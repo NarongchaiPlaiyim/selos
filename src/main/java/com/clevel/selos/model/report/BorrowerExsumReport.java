@@ -8,11 +8,8 @@ import java.math.BigDecimal;
 
 public class BorrowerExsumReport extends ReportModel{
     private int no;
-    private String titleTh;
-    private String firstNameTh;
-    private String lastNameTh;
+    private String customerName;
     private String citizenId;
-    private String registrationId;
     private String tmbCustomerId;
     private String relation;
     private String collateralOwner;
@@ -29,12 +26,7 @@ public class BorrowerExsumReport extends ReportModel{
     private String owner;
 
     public BorrowerExsumReport() {
-        this.titleTh = "";
-        this.firstNameTh = "";
-        this.lastNameTh = "";
-        this.lastNameTh = "";
         this.citizenId = "";
-        this.registrationId = "";
         this.tmbCustomerId = "";
         this.relation = "";
         this.collateralOwner = "";
@@ -56,28 +48,13 @@ public class BorrowerExsumReport extends ReportModel{
         this.no = no;
     }
 
-    public String getTitleTh() {
-        return titleTh;
+    public String getCustomerName() {
+
+        return customerName;
     }
 
-    public void setTitleTh(String titleTh) {
-        this.titleTh = titleTh;
-    }
-
-    public String getFirstNameTh() {
-        return firstNameTh;
-    }
-
-    public void setFirstNameTh(String firstNameTh) {
-        this.firstNameTh = firstNameTh;
-    }
-
-    public String getLastNameTh() {
-        return lastNameTh;
-    }
-
-    public void setLastNameTh(String lastNameTh) {
-        this.lastNameTh = lastNameTh;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getCitizenId() {
@@ -86,14 +63,6 @@ public class BorrowerExsumReport extends ReportModel{
 
     public void setCitizenId(String citizenId) {
         this.citizenId = citizenId;
-    }
-
-    public String getRegistrationId() {
-        return registrationId;
-    }
-
-    public void setRegistrationId(String registrationId) {
-        this.registrationId = registrationId;
     }
 
     public String getTmbCustomerId() {
@@ -210,26 +179,24 @@ public class BorrowerExsumReport extends ReportModel{
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("titleTh", titleTh).
-                append("firstNameTh", firstNameTh).
-                append("lastNameTh", lastNameTh).
-                append("citizenId", citizenId).
-                append("registrationId", registrationId).
-                append("tmbCustomerId", tmbCustomerId).
-                append("relation", relation).
-                append("collateralOwner", collateralOwner).
-                append("indLv", indLv).
-                append("jurLv", jurLv).
-                append("percentShare", percentShare).
-                append("age", age).
-                append("kycLevel", kycLevel).
-                append("worthiness", worthiness).
-                append("customerCSIList", customerCSIList).
-                append("businessLocationName", businessLocationName).
-                append("businessLocationAddress", businessLocationAddress).
-                append("businessLocationAddressEN", businessLocationAddressEN).
-                append("owner", owner).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("no", no)
+                .append("customerName", customerName)
+                .append("citizenId", citizenId)
+                .append("tmbCustomerId", tmbCustomerId)
+                .append("relation", relation)
+                .append("collateralOwner", collateralOwner)
+                .append("indLv", indLv)
+                .append("jurLv", jurLv)
+                .append("percentShare", percentShare)
+                .append("age", age)
+                .append("kycLevel", kycLevel)
+                .append("worthiness", worthiness)
+                .append("customerCSIList", customerCSIList)
+                .append("businessLocationName", businessLocationName)
+                .append("businessLocationAddress", businessLocationAddress)
+                .append("businessLocationAddressEN", businessLocationAddressEN)
+                .append("owner", owner)
+                .toString();
     }
 }

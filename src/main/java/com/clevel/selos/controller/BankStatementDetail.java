@@ -296,9 +296,9 @@ public class BankStatementDetail extends BaseController {
             }
 
             // update related parts
+            bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
             dbrControl.updateValueOfDBR(workCaseId);
             calculationControl.calForBankStmtSummary(workCaseId);
-            bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Detail data success.";

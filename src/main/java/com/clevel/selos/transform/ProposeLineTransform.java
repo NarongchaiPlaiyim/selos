@@ -304,6 +304,70 @@ public class ProposeLineTransform extends Transform {
         return proposeLineView;
     }
 
+    public ProposeLineView transformProposeLineToReport(ProposeLine proposeLine, ProposeType proposeType) {
+        ProposeLineView proposeLineView = new ProposeLineView();
+        if(!Util.isNull(proposeLine) && !Util.isZero(proposeLine.getId())){
+            proposeLineView.setProposeCreditInfoDetailViewList(transformProposeCreditToReportList(proposeLine.getProposeCreditInfoList(), proposeType));
+        }
+        return proposeLineView;
+    }
+
+    public List<ProposeCreditInfoDetailView> transformProposeCreditToReportList(List<ProposeCreditInfo> proposeCreditInfoList, ProposeType proposeType) {
+        List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList = new ArrayList<ProposeCreditInfoDetailView>();
+        if (!Util.isNull(proposeCreditInfoList)) {
+            for (ProposeCreditInfo proCredit : proposeCreditInfoList) {
+                ProposeCreditInfoDetailView proposeCreditInfoDetailView = transformProposeCreditToReport(proCredit, proposeType);
+                if(!Util.isNull(proposeCreditInfoDetailView)) {
+                    proposeCreditInfoDetailViewList.add(proposeCreditInfoDetailView);
+                }
+            }
+        }
+        return proposeCreditInfoDetailViewList;
+    }
+
+    public ProposeCreditInfoDetailView transformProposeCreditToReport(ProposeCreditInfo proposeCreditInfo, ProposeType proposeType) {
+        ProposeCreditInfoDetailView proposeCreditInfoDetailView = null;
+        if(!Util.isNull(proposeCreditInfo) && !Util.isZero(proposeCreditInfo.getId()) && proposeCreditInfo.getProposeType() == proposeType && proposeCreditInfo.getUwDecision() == DecisionType.APPROVED){
+            proposeCreditInfoDetailView = new ProposeCreditInfoDetailView();
+
+            proposeCreditInfoDetailView.setId(proposeCreditInfo.getId());
+
+            proposeCreditInfoDetailView.setRequestType(proposeCreditInfo.getRequestType());
+            proposeCreditInfoDetailView.setRefinance(proposeCreditInfo.getRefinance());
+            proposeCreditInfoDetailView.setProductProgramView(productTransform.transformToView(proposeCreditInfo.getProductProgram()));
+            proposeCreditInfoDetailView.setCreditTypeView(productTransform.transformToView(proposeCreditInfo.getCreditType()));
+            proposeCreditInfoDetailView.setProductCode(proposeCreditInfo.getProductCode());
+            proposeCreditInfoDetailView.setProjectCode(proposeCreditInfo.getProjectCode());
+            proposeCreditInfoDetailView.setLimit(proposeCreditInfo.getLimit());
+            proposeCreditInfoDetailView.setPCEPercent(proposeCreditInfo.getPcePercent());
+            proposeCreditInfoDetailView.setPCEAmount(proposeCreditInfo.getPceAmount());
+            proposeCreditInfoDetailView.setReducePriceFlag(Util.isTrue(proposeCreditInfo.getReducePriceFlag()));
+            proposeCreditInfoDetailView.setReduceFrontEndFee(Util.isTrue(proposeCreditInfo.getReduceFrontEndFee()));
+            proposeCreditInfoDetailView.setFrontEndFee(proposeCreditInfo.getFrontEndFee());
+            proposeCreditInfoDetailView.setLoanPurposeView(loanPurposeTransform.transformToView(proposeCreditInfo.getLoanPurpose()));
+            proposeCreditInfoDetailView.setProposeDetail(proposeCreditInfo.getRemark());
+            proposeCreditInfoDetailView.setDisbursementTypeView(disbursementTypeTransform.transformToView(proposeCreditInfo.getDisbursementType()));
+            proposeCreditInfoDetailView.setHoldLimitAmount(proposeCreditInfo.getHoldLimitAmount());
+            proposeCreditInfoDetailView.setUseCount(proposeCreditInfo.getUseCount());
+            proposeCreditInfoDetailView.setSeq(proposeCreditInfo.getSeq());
+            proposeCreditInfoDetailView.setInstallment(proposeCreditInfo.getInstallment());
+            proposeCreditInfoDetailView.setFrontEndFeeOriginal(proposeCreditInfo.getFrontEndFeeOriginal());
+            proposeCreditInfoDetailView.setStandardInterest(proposeCreditInfo.getStandardInterest());
+            proposeCreditInfoDetailView.setStandardBaseRate(baseRateTransform.transformToView(proposeCreditInfo.getStandardBasePrice()));
+            proposeCreditInfoDetailView.setSuggestInterest(proposeCreditInfo.getSuggestInterest());
+            proposeCreditInfoDetailView.setSuggestBaseRate(baseRateTransform.transformToView(proposeCreditInfo.getSuggestBasePrice()));
+            proposeCreditInfoDetailView.setLastNo(proposeCreditInfo.getLastNo());
+            proposeCreditInfoDetailView.setSetupCompleted(proposeCreditInfo.getSetupCompleted());
+
+            proposeCreditInfoDetailView.setUwDecision(proposeCreditInfo.getUwDecision());
+
+            List<ProposeCreditInfoTierDetailView> proposeCreditInfoTierDetailViewList = transformProposeCreditTierToViewList(proposeCreditInfo.getProposeCreditInfoTierDetailList(), proposeCreditInfoDetailView);
+            proposeCreditInfoDetailView.setProposeCreditInfoTierDetailViewList(orderTierDetail(proposeCreditInfoTierDetailViewList, proposeCreditInfoDetailView));
+        }
+
+        return proposeCreditInfoDetailView;
+    }
+
     //-------------------------------------------------------- Propose Credit Info --------------------------------------------------------//
 
     public ProposeCreditInfo transformProposeCreditToModel(ProposeLine proposeLine, ProposeCreditInfoDetailView proposeCreditInfoDetailView, WorkCase workCase, User user, ProposeType proposeType) {

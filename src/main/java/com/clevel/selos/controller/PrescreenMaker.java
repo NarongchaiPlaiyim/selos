@@ -1736,6 +1736,7 @@ public class PrescreenMaker extends BaseController {
             //complete = true;
         }
         previousMaritalStatus = null;
+        customerModifyFlag = customerModifyFlag + 1;
         context.addCallbackParam("functionComplete", complete);
         log.debug("customerInfoViewList after save : {}", customerInfoViewList);
 

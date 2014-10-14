@@ -905,7 +905,9 @@ public class Decision extends BaseController {
         log.debug("onSaveDecision");
         try {
             log.debug("roleId :: {}", roleId);
-            if ((roleId == RoleValue.ZM.id() && stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) || (roleId == RoleValue.UW.id())) {
+            if ((roleId == RoleValue.ZM.id() && stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) ||
+                    (roleId == RoleValue.BDM.id() && stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) ||
+                        (roleId == RoleValue.UW.id())) {
                 log.debug("Save Decision Role UW");
                 // Save All Approve (Credit, Collateral, Guarantor) and Follow up Condition
                 decisionControl.saveApproveAndCondition(decisionView, workCaseId, hashSeqCredit, stepId);

@@ -2090,7 +2090,8 @@ public class CustomerInfoIndividual extends BaseController {
                 customerInfoView.getSpouse().getTitleTh().setTitleTh(titleControl.getTitleById(customerInfoView.getSpouse().getTitleTh().getId()).getTitleTh());
                 customerInfoView.getSpouse().getRelation().setDescription(relationControl.getRelationViewById(relationSpouseCusId).getDescription());
                 customerInfoView.getSpouse().getKycLevel().setKycLevel(kycLevelControl.getKYCLevelViewById(customerInfoView.getSpouse().getKycLevel().getId()).getKycLevel());
-                customerInfoView.getSpouse().setIndLv(referenceControl.getReferenceViewById(referenceSpouseCusId).getDescription()+" of "+customerInfoView.getFirstNameTh()+" "+customerInfoView.getLastNameTh());
+//                customerInfoView.getSpouse().setIndLv(referenceControl.getReferenceViewById(referenceSpouseCusId).getDescription()+" of "+customerInfoView.getFirstNameTh()+" "+customerInfoView.getLastNameTh());
+                customerInfoView.getSpouse().setIndLv(msg.get("app.custInfoSummary.indLv")+" "+customerInfoView.getFirstNameTh()+" "+customerInfoView.getLastNameTh());
             }
 
             //customerInfoView = individual
