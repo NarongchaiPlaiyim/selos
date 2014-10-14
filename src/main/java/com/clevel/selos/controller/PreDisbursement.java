@@ -11,6 +11,7 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.FieldsControlView;
+import com.clevel.selos.model.view.PreDisbursementDetailView;
 import com.clevel.selos.model.view.PreDisbursementView;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -28,6 +29,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @ViewScoped
@@ -137,7 +139,7 @@ public class PreDisbursement implements Serializable {
 	}
 
 	public void setPreDisbursementView(PreDisbursementView preDisbursementView) {
-		this.preDisbursementView = preDisbursementView;
+            this.preDisbursementView = preDisbursementView;
 	}
 	
 	private void _loadInitData() {
@@ -146,6 +148,26 @@ public class PreDisbursement implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 
+        for(Map.Entry<String, List<PreDisbursementDetailView>> entry : preDisbursementView.getPreDisBursementDetailViewMap().entrySet()){
+            if(entry.getKey().equals("2.1")){
+                List<PreDisbursementDetailView> preDisbursementDetailViewList = entry.getValue();
+                for(PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+                    if(preDisbursementDetailView.getValue()>0){
+                        preDisbursementView.setSelectedTest2_1(true);
+                        break;
+                    }
+                }
+            }
+            if(entry.getKey().equals("2.2")){
+                List<PreDisbursementDetailView> preDisbursementDetailViewList = entry.getValue();
+                for(PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+                    if(preDisbursementDetailView.getValue()>0){
+                        preDisbursementView.setSelectedTest2_2(true);
+                        break;
+                    }
+                }
+            }
+        }
 	}
 	
 	/*
@@ -178,7 +200,36 @@ public class PreDisbursement implements Serializable {
 		if (field == null)
 			return FieldsControlView.DEFAULT_READONLY;
 		return field.isReadOnly();
-	}	
+	}
 
+    public void onCheckCon21(){
+        if(!preDisbursementView.isSelectedTest2_1()){
+            for(Map.Entry<String, List<PreDisbursementDetailView>> entry : preDisbursementView.getPreDisBursementDetailViewMap().entrySet()){
+                if(entry.getKey().equals("2.1")){
+                    List<PreDisbursementDetailView> preDisbursementDetailViewList = entry.getValue();
+                    for(PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+                        preDisbursementDetailView.setValue(0);
+                    }
+                    break;
+                }
+            }
+        }
+        log.debug("preDisbursementView : {}",preDisbursementView);
+    }
+
+    public void onCheckCon22(){
+        if(!preDisbursementView.isSelectedTest2_2()){
+            for(Map.Entry<String, List<PreDisbursementDetailView>> entry : preDisbursementView.getPreDisBursementDetailViewMap().entrySet()){
+                if(entry.getKey().equals("2.2")){
+                    List<PreDisbursementDetailView> preDisbursementDetailViewList = entry.getValue();
+                    for(PreDisbursementDetailView preDisbursementDetailView : preDisbursementDetailViewList){
+                        preDisbursementDetailView.setValue(0);
+                    }
+                    break;
+                }
+            }
+        }
+        log.debug("preDisbursementView : {}",preDisbursementView);
+    }
 }
 

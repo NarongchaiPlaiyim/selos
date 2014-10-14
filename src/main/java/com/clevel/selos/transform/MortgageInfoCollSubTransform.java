@@ -22,9 +22,8 @@ public class MortgageInfoCollSubTransform extends Transform {
 			return view;
 		view.setNewCollSubId(subModel.getId());
 		view.setJobNo(subModel.getProposeCollateralHead().getProposeCollateral().getJobID());
-        //todo:this
-//		view.setHcNo(subModel.getProposeCollateralHead().getCollID());
-//		view.setSubNo(subModel.getCollID());
+		view.setHcNo(subModel.getProposeCollateralHead().getHeadCollType().getDescription());
+		view.setSubNo(subModel.getSubCollateralType().getDescription());
 		
 		StringBuilder builder = new StringBuilder();
 		List<ProposeCollateralSubOwner> owners = subModel.getProposeCollateralSubOwnerList();
