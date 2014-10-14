@@ -500,7 +500,7 @@ public class BankStmtControl extends BusinessControl {
             for(BankStmtView bankStmtView : bankStmtViewList) {
                 //Clear
                 bankStmtView.setMainAccount(RadioValue.NO.value());
-                bankStmtView.setHighestInflow("");
+                bankStmtView.setHighestInflow("N");
 
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
