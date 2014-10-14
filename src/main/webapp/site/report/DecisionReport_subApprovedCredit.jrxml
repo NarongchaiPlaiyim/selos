@@ -180,9 +180,9 @@ Fee(%)]]></text>
 	</columnHeader>
 	<detail>
 		<band height="54" splitType="Stretch">
-			<textField isStretchWithOverflow="true" evaluationTime="Page" isBlankWhenNull="true">
-				<reportElement uuid="ff193b68-1a91-4728-b9c6-fa6facbe7453" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="119" y="0" width="48" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d011f92e-76a1-4aeb-b30e-8bc7d367c175" style="detail" stretchType="RelativeToBandHeight" x="119" y="0" width="48" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
@@ -196,9 +196,9 @@ Fee(%)]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prodName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" evaluationTime="Page" isBlankWhenNull="true">
-				<reportElement uuid="2fc918d5-e595-49f1-81ae-9f0417083415" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="167" y="0" width="61" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fce938b9-6f8a-4d4a-85b4-aa0d9c806e17" style="detail" stretchType="RelativeToBandHeight" x="167" y="0" width="61" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>

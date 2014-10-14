@@ -335,13 +335,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         return characteristicExSumReport;
     }
 
-    public AccountMovementExSumReport fillAccountMovement(){
-        AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
+    public List<AccountMovementExSumReport> fillAccountMovement(){
+        List<AccountMovementExSumReport> accountMovementExSumReportList = new ArrayList<AccountMovementExSumReport>();
         List<ExSumAccountMovementView> movementViewList = exSummaryView.getExSumAccMovementViewList();
 
         if(Util.isSafetyList(movementViewList)){
             log.debug("movementViewList.size() {}",movementViewList.size());
             for (ExSumAccountMovementView movementView : movementViewList){
+                AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
                 movementExSumReport.setOdLimit(Util.convertNullToZERO(movementView.getOdLimit()));
                 movementExSumReport.setUtilization(Util.convertNullToZERO(movementView.getUtilization()));
                 movementExSumReport.setSwing(Util.convertNullToZERO(movementView.getSwing()));
@@ -352,11 +353,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 movementExSumReport.setCashFlowLimit(Util.convertNullToZERO(movementView.getCashFlowLimit()));
                 movementExSumReport.setTradeChequeReturnAmount(Util.convertNullToZERO(movementView.getTradeChequeReturnPercent()));
                 movementExSumReport.setTradeChequeReturnPercent(Util.convertNullToZERO(movementView.getTradeChequeReturnPercent()));
+                accountMovementExSumReportList.add(movementExSumReport);
             }
         } else {
             log.debug("movementViewList in Method fillAccountMovement id Null. {}",movementViewList);
         }
-        return movementExSumReport;
+        return accountMovementExSumReportList;
     }
 
     public CollateralExSumReport fillCollateral(){
@@ -573,11 +575,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 }
                 decisionReport.setAccount(account.toString());
 
+                StringBuilder prodProgramName = new StringBuilder();
                 if (!Util.isNull(detailView.getExistProductProgramView())){
-                    decisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
+                    prodProgramName = prodProgramName.append(Util.checkNullString(detailView.getExistProductProgramView().getName())).append(enter);
                 } else {
-                    decisionReport.setProductProgramName(minus);
+                    prodProgramName = prodProgramName.append(minus);
                 }
+                decisionReport.setProductProgramName(prodProgramName.toString());
 
                 if (!Util.isNull(detailView.getExistCreditTypeView())) {
                     decisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
@@ -628,13 +632,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     for (ExistingSplitLineDetailView existingSplitLineDetailView : detailView.getExistingSplitLineDetailViewList()){
                         ExistingSplitLineDetailReport existingSplitLineDetailReport = new ExistingSplitLineDetailReport();
 
-                        StringBuilder productProgran = new StringBuilder();
+                        StringBuilder productProgram = new StringBuilder();
                         if (!Util.isNull(existingSplitLineDetailView.getProductProgram())){
-                            productProgran = productProgran.append(Util.checkNullString(existingSplitLineDetailView.getProductProgram().getName())).append(enter);
+                            productProgram = productProgram.append(Util.checkNullString(existingSplitLineDetailView.getProductProgram().getName())).append(enter);
                         } else {
-                            productProgran = productProgran.append(minus).append(enter);
+                            productProgram = productProgram.append(minus).append(enter);
                         }
-                        existingSplitLineDetailReport.setProductProgramName(productProgran.toString());
+                        existingSplitLineDetailReport.setProductProgramName(productProgram.toString());
                         existingSplitLineDetailReport.setLimit(Util.convertNullToZERO(existingSplitLineDetailView.getLimit()));
                         existingSplitLineDetailReportList.add(existingSplitLineDetailReport);
                     }
@@ -704,11 +708,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 borrowerRetailDecisionReport.setAccount(account.toString());
                 log.debug("accountLable by borrowerRetail. {}",account.toString());
 
-                if(!Util.isNull(detailView.getExistProductProgramView())){
-                    borrowerRetailDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
+                StringBuilder prodProgramName = new StringBuilder();
+                if (!Util.isNull(detailView.getExistProductProgramView())){
+                    prodProgramName = prodProgramName.append(Util.checkNullString(detailView.getExistProductProgramView().getName())).append(enter);
                 } else {
-                    borrowerRetailDecisionReport.setProductProgramName(minus);
+                    prodProgramName = prodProgramName.append(minus);
                 }
+                borrowerRetailDecisionReport.setProductProgramName(prodProgramName.toString());
 
                 if (!Util.isNull(detailView.getExistCreditTypeView())){
                     borrowerRetailDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
@@ -732,7 +738,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
                         } else {
                             finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
@@ -783,17 +789,19 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if(!Util.isNull(detailView.getExistAccountStatusView())){
-                    account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+                    account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription())).append(enter);
                 } else {
-                    account = account.append("Acc Status: ").append(minus);
+                    account = account.append("Acc Status: ").append(minus).append(enter);
                 }
                 relatedCommercialDecisionReport.setAccount(account.toString());
 
+                StringBuilder prodProgramName = new StringBuilder();
                 if (!Util.isNull(detailView.getExistProductProgramView())){
-                    relatedCommercialDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
+                    prodProgramName = prodProgramName.append(Util.checkNullString(detailView.getExistProductProgramView().getName())).append(enter);
                 } else {
-                    relatedCommercialDecisionReport.setProductProgramName(minus);
+                    prodProgramName = prodProgramName.append(minus);
                 }
+                relatedCommercialDecisionReport.setProductProgramName(prodProgramName.toString());
 
                 if (!Util.isNull(detailView.getExistCreditTypeView())){
                     relatedCommercialDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
@@ -818,7 +826,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
                         } else {
                             finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
@@ -888,17 +896,19 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 account = account.append(" Suf.: ").append(Util.checkNullString(detailView.getAccountSuf())).append(enter);
 
                 if (!Util.isNull(detailView.getExistAccountStatusView())){
-                    account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription()));
+                    account = account.append("Acc Status: ").append(Util.checkNullString(detailView.getExistAccountStatusView().getDescription())).append(enter);
                 } else {
-                    account = account.append("Acc Status: ").append(minus);
+                    account = account.append("Acc Status: ").append(minus).append(enter);
                 }
                 relatedRetailDecisionReport.setAccount(account.toString());
 
+                StringBuilder prodProgramName = new StringBuilder();
                 if (!Util.isNull(detailView.getExistProductProgramView())){
-                    relatedRetailDecisionReport.setProductProgramName(Util.checkNullString(detailView.getExistProductProgramView().getName()));
+                    prodProgramName = prodProgramName.append(Util.checkNullString(detailView.getExistProductProgramView().getName())).append(enter);
                 } else {
-                    relatedRetailDecisionReport.setProductProgramName(minus);
+                    prodProgramName = prodProgramName.append(minus);
                 }
+                relatedRetailDecisionReport.setProductProgramName(prodProgramName.toString());
 
                 if (!Util.isNull(detailView.getExistCreditTypeView())){
                     relatedRetailDecisionReport.setCreditTypeName(Util.checkNullString(detailView.getExistCreditTypeView().getName()));
@@ -924,7 +934,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
 
                         StringBuilder finalBasePriceAndInterest = new StringBuilder();
                         if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName())).append("+");
+                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
                         } else {
                             finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
                         }
