@@ -408,7 +408,7 @@ public class BankStmtControl extends BusinessControl {
         }
     }
 
-    public void calculateHighestInflow(BankStmtSummaryView bankStmtSummaryView){
+    /*public void calculateHighestInflow(BankStmtSummaryView bankStmtSummaryView){
         if(!Util.isNull(bankStmtSummaryView)){
             // find highest inflow for TMB bank
             BigDecimal maxTMBAvgGrossInflowPerLimit = BigDecimal.ZERO;
@@ -489,7 +489,7 @@ public class BankStmtControl extends BusinessControl {
         }
 
 
-    }
+    }*/
 
     public void calculateMainAccount(List<BankStmtView> bankStmtViewList) {
         if (!Util.isNull(bankStmtViewList)) {
@@ -498,6 +498,10 @@ public class BankStmtControl extends BusinessControl {
             long atId = 0;
 
             for(BankStmtView bankStmtView : bankStmtViewList) {
+                //Clear
+                bankStmtView.setMainAccount(RadioValue.NO.value());
+                bankStmtView.setHighestInflow("N");
+
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
                     break;
@@ -594,29 +598,45 @@ public class BankStmtControl extends BusinessControl {
 
     public void updateMainAccAndHighestInflow(BankStmtSummaryView bankStmtSummaryView) {
         log.debug("calculateMainAccount()");
-        BigDecimal tmbLimit = BigDecimal.ZERO;
+        BankStmtView tmb = new BankStmtView();
+        boolean isHaveMainTMB = false;
         if(!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getTmbBankStmtViewList());
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
-                if(bankStmtView.getMainAccount() == 1) {
-                    tmbLimit = bankStmtView.getNetIncomeLastSix();
-                    log.debug("TMB Limit :: {}", tmbLimit);
+                if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
+                    tmb = bankStmtView;
+                    tmb.setHighestInflow("Y");
+                    isHaveMainTMB = true;
+                    break; //Main have only one
                 }
             }
         }
         if(!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
-            for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
-                if(bankStmtView.getMainAccount() == 1) {
-                    log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
-                    if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
-                        log.debug("TMB Compare OTH > 0");
-                        bankStmtView.setMainAccount(0);
+                for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
+                    if(bankStmtView.getMainAccount() == RadioValue.YES.value()) { //OTH = Main
+                        if(isHaveMainTMB) {
+                            log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
+                            if(tmb.getNetIncomeLastSix().compareTo(bankStmtView.getNetIncomeLastSix()) > 0) { //OTH = Main && Income Last Six Month < TMB
+                                log.debug("TMB Compare OTH > 0");
+                                bankStmtView.setMainAccount(RadioValue.NO.value());
+                                tmb.setHighestInflow("Y");
+                                bankStmtView.setHighestInflow("N");
+                                break; //Main have only one
+                            } else { //OTH = Main && Income Last Six Month > TMB
+                                tmb.setHighestInflow("N");
+                                bankStmtView.setHighestInflow("Y");
+                                break; //Main have only one
+                            }
+                        } else { //OTH = Main && Not have Main TMB
+                            tmb.setHighestInflow("N");
+                            bankStmtView.setHighestInflow("Y");
+                            break; //Main have only one
+                        }
                     }
                 }
-            }
         }
-        calculateHighestInflow(bankStmtSummaryView);
+//        calculateHighestInflow(bankStmtSummaryView);
     }
 
     public void bankStmtDetailCalculation(BankStmtView bankStmtView, int seasonalFlag) {
