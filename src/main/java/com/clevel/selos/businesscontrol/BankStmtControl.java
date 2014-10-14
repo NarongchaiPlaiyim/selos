@@ -605,28 +605,36 @@ public class BankStmtControl extends BusinessControl {
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
                 if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
                     tmb = bankStmtView;
+                    tmb.setHighestInflow("Y");
                     isHaveMainTMB = true;
-                    break;
+                    break; //Main have only one
                 }
             }
         }
         if(!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
-            if(isHaveMainTMB) {
                 for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
-                    if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
-                        log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
-                        if(tmb.getNetIncomeLastSix().compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
-                            log.debug("TMB Compare OTH > 0");
-                            bankStmtView.setMainAccount(RadioValue.NO.value());
-                            tmb.setHighestInflow("Y");
-                            break;
-                        } else {
+                    if(bankStmtView.getMainAccount() == RadioValue.YES.value()) { //OTH = Main
+                        if(isHaveMainTMB) {
+                            log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
+                            if(tmb.getNetIncomeLastSix().compareTo(bankStmtView.getNetIncomeLastSix()) > 0) { //OTH = Main && Income Last Six Month < TMB
+                                log.debug("TMB Compare OTH > 0");
+                                bankStmtView.setMainAccount(RadioValue.NO.value());
+                                tmb.setHighestInflow("Y");
+                                bankStmtView.setHighestInflow("N");
+                                break; //Main have only one
+                            } else { //OTH = Main && Income Last Six Month > TMB
+                                tmb.setHighestInflow("N");
+                                bankStmtView.setHighestInflow("Y");
+                                break; //Main have only one
+                            }
+                        } else { //OTH = Main && Not have Main TMB
+                            tmb.setHighestInflow("N");
                             bankStmtView.setHighestInflow("Y");
+                            break; //Main have only one
                         }
                     }
                 }
-            }
         }
 //        calculateHighestInflow(bankStmtSummaryView);
     }
