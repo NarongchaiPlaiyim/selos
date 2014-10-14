@@ -147,6 +147,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementMcDetailView.setIssuedBy(disbursementMC.getIssuedBy().getId());
 			disbursementMcDetailView.setIssuedDate(disbursementMC.getIssuedDate());
 			disbursementMcDetailView.setPayeeName(disbursementMC.getPayeeName().getCode());
+            disbursementMcDetailView.setPayeeSubname(disbursementMC.getPayeeRemark());
 			disbursementMcDetailView.setCrossType(disbursementMC.getCrossType().getId());
 
 			disbursementMcDetailView
@@ -228,6 +229,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementBahtnetDetailView.setBankCode(disbursementBahtnet.getBank().getCode());
 			disbursementBahtnetDetailView.setAccountNumber(disbursementBahtnet.getAccountNumber());
 			disbursementBahtnetDetailView.setBenefitName(disbursementBahtnet.getBeneficiaryName());
+            disbursementBahtnetDetailView.setBranchName(disbursementBahtnet.getBranchName());
 			disbursementBahtnetDetailView.setDisbursementCreditTypeView(this.getDisbursementCreditView(disbursementBahtnet,
 					disbursementBahtnetDetailView));
 			disbursementBahtnetDetailViewList.add(disbursementBahtnetDetailView);
@@ -248,6 +250,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementCreditView.setNewCreditDetailId(disbursementBahtnetCredit.getCreditDetail().getId());
 			disbursementCreditView.setProductProgram(disbursementBahtnetCredit.getCreditDetail().getProductProgram().getName());
 			disbursementCreditView.setCreditFacility(disbursementBahtnetCredit.getCreditDetail().getCreditType().getName());
+            disbursementCreditView.setLimitAmount(disbursementBahtnetCredit.getCreditDetail().getLimit());
 			disbursementCreditView.setDisburseAmount(disbursementBahtnetCredit.getDisburseAmount());
 			totalDisbursementAmount = totalDisbursementAmount.add(disbursementBahtnetCredit.getDisburseAmount());
 			disbursementCreditViewList.add(disbursementCreditView);
@@ -392,25 +395,27 @@ public class DisbursementControl extends BusinessControl {
 	public List<DisbursementDepositBaDetailView> getBADisbursementView(long workCaseId) {
 		List<DisbursementDepositBaDetailView> disbursementDepositBaDetailViewList = new ArrayList<DisbursementDepositBaDetailView>();
 		BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
-		List<BAPAInfoCredit> bapaInfoCreditList = bapaInfoCreditDAO.findByBAPAInfo(bapaInfo.getId());
-		for (BAPAInfoCredit bapaInfoCredit : bapaInfoCreditList) {
-            ProposeCreditInfo newCreditDetail = bapaInfoCredit.getCreditDetail();
-			DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
+        if(bapaInfo!=null && bapaInfo.getId()>0){
+            List<BAPAInfoCredit> bapaInfoCreditList = bapaInfoCreditDAO.findByBAPAInfo(bapaInfo.getId());
+            for (BAPAInfoCredit bapaInfoCredit : bapaInfoCreditList) {
+                ProposeCreditInfo newCreditDetail = bapaInfoCredit.getCreditDetail();
+                DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
 //			depositBaDetailView.setAccountName(newCreditDetail.getAccountName());
 //			depositBaDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
-			depositBaDetailView.setTotalAmount(bapaInfoCredit.getExpenseAmount());
+                depositBaDetailView.setTotalAmount(bapaInfoCredit.getExpenseAmount());
 
-			List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
-			DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
-			disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
-			disbursementCreditView.setCreditType(newCreditDetail.getCreditType().getName());
-			disbursementCreditView.setObjective("คุ้มครองวงเงิน " + newCreditDetail.getCreditType().getName());
-			disbursementCreditViewList.add(disbursementCreditView);
+                List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
+                DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
+                disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
+                disbursementCreditView.setCreditType(newCreditDetail.getCreditType().getName());
+                disbursementCreditView.setObjective("?????????????? " + newCreditDetail.getCreditType().getName());
+                disbursementCreditViewList.add(disbursementCreditView);
 
-			depositBaDetailView.setDisbursementCreditTypeView(disbursementCreditViewList);
+                depositBaDetailView.setDisbursementCreditTypeView(disbursementCreditViewList);
 
-			disbursementDepositBaDetailViewList.add(depositBaDetailView);
-		}
+                disbursementDepositBaDetailViewList.add(depositBaDetailView);
+            }
+        }
 		return disbursementDepositBaDetailViewList;
 	}
 

@@ -102,7 +102,7 @@ public class FeeCalculation implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		_loadFieldControl();
-		_loadInitData(true);
+		_loadInitData(false);
 	}
 	
 	public void preRender() {

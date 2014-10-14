@@ -320,22 +320,24 @@
 										</tr>
 										<tr>
 											<td colspan="100%"><p:dataTable
-													value="#{approveDetailInformation.approveDetailInformationView.newCreditFacilityView.proposeConditionInfoViewList}"
+													value="#{approveDetailInformation.approveDetailInformationView.decisionFollowConditionViewList}"
 													var="item" rowIndexVar="rowIdx" styleClass="full_table">
 													<p:column style="width:30px" styleClass="center">
 	                        				#{rowIdx+1}
 	                        			</p:column>
 													<p:column style="width:500px"
 														headerText="#{msg.get('app.approveDetail.conditionApproval.table.condition')}">
-														<h:outputText value="#{item.loanType}" />
+														<h:outputText value="#{item.conditionView.name}" />
 													</p:column>
 													<p:column
 														headerText="#{msg.get('app.approveDetail.conditionApproval.table.detail')}">
-														<h:outputText value="#{item.conditionDesc}" />
+														<h:outputText value="#{item.detail}" />
 													</p:column>
 													<p:column style="width:100px" styleClass="center"
 														headerText="#{msg.get('app.approveDetail.conditionApproval.table.date')}">
-														<h:outputText value="#{item.modifyDate}" />
+														<h:outputText value="#{item.followDate}">
+                                                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                                        </h:outputText>
 													</p:column>
 												</p:dataTable></td>
 										</tr>

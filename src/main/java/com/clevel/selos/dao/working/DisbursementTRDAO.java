@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.DisbursementTR;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
@@ -24,6 +25,7 @@ public class DisbursementTRDAO extends GenericDAO<DisbursementTR, Long> {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("disbursement.id", disbursementId));
+        criteria.addOrder(Order.asc("id"));
         List<DisbursementTR> disbursementTRList = criteria.list();
         return disbursementTRList;
     }

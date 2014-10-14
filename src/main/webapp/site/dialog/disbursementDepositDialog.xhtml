@@ -60,7 +60,7 @@
                                      binding="#{saveDisbursementDepBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementDeposit}"
                                      styleClass="smaller"
-                                     update=":frmMain ,:disbursementDepositForm"
+                                     update=":frmMain ,:disbursementDepositForm, :msgBoxSystemMessagePanel2"
                                      onclick="PF('blockDisbursementDep').show()"
                                      oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args); blockDisbursementDep.hide()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
@@ -71,7 +71,7 @@
         </table>
     </h:form>
     </p:panel>
-    <p:blockUI widgetVar="blockDisbursementDep" block=":disbursementDepositForm">
+    <p:blockUI widgetVar="blockDisbursementDep" block=":disbursementDepositDlgPanel">
         LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>

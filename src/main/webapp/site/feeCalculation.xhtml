@@ -12,6 +12,36 @@
     <title>#{msg.get('app.feecalculation.title')}</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
+    <style>
+        .table_content_new {
+            border-top: 1px solid #868686;
+            border-right: 1px solid #868686;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        .table_content_new th {
+            text-align: center;
+            height: 21px;
+            /*background: url('../images/table/table_header_bg.jpg') repeat-x;*/
+            background:  url(#{resource['images:table/table_header_bg.jpg']}) repeat-x;
+            background-color: #3f3f3f;
+            font-weight: bold;
+            color: white;
+            padding: 2px 8px;
+            border-left: 1px solid #868686;
+            border-bottom: 1px solid #868686;
+        }
+
+        .table_content_new td {
+            height: 21px;
+            padding: 2px 8px;
+            border-top: 1px solid #868686;
+            border-right: 1px solid #868686;
+            border-left: 1px solid #868686;
+            border-bottom: 1px solid #868686;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -60,7 +90,7 @@
 	                        <tr>
 	                           <td></td>
                                <td>
-                               		<table class="table_content">
+                               		<table class="table_content_new" style="border-right: 1px solid #868686;">
                                			<thead>
                                				<tr>
 	                               				<th style="width: 15px;"></th>
