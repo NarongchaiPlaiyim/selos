@@ -500,6 +500,7 @@ public class BankStmtControl extends BusinessControl {
             for(BankStmtView bankStmtView : bankStmtViewList) {
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
+                    bankStmtView.setMainAccount(0);
                     break;
                 }
 
