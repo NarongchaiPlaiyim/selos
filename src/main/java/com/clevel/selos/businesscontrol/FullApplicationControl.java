@@ -460,7 +460,11 @@ public class FullApplicationControl extends BusinessControl {
             approvalHistoryApprove = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
             if(!Util.isNull(approvalHistoryApprove)){
                 if(approvalHistoryApprove.getApproveDecision() != RadioValue.NOT_SELECTED.value()){
-                    zmDecisionFlag = approvalHistoryApprove.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                    zmDecisionFlag = getDecisionFlag(approvalHistoryApprove.getApproveDecision());
+
+                    if(Util.isEmpty(zmDecisionFlag))
+                        throw new Exception("Please make decision before submit.");
+
                     approvalHistoryApprove.setSubmit(1);
                     approvalHistoryApprove.setSubmitDate(new Date());
 
@@ -576,7 +580,11 @@ public class FullApplicationControl extends BusinessControl {
 
             if(!Util.isNull(approvalHistoryEndorsePricing)){
                 if(approvalHistoryEndorsePricing.getApproveDecision() != 0){
-                    cssoDecisionFlag = approvalHistoryEndorsePricing.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
+                    cssoDecisionFlag = getDecisionFlag(approvalHistoryEndorsePricing.getApproveDecision());
+
+                    if(Util.isEmpty(cssoDecisionFlag))
+                        throw new Exception("Please make decision before submit.");
+
                     approvalHistoryEndorsePricing.setSubmit(1);
                     approvalHistoryEndorsePricing.setSubmitDate(new Date());
 
@@ -608,7 +616,10 @@ public class FullApplicationControl extends BusinessControl {
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
             } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                decisionFlag = getDecisionFlag(approvalHistoryEndorseCA.getApproveDecision());
+
+                if(Util.isEmpty(decisionFlag))
+                    throw new Exception("Please make decision before submit.");
 
                 WorkCase workCase = workCaseDAO.findById(workCaseId);
                 String appraisalRequired = workCase != null ? String.valueOf(workCase.getRequestAppraisalRequire()) : "0";
@@ -645,11 +656,15 @@ public class FullApplicationControl extends BusinessControl {
             if(approvalHistoryEndorseCA==null){
                 throw new Exception("Please make decision before submit.");
             } else {
-                decisionFlag = approvalHistoryEndorseCA.getApproveDecision() == DecisionType.APPROVED.value()?"A":"R";
 
-                if(returnControl.getReturnHistoryHaveRG001(workCaseId)){
+                decisionFlag = getDecisionFlag(approvalHistoryEndorseCA.getApproveDecision());
+
+                if(Util.isEmpty(decisionFlag))
+                    throw new Exception("Please make decision before submit.");
+
+                if(returnControl.getReturnHistoryHaveRG001(workCaseId))
                     haveRG001 = "Y";
-                }
+
 
                 BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
                 if(!Util.isNull(basicInfo)){
@@ -811,8 +826,11 @@ public class FullApplicationControl extends BusinessControl {
                 newCollateralDAO.persist(proposeCol);
             }
         }
+    }
 
+    public void duplicateCollateralForAppraisal(long workCaseId, long workCasePreScreenId){
         //Duplicate Data From Propose ( Requested ) to Approve Requested...
+        log.debug("duplicateCollateralData : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         duplicateCollateralData(workCaseId, workCasePreScreenId);
     }
 
@@ -1154,8 +1172,8 @@ public class FullApplicationControl extends BusinessControl {
         bpmExecutor.submitCustomerAcceptance(queueName, wobNumber, ActionCode.CUSTOMER_ACCEPT.getVal());
     }
 
-    public void submitPendingDecision(String queueName, String wobNumber, String remark, int reasonId) throws Exception{
-        bpmExecutor.submitPendingDecision(queueName, wobNumber, remark, getReasonDescription(reasonId), ActionCode.PENDING_FOR_DECISION.getVal());
+    public void submitPendingDecision(String queueName, String wobNumber) throws Exception{
+        bpmExecutor.submitPendingDecision(queueName, wobNumber, ActionCode.PENDING_FOR_DECISION.getVal());
     }
 
     public void submitRequestPriceReduction(String queueName, String wobNumber) throws Exception{
@@ -1464,6 +1482,17 @@ public class FullApplicationControl extends BusinessControl {
 
     public void cancelRequestPriceReduction(String queueName, String wobNumber, int reasonId, String remark) throws Exception {
         bpmExecutor.cancelRequestPriceReduction(queueName, wobNumber, getReasonDescription(reasonId), remark, ActionCode.CANCEL_REQUEST_PRICE_REDUCTION.getVal());
+    }
+
+    private String getDecisionFlag(int decisionType){
+        String decisionFlag = "";
+        if(decisionType == DecisionType.APPROVED.getValue()){
+            decisionFlag = "A";
+        }else if(decisionType == DecisionType.REJECTED.getValue()){
+            decisionFlag = "R";
+        }
+
+        return  decisionFlag;
     }
 
     public List<Reason> getReasonList(ReasonTypeValue reasonTypeValue){
