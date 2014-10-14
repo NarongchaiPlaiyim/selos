@@ -33,7 +33,9 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<paragraph spacingBefore="2"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
@@ -45,7 +47,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
-					<paragraph leftIndent="2"/>
+					<paragraph leftIndent="2" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{guaranteeAmount}]]></textFieldExpression>
 			</textField>
@@ -57,7 +59,7 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top">
-					<paragraph firstLineIndent="2" leftIndent="2"/>
+					<paragraph firstLineIndent="2" leftIndent="2" spacingBefore="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{account}]]></textFieldExpression>
 			</textField>
@@ -69,7 +71,9 @@
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<paragraph spacingBefore="2"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{productProgramAndCreditType}]]></textFieldExpression>
 			</textField>
 		</band>
