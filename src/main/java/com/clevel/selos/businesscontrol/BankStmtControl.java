@@ -500,7 +500,7 @@ public class BankStmtControl extends BusinessControl {
             for(BankStmtView bankStmtView : bankStmtViewList) {
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
-                    bankStmtView.setMainAccount(0);
+                    bankStmtView.setMainAccount(RadioValue.NO.value());
                     break;
                 }
 
@@ -612,7 +612,7 @@ public class BankStmtControl extends BusinessControl {
                     log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
                     if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
                         log.debug("TMB Compare OTH > 0");
-                        bankStmtView.setMainAccount(0);
+                        bankStmtView.setMainAccount(RadioValue.NO.value());
                     }
                 }
             }
