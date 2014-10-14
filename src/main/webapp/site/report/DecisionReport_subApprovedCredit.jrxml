@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCredit" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2de27425-9750-4baf-ac08-eec57a87c2d9">
-	<property name="ireport.zoom" value="1.610510000000011"/>
+	<property name="ireport.zoom" value="1.1000000000000074"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -198,7 +198,7 @@ Fee(%)]]></text>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="fce938b9-6f8a-4d4a-85b4-aa0d9c806e17" style="detail" stretchType="RelativeToBandHeight" x="167" y="0" width="61" height="18"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
@@ -212,7 +212,7 @@ Fee(%)]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" evaluationTime="Page" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="6e0a3df7-cebe-4663-93f3-0c1116ad5a3a" style="detail" stretchType="RelativeToBandHeight" mode="Opaque" x="520" y="0" width="35" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
@@ -262,7 +262,7 @@ Fee(%)]]></text>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<subreport>
-					<reportElement uuid="679b4e16-b722-45f8-8b1f-556c770242ae" x="0" y="0" width="244" height="18"/>
+					<reportElement uuid="679b4e16-b722-45f8-8b1f-556c770242ae" x="0" y="0" width="244" height="18" isRemoveLineWhenBlank="true"/>
 					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoTierDetailReports})]]></dataSourceExpression>
 					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subProposedCredit_subProposedCredit.jasper"]]></subreportExpression>
 				</subreport>

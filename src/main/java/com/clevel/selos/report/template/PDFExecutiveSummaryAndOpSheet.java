@@ -7,18 +7,18 @@ import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
+import com.clevel.selos.dao.working.ProposeLineDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.CreditCustomerType;
-import com.clevel.selos.model.DecisionType;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.RequestTypes;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.working.ExSummary;
+import com.clevel.selos.model.db.working.ProposeLine;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.ProposeLineTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -35,46 +35,24 @@ import java.util.List;
 
 
 public class PDFExecutiveSummaryAndOpSheet implements Serializable {
-    @Inject
-    private ExSummaryControl exSummaryControl;
-
-    @Inject
-    CustomerInfoControl customerInfoControl;
-
-    @Inject
-    private TitleDAO titleDAO;
-
-    @Inject
-    CustomerDAO customerDAO;
+    @Inject private ExSummaryControl exSummaryControl;
+    @Inject CustomerInfoControl customerInfoControl;
+    @Inject private TitleDAO titleDAO;
+    @Inject CustomerDAO customerDAO;
 
     @Inject
     @SELOS
     Logger log;
-
-    @Inject
-    ExSummaryView exSummaryView;
-
-    @Inject
-    BizInfoSummaryControl bizInfoSummaryControl;
-
-    @Inject
-    ExSummaryDAO exSummaryDAO;
-
-    @Inject
-    ExSummary exSummary;
-
-    @Inject
-    private AppHeaderView appHeaderView;
-
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-
-    @Inject
-    DecisionView decisionView;
-
-    @Inject
-    private BizInfoSummaryView bizInfoSummaryView;
-
+    @Inject ExSummaryView exSummaryView;
+    @Inject BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject ExSummaryDAO exSummaryDAO;
+    @Inject ExSummary exSummary;
+    @Inject private AppHeaderView appHeaderView;
+    @Inject  private WorkCaseDAO workCaseDAO;
+    @Inject DecisionView decisionView;
+    @Inject private BizInfoSummaryView bizInfoSummaryView;
+    @Inject private ProposeLineDAO proposeLineDAO;
+    @Inject private ProposeLineTransform proposeLineTransform;
     @Inject
     @NormalMessage
     Message msg;
@@ -356,6 +334,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 accountMovementExSumReportList.add(movementExSumReport);
             }
         } else {
+            AccountMovementExSumReport movementExSumReport = new AccountMovementExSumReport();
+            accountMovementExSumReportList.add(movementExSumReport);
             log.debug("movementViewList in Method fillAccountMovement id Null. {}",movementViewList);
         }
         return accountMovementExSumReportList;
@@ -1259,6 +1239,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
                 ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
                 List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
+                approvedView.setPath(pathsub);
 
                 if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
                     for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
@@ -1272,7 +1253,6 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     }
                 }
 
-                approvedView.setPath(pathsub);
                 approvedView.setCount(count++);
 
                 if (!Util.isNull(detailView.getUwDecision())){
@@ -1349,86 +1329,101 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     //Opsheet
     public List<ProposedCreditDecisionReport> fillApprovedCredit(String pathsub){
         log.debug("on fillApprovedCredit. {}");
-        newCreditDetailViewList = decisionView.getApproveCreditList();
+
         List<ProposedCreditDecisionReport> proposedCreditDecisionReportList = new ArrayList<ProposedCreditDecisionReport>();
 
+        ProposeLine proposeLine = null;
+        if(!Util.isZero(workCaseId)) {
+            proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+        }
+
+        ProposeLineView approveLineView = proposeLineTransform.transformProposeLineToReport(proposeLine, ProposeType.A);
+
         int count = 1;
-        if (Util.isSafetyList(newCreditDetailViewList)){
-            log.debug("newCreditDetailViewList.size() {}",newCreditDetailViewList.size());
-            for (ProposeCreditInfoDetailView detailView : newCreditDetailViewList){
-                ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
-                List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
-
-                if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
-                    if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
-                        for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
-                            ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
-                            proposeCreditInfoTierDetailReport.setStandardPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getStandardPriceLabel()));
-                            proposeCreditInfoTierDetailReport.setSuggestPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getSuggestPriceLabel()));
-                            proposeCreditInfoTierDetailReport.setFinalPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getFinalPriceLabel()));
-                            proposeCreditInfoTierDetailReport.setInstallment(Util.convertNullToZERO(proposeCreditInfoTierDetailView.getInstallment()));
-                            proposeCreditInfoTierDetailReport.setTenor(proposeCreditInfoTierDetailView.getTenor());
-                            creditInfoTierDetailReportList.add(proposeCreditInfoTierDetailReport);
-                        }
-                    }
-
+        if (!Util.isNull(approveLineView)){
+            log.debug("approveLineView is not null.");
+            if (Util.isSafetyList(approveLineView.getProposeCreditInfoDetailViewList())){
+                log.debug("newCreditDetailViewList.size() {}",approveLineView.getProposeCreditInfoDetailViewList().size());
+                for (ProposeCreditInfoDetailView detailView : approveLineView.getProposeCreditInfoDetailViewList()){
+                    ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
+                    List<ProposeCreditInfoTierDetailReport> creditInfoTierDetailReportList = new ArrayList<ProposeCreditInfoTierDetailReport>();
                     approvedView.setPath(pathsub);
-                    approvedView.setCount(count++);
-
-                    if (!Util.isNull(detailView.getProductProgramView())){
-                        approvedView.setProdName(Util.checkNullString(detailView.getProductProgramView().getName()));
-                    } else {
-                        approvedView.setProdName(minus);
-                    }
 
                     if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
-                        approvedView.setUwDecision("APPROVED");
-                    }
-
-                    if (!Util.isNull(detailView.getCreditTypeView())){
-                        approvedView.setCredittypeName(Util.checkNullString(detailView.getCreditTypeView().getName()));
-                    } else {
-                        approvedView.setCredittypeName(minus);
-                    }
-
-                    StringBuilder code = new StringBuilder();
-                    code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append(enter);
-                    code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode())).append(enter);
-
-                    approvedView.setProductAndProject(code.toString());
-                    approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
-                    approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
-                    approvedView.setProposeCreditInfoTierDetailReports(creditInfoTierDetailReportList);
-
-                    StringBuilder builder = new StringBuilder();
-
-                    if (!Util.isNull(detailView.getRequestType())){
-                        if (detailView.getRequestType() == RequestTypes.NEW.value()){
-                            builder = builder.append("Request Type : New    ");
-                        } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
-                            builder = builder.append("Request Type : Change    ");
+                        if (Util.isSafetyList(detailView.getProposeCreditInfoTierDetailViewList())){
+                            for (ProposeCreditInfoTierDetailView proposeCreditInfoTierDetailView : detailView.getProposeCreditInfoTierDetailViewList()){
+                                ProposeCreditInfoTierDetailReport proposeCreditInfoTierDetailReport = new ProposeCreditInfoTierDetailReport();
+                                proposeCreditInfoTierDetailReport.setStandardPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getStandardPriceLabel()));
+                                proposeCreditInfoTierDetailReport.setSuggestPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getSuggestPriceLabel()));
+                                proposeCreditInfoTierDetailReport.setFinalPriceLabel(Util.checkNullString(proposeCreditInfoTierDetailView.getFinalPriceLabel()));
+                                proposeCreditInfoTierDetailReport.setInstallment(Util.convertNullToZERO(proposeCreditInfoTierDetailView.getInstallment()));
+                                proposeCreditInfoTierDetailReport.setTenor(proposeCreditInfoTierDetailView.getTenor());
+                                creditInfoTierDetailReportList.add(proposeCreditInfoTierDetailReport);
+                            }
                         }
-                    }
 
-                    if (!Util.isNull(detailView.getRefinance())){
-                        if (detailView.getRefinance() == RadioValue.YES.value()){
-                            builder = builder.append("Refinance : Yes").append(enter);
-                            approvedView.setRefinance("Yes");
-                        } else if (detailView.getRefinance() == RadioValue.NO.value()){
-                            builder = builder.append("Refinance : No").append(enter);
+                        approvedView.setCount(count++);
+
+                        if (!Util.isNull(detailView.getProductProgramView())){
+                            approvedView.setProdName(Util.checkNullString(detailView.getProductProgramView().getName()));
+                        } else {
+                            approvedView.setProdName(minus);
                         }
+
+                        if ((DecisionType.APPROVED).equals(detailView.getUwDecision())){
+                            approvedView.setUwDecision("APPROVED");
+                        }
+
+                        if (!Util.isNull(detailView.getCreditTypeView())){
+                            approvedView.setCredittypeName(Util.checkNullString(detailView.getCreditTypeView().getName()));
+                        } else {
+                            approvedView.setCredittypeName(minus);
+                        }
+
+                        StringBuilder code = new StringBuilder();
+                        code = code.append("Product: ").append(Util.checkNullString(detailView.getProductCode())).append(enter);
+                        code = code.append("Project: ").append(Util.checkNullString(detailView.getProjectCode())).append(enter);
+
+                        approvedView.setProductAndProject(code.toString());
+                        approvedView.setLimit(Util.convertNullToZERO(detailView.getLimit()));
+                        approvedView.setFrontEndFee(Util.convertNullToZERO(detailView.getFrontEndFee()));
+                        approvedView.setProposeCreditInfoTierDetailReports(creditInfoTierDetailReportList);
+
+                        StringBuilder builder = new StringBuilder();
+
+                        if (!Util.isNull(detailView.getRequestType())){
+                            if (detailView.getRequestType() == RequestTypes.NEW.value()){
+                                builder = builder.append("Request Type : New    ");
+                            } else if (detailView.getRequestType() == RequestTypes.CHANGE.value()){
+                                builder = builder.append("Request Type : Change    ");
+                            }
+                        }
+
+                        if (!Util.isNull(detailView.getRefinance())){
+                            if (detailView.getRefinance() == RadioValue.YES.value()){
+                                builder = builder.append("Refinance : Yes").append(enter);
+                                approvedView.setRefinance("Yes");
+                            } else if (detailView.getRefinance() == RadioValue.NO.value()){
+                                builder = builder.append("Refinance : No").append(enter);
+                            }
+                        }
+
+                        builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
+                                Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : minus).append(enter);
+                        builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append(enter);
+                        builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
+                                Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(SPACE);
+                        builder = builder.append("Hold Amount : ").append(Util.formatNumber(Util.convertNullToZERO(detailView.getHoldLimitAmount())));
+
+                        approvedView.setProposedDetail(builder.toString());
                     }
-
-                    builder = builder.append("Purpose : ").append(!Util.isNull(detailView.getLoanPurposeView()) ?
-                            Util.checkNullString(detailView.getLoanPurposeView().getDescription()) : minus).append(enter);
-                    builder = builder.append("Purpose Detail : ").append(Util.checkNullString(detailView.getProposeDetail())).append(enter);
-                    builder = builder.append("Disbursement : ").append(!Util.isNull(detailView.getDisbursementTypeView()) ?
-                            Util.checkNullString(detailView.getDisbursementTypeView().getDisbursement()) : minus).append(SPACE);
-                    builder = builder.append("Hold Amount : ").append(Util.formatNumber(Util.convertNullToZERO(detailView.getHoldLimitAmount())));
-
-                    approvedView.setProposedDetail(builder.toString());
                     proposedCreditDecisionReportList.add(approvedView);
                 }
+            } else {
+                ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
+                approvedView.setPath(pathsub);
+                proposedCreditDecisionReportList.add(approvedView);
+                log.debug("newCreditDetailViewList is Null by fillApprovedCredit. {}");
             }
         } else {
             ProposedCreditDecisionReport approvedView = new ProposedCreditDecisionReport();
@@ -1436,6 +1431,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             proposedCreditDecisionReportList.add(approvedView);
             log.debug("newCreditDetailViewList is Null by fillApprovedCredit. {}");
         }
+
         return proposedCreditDecisionReportList;
     }
 
