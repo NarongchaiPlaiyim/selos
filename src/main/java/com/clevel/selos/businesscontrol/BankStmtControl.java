@@ -596,23 +596,28 @@ public class BankStmtControl extends BusinessControl {
     public void updateMainAccAndHighestInflow(BankStmtSummaryView bankStmtSummaryView) {
         log.debug("calculateMainAccount()");
         BigDecimal tmbLimit = BigDecimal.ZERO;
+        boolean isHaveMainTMB = false;
         if(!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getTmbBankStmtViewList());
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
-                if(bankStmtView.getMainAccount() == 1) {
+                if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
                     tmbLimit = bankStmtView.getNetIncomeLastSix();
+                    isHaveMainTMB = true;
                     log.debug("TMB Limit :: {}", tmbLimit);
+                    log.debug("Have Main TMB :: {}", isHaveMainTMB);
                 }
             }
         }
         if(!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
-            for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
-                if(bankStmtView.getMainAccount() == 1) {
-                    log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
-                    if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
-                        log.debug("TMB Compare OTH > 0");
-                        bankStmtView.setMainAccount(RadioValue.NO.value());
+            if(isHaveMainTMB) {
+                for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
+                    if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
+                        log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
+                        if(tmbLimit.compareTo(bankStmtView.getNetIncomeLastSix()) > 0) {
+                            log.debug("TMB Compare OTH > 0");
+                            bankStmtView.setMainAccount(RadioValue.NO.value());
+                        }
                     }
                 }
             }
