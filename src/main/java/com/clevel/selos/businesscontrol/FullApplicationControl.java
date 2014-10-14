@@ -765,7 +765,7 @@ public class FullApplicationControl extends BusinessControl {
                     borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
                 }
             }
-            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
             log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
         } catch (Exception ex){
             log.error("Exception while Create Work Item for Appraisal.");
