@@ -443,7 +443,7 @@ public class DisbursementControl extends BusinessControl {
 		for (OpenAccount model : models) {
 			SelectItem item = new SelectItem();
 			for (OpenAccountPurpose openAccountPurpose : model.getOpenAccountPurposeList()){
-				if (openAccountPurpose.getAccountPurpose().getName().equals("โอนสินเชื่อเข้าบัญชี")){
+				if (openAccountPurpose.getAccountPurpose().getId()==4){
 					item.setValue(model.getId());
 					item.setLabel(model.getAccountNumber());
 					StringBuilder accountName = new StringBuilder();
