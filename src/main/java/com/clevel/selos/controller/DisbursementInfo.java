@@ -230,6 +230,8 @@ public class DisbursementInfo implements Serializable {
 				if (disbursementDepositDetailView.getOpenAccountId() == ((Long) item.getValue())) {
 					log.debug("updateAccountName description: " + item.getDescription());
 					disbursementDepositDetailView.setAccountName(item.getDescription());
+                    disbursementDepositDetailView.setAccountNumber(item.getLabel());
+                    disbursementDepositDetailView.setOpenAccountId(((Long)item.getValue()).longValue());
 					break;
 				}
 			}

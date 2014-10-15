@@ -213,6 +213,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementCreditView.setProductProgram(disbursementTRCredit.getCreditDetail().getProductProgram().getName());
 			disbursementCreditView.setCreditFacility(disbursementTRCredit.getCreditDetail().getCreditType().getName());
 			disbursementCreditView.setDisburseAmount(disbursementTRCredit.getDisburseAmount());
+            disbursementCreditView.setLimitAmount(disbursementTRCredit.getCreditDetail().getLimit());
 			totalDisbursementAmount = totalDisbursementAmount.add(disbursementTRCredit.getDisburseAmount());
 			disbursementCreditViewList.add(disbursementCreditView);
 		}
@@ -331,7 +332,7 @@ public class DisbursementControl extends BusinessControl {
 				disbursementTR.setDisbursement(disbursement);
 
 			}
-			//disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
+			disbursementTR.setOpenAccount(openAccountDAO.findById(depositBaDetailView.getOpenAccountId()));
 			disbursementTRDAO.persist(disbursementTR);
 			// Disbursement TR credit
 			for (DisbursementCreditTypeView disbursementCreditTypeView : depositBaDetailView.getDisbursementCreditTypeView()) {
@@ -444,8 +445,12 @@ public class DisbursementControl extends BusinessControl {
 			SelectItem item = new SelectItem();
 			for (OpenAccountPurpose openAccountPurpose : model.getOpenAccountPurposeList()){
 				if (openAccountPurpose.getAccountPurpose().getId()==4){
+                    String accountNumber = "";
+                    if(model.getAccountNumber()!=null){
+                        accountNumber = model.getAccountNumber();
+                    }
 					item.setValue(model.getId());
-					item.setLabel(model.getAccountNumber());
+					item.setLabel(accountNumber);
 					StringBuilder accountName = new StringBuilder();
 					for ( OpenAccountName openAccountName : model.getOpenAccountNameList()){
 						accountName.append(openAccountName.getCustomer().getNameEn());
@@ -453,10 +458,10 @@ public class DisbursementControl extends BusinessControl {
 					}
 					accountName.setLength(accountName.length() - 1);
 					item.setDescription(accountName.toString());
+                    rtnDatas.add(item);
 					break;
 				}
 			}
-			rtnDatas.add(item);
 		}
 		return rtnDatas;
 	}
