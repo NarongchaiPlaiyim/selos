@@ -765,7 +765,7 @@ public class FullApplicationControl extends BusinessControl {
                     borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
                 }
             }
-            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
             log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
         } catch (Exception ex){
             log.error("Exception while Create Work Item for Appraisal.");
@@ -835,7 +835,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
-    public void requestAppraisal(long workCaseId, String queueName, String wobNumber, String aadAdminUserName) throws Exception{
+    public void requestAppraisal(String queueName, String wobNumber, long workCaseId, String submitRemark, int slaReasonId, String slaRemark ) throws Exception{
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {
             try{
                 log.debug("requestAppraisal Customer Acceptance ::: Create WorkCaseAppraisal Complete.");
@@ -861,7 +861,7 @@ public class FullApplicationControl extends BusinessControl {
                         }
                     }
                 }
-                bpmExecutor.requestAppraisal(queueName, wobNumber, aadAdminUserName, ActionCode.REQUEST_APPRAISAL.getVal());
+                bpmExecutor.requestAppraisal(queueName, wobNumber, ActionCode.REQUEST_APPRAISAL.getVal(), getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId));
                 log.debug("requestAppraisal Customer Acceptance ::: Create Work Item for appraisal complete.");
             } catch (Exception ex){
                 log.error("Exception while Create Work Item for Appraisal. : ", ex);

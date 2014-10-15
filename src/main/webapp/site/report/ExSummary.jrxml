@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.024520183047623"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="383"/>
+	<property name="ireport.y" value="2284"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -3571,7 +3571,7 @@ new net.sf.jasperreports.engine.JREmptyDataSource()
 				<text><![CDATA[Propose Collateral]]></text>
 			</staticText>
 		</band>
-		<band height="65">
+		<band height="60">
 			<staticText>
 				<reportElement uuid="ca715c63-18de-417d-8d6e-b0e71ed14e4b" x="0" y="5" width="110" height="13"/>
 				<textElement>

@@ -119,7 +119,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="31" splitType="Stretch">
+		<band height="31">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="1546d8d0-471e-46ea-9ffc-ef23d93b8e2f" style="detail" stretchType="RelativeToBandHeight" x="0" y="0" width="25" height="31"/>
 				<textElement verticalAlignment="Top">
