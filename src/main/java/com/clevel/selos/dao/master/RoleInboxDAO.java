@@ -62,34 +62,39 @@ public class RoleInboxDAO extends GenericDAO<InboxType, Long> {
         List userList = cr.list();
         log.info("userList .... {}", userList);
 
-        Iterator iterator = userList.iterator();
-
-        while(iterator.hasNext() == true)
+        if(userList!=null && userList.size()>0)
         {
-            RelRoleBasedInbox inboxTableName = new RelRoleBasedInbox();
+            Iterator iterator = userList.iterator();
 
-            inboxTableName = (RelRoleBasedInbox)iterator.next();
+            while(iterator.hasNext() == true)
+            {
+                RelRoleBasedInbox inboxTableName = new RelRoleBasedInbox();
 
-            inboxRoleId = inboxTableName.getInboxId();
-            inboxList.add(inboxRoleId);
+                inboxTableName = (RelRoleBasedInbox)iterator.next();
+
+                inboxRoleId = inboxTableName.getInboxId();
+                inboxList.add(inboxRoleId);
+            }
+            Criteria criteria2 = getSession().createCriteria(InboxType.class);
+
+            criteria2.setProjection(Projections.projectionList().add(Projections.property("inbox_name"), "inbox_name")).add(Restrictions.in("id", inboxList)).setResultTransformer(Transformers.aliasToBean(InboxType.class));
+            inboxTypeList = Util.safetyList(criteria2.list());
+
+            iterator = inboxTypeList.iterator();
+
+            while (iterator.hasNext() == true)
+            {
+               InboxType inboxType1 = new InboxType();
+                inboxType1 = (InboxType) iterator.next();
+                inboxName = inboxType1.getInbox_name();
+              //  modifiedInboxName = "'" + inboxName + "'";
+                log.info("inbox Name ..{}",inboxName);
+                stringInboxList.add(inboxName);
+            }
+            log.info("inboxTypeList .... {}", stringInboxList);
+
         }
-        Criteria criteria2 = getSession().createCriteria(InboxType.class);
 
-        criteria2.setProjection(Projections.projectionList().add(Projections.property("inbox_name"), "inbox_name")).add(Restrictions.in("id", inboxList)).setResultTransformer(Transformers.aliasToBean(InboxType.class));
-        inboxTypeList = Util.safetyList(criteria2.list());
-
-        iterator = inboxTypeList.iterator();
-
-        while (iterator.hasNext() == true)
-        {
-           InboxType inboxType1 = new InboxType();
-            inboxType1 = (InboxType) iterator.next();
-            inboxName = inboxType1.getInbox_name();
-          //  modifiedInboxName = "'" + inboxName + "'";
-            log.info("inbox Name ..{}",inboxName);
-            stringInboxList.add(inboxName);
-        }
-        log.info("inboxTypeList .... {}", stringInboxList);
 
         return stringInboxList;
 
