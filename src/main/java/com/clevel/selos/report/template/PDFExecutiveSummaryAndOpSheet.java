@@ -605,6 +605,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
                         existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                     }
+                } else {
+                    ExistingCreditTierDetailReport existingCreditTierDetailReport = new ExistingCreditTierDetailReport();
+                    existingCreditTierDetailReport.setInstallment(BigDecimal.ZERO);
+                    existingCreditTierDetailReport.setFinalBasePriceAndInterest(minus);
+                    existingCreditTierDetailReport.setTenor(0);
+                    existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                 }
                 decisionReport.setExistingCreditTierDetailReports(existingCreditTierDetailReportList);
 
@@ -710,34 +716,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 borrowerRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 borrowerRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 borrowerRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
+                borrowerRetailDecisionReport.setInstallment(Util.convertNullToZERO(detailView.getInstallment()));
+                borrowerRetailDecisionReport.setIntFeePercent(Util.convertNullToZERO(detailView.getIntFeePercent()));
+                borrowerRetailDecisionReport.setTenor(Util.convertNullToZERO(detailView.getTenor()));
 
-                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
-                    for (ExistingCreditTierDetailView existingCreditTierDetailView : detailView.getExistingCreditTierDetailViewList()){
-                        ExistingCreditTierDetailReport existingCreditTierDetailReport = new ExistingCreditTierDetailReport();
-                        existingCreditTierDetailReport.setInstallment(Util.convertNullToZERO(existingCreditTierDetailView.getInstallment()));
-
-                        StringBuilder finalBasePriceAndInterest = new StringBuilder();
-                        if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
-                        } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
-                        }
-
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
-                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
-                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
-                            } else {
-                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
-                            }
-                        } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
-                        }
-                        existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
-                        existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
-                        existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
-                    }
-                }
-                borrowerRetailDecisionReport.setExistingCreditTierDetailReports(existingCreditTierDetailReportList);
                 retailDecisionReportList.add(borrowerRetailDecisionReport);
             }
         } else {
@@ -824,6 +806,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
                         existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                     }
+                } else {
+                    ExistingCreditTierDetailReport existingCreditTierDetailReport = new ExistingCreditTierDetailReport();
+                    existingCreditTierDetailReport.setInstallment(BigDecimal.ZERO);
+                    existingCreditTierDetailReport.setFinalBasePriceAndInterest(minus);
+                    existingCreditTierDetailReport.setTenor(0);
+                    existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                 }
                 relatedCommercialDecisionReport.setExistingCreditTierDetailReports(existingCreditTierDetailReportList);
 
@@ -906,34 +894,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 relatedRetailDecisionReport.setPcePercent(Util.convertNullToZERO(detailView.getPceLimit()));
                 relatedRetailDecisionReport.setPceLimit(Util.convertNullToZERO(detailView.getLimit()));
                 relatedRetailDecisionReport.setOutstanding(Util.convertNullToZERO(detailView.getOutstanding()));
+                relatedRetailDecisionReport.setInstallment(Util.convertNullToZERO(detailView.getInstallment()));
+                relatedRetailDecisionReport.setIntFeePercent(Util.convertNullToZERO(detailView.getIntFeePercent()));
+                relatedRetailDecisionReport.setTenor(Util.convertNullToZERO(detailView.getTenor()));
 
-                if (Util.isSafetyList(detailView.getExistingCreditTierDetailViewList())){
-                    for (ExistingCreditTierDetailView existingCreditTierDetailView : detailView.getExistingCreditTierDetailViewList()){
-                        ExistingCreditTierDetailReport existingCreditTierDetailReport = new ExistingCreditTierDetailReport();
-                        existingCreditTierDetailReport.setInstallment(Util.convertNullToZERO(existingCreditTierDetailView.getInstallment()));
-
-                        StringBuilder finalBasePriceAndInterest = new StringBuilder();
-                        if (!Util.isNull(existingCreditTierDetailView.getFinalBasePrice())){
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(Util.checkNullString(existingCreditTierDetailView.getFinalBasePrice().getName()));
-                        } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE);
-                        }
-
-                        if (!Util.isZero(existingCreditTierDetailView.getFinalInterest()) && !Util.isNull(existingCreditTierDetailView.getFinalInterest())){
-                            if ((existingCreditTierDetailView.getFinalInterest()).compareTo(BigDecimal.ZERO) > 0){
-                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(add).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
-                            } else {
-                                finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(Util.formatNumber(Util.convertNullToZERO(existingCreditTierDetailView.getFinalInterest()))).append(enter);
-                            }
-                        } else {
-                            finalBasePriceAndInterest = finalBasePriceAndInterest.append(SPACE).append(enter);
-                        }
-                        existingCreditTierDetailReport.setFinalBasePriceAndInterest(finalBasePriceAndInterest.toString());
-                        existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
-                        existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
-                    }
-                }
-                relatedRetailDecisionReport.setExistingCreditTierDetailReports(existingCreditTierDetailReportList);
                 relatedRetailDecisionReportList.add(relatedRetailDecisionReport);
             }
         } else {

@@ -270,9 +270,9 @@ Fee(%)]]></text>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="470672a5-c124-4e07-b3c0-57f5d9360fd2" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="376" y="0" width="48" height="18"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top">
@@ -283,9 +283,9 @@ Fee(%)]]></text>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="9f14c74c-e63b-48fc-abe5-8019bccaf84c" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="481" y="0" width="39" height="18"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top">
@@ -296,9 +296,9 @@ Fee(%)]]></text>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="3c638d85-b0a0-4c78-8ea8-19f7cf58bddf" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="424" y="0" width="57" height="18"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Top">
@@ -309,9 +309,9 @@ Fee(%)]]></text>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="a8b08a16-5f3f-427d-89ed-81abc132603d" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="325" y="0" width="51" height="18"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top">
@@ -322,9 +322,9 @@ Fee(%)]]></text>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="1d1f3044-294e-4ef2-83ed-5aaead4c5041" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="276" y="0" width="49" height="18"/>
 				<box>
-					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Top">
