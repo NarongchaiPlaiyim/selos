@@ -1,9 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.BaseRateDAO;
-import com.clevel.selos.dao.master.FeePaymentMethodDAO;
-import com.clevel.selos.dao.master.FeeTypeDAO;
-import com.clevel.selos.dao.master.MortgageTypeDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.brms.model.response.PricingIntTier;
@@ -94,6 +91,8 @@ public class ProposeLineTransform extends Transform {
     private DecisionFollowConditionTransform decisionFollowConditionTransform;
     @Inject
     private ApprovalHistoryTransform approvalHistoryTransform;
+    @Inject
+    private AADDecisionDAO aadDecisionDAO;
 
     @Inject
     @NormalMessage
@@ -1483,6 +1482,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAppraisalDate(proposeCollateralInfo.getAppraisalDate());
             proposeCollateralInfoView.setNumberMonthsFromApprDate(proposeCollateralInfo.getNumberMonthsFromApprDate());
             proposeCollateralInfoView.setAadDecision(proposeCollateralInfo.getAadDecision());
+            if(proposeCollateralInfo.getAadDecision()!=null && !proposeCollateralInfo.getAadDecision().trim().equalsIgnoreCase("")){
+                AADDecision aadDecision = aadDecisionDAO.getByCode(proposeCollateralInfo.getAadDecision());
+                proposeCollateralInfoView.setAadDecisionLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setAadDecisionLabel("-");
+            }
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
@@ -1538,6 +1543,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAppraisalDate(proposeCollateralInfo.getAppraisalDate());
             proposeCollateralInfoView.setNumberMonthsFromApprDate(proposeCollateralInfo.getNumberMonthsFromApprDate());
             proposeCollateralInfoView.setAadDecision(proposeCollateralInfo.getAadDecision());
+            if(proposeCollateralInfo.getAadDecision()!=null && !proposeCollateralInfo.getAadDecision().trim().equalsIgnoreCase("")){
+                AADDecision aadDecision = aadDecisionDAO.getByCode(proposeCollateralInfo.getAadDecision());
+                proposeCollateralInfoView.setAadDecisionLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setAadDecisionLabel("-");
+            }
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
