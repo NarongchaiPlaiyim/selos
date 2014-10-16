@@ -1731,31 +1731,56 @@ public class ProposeLineControl extends BusinessControl {
         return returnMapVal;
     }
 
-    public Map<String, Object> onRetrieveAppraisalReport(String jobId, User user, List<ProposeCollateralInfoView> proposeCollateralInfoViewList) {
+    public Map<String, Object> onRetrieveAppraisalReport(String jobId, User user, List<ProposeCollateralInfoView> proposeCollateralInfoViewList, boolean isModeEdit) {
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
         Integer completeFlag = 1;
         if (!Util.isNull(jobId) && !Util.isEmpty(jobId) && !Util.isNull(user)) {
-            if (checkJobIdExist(proposeCollateralInfoViewList, jobId)) {
-                try {
-                    AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
-                    if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
-                        ProposeCollateralInfoView proposeCollateralInfoView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
-                        returnMapVal.put("proposeCollateralInfoView", proposeCollateralInfoView);
-                        returnMapVal.put("completeFlag", completeFlag);
-                    } else {
+            if (isModeEdit) {
+                if(checkCountJobIdExist(proposeCollateralInfoViewList, jobId) == 1) {
+                    try {
+                        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
+                        if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
+                            ProposeCollateralInfoView proposeCollateralInfoView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
+                            returnMapVal.put("proposeCollateralInfoView", proposeCollateralInfoView);
+                            returnMapVal.put("completeFlag", completeFlag);
+                        } else {
+                            completeFlag = 2;
+                            returnMapVal.put("error", appraisalDataResult.getReason());
+                            returnMapVal.put("completeFlag", completeFlag);
+                        }
+                    } catch (COMSInterfaceException e) {
+                        log.debug("COMSInterfaceException :: {}", e);
                         completeFlag = 2;
-                        returnMapVal.put("error", appraisalDataResult.getReason());
+                        returnMapVal.put("error", e.getMessage());
                         returnMapVal.put("completeFlag", completeFlag);
                     }
-                } catch (COMSInterfaceException e) {
-                    log.debug("COMSInterfaceException :: {}", e);
-                    completeFlag = 2;
-                    returnMapVal.put("error", e.getMessage());
+                } else {
+                    completeFlag = 3;
                     returnMapVal.put("completeFlag", completeFlag);
                 }
             } else {
-                completeFlag = 3;
-                returnMapVal.put("completeFlag", completeFlag);
+                if(checkJobIdExist(proposeCollateralInfoViewList, jobId)) {
+                    try {
+                        AppraisalDataResult appraisalDataResult = comsInterface.getAppraisalData(user.getId(), jobId);
+                        if (!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())) {
+                            ProposeCollateralInfoView proposeCollateralInfoView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
+                            returnMapVal.put("proposeCollateralInfoView", proposeCollateralInfoView);
+                            returnMapVal.put("completeFlag", completeFlag);
+                        } else {
+                            completeFlag = 2;
+                            returnMapVal.put("error", appraisalDataResult.getReason());
+                            returnMapVal.put("completeFlag", completeFlag);
+                        }
+                    } catch (COMSInterfaceException e) {
+                        log.debug("COMSInterfaceException :: {}", e);
+                        completeFlag = 2;
+                        returnMapVal.put("error", e.getMessage());
+                        returnMapVal.put("completeFlag", completeFlag);
+                    }
+                } else {
+                    completeFlag = 3;
+                    returnMapVal.put("completeFlag", completeFlag);
+                }
             }
         }
 
@@ -1769,6 +1794,16 @@ public class ProposeLineControl extends BusinessControl {
             }
         }
         return true;
+    }
+
+    public int checkCountJobIdExist(List<ProposeCollateralInfoView> proposeCollateralInfoViewList, String jobId) {
+        int count = 0;
+        for (ProposeCollateralInfoView proposeCollateralInfoView : proposeCollateralInfoViewList) {
+            if (Util.equals(proposeCollateralInfoView.getJobID(), jobId)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public int getLastSeqNumberFromProposeCredit(List<ProposeCreditInfoDetailView> proposeCreditInfoDetailViewList) {
