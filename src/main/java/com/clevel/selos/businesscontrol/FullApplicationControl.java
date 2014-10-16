@@ -1246,11 +1246,15 @@ public class FullApplicationControl extends BusinessControl {
             boolean exceptionalFlow = false;
             if(newCreditDetailList != null && newCreditDetailList.size() > 0){
                 //Check for Request Price Reduction
-                for(ProposeCreditInfo itemCreditDetail : newCreditDetailList){
-                    if(itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1){
-                        requestPricing = 1;
-                        break;
+                if(!skipReduceFlag) {
+                    for (ProposeCreditInfo itemCreditDetail : newCreditDetailList) {
+                        if (itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1) {
+                            requestPricing = 1;
+                            break;
+                        }
                     }
+                }else{
+                    requestPricing = 1;
                 }
 
                 for(ProposeCreditInfo proposeCreditInfo : newCreditDetailList){
