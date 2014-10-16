@@ -7,6 +7,7 @@ import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
@@ -59,6 +60,8 @@ public class InboxControl extends BusinessControl {
 
     public static final String RETURN_REPLY_PAGE = "/site/returnInfoReply.jsf";
     public static final String RETURN_REVIEW_PAGE = "/site/returnInfoReview.jsf";
+    private static final  String BASIC_INFO_PAGE = "/site/basicInfo.jsf";
+    private static final String DECISION_PAGE = "/site/decision.jsf";
 
     @Inject
     public InboxControl(){
@@ -68,25 +71,25 @@ public class InboxControl extends BusinessControl {
     public String getLandingPage(long stepId, long status){
         User user = getCurrentUser();
         if(user!=null){
-            if(stepId==2004 && status==20006){
+            if(stepId==StepValue.CREDIT_DECISION_UW1_BDM.value() && status==20006){
                 if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
-            if(stepId==2026 && status==20006){
+            if(stepId==StepValue.CREDIT_DECISION_UW1_CORRECT_INFO_BDM.value() && status==20006){
                 if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
-            if(stepId==2017 && status==20015){
+            if(stepId==StepValue.CREDIT_DECISION_UW2_BDM.value() && status==20015){
                 if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
             }
 
-            if(stepId==2030 && status==20015){
+            if(stepId==StepValue.CREDIT_DECISION_UW2_BDM_UPD_INFO.value() && status==20015){
                 if(user.getRole().getId()== RoleValue.BDM.id()){
                     return RETURN_REPLY_PAGE;
                 }
@@ -96,6 +99,11 @@ public class InboxControl extends BusinessControl {
             String landingPage = "";
             if(stepLandingPage != null){
                 landingPage = stepLandingPage.getPageName();
+                if(user.getRole().getId() == RoleValue.UW.id() && !(landingPage.equals(BASIC_INFO_PAGE) || landingPage.equals(DECISION_PAGE))){
+                    landingPage = BASIC_INFO_PAGE;
+                }else if(user.getRole().getId() == RoleValue.VIEWER.id() && !landingPage.equals(BASIC_INFO_PAGE)){
+                    landingPage = BASIC_INFO_PAGE;
+                }
             } else {
                 landingPage = "LANDING_PAGE_NOT_FOUND";
             }

@@ -220,8 +220,8 @@ public class COMSService implements Serializable {
                                     if(subCollateralDataMap.containsKey(subCollateral.getColId())){
                                         SubCollateralData subCollateralDataTmp = subCollateralDataMap.get(subCollateral.getColId());
                                         String collateralOwnerStr = subCollateralDataTmp.getCollateralOwner();
-                                        if(collateralOwner!=null && !collateralOwner.trim().equalsIgnoreCase("")){
-                                            collateralOwnerStr = collateralOwner.concat(", ").concat(subCollateralData.getCollateralOwner());
+                                        if(collateralOwnerStr!=null && !collateralOwnerStr.trim().equalsIgnoreCase("")){
+                                            collateralOwnerStr = collateralOwnerStr.concat(", ").concat(subCollateralData.getCollateralOwner());
                                         } else {
                                             collateralOwnerStr = subCollateralData.getCollateralOwner();
                                         }
