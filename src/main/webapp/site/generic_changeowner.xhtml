@@ -147,19 +147,19 @@
                             </p:column>
 
                             <p:column headerText="Received Date" styleClass="center"
-                                      style="width: 130px;" sortBy="longReceivedTime">
+                                      style="width: 60px;" sortBy="longReceivedTime">
                                 <h:outputText value="#{item.receivedDate}"/>
                             </p:column>
 
                             <p:column headerText="Application Number" styleClass="center"
-                                      style="width: 110px;" sortBy="appNumber" >
+                                      style="width: 60px;" sortBy="appNumber" >
                                 <h:outputText value="App No.: #{item.appNumber}"/>
                                 <br/>
                                 <h:outputText value="Ref App No.: #{empty item.refAppNumber ? '-' : item.refAppNumber}"/>
                             </p:column>
 
                             <p:column headerText="Name" styleClass="center"
-                                      style="width: 110px;" sortBy="name">
+                                      style="width: 60px;" sortBy="name">
                                 <h:outputText value="#{item.name}"/>
                             </p:column>
 
@@ -172,52 +172,52 @@
                             </p:column>
 
                             <p:column headerText="Step" styleClass="center"
-                                      style="width: 110px;" sortBy="step">
+                                      style="width: 60px;" sortBy="step">
                                 <h:outputText value="#{item.step}"/>
                             </p:column>
 
                             <p:column headerText="Status" styleClass="center"
-                                      style="width: 110px;" sortBy="status">
+                                      style="width: 60px;" sortBy="status">
                                 <h:outputText value="#{item.status}"/>
                             </p:column>
 
                             <p:column headerText="From User" styleClass="center"
-                                      style="width: 110px;" sortBy="currentUser">
+                                      style="width: 60px;" sortBy="currentUser">
                                 <h:outputText value="#{item.fromUser}"/>
                             </p:column>
 
                             <p:column headerText="At User" styleClass="center"
-                                      style="width: 110px;" sortBy="currentUser">
+                                      style="width: 60px;" sortBy="currentUser">
                                 <h:outputText value="#{item.currentUser}"/>
                             </p:column>
 
                             <p:column headerText="At User Team" styleClass="center"
-                                      style="width: 130px;" sortBy="teamName">
+                                      style="width: 60px;" sortBy="teamName">
                                 <h:outputText value="#{item.teamName}"/>
                             </p:column>
 
                             <p:column headerText="Appointment Date" styleClass="center"
-                                      style="width: 110px;" sortBy="longAppointmentDate">
+                                      style="width: 60px;" sortBy="longAppointmentDate">
                                 <h:outputText value="#{item.appointmentDate}" />
                             </p:column>
 
                             <p:column headerText="DOA Level" styleClass="center"
-                                      style="width: 110px;">
+                                      style="width: 60px;">
                                 <h:outputText value="#{item.doaLevel}"/>
                             </p:column>
 
                             <p:column headerText="SLAEndDate" styleClass="center"
-                                      style="width: 110px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="longSLAEndTime">
+                                      style="width: 600px; background-color : #{item.slastatus eq 'A' ? 'yellow' : (item.slastatus eq 'R' ? 'red' : 'default')};" sortBy="longSLAEndTime">
                                 <h:outputText value="#{item.SLAEndTime}" />
                             </p:column>
 
                             <p:column headerText="Total Time Spent At User" styleClass="center"
-                                      style="width: 110px;" sortBy="totalTimeAtUser">
+                                      style="width: 60px;" sortBy="totalTimeAtUser">
                                 <h:outputText value="#{item.totalTimeAtUser}"/>
                             </p:column>
 
                             <p:column headerText="Total Time Spent At Process" styleClass="center"
-                                      style="width: 110px;" sortBy="totalTimeAtProcess">
+                                      style="width: 60px;" sortBy="totalTimeAtProcess">
                                 <h:outputText value="#{item.totalTimeAtProcess}"/>
                             </p:column>
 
@@ -227,7 +227,7 @@
                                 </p:commandButton>
                             </p:column>
                            <!-- <p:column headerText="F_WOBNumber" styleClass="center"
-                                      style="width: 110px;" sortBy="{item.f_WobNum}">
+                                      style="width: 60px;" sortBy="{item.f_WobNum}">
                                 <h:outputText value="{item.f_WobNum}"/>
                             </p:column>-->
 

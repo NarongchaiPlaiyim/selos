@@ -36,6 +36,7 @@ public class CustomerInfoControl extends BusinessControl {
     @Inject
     @SELOS
     private Logger log;
+
     @Inject
     CustomerDAO customerDAO;
     @Inject
