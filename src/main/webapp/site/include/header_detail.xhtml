@@ -500,6 +500,7 @@
                          rendered="#{headerController.checkButton('Request for Price Reduction')}"
                          onclick="PF('confirmRequestPriceReduction').show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request for Price Reduction" styleClass="left"
+                             closeOnEscape="false" closable="false"
                              icon="ui-icon-alert"
                              widgetVar="confirmRequestPriceReduction" global="false" showEffect="fade"
                              rendered="#{headerController.checkButton('Request for Price Reduction')}">

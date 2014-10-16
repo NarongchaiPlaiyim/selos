@@ -664,8 +664,8 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void requestAppraisal(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
-        boolean success = bpmInterface.createParallelCase(appNumber, borrowerName, productGroup, requestType, bdmUserName);
+    public void requestAppraisal(String appNumber, String refAppNumber, String borrowerName, String productGroup, int requestType, String bdmUserName) throws Exception{
+        boolean success = bpmInterface.createParallelCase(appNumber, refAppNumber, borrowerName, productGroup, requestType, bdmUserName);
         if(!success){
             log.debug("create workcase appraisal item failed.");
             throw new Exception("exception while launch new case for appraisal");
