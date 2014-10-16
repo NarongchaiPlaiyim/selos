@@ -806,6 +806,12 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         existingCreditTierDetailReport.setTenor(Util.convertNullToZERO(existingCreditTierDetailView.getTenor()));
                         existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                     }
+                } else {
+                    ExistingCreditTierDetailReport existingCreditTierDetailReport = new ExistingCreditTierDetailReport();
+                    existingCreditTierDetailReport.setInstallment(BigDecimal.ZERO);
+                    existingCreditTierDetailReport.setFinalBasePriceAndInterest(minus);
+                    existingCreditTierDetailReport.setTenor(0);
+                    existingCreditTierDetailReportList.add(existingCreditTierDetailReport);
                 }
                 relatedCommercialDecisionReport.setExistingCreditTierDetailReports(existingCreditTierDetailReportList);
 
