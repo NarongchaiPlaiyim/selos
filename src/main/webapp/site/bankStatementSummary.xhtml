@@ -798,7 +798,7 @@
                                                  styleClass="small">
                                     <f:setPropertyActionListener value="1" target="#{bankStatementSummary.actionNo}"/>
                                 </p:commandButton>
-                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                <p:commandButton id="btnCancel" styleClass="small"
                                                  process="@this" update=":frmMain"
                                                  actionListener="#{bankStatementSummary.onCreation()}"/>
                             </td>
