@@ -80,7 +80,7 @@ public class DBR implements Serializable {
     @Column(name = "TOTAL_MONTH_DEBT_RELATED")
     private BigDecimal totalMonthDebtRelated;
 
-    @Column(name = "marketable_flag", columnDefinition = "int default 0")
+    @Column(name = "marketable_flag", columnDefinition = "int default 1")
     private int marketableFlag;
 
     public DBR() {
