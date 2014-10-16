@@ -12,6 +12,7 @@ import java.util.Locale;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.clevel.selos.model.ConfirmAccountType;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
@@ -291,6 +292,13 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3023_CreateCustProfile(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3023_CreateCustProfile");
 		String accOpenRequired = "N";
+        List<OpenAccount> models = openAccountDAO.findByWorkCaseId(workCase.getId());
+        for(OpenAccount openAccount : models){
+            if(openAccount.getConfirmOpenAccount()!=null && openAccount.getConfirmOpenAccount()==ConfirmAccountType.OPEN){
+                accOpenRequired = "Y";
+                break;
+            }
+        }
 		fields.put("AccOpenRequired", accOpenRequired);
 	}
 	private void _Before_3029_GenerateAgreement(WorkCase workCase, long actionId,HashMap<String,String> fields) {
