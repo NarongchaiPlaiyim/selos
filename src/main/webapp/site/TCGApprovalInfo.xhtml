@@ -78,7 +78,7 @@
 												value="#{msg.get('app.tcgApprovalInfo.submitDate')}" /></td>
 										<td class="left"
 											style="min-width: 300px; max-width: 400px; width: 400px;">
-											<p:calendar disabled="#{tcgApprovalInfo.isEnableSubmit}"
+											<p:calendar disabled="#{tcgApprovalInfo.isDisabled('tcgInfo')}"
 												value="#{tcgApprovalInfo.tcgInfoView.tcgSubmitDate}"
 												showOn="button" />
 										</td>
@@ -88,7 +88,7 @@
 									<tr>
 										<td class="title"><h:outputText value="#{msg.get('app.tcgApprovalInfo.approveResult')}#{tcgApprovalInfo.mandate('approveResult')}" /></td>
 										<td><p:selectOneRadio
-												disabled="#{tcgApprovalInfo.isEnableApprove}"
+                                                disabled="#{tcgApprovalInfo.isDisabled('approveResult')}"
 												value="#{tcgApprovalInfo.tcgInfoView.approvedResult}"
 												layout="grid" columns="2">
 												<f:selectItem itemLabel="#{'Approved'}" itemValue="1" />
@@ -96,12 +96,10 @@
 											</p:selectOneRadio></td>
 										<td class="title" style="width: 130px;"><h:outputText
 												value="#{msg.get('app.tcgApprovalInfo.approveDate')}#{tcgApprovalInfo.mandate('approveDate')}" /></td>
-										<td class="left">
 										<td class="left"><p:calendar
-												disabled="#{tcgApprovalInfo.isEnableApprove}"
+                                                disabled="#{tcgApprovalInfo.isDisabled('approveDate')}"
 												value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
 												showOn="button" /></td>
-										</td>
 									</tr>
 									<tr>
 										<td colspan="100%">
