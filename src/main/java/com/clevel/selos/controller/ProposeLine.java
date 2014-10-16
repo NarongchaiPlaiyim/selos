@@ -552,7 +552,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onRetrieveAppraisalReportInfo() {
-        Map<String, Object> resultMapVal = proposeLineControl.onRetrieveAppraisalReport(proposeCollateralInfoView.getJobID(), user, proposeLineView.getProposeCollateralInfoViewList());
+        Map<String, Object> resultMapVal = proposeLineControl.onRetrieveAppraisalReport(proposeCollateralInfoView.getJobID(), user, proposeLineView.getProposeCollateralInfoViewList(), isModeEdit);
 
         headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findAll());
 
