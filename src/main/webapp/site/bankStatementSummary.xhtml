@@ -793,6 +793,7 @@
                                                  binding="#{saveButton}"
                                                  action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                  process="@form"
+                                                 disabled="#{bankStatementSummary.isDisabled('saveButton')}"
                                                  update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
                                                  styleClass="small">
                                     <f:setPropertyActionListener value="1" target="#{bankStatementSummary.actionNo}"/>
