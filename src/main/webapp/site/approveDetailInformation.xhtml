@@ -391,7 +391,7 @@
 													</p:column>
 													<p:column style="min-width:500px"
 														headerText="#{msg.get('app.approveDetail.accountDeposit.table.purpose')}">
-														<h:outputText value="#{item.getAllPurposes(',')}" />
+														<h:outputText value="#{item.allPurposes}" escape="false"/>
 													</p:column>
 												</p:dataTable></td>
 										</tr>
