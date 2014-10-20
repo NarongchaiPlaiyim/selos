@@ -4,7 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:clv="http://clevel.com/ui">
 
 	<h:head>
 		<title>#{msg.get('app.tcgApprovalInfo.title')}</title>
@@ -78,9 +79,12 @@
 												value="#{msg.get('app.tcgApprovalInfo.submitDate')}" /></td>
 										<td class="left"
 											style="min-width: 300px; max-width: 400px; width: 400px;">
-											<p:calendar disabled="#{tcgApprovalInfo.isDisabled('tcgInfo')}"
-												value="#{tcgApprovalInfo.tcgInfoView.tcgSubmitDate}"
-                                                pattern="dd/MM/yyyy" showOn="button" autocomplete="false" />
+                                            <clv:BECalendar id='tcg_submitDate' value="#{tcgApprovalInfo.tcgInfoView.tcgSubmitDate}"
+                                                            readonlyInput="true"
+                                                            pattern="dd/MM/yyyy" showOn="button"
+                                                            disabled="#{tcgApprovalInfo.isDisabled('tcgInfo')}"
+                                                            autocomplete="false" locale="th_TH"
+                                                    />
 										</td>
 										<td></td>
 										<td></td>
@@ -96,10 +100,14 @@
 											</p:selectOneRadio></td>
 										<td class="title" style="width: 130px;"><h:outputText
 												value="#{msg.get('app.tcgApprovalInfo.approveDate')}#{tcgApprovalInfo.mandate('approveDate')}" /></td>
-										<td class="left"><p:calendar
-                                                disabled="#{tcgApprovalInfo.isDisabled('approveDate')}"
-												value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
-                                                pattern="dd/MM/yyyy" showOn="button" autocomplete="false"/></td>
+										<td class="left">
+                                            <clv:BECalendar id='tcg_submitDate' value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
+                                                            readonlyInput="true"
+                                                            pattern="dd/MM/yyyy" showOn="button"
+                                                            disabled="#{tcgApprovalInfo.isDisabled('approveDate')}"
+                                                            autocomplete="false" locale="th_TH"
+                                                    />
+                                        </td>
 									</tr>
 									<tr>
 										<td colspan="100%">

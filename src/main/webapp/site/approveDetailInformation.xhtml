@@ -4,7 +4,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 
 
@@ -424,9 +425,12 @@
 													for="loan_firstpaydate"
 													value="#{msg.get('app.approveDetail.loanPaymentDetail.firstPaymentDate')}" />
 											</td>
-											<td><p:calendar id='loan_firstpaydate'
-													value="#{approveDetailInformation.approveDetailInformationView.firstPaymentDate}"
-													pattern="dd/MM/yyyy" showOn="button" autocomplete="false" />
+											<td>
+                                                <clv:BECalendar id='loan_firstpaydate' value="#{approveDetailInformation.approveDetailInformationView.firstPaymentDate}"
+                                                                readonlyInput="true"
+                                                                pattern="dd/MM/yyyy" showOn="button"
+                                                                autocomplete="false" locale="th_TH"
+                                                        />
 											</td>
 										</tr>
 										<tr>
