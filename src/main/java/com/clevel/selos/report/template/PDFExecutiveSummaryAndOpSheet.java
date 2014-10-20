@@ -397,7 +397,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     }
                 }
 
-                decisionExSumReport.setApplicationResult(Util.checkNullString(exSummaryView.getApplicationResult()));
+                decisionExSumReport.setApplicationResult(exSummaryView.getApplicationResult());
 
                 if (!Util.isNull(decisionView.getFlag())){
                     if ("Y".equalsIgnoreCase(decisionView.getFlag().code())){
@@ -1606,15 +1606,11 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                     StringBuilder collateralIwner = new StringBuilder();
                                     for (CustomerInfoView customerInfoView : proposeCollateralInfoSubView.getCollateralOwnerUWList()){
                                         if (!Util.isNull(customerInfoView.getTitleTh())){
-                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getTitleTh().getTitleTh())).append(minus);
-                                        } else {
-                                            collateralIwner = collateralIwner.append(minus);
+                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getTitleTh().getTitleTh()));
                                         }
 
                                         if (!Util.isNull(customerInfoView.getFirstNameTh())){
-                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh())).append(minus);
-                                        } else {
-                                            collateralIwner = collateralIwner.append(minus);
+                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh())).append(SPACE);
                                         }
 
                                         if (!Util.isNull(customerInfoView.getLastNameTh())){
@@ -1794,14 +1790,10 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                     for (CustomerInfoView customerInfoView : proposeCollateralInfoSubView.getCollateralOwnerUWList()){
                                         if (!Util.isNull(customerInfoView.getTitleTh())){
                                             collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getTitleTh().getTitleTh()));
-                                        } else {
-                                            collateralIwner = collateralIwner.append(SPACE);
                                         }
 
                                         if (!Util.isNull(customerInfoView.getFirstNameTh())){
-                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh()));
-                                        } else {
-                                            collateralIwner = collateralIwner.append(minus);
+                                            collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh())).append(SPACE);
                                         }
 
                                         if (!Util.isNull(customerInfoView.getLastNameTh())){
@@ -1973,14 +1965,9 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                             for (CustomerInfoView customerInfoView : proposeCollateralInfoSubView.getCollateralOwnerUWList()){
                                                 if (!Util.isNull(customerInfoView.getTitleTh())){
                                                     collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getTitleTh().getTitleTh()));
-                                                } else {
-                                                    collateralIwner = collateralIwner.append(minus);
                                                 }
-
                                                 if (!Util.isNull(customerInfoView.getFirstNameTh())){
-                                                    collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh()));
-                                                } else {
-                                                    collateralIwner = collateralIwner.append(minus);
+                                                    collateralIwner = collateralIwner.append(Util.checkNullString(customerInfoView.getFirstNameTh())).append(SPACE);
                                                 }
 
                                                 if (!Util.isNull(customerInfoView.getLastNameTh())){
