@@ -696,7 +696,7 @@ public class HeaderController extends BaseController {
                             }
 
                             //TO Disabled DDL DOA Lower than GH
-                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) || !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
+                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                             }
