@@ -1119,7 +1119,27 @@ public class FullApplicationControl extends BusinessControl {
         }
         if(!Util.isNull(proposeLine)){
             if(!Util.isNull(proposeLine.getProposeCollateralInfoList()) && proposeLine.getProposeCollateralInfoList().size() > 0){
-                for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
+                for(int i = 0; i < proposeLine.getProposeCollateralInfoList().size(); i++){
+                    ProposeCollateralInfo proposeCollateralInfo = proposeLine.getProposeCollateralInfoList().get(i);
+                    List<ProposeCollateralInfoHead> tempProposeColHeadList = new ArrayList<ProposeCollateralInfoHead>();
+                    if(proposeCollateralInfo.getProposeType() == ProposeType.R) {
+                        log.debug("Update Propose Type for Collateral id : {}", proposeCollateralInfo.getId());
+                        proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                        proposeCollateralInfo.setProposeType(ProposeType.A);
+                        if (!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0) {
+                            for (int j = 0; j < proposeCollateralInfo.getProposeCollateralInfoHeadList().size(); j++) {
+                                log.debug("Update Propose Type for Collateral Head id : {}", proposeCollateralInfo.getId());
+                                ProposeCollateralInfoHead proposeCollateralInfoHead = proposeCollateralInfo.getProposeCollateralInfoHeadList().get(j);
+                                proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                                proposeCollateralInfoHead.setProposeType(ProposeType.A);
+                                tempProposeColHeadList.add(proposeCollateralInfoHead);
+                            }
+                            proposeCollateralInfo.setProposeCollateralInfoHeadList(tempProposeColHeadList);
+                        }
+                        newCollateralDAO.persist(proposeCollateralInfo);
+                    }
+                }
+                /*for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
                     if(proposeCollateralInfo.getProposeType() == ProposeType.R && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
                         proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
                         if(!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0){
@@ -1131,8 +1151,9 @@ public class FullApplicationControl extends BusinessControl {
                             }
                         }
                     }
+                    log.debug("submitForAADCommittee : proposeCollateralInfo : {}", proposeCollateralInfo);
                     newCollateralDAO.persist(proposeCollateralInfo);
-                }
+                }*/
             }
         }
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());

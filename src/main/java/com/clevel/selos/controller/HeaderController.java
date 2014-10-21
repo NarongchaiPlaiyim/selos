@@ -1691,16 +1691,9 @@ public class HeaderController extends BaseController {
         }
     }
 
-
-
     public void onReturnBDMByAAD(){
-        String wobNumber = "";
-        String queueName = "";
+        _loadSessionVariable();
         boolean complete = false;
-
-        HttpSession session = FacesUtil.getSession(false);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
@@ -2356,6 +2349,7 @@ public class HeaderController extends BaseController {
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
                     returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
+                    //TODO Remove Collateral List when AAD Admin return to BDM
                     messageHeader = "Information.";
                     message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -2578,6 +2572,7 @@ public class HeaderController extends BaseController {
                 message = "Return to AAD Admin success.";
 
                 fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+                //TODO Duplicate Collateral to Propose Type A
                 returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
