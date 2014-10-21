@@ -204,10 +204,10 @@ public class IsaReport implements Serializable {
         nameISAUserProfile = nameISAUserProfile.append("Matrix_").append(Util.getFileNameForISA());
 
         StringBuilder builder =  new StringBuilder();
-        builder.append("STEP_ID").append(COMMA_DELIMITED);
-        builder.append("STEP_NAME").append(COMMA_DELIMITED);
         builder.append("ROLE_ID").append(COMMA_DELIMITED);
-        builder.append("ROLE_NAME").append('\n');
+        builder.append("ROLE_NAME").append(COMMA_DELIMITED);
+        builder.append("SCREEN_ID").append(COMMA_DELIMITED);
+        builder.append("SCREEN_NAME").append('\n');
 
         try {
             log.debug("isaViewReport.getRole() {}",isaViewReport.getRole());
