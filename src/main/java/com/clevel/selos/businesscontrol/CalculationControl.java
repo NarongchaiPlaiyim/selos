@@ -541,6 +541,9 @@ public class CalculationControl extends BusinessControl{
         // Sum(weight cost of goods sold * businessProportion)
         // cost of goods = business desc ( column COG )
         // business proportion = สัดส่วนธุรกิจ ในแต่ละ business < %Income >
+        //CR >>
+        //AAAValue = ยอดขาย/รายได้ คูณ weighted Standard Cost of Good Sold
+        //ยอดขาย/รายได้ = รายได้ต่อเดือน (adjusted) [DBR] คูณ 12
         BigDecimal aaaValue = BigDecimal.ZERO;
 
         //table 1
@@ -585,6 +588,8 @@ public class CalculationControl extends BusinessControl{
             }
         }
 
+        //*** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
+        BigDecimal salesIncome = Util.multiply(adjustDBR, monthOfYear);
 
         BizInfoSummaryView bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
         if (bizInfoSummaryView != null) {
@@ -601,14 +606,12 @@ public class CalculationControl extends BusinessControl{
                         if (bidv.getBizDesc() != null) {
                             cog = bidv.getBizDesc().getCog();
                         }
-                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, bidv.getPercentBiz()), oneHundred));
+                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, salesIncome), oneHundred));
                     }
                 }
             }
         }
 
-        //*** ยอดขาย/รายได้  = รายได้ต่อเดือน (adjusted) [DBR] * 12
-        BigDecimal salesIncome = Util.multiply(adjustDBR, monthOfYear);
         //calculation
         //(ยอดขาย/รายได้ หาร 365 คูณ Weighted AR) + (AAAValue หาร 365 คูณ Weighted INV) - ((AAAValue หาร 365 คูณ Weighted AP)
         wcNeed = Util.subtract((Util.add(Util.multiply(Util.divide(salesIncome, dayOfYear), weightAR), Util.multiply(Util.divide(aaaValue, dayOfYear), weightINV))), (Util.multiply(Util.divide(aaaValue, dayOfYear), weightAP)));
