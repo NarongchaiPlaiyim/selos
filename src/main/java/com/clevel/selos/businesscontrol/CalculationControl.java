@@ -778,6 +778,7 @@ public class CalculationControl extends BusinessControl{
             BigDecimal borrowerComOBOD = BigDecimal.ZERO;
             BigDecimal borrowerCom = BigDecimal.ZERO;
             BigDecimal groupExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalNewCredit = BigDecimal.ZERO;
 
             ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if (!Util.isNull(existingCreditFacility)) {
@@ -791,8 +792,8 @@ public class CalculationControl extends BusinessControl{
             TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
-                log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", existingCreditFacility.getId());
-                log.debug("calculateTotalProposeAmount :: tcg ID :: {}", existingCreditFacility.getId());
+                log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", basicInfo.getId());
+                log.debug("calculateTotalProposeAmount :: tcg ID :: {}", tcg.getId());
                 int tcgFlag = tcg.getTcgFlag();
                 int specialProgramId = 0;
                 if(basicInfo.getApplySpecialProgram() == 1) {
@@ -873,6 +874,14 @@ public class CalculationControl extends BusinessControl{
                                                     sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                 }
                                             }
+
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalNewCredit = sumTotalNewCredit.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalNewCredit = sumTotalNewCredit.add(creditInfo.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                                sumTotalNewCredit = sumTotalNewCredit.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
+                                            }
                                         }
                                     }
                                 }
@@ -893,6 +902,7 @@ public class CalculationControl extends BusinessControl{
             log.debug("calculateTotalProposeAmount :: Total Commercial :: {}", sumTotalBorrowerCommercial);
             log.debug("calculateTotalProposeAmount :: Total Commercial And OBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
             log.debug("calculateTotalProposeAmount :: Total Exposure :: {}", sumTotalGroupExposure);
+            log.debug("calculateTotalProposeAmount :: Total New Credit :: {}", sumTotalNewCredit);
 
             if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // If UW Save will update loan dbr
                 proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);                 //sumTotalLoanDbr
@@ -900,14 +910,16 @@ public class CalculationControl extends BusinessControl{
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
-                proposeLine.setTotalExposure(sumTotalGroupExposure);
+                proposeLine.setTotalExposure(sumTotalGroupExposure);                        //sumTotalGroupExposure
+                proposeLine.setTotalNewCredit(sumTotalNewCredit);                           //sumTotalNewCredit
             } else {
                 proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                        //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
-                proposeLine.setTotalExposure(sumTotalGroupExposure);
+                proposeLine.setTotalExposure(sumTotalGroupExposure);                        //sumTotalGroupExposure
+                proposeLine.setTotalNewCredit(sumTotalNewCredit);                           //sumTotalNewCredit
             }
         }
         proposeLineDAO.persist(proposeLine);
