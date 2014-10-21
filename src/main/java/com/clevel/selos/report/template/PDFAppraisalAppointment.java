@@ -112,7 +112,7 @@ public class PDFAppraisalAppointment implements Serializable {
             report.setProvinceOfProperty(Util.checkNullString(!Util.isNull(appraisalView.getProvinceOfProperty()) ? appraisalView.getProvinceOfProperty().getName() : SPACE));
             report.setAppraisalDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppraisalDate()));
             report.setDueDate(DateTimeUtil.getCurrentDateTH(appraisalView.getDueDate()));
-            report.setAADAdminRemark(Util.checkNullString(appraisalView.getAADAdminRemark()));
+            report.setAADAdminRemark(Util.checkNullString(appraisalView.getBdmRemark()));
 
             report.setAppointmentDate(DateTimeUtil.getCurrentDateTH(appraisalView.getAppointmentDate()));
             report.setAppointmentCusName(Util.checkNullString(appraisalView.getAppointmentCusName()));
@@ -123,7 +123,7 @@ public class PDFAppraisalAppointment implements Serializable {
             } else {
                 report.setCancelAppointment(SPACE);
             }
-            report.setAppointmentRemark(Util.checkNullString(appraisalView.getAppointmentRemark()));
+            report.setAppointmentRemark(Util.checkNullString(appraisalView.getAADAdminRemark()));
 
             report.setZoneLocation(Util.checkNullString(getZoneLocation()));
         } else {
