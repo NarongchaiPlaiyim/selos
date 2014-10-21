@@ -12,7 +12,7 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                     </td>
                     <td style="width: 200px;">
-                        <p:inputText value="#{appraisalAppointment.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalAppointment.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}" maxlength="50" />
+                        <p:inputText value="#{appraisalAppointment.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalAppointment.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}" maxlength="50" disabled="#{appraisalAppointment.isDisabled('saveButton')}" />
                     </td>
                 </tr>
                 <tr>
@@ -20,13 +20,13 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
                     </td>
                     <td style = "#{appraisalAppointment.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
-                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewAppraisalB}"/>
+                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewAppraisalB}" disabled="#{appraisalAppointment.isDisabled('saveButton')}"/>
                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}"/>
                         <br/>
-                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeNewAppraisalB}"/>
+                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeNewAppraisalB}" disabled="#{appraisalAppointment.isDisabled('saveButton')}"/>
                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}"/>
                         <br/>
-                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewBuildingB}"/>
+                        <h:selectBooleanCheckbox value="#{appraisalAppointment.appraisalDetailViewDialog.purposeReviewBuildingB}" disabled="#{appraisalAppointment.isDisabled('saveButton')}"/>
                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}"/>
 
                     </td>
@@ -36,7 +36,7 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
                     </td>
                     <td style="width: 200px;">
-                        <p:selectOneRadio id="characteristicRadio" value="#{appraisalAppointment.appraisalDetailViewDialog.characteristic}">
+                        <p:selectOneRadio id="characteristicRadio" value="#{appraisalAppointment.appraisalDetailViewDialog.characteristic}" disabled="#{appraisalAppointment.isDisabled('saveButton')}">
                             <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                             <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                         </p:selectOneRadio>
@@ -48,6 +48,7 @@
                     </td>
                     <td class="title" style="width: 200px;">
                         <p:inputText id="numberOfDocuments"  styleClass="right" maxlength="3"
+                                     disabled="#{appraisalAppointment.isDisabled('saveButton')}"
                                      onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                      value="#{appraisalAppointment.appraisalDetailViewDialog.numberOfDocuments}"
                                      style = "#{appraisalAppointment.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} " >
@@ -59,6 +60,7 @@
                 <tr>
                     <td class="center" colspan="2" style="margin-top: 20px;">
                         <p:commandButton id="btnSaveAppraisalDetail"
+                                         disabled="#{appraisalAppointment.isDisabled('saveButton')}"
                                          value="#{msg.get('app.button.ok')}"
                                          actionListener="#{appraisalAppointment.onSaveAppraisalDetailView()}"
                                          process="@form"

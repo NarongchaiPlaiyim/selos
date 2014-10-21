@@ -778,6 +778,7 @@ public class CalculationControl extends BusinessControl{
             BigDecimal borrowerComOBOD = BigDecimal.ZERO;
             BigDecimal borrowerCom = BigDecimal.ZERO;
             BigDecimal groupExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalNewCredit = BigDecimal.ZERO;
 
             ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
             if (!Util.isNull(existingCreditFacility)) {
@@ -791,8 +792,8 @@ public class CalculationControl extends BusinessControl{
             TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
 
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
-                log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", existingCreditFacility.getId());
-                log.debug("calculateTotalProposeAmount :: tcg ID :: {}", existingCreditFacility.getId());
+                log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", basicInfo.getId());
+                log.debug("calculateTotalProposeAmount :: tcg ID :: {}", tcg.getId());
                 int tcgFlag = tcg.getTcgFlag();
                 int specialProgramId = 0;
                 if(basicInfo.getApplySpecialProgram() == 1) {
@@ -873,6 +874,14 @@ public class CalculationControl extends BusinessControl{
                                                     sumTotalLoanDbr = sumTotalLoanDbr.add(calTotalProposeLoanDBRForIntYear(creditInfo, productFormula.getDbrSpread()));
                                                 }
                                             }
+
+                                            if (productFormula.getExposureMethod() == ExposureMethod.NOT_CALCULATE.value()) { //ไม่คำนวณ
+                                                sumTotalNewCredit = sumTotalNewCredit.add(BigDecimal.ZERO);
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.LIMIT.value()) { //limit
+                                                sumTotalNewCredit = sumTotalNewCredit.add(creditInfo.getLimit());
+                                            } else if (productFormula.getExposureMethod() == ExposureMethod.PCE_LIMIT.value()) {    //(limit * %PCE)/100
+                                                sumTotalNewCredit = sumTotalNewCredit.add(Util.divide(Util.multiply(creditInfo.getLimit(),creditInfo.getPcePercent()),100));
+                                            }
                                         }
                                     }
                                 }
@@ -893,6 +902,7 @@ public class CalculationControl extends BusinessControl{
             log.debug("calculateTotalProposeAmount :: Total Commercial :: {}", sumTotalBorrowerCommercial);
             log.debug("calculateTotalProposeAmount :: Total Commercial And OBOD :: {}", sumTotalBorrowerCommercialAndOBOD);
             log.debug("calculateTotalProposeAmount :: Total Exposure :: {}", sumTotalGroupExposure);
+            log.debug("calculateTotalProposeAmount :: Total New Credit :: {}", sumTotalNewCredit);
 
             if(!Util.isNull(user) && !Util.isNull(user.getRole()) && user.getRole().getId() == RoleValue.UW.id()) { // If UW Save will update loan dbr
                 proposeLine.setTotalProposeLoanDBR(sumTotalApproveLoanDbr);                 //sumTotalLoanDbr
@@ -900,14 +910,16 @@ public class CalculationControl extends BusinessControl{
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
-                proposeLine.setTotalExposure(sumTotalGroupExposure);
+                proposeLine.setTotalExposure(sumTotalGroupExposure);                        //sumTotalGroupExposure
+                proposeLine.setTotalNewCredit(sumTotalNewCredit);                           //sumTotalNewCredit
             } else {
                 proposeLine.setTotalProposeLoanDBR(sumTotalLoanDbr);                        //sumTotalLoanDbr
                 proposeLine.setTotalPropose(sumTotalPropose);                               //sumTotalPropose All Credit in this case
                 proposeLine.setTotalProposeNonLoanDBR(sumTotalNonLoanDbr);                  //sumTotalNonLoanDbr
                 proposeLine.setTotalCommercial(sumTotalBorrowerCommercial);                 //sum Commercial of Existing and Propose
                 proposeLine.setTotalCommercialAndOBOD(sumTotalBorrowerCommercialAndOBOD);   //sum Commercial and OBOD of Existing and Propose
-                proposeLine.setTotalExposure(sumTotalGroupExposure);
+                proposeLine.setTotalExposure(sumTotalGroupExposure);                        //sumTotalGroupExposure
+                proposeLine.setTotalNewCredit(sumTotalNewCredit);                           //sumTotalNewCredit
             }
         }
         proposeLineDAO.persist(proposeLine);
@@ -988,7 +1000,7 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
                             maximumSMELimit = summaryOne;
@@ -1063,7 +1075,7 @@ public class CalculationControl extends BusinessControl{
                                         BigDecimal ltvValue;
                                         BigDecimal percentLTV;
                                         for (ProposeCollateralInfoHead collHead : collHeadList) {
-                                            percentLTV = findLTVPercent(collHead, workCaseId);
+                                            percentLTV = findLTVPercent(collHead, basicInfo, workCase);
                                             ltvValue = Util.multiply(collHead.getAppraisalValue(), percentLTV);
                                             summaryOne = Util.add(summaryOne, (Util.subtract(ltvValue, collHead.getExistingCredit())));
                                         }
@@ -1072,7 +1084,7 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
 
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
@@ -1112,7 +1124,7 @@ public class CalculationControl extends BusinessControl{
         proposeLineDAO.persist(proposeLine);
     }
 
-    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId) {
+    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
         BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
         BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
         BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
@@ -1126,7 +1138,6 @@ public class CalculationControl extends BusinessControl{
         4. [Sum of (Income Gross_TMB Bank Statement Summary)+Sum of (Income Gross_Other Bank Statement Summary)] x 12 >= 100,000,000
         5. ใช้สินเชื่อทางตรงกับ TMB อย่างน้อย 1 ปี (ในหน้า Basic Info) = Yes
         */
-        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(bankStatementSummary)) {
             sumBank = Util.multiply(Util.add(bankStatementSummary.getTMBTotalIncomeGross(), bankStatementSummary.getOthTotalIncomeGross()), BigDecimal.valueOf(12));
         }
@@ -1153,7 +1164,6 @@ public class CalculationControl extends BusinessControl{
             }
         }
 
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
                     ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
@@ -1169,7 +1179,7 @@ public class CalculationControl extends BusinessControl{
         return summary;
     }
 
-    public BigDecimal findLTVPercent(ProposeCollateralInfoHead proposeCollateralInfoHead, long workCaseId) {
+    public BigDecimal findLTVPercent(ProposeCollateralInfoHead proposeCollateralInfoHead, BasicInfo basicInfo, WorkCase workCase) {
         BigDecimal ltvPercentBig = BigDecimal.ZERO;
         if(!Util.isNull(proposeCollateralInfoHead)){
             if(!Util.isNull(proposeCollateralInfoHead.getPotentialCollateral()) && !Util.isZero(proposeCollateralInfoHead.getPotentialCollateral().getId())
@@ -1179,8 +1189,6 @@ public class CalculationControl extends BusinessControl{
                 if (!Util.isNull(potentialCollateral) && !Util.isNull(tcgCollateralType)) {
                     PotentialColToTCGCol potentialColToTCGCol = potentialColToTCGColDAO.getPotentialColToTCGCol(potentialCollateral, tcgCollateralType);
                     if (potentialColToTCGCol != null) {
-                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                        WorkCase workCase = workCaseDAO.findById(workCaseId);
                         if (basicInfo != null && workCase != null) {
                             if (workCase.getProductGroup() != null && Util.isTrue(workCase.getProductGroup().getSpecialLTV())) {
                                 if (potentialColToTCGCol.getRetentionLTV() != null) {

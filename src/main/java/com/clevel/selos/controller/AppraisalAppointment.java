@@ -137,6 +137,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     private boolean addDialog;
     private Status workCaseStatus;
     private CustomerAcceptanceView customerAcceptanceView;
+    private User user;
 
     public AppraisalAppointment() {
 
@@ -170,6 +171,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         statusId = Util.parseLong(session.getAttribute("statusId"), 0);
+        user = (User) session.getAttribute("user");
 
         onLoadCompany();
         onLoadProvince();
@@ -281,8 +283,8 @@ public class AppraisalAppointment extends BaseController implements Serializable
         messageHeader = "เกิดข้อผิดพลาด";
         message = "ยังไม่มีการกรอกข้อมูลการร้องขอ Appraisal มาก่อน";
         RequestContext.getCurrentInstance().execute("msgBoxNoRequestMessageDlg.show()");
-
     }
+
     public void onChangePageCauseNoRequest(){
         try{
             log.info("onChangePageCauseNoRequest 1");
@@ -312,6 +314,10 @@ public class AppraisalAppointment extends BaseController implements Serializable
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
         Cloner cloner = new Cloner();
+
+        contactRecord.updateNextCallingDate();
+
+        sendCallBackParam(true);
         if(Util.isZero(contactRecordDetailViewList.size())){
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
             log.debug("-- [NEW]ContactRecordDetailViewList created");
@@ -488,6 +494,8 @@ public class AppraisalAppointment extends BaseController implements Serializable
     public void onAddAppraisalContactDetailView(){
         log.info("-- onAddAppraisalContactDetailView() ModeForButton[ADD]");
         contactRecord = new ContactRecordDetailView();
+        contactRecord.setCreateBy(user);
+        contactRecord.setStatus(workCaseStatus);
         if (Util.isNull(reasons) || Util.isZero(reasons.size())){
             reasons = customerAcceptanceControl.getContactRecordReasons();
         }
@@ -991,7 +999,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public String getMinDate() {
-        SimpleDateFormat dFmt = new SimpleDateFormat("dd/MM/yyyy",new Locale("th", "TH"));
-        return dFmt.format(new Date());
+        log.debug("current date : {}", getCurrentDate());
+        return DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
     }
 }
