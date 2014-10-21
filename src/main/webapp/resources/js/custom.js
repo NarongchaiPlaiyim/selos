@@ -811,12 +811,6 @@ function handleAppraisalContactDetailRequest(xhr, status, args) {
     }
 }
 
-function handleCollateralDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        appraisalComsViewDlg.hide();
-    }
-}
-
 function handleExSumDeviateRequest(xhr, status, args) {
     if (args.functionComplete) {
         exSumDeviateDlg.hide();

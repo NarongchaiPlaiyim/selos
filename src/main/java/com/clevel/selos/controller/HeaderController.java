@@ -173,7 +173,7 @@ public class HeaderController extends BaseController {
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
     //Request Appraisal
-    private enum ModeForButton{ ADD, EDIT }
+    /*private enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
     private int rowIndex;
 
@@ -191,7 +191,7 @@ public class HeaderController extends BaseController {
     private boolean numberOfDocumentsFlag;
     private boolean contactFlag;
     private boolean contactFlag2;
-    private boolean contactFlag3;
+    private boolean contactFlag3;*/
 
     private HashMap<String, Integer> stepStatusMap;
 
@@ -296,9 +296,9 @@ public class HeaderController extends BaseController {
         log.debug("HeaderController ::: stepStatusMap : {}", stepStatusMap);
 
         //FOR Appraisal Request Dialog
-        appraisalView = new AppraisalView();
-        appraisalDetailView = new AppraisalDetailView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
+        //appraisalView = new AppraisalView();
+        //appraisalDetailView = new AppraisalDetailView();
+        //appraisalContactDetailView = new AppraisalContactDetailView();
 
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
@@ -411,6 +411,7 @@ public class HeaderController extends BaseController {
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
         slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");
         currentUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+        user = (User) session.getAttribute("user");
     }
 
     public boolean checkButton(String buttonName){
@@ -690,12 +691,12 @@ public class HeaderController extends BaseController {
                             }
 
                             //TO Disabled DDL DOA Lower than RGM
-                            if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
                                 isSubmitToZM = false;
                             }
 
                             //TO Disabled DDL DOA Lower than GH
-                            if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) || !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                             }
@@ -1297,7 +1298,71 @@ public class HeaderController extends BaseController {
     //************* END FUNCTION FOR CANCEL CA *************//
 
     //************** FUNCTION FOR APPRAISAL STAGE *************//
-    //-------------- Function for Cancel Appraisal Request -----------//
+
+    //---------------- Function for Request Appraisal ( Parallel ) -----------------//
+    //*** For BDM Request from PreScreen/FullApplication
+    //*   Flag for Parallel flag to REQUESTING_PARALLEL
+    //*   Step 2001/1003
+    public void onRequestParallelAppraisal(){
+        _loadSessionVariable();
+        try {
+            log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
+            fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
+            //Redirect to Appraisal Request Page
+            FacesUtil.redirect("/site/appraisalRequest.jsf");
+            return;
+        }catch (Exception ex){
+            log.error("Exception while request parallel appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
+            showMessageBox();
+        }
+    }
+
+    //*** For BDM Request from RequestAppraisal Screen
+    //*   Show Dialog for Submit Request Parallel
+    //*   Step 2001/1003
+    public void onOpenSubmitParallelRequestAppraisal(){
+        _loadSessionVariable();
+        slaReasonId = 0;
+        submitRemark = "";
+        slaRemark = "";
+        RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
+    }
+
+    //*** For BDM Request from RequestAppraisal Screen
+    //*   Submit case and Create parallel Case for Appraisal
+    //*   Step 2001/1003
+    public void onSubmitParallelRequestAppraisal(){
+        try{
+            fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
+            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
+            messageHeader = "Information.";
+            message = "Request for Appraisal complete.";
+            showMessageRedirect();
+        }catch(Exception ex){
+            log.error("Exception while submit parallel request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            showMessageBox();
+        }
+
+    }
+
+    //*** For BDM Cancel Request from RequestAppraisal Screen
+    //*   Step 2001/1003
+    public void onCancelParallelRequestAppraisal(){
+        _loadSessionVariable();
+        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}, stepId : {}", workCaseId, workCasePreScreenId, stepId);
+        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId, stepId);
+        messageHeader = "Information.";
+        message = "Cancel request appraisal complete.";
+        showMessageRedirect();
+    }
+
+    //*** For BDM Cancel Request from RequestAppraisal Screen
+    //*   Clear Parallel Appraisal Flag, Delete Collateral ProposeType A ( Requested )
+    //*   Step 2007
     public void onOpenCancelAppraisalRequest(){
         log.debug("onOpenCancelAppraisalRequest ::: starting...");
         cancelRemark = "";
@@ -1306,12 +1371,16 @@ public class HeaderController extends BaseController {
         log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
     }
 
+    //*** For BDM Cancel Request from RequestAppraisal Screen
+    //*   Clear Parallel Appraisal Flag, Delete Collateral ProposeType A ( Requested )
+    //*   Step 2007
     public void onCancelAppraisalRequest(){
         log.debug("onCancelAppraisalRequest ::: starting...");
         _loadSessionVariable();
         boolean complete = false;
         try{
             fullApplicationControl.cancelRequestAppraisal(queueName, wobNumber, cancelRequestReasonId, cancelRequestRemark, workCasePreScreenId, workCaseId, stepId);
+            fullApplicationControl.deleteUnUseCollateral(workCaseId, workCasePreScreenId);
             messageHeader =  msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.cancel.success");
             showMessageRedirect();
@@ -1326,6 +1395,45 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
+    //*** For BDM Request Appraisal after Customer Acceptance
+    //*   Step 2032
+    public void onOpenRequestAppraisalCustomerAccepted(){
+        log.debug("onOpenRequestAppraisalCustomerAccepted ( after customer acceptance )");
+        _loadSessionVariable();
+
+        //Check Appraisal data exist.
+        if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
+            RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
+        } else {
+            log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
+            messageHeader = "Information.";
+            message = "Please complete request appraisal form.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+
+    }
+
+    //*** For BDM Request Appraisal after Customer Acceptance
+    //*   Step 2032
+    public void onSubmitRequestAppraisalCustomerAccepted(){
+        log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
+        _loadSessionVariable();
+
+        try {
+            fullApplicationControl.requestAppraisal(queueName, wobNumber, workCaseId, submitRemark, slaReasonId, slaRemark);
+            messageHeader = "Information.";
+            message = "Submit case success.";
+            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
+        } catch (Exception ex){
+            log.error("exception while request appraisal : ", ex);
+            messageHeader = "Exception.";
+            message = Util.getMessageException(ex);
+            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+        }
+    }
+
+    //*** For AAD Admin Submit to AAD Committee
+    //*   Step 2006
     public void onOpenSubmitForAADAdmin(){
         log.debug("onOpenSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
@@ -1340,12 +1448,14 @@ public class HeaderController extends BaseController {
         }
     }
 
+    //*** For AAD Admin Submit to AAD Committee
+    //*   Step 2006
     public void onSubmitForAADAdmin(){
         log.debug("onSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
         boolean canSubmit = false;
         try{
-            if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId==StatusValue.REPLY_FROM_BDM.value()){
+            if(stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() && statusId == StatusValue.REPLY_FROM_BDM.value()){
                 log.debug("onSubmitForAADAdmin ( save Return History For Restart )");
                 returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                 canSubmit = true;
@@ -1376,19 +1486,22 @@ public class HeaderController extends BaseController {
         }
     }
 
+    //*** For AAD Committee Submit to UW
     public void onOpenSubmitForAADCommittee(){
         _loadSessionVariable();
         log.debug("onOpenSubmitForAADCommittee");
 
     }
 
+    //*** For AAD Committee Submit to UW
     public void onSubmitForAADCommittee(){
         _loadSessionVariable();
         log.debug("onSubmitForAADCommittee ( appraisal to uw )");
         try{
             returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
             fullApplicationControl.submitForAADCommittee(queueName, wobNumber, workCaseId, workCasePreScreenId);
-
+            //Delete Request Data
+            fullApplicationControl.deleteUnUseCollateral(workCaseId, workCasePreScreenId);
             messageHeader = "Information.";
             message = "Submit case success.";
             showMessageRedirect();
@@ -1399,174 +1512,6 @@ public class HeaderController extends BaseController {
             showMessageBox();
         }
     }
-
-    //-------------- Function for Appraisal Request ( BDM ) -------------------//
-    public void onOpenRequestAppraisal(){
-        log.debug("onOpenRequestAppraisal");
-
-        appraisalView = new AppraisalView();
-        appraisalDetailView = new AppraisalDetailView();
-        appraisalContactDetailView = new AppraisalContactDetailView();
-        appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
-
-        try{
-            appraisalView.setZoneLocation(user.getTeam().getTeam_name());
-        } catch (Exception e) {
-            appraisalView.setZoneLocation("");
-        }
-
-    }
-
-    public void onSubmitRequestAppraisal(){
-        log.debug("onSubmitRequestAppraisal ( bdm input data for aad admin )");
-        log.debug("onSubmitRequestAppraisal ::: starting to save RequestAppraisal.");
-        RequestContext context = RequestContext.getCurrentInstance();
-        boolean complete = false;
-        _loadSessionVariable();
-
-        if(!headerControl.getRequestAppraisalFlag(workCaseId, workCasePreScreenId)){
-            if(checkAppraisalContact()){
-                if(appraisalDetailViewList.size() > 0){
-                    try{
-                        //Save Appraisal Request
-                        appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
-                        appraisalView.setAppraisalContactDetailView(appraisalContactDetailView);
-
-                        //Submit Appraisal - Create WRK_Appraisal And Launch new Workflow
-                        fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, statusId);
-                        log.debug("onSubmitRequestAppraisal ::: create new Work Case Appraisal, Launch new workflow.");
-
-                        complete = true;
-
-                        messageHeader = "Information.";
-                        message = "Request appraisal completed.";
-
-                        context.execute("msgBoxBaseMessageDlg.show()");
-                    } catch(Exception ex){
-                        log.error("Exception while submitRequestAppraisal : ", ex);
-                        messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
-                        message = msg.get("app.appraisal.request.message.body.save.fail") + Util.getMessageException(ex);
-
-                        context.execute("msgBoxBaseMessageDlg.show()");
-                    }
-                } else {
-                    messageHeader = "Information.";
-                    message = "Please add information in Appraisal Detail at least 1.";
-
-                    context.execute("msgBoxBaseMessageDlg.show()");
-                }
-            }
-        } else {
-            messageHeader = "Information.";
-            message = "This case already Request Appraisal. Please contact to AAD Admin";
-
-            context.execute("msgBoxBaseMessageDlg.show()");
-        }
-
-        context.addCallbackParam("functionComplete", complete);
-    }
-
-    public void onSaveAppraisalDetail(){
-        log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-        if(checkAppraisalDialog()){
-            complete = true;
-            if(ModeForButton.ADD == modeForButton){
-                appraisalDetailViewList.add(appraisalDetailView);
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }else if(ModeForButton.EDIT == modeForButton){
-                log.debug("-- RowIndex[{}]", rowIndex);
-                appraisalDetailViewList.set(rowIndex, appraisalDetailView);
-                appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
-            }
-            context.addCallbackParam("functionComplete", complete);
-        }else {
-            context.addCallbackParam("functionComplete", complete);
-        }
-    }
-
-    public boolean checkAppraisalDialog(){
-        log.debug("-- appraisalDetailViewMandate() ::: appraisalDetailView : {}", appraisalDetailView);
-        boolean result = true;
-        if(!Util.isNull(appraisalDetailView.getTitleDeed())){
-            if(Util.isZero(appraisalDetailView.getTitleDeed().length())){
-                titleDeedFlag = true;
-                result = false;
-            } else {
-                titleDeedFlag = false;
-            }
-        } else {
-            titleDeedFlag = true;
-            result = false;
-        }
-        if(!appraisalDetailView.isPurposeNewAppraisalB() && !appraisalDetailView.isPurposeReviewAppraisalB() && !appraisalDetailView.isPurposeReviewBuildingB()){
-            purposeFlag = true;
-            result = false;
-        } else {
-            purposeFlag = false;
-        }
-        if(appraisalDetailView.getCharacteristic() == 1 && appraisalDetailView.getNumberOfDocuments() == 0){
-            numberOfDocumentsFlag = true;
-            result = false;
-        } else {
-            numberOfDocumentsFlag = false;
-        }
-
-        log.debug("-- titleDeedFlag = {}", titleDeedFlag);
-        log.debug("-- purposeFlag = {}", purposeFlag);
-        log.debug("-- numberOfDocumentsFlag = {}", numberOfDocumentsFlag);
-        log.debug("-- result = {}", result);
-
-        return result;
-    }
-
-    public boolean checkAppraisalContact(){
-        log.debug("-- checkAppraisalContact()");
-        //todo :  2 0 21
-        boolean result = true;
-
-        if(appraisalContactDetailView.getCustomerName1().length() == 0 && appraisalContactDetailView.getContactNo1().length() == 0 ){
-            contactFlag = true;
-            result = false;
-        } else {
-            contactFlag = false;
-        }
-
-        log.debug("-- contactFlag = {}", contactFlag);
-        log.debug("-- result = {}", result);
-        return result;
-    }
-
-    public void onEditAppraisalDetail(){
-        titleDeedFlag = false;
-        purposeFlag = false;
-        numberOfDocumentsFlag = false;
-        modeForButton = ModeForButton.EDIT;
-        log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
-        Cloner cloner = new Cloner();
-        try{
-            appraisalDetailView = cloner.deepClone(appraisalDetailViewSelected);
-        } catch (Exception ex){
-            log.error("Exception occur when clone appraisalDetailView.");
-        }
-    }
-
-    public void onDeleteAppraisalDetailView() {
-        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
-        appraisalDetailViewList.remove(rowIndex);
-        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
-    }
-
-    public void onAddAppraisalDetail(){
-        log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
-        appraisalDetailView = new AppraisalDetailView();
-        titleDeedFlag = false;
-        purposeFlag = false;
-        numberOfDocumentsFlag = false;
-        modeForButton = ModeForButton.ADD;
-    }
-    //-------------- End of Function for Appraisal Request ( BDM ) ------------------//
 
     //************** END FUNCTION FOR APPRAISAL STAGE **************//
 
@@ -1746,50 +1691,9 @@ public class HeaderController extends BaseController {
         }
     }
 
-    //Request Appraisal after Customer Acceptance
-    public void onOpenRequestAppraisalCustomerAccepted(){
-        log.debug("onOpenRequestAppraisalCustomerAccepted ( after customer acceptance )");
-        HttpSession session = FacesUtil.getSession(false);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-
-        //Check Appraisal data exist.
-        if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
-            aadAdminList = fullApplicationControl.getUserListByRole(RoleValue.AAD_ADMIN);
-            aadAdminId = "";
-            RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
-        } else {
-            log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
-            messageHeader = "Information.";
-            message = "Please complete request appraisal form.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-
-    }
-    public void onSubmitRequestAppraisalCustomerAccepted(){
-        log.debug("onRequestAppraisal by BDM ( after customer acceptance )");
-        _loadSessionVariable();
-
-        try {
-            fullApplicationControl.requestAppraisal(queueName, wobNumber, workCaseId, submitRemark, slaReasonId, slaRemark);
-            messageHeader = "Information.";
-            message = "Submit case success.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
-        } catch (Exception ex){
-            log.error("exception while request appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }
-
     public void onReturnBDMByAAD(){
-        String wobNumber = "";
-        String queueName = "";
+        _loadSessionVariable();
         boolean complete = false;
-
-        HttpSession session = FacesUtil.getSession(false);
-        queueName = Util.parseString(session.getAttribute("queueName"), "");
-        wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
         if(!Util.isNull(reasonId) && !Util.isZero(reasonId)){
             try{
@@ -2445,6 +2349,7 @@ public class HeaderController extends BaseController {
                     log.error("onSubmitReviewReturn ::: fail.");
                 } else {
                     returnControl.submitReturnBDM(workCaseId, workCasePreScreenId, queueName, user, stepId, returnInfoViewList, wobNumber);
+                    //TODO Remove Collateral List when AAD Admin return to BDM
                     messageHeader = "Information.";
                     message = msg.get("app.message.dialog.return.success");
                     RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -2469,17 +2374,12 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    public void onSubmitReturnAADInfo(){ //Submit return to BDM
-        log.debug("onSubmitReturnBDM ::: returnInfoViewList size : {}", returnInfoViewList);
+    public void onSubmitReturnAADInfo(){ //Submit Return to AAD Admin ( from AAD Committee )
+        log.debug("onSubmitReturnAADInfo ::: returnInfoViewList size : {}", returnInfoViewList);
         boolean complete = false;
+        _loadSessionVariable();
         if(returnInfoViewList!=null && returnInfoViewList.size()>0){
             try{
-                HttpSession session = FacesUtil.getSession(false);
-                long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-                String queueName = session.getAttribute("queueName").toString();
-                User user = (User) session.getAttribute("user");
-                long stepId = Long.parseLong(session.getAttribute("stepId").toString());
-
                 List<ReturnInfoView> returnInfoViews = returnControl.getReturnNoReviewList(workCaseId,workCasePreScreenId);
 
                 if(returnInfoViews!=null && returnInfoViews.size()>0){
@@ -2666,14 +2566,13 @@ public class HeaderController extends BaseController {
 
         try {
             if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
-                HttpSession session = FacesUtil.getSession(false);
-                String queueName = Util.parseString(session.getAttribute("queueName"), "");
-                String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+                _loadSessionVariable();
 
                 messageHeader = "Information.";
                 message = "Return to AAD Admin success.";
 
                 fullApplicationControl.returnAADAdminByBDM(queueName, wobNumber);
+                //TODO Duplicate Collateral to Propose Type A
                 returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
 
                 RequestContext.getCurrentInstance().execute("msgBoxBaseRedirectDlg.show()");
@@ -2695,9 +2594,7 @@ public class HeaderController extends BaseController {
         log.debug("onCompleteCase");
 
         try{
-            HttpSession session = FacesUtil.getSession(false);
-            String queueName = Util.parseString(session.getAttribute("queueName"), "");
-            String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
+            _loadSessionVariable();
 
             fullApplicationControl.completeCase(queueName,wobNumber);
 
@@ -2716,10 +2613,8 @@ public class HeaderController extends BaseController {
     }
 
     public void onCheckCriteria(){
-        long workCaseId;
         boolean success = false;
-        HttpSession session = FacesUtil.getSession(false);
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
         log.debug("onCheckCriteria : workCaseId : {}", workCaseId);
         if(workCaseId != 0){
             try{
@@ -2790,73 +2685,9 @@ public class HeaderController extends BaseController {
         //RequestContext.getCurrentInstance().execute("blockUI.hide()");
     }
 
-    //---------------- Function for Request Appraisal ( Parallel ) -----------------//
-    //*** For BDM Request from PreScreen/FullApplication
-    //*   Flag for Parallel flag to REQUESTING_PARALLEL
-    public void onRequestParallelAppraisal(){
-        _loadSessionVariable();
-        try {
-            log.debug("onRequestParallelAppraisal : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
-            fullApplicationControl.requestParallelAppraisal(workCaseId, workCasePreScreenId);
-            //Redirect to Appraisal Request Page
-            FacesUtil.redirect("/site/appraisalRequest.jsf");
-            return;
-        }catch (Exception ex){
-            log.error("Exception while request parallel appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = "Exception while request parallel appraisal, " + Util.getMessageException(ex);
-            showMessageBox();
-        }
-    }
-
-    //*** For BDM Request from RequestAppraisal Screen
-    //*   Show Dialog for Submit Request Parallel
-    public void onOpenSubmitParallelRequestAppraisal(){
-        _loadSessionVariable();
-        slaReasonId = 0;
-        submitRemark = "";
-        slaRemark = "";
-        RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
-    }
-
-    //*** For BDM Request from RequestAppraisal Screen
-    //*   Submit case and Create parallel Case for Appraisal
-    public void onSubmitParallelRequestAppraisal(){
-        try{
-            fullApplicationControl.requestAppraisal(workCasePreScreenId, workCaseId, stepId);
-            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
-            messageHeader = "Information.";
-            message = "Request for Appraisal complete.";
-            showMessageRedirect();
-        }catch(Exception ex){
-            log.error("Exception while submit parallel request appraisal : ", ex);
-            messageHeader = "Exception.";
-            message = Util.getMessageException(ex);
-            showMessageBox();
-        }
-
-    }
-
-    //--- For BDM Cancel Request from RequestAppraisal Screen
-    public void onCancelParallelRequestAppraisal(){
-        _loadSessionVariable();
-        log.debug("onCancelParallelRequestAppraisal : workCaseId : {}, workCasePreScreenId : {}, stepId : {}", workCaseId, workCasePreScreenId, stepId);
-        fullApplicationControl.cancelParallelRequestAppraisal(workCasePreScreenId, workCaseId, stepId);
-        messageHeader = "Information.";
-        message = "Cancel request appraisal complete.";
-        showMessageRedirect();
-    }
-
-    //------------------ End function for Appraisal ---------------------------//
-
     public boolean checkAccessStage(String stageString){
         boolean accessible = false;
-        HttpSession session = FacesUtil.getSession(false);
-
-        long stageId = Util.parseLong(session.getAttribute("stageId"), 0);
-        long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
-        long workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        long workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
+        _loadSessionVariable();
 
         if("PRESCREEN".equalsIgnoreCase(stageString) && workCasePreScreenId != 0){
             if(stageId == 101){
@@ -3309,102 +3140,6 @@ public class HeaderController extends BaseController {
 
     public void setSubmitRemark(String submitRemark) {
         this.submitRemark = submitRemark;
-    }
-
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
-
-    public AppraisalView getAppraisalView() {
-        return appraisalView;
-    }
-
-    public void setAppraisalView(AppraisalView appraisalView) {
-        this.appraisalView = appraisalView;
-    }
-
-    public AppraisalDetailView getAppraisalDetailView() {
-        return appraisalDetailView;
-    }
-
-    public void setAppraisalDetailView(AppraisalDetailView appraisalDetailView) {
-        this.appraisalDetailView = appraisalDetailView;
-    }
-
-    public AppraisalDetailView getAppraisalDetailViewSelected() {
-        return appraisalDetailViewSelected;
-    }
-
-    public void setAppraisalDetailViewSelected(AppraisalDetailView appraisalDetailViewSelected) {
-        this.appraisalDetailViewSelected = appraisalDetailViewSelected;
-    }
-
-    public List<AppraisalDetailView> getAppraisalDetailViewList() {
-        return appraisalDetailViewList;
-    }
-
-    public void setAppraisalDetailViewList(List<AppraisalDetailView> appraisalDetailViewList) {
-        this.appraisalDetailViewList = appraisalDetailViewList;
-    }
-
-    public AppraisalContactDetailView getAppraisalContactDetailView() {
-        return appraisalContactDetailView;
-    }
-
-    public void setAppraisalContactDetailView(AppraisalContactDetailView appraisalContactDetailView) {
-        this.appraisalContactDetailView = appraisalContactDetailView;
-    }
-
-    public boolean isTitleDeedFlag() {
-        return titleDeedFlag;
-    }
-
-    public void setTitleDeedFlag(boolean titleDeedFlag) {
-        this.titleDeedFlag = titleDeedFlag;
-    }
-
-    public boolean isPurposeFlag() {
-        return purposeFlag;
-    }
-
-    public void setPurposeFlag(boolean purposeFlag) {
-        this.purposeFlag = purposeFlag;
-    }
-
-    public boolean isNumberOfDocumentsFlag() {
-        return numberOfDocumentsFlag;
-    }
-
-    public void setNumberOfDocumentsFlag(boolean numberOfDocumentsFlag) {
-        this.numberOfDocumentsFlag = numberOfDocumentsFlag;
-    }
-
-    public boolean isContactFlag() {
-        return contactFlag;
-    }
-
-    public void setContactFlag(boolean contactFlag) {
-        this.contactFlag = contactFlag;
-    }
-
-    public boolean isContactFlag2() {
-        return contactFlag2;
-    }
-
-    public void setContactFlag2(boolean contactFlag2) {
-        this.contactFlag2 = contactFlag2;
-    }
-
-    public boolean isContactFlag3() {
-        return contactFlag3;
-    }
-
-    public void setContactFlag3(boolean contactFlag3) {
-        this.contactFlag3 = contactFlag3;
     }
 
     public boolean isRequestPricing() {

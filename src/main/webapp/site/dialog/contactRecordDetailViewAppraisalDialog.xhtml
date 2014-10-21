@@ -36,6 +36,7 @@
                                           value="#{appraisalAppointment.contactRecord.callingResult}"
                                           required="true"
                                           requiredMessage="#{msg.get('app.cusaccept.validate.callResult')}">
+                            <p:ajax process="@this" update=":contactRecordViewDlgForm:reason"/>
                             <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cancontact')}"  itemValue="2" />
                             <f:selectItem itemLabel="#{msg.get('app.cusaccept.callResult.radio.cannotcontact')}" itemValue="1" />
                         </p:selectOneRadio>
@@ -55,9 +56,44 @@
                         </p:selectOneRadio>
                     </td>
                 </tr>
-
-
                 <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}" for='nextcalling_datetime'/>
+                    </td>
+                    <td>
+                        <clv:BECalendar id='nextcalling_datetime' readonlyInput="true"
+                                        pattern="dd/MM/yyyy"
+                                        showOn="button"
+                                        value="#{appraisalAppointment.contactRecord.nextCallingDateOnly}"
+                                        locale='th_TH'
+                                        mindate="#{appraisalAppointment.minDate}"
+                                        autocomplete="false"
+                                        required="#{appraisalAppointment.isMandate('record.nextCallingDate') and ( not empty param[btnAddContactRecordAppointment.clientId] )}"
+                                        requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+                                        disabled="#{appraisalAppointment.isDisabled('record.nextCallingDate')}"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                    </td>
+                    <td>
+                        <h:outputText value="HH"/>
+                        <p:spinner value="#{appraisalAppointment.contactRecord.nextCallingHour}"
+                                   min="0" max="23" size="3" style="margin-right : 5px; margin-left: 5px;"
+                                   required="#{appraisalAppointment.isMandate('record.nextCallingTime')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+                                   disabled="#{appraisalAppointment.isDisabled('record.nextCallingTime')}"/>
+                        :
+                        <h:outputText value="MM"/>
+                        <p:spinner value="#{appraisalAppointment.contactRecord.nextCallingMin}"
+                                   min="0" max="59"  size="3" style="margin-left:5px"
+                                   required="#{appraisalAppointment.isMandate('record.nextCallingTime') and ( not empty param[btnAddContactRecordAppointment.clientId] )}"
+                                   requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
+                                   disabled="#{appraisalAppointment.isDisabled('record.nextCallingTime')}"/>
+                    </td>
+                </tr>
+
+                <!--<tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.cusaccept.dialog.contactRecord.nextCallDateTime')}"
                                        for='nextcalling_datetime'/>
@@ -75,7 +111,7 @@
                             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                         </clv:BECalendar>
                     </td>
-                </tr>
+                </tr>-->
 
 
                 <tr>
@@ -87,7 +123,7 @@
                     <td>
                         <p:selectOneMenu id='reason' value='#{appraisalAppointment.contactRecord.updReasonId}'
                                          disabled="#{appraisalAppointment.isDisabled('record.reason')}"
-                                         required="true"
+                                         required="#{appraisalAppointment.contactRecord.callingResult == 1}"
                                          requiredMessage="#{msg.get('app.cusaccept.validate.reason')}"
                                          style="max-width: 270px; min-width: 270px; width: 270px;">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -119,6 +155,7 @@
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton
+                                binding="#{btnAddContactRecordAppointment}"
                                 id="btnSaveContactRecord"
                                 disabled="#{appraisalAppointment.isDisabled('record.okButton')}"
                                 value="#{msg.get('app.button.ok')}"

@@ -2,7 +2,7 @@ package com.clevel.selos.model;
 
 public enum ProposeType {
 
-    NA(0), P(1), A(2), BOTH(3);
+    NA(0), P(1), A(2), BOTH(3), R(4);
     private final int value;
 
     ProposeType(int value) {
