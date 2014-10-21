@@ -237,49 +237,6 @@ public class STPExecutor implements Serializable {
         });
     }
 
-    public ResultSet getLogonOver90(){
-        final ResultSet[] rs = {null};
-        ((Session) em.getDelegate()).doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                try{
-                    CallableStatement callStmt=connection.prepareCall("call SLOS.logonover90 ( ? )");
-                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
-                    callStmt.execute();
-                    rs[0] = (ResultSet) callStmt.getObject(1);
-                } catch (Exception e){
-                    log.debug("Exception Error. {}",e);
-                }
-            }
-        });
-        return rs[0];
-    }
-
-    public ResultSet getViolation(final Map<String, Object> map){
-        log.debug("on getViolation.");
-        final ResultSet[] rs = {null};
-        ((Session) em.getDelegate()).doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                try{
-                    CallableStatement callStmt = connection.prepareCall("call SLOS.violation (?, ?, ?)");
-                    int round = 1;
-                    for (String key : map.keySet()){
-                        callStmt.setObject(round, map.get(key).toString());
-                        round++;
-                    }
-                    callStmt.registerOutParameter(3,OracleTypes.CURSOR);
-                    callStmt.executeUpdate();
-                    rs[0] = (ResultSet) callStmt.getObject(3);
-                } catch (Exception e){
-                    log.debug("Exception Error. {}",e);
-                }
-            }
-        });
-        log.debug("--rs. {}",rs[0]);
-        return rs[0];
-    }
-
     public ResultSet getActivity(final Map<String, Object> map){
         log.debug("on getViolation.");
         final ResultSet[] rs = {null};
@@ -296,9 +253,6 @@ public class STPExecutor implements Serializable {
                     callStmt.registerOutParameter(3,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
                     rs[0] = (ResultSet) callStmt.getObject(3);
-//                    callStmt.registerOutParameter(1,OracleTypes.CURSOR);
-//                    callStmt.executeUpdate();
-//                    rs[0] = (ResultSet) callStmt.getObject(1);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }
@@ -319,6 +273,27 @@ public class STPExecutor implements Serializable {
                     callStmt.registerOutParameter(1,OracleTypes.CURSOR);
                     callStmt.executeUpdate();
                     rs[0] = (ResultSet) callStmt.getObject(1);
+                } catch (Exception e){
+                    log.debug("Exception Error. {}",e);
+                }
+            }
+        });
+        log.debug("--rs. {}",rs[0]);
+        return rs[0];
+    }
+
+    public ResultSet getMatrix(final int roleId){
+        log.debug("on getMatrix.");
+        final ResultSet[] rs = {null};
+        ((Session) em.getDelegate()).doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                try{
+                    CallableStatement callStmt = connection.prepareCall("call SLOS.userAccressMatrix (?, ?)");
+                    callStmt.setInt(1, roleId);
+                    callStmt.registerOutParameter(2, OracleTypes.CURSOR);
+                    callStmt.executeUpdate();
+                    rs[0] = (ResultSet) callStmt.getObject(2);
                 } catch (Exception e){
                     log.debug("Exception Error. {}",e);
                 }

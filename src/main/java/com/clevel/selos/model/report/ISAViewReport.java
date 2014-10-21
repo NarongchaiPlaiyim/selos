@@ -1,5 +1,6 @@
 package com.clevel.selos.model.report;
 
+import com.clevel.selos.model.db.master.Role;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,7 +20,6 @@ public class ISAViewReport {
     private String buCode;
     private String team;
     private String testId;
-    private String role;
     private Date modifyDate;
     private String createBy;
     private String modifyBy;
@@ -35,6 +35,14 @@ public class ISAViewReport {
     private String division;
     private String region;
     private String title;
+
+    //Matrix
+    private String screenId;
+    private String screenName;
+    private String roleId;
+    private String roleName;
+
+    private int role;
 
     public ISAViewReport() {
     }
@@ -125,14 +133,6 @@ public class ISAViewReport {
 
     public void setTeam(String team) {
         this.team = team;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public Date getModifyDate() {
@@ -263,6 +263,46 @@ public class ISAViewReport {
         this.title = title;
     }
 
+    public String getScreenId() {
+        return screenId;
+    }
+
+    public void setScreenId(String screenId) {
+        this.screenId = screenId;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -278,7 +318,6 @@ public class ISAViewReport {
                 .append("buCode", buCode)
                 .append("team", team)
                 .append("testId", testId)
-                .append("role", role)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
@@ -294,6 +333,11 @@ public class ISAViewReport {
                 .append("division", division)
                 .append("region", region)
                 .append("title", title)
+                .append("screenId", screenId)
+                .append("screenName", screenName)
+                .append("roleId", roleId)
+                .append("roleName", roleName)
+                .append("role", role)
                 .toString();
     }
 }
