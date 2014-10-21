@@ -210,11 +210,14 @@ public class TCGInfo extends BaseController {
         try {
             tcgInfoControl.saveTCGInfo(TCGView, TCGDetailViewList, workCaseId);
             calculationControl.calForTCG(workCaseId);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
+            calculationControl.calculateMaximumSMELimit(workCaseId);
+
+            onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.tcg.response.save.success");
             messageSeverity = MessageDialogSeverity.INFO.severity();
-            onCreation();
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.messageHeader.exception");
