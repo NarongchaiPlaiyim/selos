@@ -129,7 +129,6 @@ public class AppraisalRequest extends BaseController {
                         stepId == StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId == StepValue.REQUEST_APPRAISAL.value())){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-
             }
         } else {
             log.debug("preRender ::: workCasePreScreenId, workCaseId, stepId is null.");
