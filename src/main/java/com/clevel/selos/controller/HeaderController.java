@@ -685,18 +685,21 @@ public class HeaderController extends BaseController {
                             //TO Get all owner of case
                             getUserOwnerBU();
 
+                            //if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
                             if(stepId <= StepValue.FULLAPP_BDM.value()) {
                                 zmUserList = fullApplicationControl.getUserList(user);
                                 log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
                             }
 
                             //TO Disabled DDL DOA Lower than RGM
-                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            //if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
                                 isSubmitToZM = false;
                             }
 
                             //TO Disabled DDL DOA Lower than GH
-                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
+                            //if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
+                            if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                             }
