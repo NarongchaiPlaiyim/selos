@@ -18,6 +18,9 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
     @Column(name = "id", nullable = false)
     private long id;
 
+    @Column(name = "ref_app_number")
+    private String refAppNumber;
+
     @OneToOne
     @JoinColumn(name = "request_by")
     private User requestBy;
@@ -55,6 +58,14 @@ public class WorkCaseAppraisal extends AbstractWorkCase {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
     }
 
     public String getAppNumber() {

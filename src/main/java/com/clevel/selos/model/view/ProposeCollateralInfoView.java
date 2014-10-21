@@ -18,6 +18,7 @@ public class ProposeCollateralInfoView implements Serializable {
     private Date appraisalDate;
     private int numberMonthsFromApprDate;
     private String aadDecision;
+    private String aadDecisionLabel;
     private String aadDecisionReason;
     private String aadDecisionReasonDetail;
     private String usage;
@@ -101,6 +102,14 @@ public class ProposeCollateralInfoView implements Serializable {
 
     public void setAadDecision(String aadDecision) {
         this.aadDecision = aadDecision;
+    }
+
+    public String getAadDecisionLabel() {
+        return aadDecisionLabel;
+    }
+
+    public void setAadDecisionLabel(String aadDecisionLabel) {
+        this.aadDecisionLabel = aadDecisionLabel;
     }
 
     public String getAadDecisionReason() {
@@ -232,6 +241,7 @@ public class ProposeCollateralInfoView implements Serializable {
                 .append("appraisalDate", appraisalDate)
                 .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
                 .append("aadDecision", aadDecision)
+                .append("aadDecisionLabel", aadDecisionLabel)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
                 .append("usage", usage)

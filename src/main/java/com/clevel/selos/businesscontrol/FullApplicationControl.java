@@ -765,7 +765,7 @@ public class FullApplicationControl extends BusinessControl {
                     borrowerName = borrowerName.concat(" ").concat(customer.getLastNameTh());
                 }
             }
-            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), "", borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
+            bpmExecutor.requestAppraisal(workCaseAppraisal.getAppNumber(), workCaseAppraisal.getRefAppNumber(), borrowerName, workCaseAppraisal.getProductGroup().getName(), workCaseAppraisal.getRequestType().getId(), getCurrentUserID());
             log.debug("requestAppraisal ::: Create Work Item for appraisal complete.");
         } catch (Exception ex){
             log.error("Exception while Create Work Item for Appraisal.");
@@ -973,6 +973,7 @@ public class FullApplicationControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
         String appNumber = "";
+        String appRefNumber = "";
         ProductGroup productGroup = null;
         RequestType requestType = null;
         log.debug("requestAppraisal ::: start... workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
@@ -981,6 +982,7 @@ public class FullApplicationControl extends BusinessControl {
             log.debug("requestAppraisal ::: getAppNumber from workCasePreScreen : {}", workCasePrescreen);
             if(workCasePrescreen != null){
                 appNumber = workCasePrescreen.getAppNumber();
+                appRefNumber = workCasePrescreen.getRefAppNumber();
                 productGroup = workCasePrescreen.getProductGroup();
                 requestType = workCasePrescreen.getRequestType();
             } else{
@@ -992,6 +994,7 @@ public class FullApplicationControl extends BusinessControl {
             log.debug("requestAppraisal ::: getAppNumber from workCase : {}", workCase);
             if(workCase != null){
                 appNumber = workCase.getAppNumber();
+                appRefNumber = workCase.getRefAppNumber();
                 productGroup = workCase.getProductGroup();
                 requestType = workCase.getRequestType();
             } else{
@@ -1003,6 +1006,7 @@ public class FullApplicationControl extends BusinessControl {
 
         WorkCaseAppraisal workCaseAppraisal = new WorkCaseAppraisal();
         workCaseAppraisal.setAppNumber(appNumber);
+        workCaseAppraisal.setRefAppNumber(appRefNumber);
         workCaseAppraisal.setCreateDate(DateTime.now().toDate());
         workCaseAppraisal.setCreateBy(getCurrentUser());
         workCaseAppraisal.setModifyDate(DateTime.now().toDate());
@@ -1242,11 +1246,15 @@ public class FullApplicationControl extends BusinessControl {
             boolean exceptionalFlow = false;
             if(newCreditDetailList != null && newCreditDetailList.size() > 0){
                 //Check for Request Price Reduction
-                for(ProposeCreditInfo itemCreditDetail : newCreditDetailList){
-                    if(itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1){
-                        requestPricing = 1;
-                        break;
+                if(!skipReduceFlag) {
+                    for (ProposeCreditInfo itemCreditDetail : newCreditDetailList) {
+                        if (itemCreditDetail.getReduceFrontEndFee() == 1 || itemCreditDetail.getReducePriceFlag() == 1) {
+                            requestPricing = 1;
+                            break;
+                        }
                     }
+                }else{
+                    requestPricing = 1;
                 }
 
                 for(ProposeCreditInfo proposeCreditInfo : newCreditDetailList){

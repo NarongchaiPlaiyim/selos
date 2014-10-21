@@ -793,11 +793,12 @@
                                                  binding="#{saveButton}"
                                                  action="#{bankStatementSummary.onConfirmBeforeAction()}"
                                                  process="@form"
+                                                 disabled="#{bankStatementSummary.isDisabled('saveButton')}"
                                                  update=":frmMain,:msgBoxSystemMessagePanel,:confirmActionDialog"
                                                  styleClass="small">
                                     <f:setPropertyActionListener value="1" target="#{bankStatementSummary.actionNo}"/>
                                 </p:commandButton>
-                                <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                <p:commandButton id="btnCancel" styleClass="small"  value="#{msg.get('app.button.cancel')}"
                                                  process="@this" update=":frmMain"
                                                  actionListener="#{bankStatementSummary.onCreation()}"/>
                             </td>

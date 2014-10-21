@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.coms;
 
 import com.clevel.selos.dao.ext.coms.AgreementAppIndexDAO;
+import com.clevel.selos.dao.master.AADDecisionDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
@@ -16,6 +17,7 @@ import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.integration.coms.module.AddressTypeMapping;
 import com.clevel.selos.integration.coms.module.DBExecute;
 import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
+import com.clevel.selos.model.db.master.AADDecision;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -27,10 +29,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class COMSService implements Serializable {
@@ -52,6 +51,9 @@ public class COMSService implements Serializable {
 
     @Inject
     UserDAO userDAO;
+
+    @Inject
+    AADDecisionDAO aadDecisionDAO;
 
     @Inject
     @ExceptionMessage
@@ -134,6 +136,7 @@ public class COMSService implements Serializable {
                             ////Get Sub Collateral
                             List<SubCollateralData> subCollateralDataList = new ArrayList<SubCollateralData>();
                             List<SubCollateral> subCollateralList = dbExecute.getSubCollateral(jobNo.trim(),headCollateral.getColId());
+                            Map<String,SubCollateralData> subCollateralDataMap = new HashMap<String, SubCollateralData>();
                             if(subCollateralList!=null && subCollateralList.size()>0){
                                 for(SubCollateral subCollateral: subCollateralList){
                                     SubCollateralData subCollateralData = new SubCollateralData();
@@ -164,7 +167,7 @@ public class COMSService implements Serializable {
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
                                     //TODO: usage, typeOfUsage
 
-                                    HashMap<String,String> usageMap = new HashMap<String, String>();
+                                    //HashMap<String,String> usageMap = new HashMap<String, String>();
 
                                     //Get Address
                                     String address = "";
@@ -185,7 +188,7 @@ public class COMSService implements Serializable {
                                                 break;
                                             case TYPE5: //Building
                                                 address = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
-                                                usageMap = dbExecute.getUsageForBuilding(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                //usageMap = dbExecute.getUsageForBuilding(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
                                                 break;
                                             case TYPE6:
                                                 address = dbExecute.getAddressType6(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
@@ -213,16 +216,35 @@ public class COMSService implements Serializable {
                                         }
                                     }
                                     subCollateralData.setAddress(address);
-                                    subCollateralDataList.add(subCollateralData);
 
-                                    if(usageMap.containsKey("usages")){
+                                    if(subCollateralDataMap.containsKey(subCollateral.getColId())){
+                                        SubCollateralData subCollateralDataTmp = subCollateralDataMap.get(subCollateral.getColId());
+                                        String collateralOwnerStr = subCollateralDataTmp.getCollateralOwner();
+                                        if(collateralOwnerStr!=null && !collateralOwnerStr.trim().equalsIgnoreCase("")){
+                                            collateralOwnerStr = collateralOwnerStr.concat(", ").concat(subCollateralData.getCollateralOwner());
+                                        } else {
+                                            collateralOwnerStr = subCollateralData.getCollateralOwner();
+                                        }
+                                        subCollateralDataTmp.setCollateralOwner(collateralOwnerStr);
+                                        subCollateralDataMap.put(subCollateral.getColId(),subCollateralDataTmp);
+                                    } else {
+                                        subCollateralDataMap.put(subCollateral.getColId(),subCollateralData);
+                                    }
+
+                                    //subCollateralDataList.add(subCollateralData);
+
+                                    /*if(usageMap.containsKey("usages")){
                                         subCollateralData.setUsage(usageMap.get("usages"));
                                     }
 
                                     if(usageMap.containsKey("usageType")){
                                         subCollateralData.setTypeOfUsage(usageMap.get("usageType"));
-                                    }
+                                    }*/
                                 }
+                            }
+
+                            if(subCollateralDataMap!=null && subCollateralDataMap.size()>0){
+                                subCollateralDataList = new ArrayList<SubCollateralData>(subCollateralDataMap.values());
                             }
 
                             headCollateralData.setSubCollateralDataList(subCollateralDataList);

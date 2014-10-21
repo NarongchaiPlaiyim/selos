@@ -253,10 +253,10 @@
 					</textElement>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement uuid="7bf769d2-4be9-4999-aa3e-a2e2d06bee69" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="510" y="0" width="44" height="18"/>
-					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<reportElement uuid="5c3a911d-0bbb-4521-8443-bc799ef86120" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="510" y="0" width="45" height="18"/>
+					<textElement textAlignment="Right" verticalAlignment="Top">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-						<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
 				</textField>
 			</frame>

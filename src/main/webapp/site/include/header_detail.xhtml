@@ -102,6 +102,7 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
+                     process="@this"
                      onclick="PF('blockUI').show()"
                      actionListener="#{headerController.onOpenCloseSales()}"
                      oncomplete="blockUI.hide()"
