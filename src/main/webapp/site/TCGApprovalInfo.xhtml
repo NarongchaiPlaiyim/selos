@@ -13,6 +13,7 @@
 		<script type="text/javascript" language="javascript"
 			src="#{request.contextPath}/resources/js/jquery.numeric.js" />
 		<h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 	</h:head>
 
 	<h:body>
@@ -101,7 +102,7 @@
 										<td class="title" style="width: 130px;"><h:outputText
 												value="#{msg.get('app.tcgApprovalInfo.approveDate')}#{tcgApprovalInfo.mandate('approveDate')}" /></td>
 										<td class="left">
-                                            <clv:BECalendar id='tcg_submitDate' value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
+                                            <clv:BECalendar id='tcg_approveDate' value="#{tcgApprovalInfo.tcgInfoView.approveDate}"
                                                             readonlyInput="true"
                                                             pattern="dd/MM/yyyy" showOn="button"
                                                             disabled="#{tcgApprovalInfo.isDisabled('approveDate')}"
