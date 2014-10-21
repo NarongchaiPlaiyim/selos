@@ -7,6 +7,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class DecisionExSumReport extends ReportModel{
 
+    private String colorResult;
+    private String applicationResult;
+
     private long id;
     private String flag;
     private String group;
@@ -69,15 +72,33 @@ public class DecisionExSumReport extends ReportModel{
         this.deviationReason = deviationReason;
     }
 
+    public String getColorResult() {
+        return colorResult;
+    }
+
+    public void setColorResult(String colorResult) {
+        this.colorResult = colorResult;
+    }
+
+    public String getApplicationResult() {
+        return applicationResult;
+    }
+
+    public void setApplicationResult(String applicationResult) {
+        this.applicationResult = applicationResult;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("flag", flag).
-                append("group", group).
-                append("ruleName", ruleName).
-                append("cusName", cusName).
-                append("deviationReason", deviationReason).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("colorResult", colorResult)
+                .append("applicationResult", applicationResult)
+                .append("id", id)
+                .append("flag", flag)
+                .append("group", group)
+                .append("ruleName", ruleName)
+                .append("cusName", cusName)
+                .append("deviationReason", deviationReason)
+                .toString();
     }
 }
