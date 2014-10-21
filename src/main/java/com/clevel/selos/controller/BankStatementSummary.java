@@ -452,6 +452,7 @@ public class BankStatementSummary extends BaseController {
                     // update related parts
                     dbrControl.updateValueOfDBR(workCaseId);
                     calculationControl.calForBankStmtSummary(workCaseId);
+                    calculationControl.calculateMaximumSMELimit(workCaseId);
                     bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
 
                     onCreation();

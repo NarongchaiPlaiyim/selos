@@ -32,6 +32,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -674,7 +675,11 @@ public class FullApplicationControl extends BusinessControl {
                 }
 
                 if(!decisionFlag.equals("R")) {
-                    mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                    try {
+                        mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                    }catch (Exception ex){
+                        log.error("Exception while calculateMortgageSummary : ", ex);
+                    }
                 }
 
                 bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
@@ -745,7 +750,7 @@ public class FullApplicationControl extends BusinessControl {
 
     //---------- Function for Appraisal ----------//
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( PreScreen, Full App ) ] **/
-    public void requestAppraisal(long workCasePreScreenId, long workCaseId, long stepId) throws Exception{
+    public void requestAppraisalParallelBDM(long workCasePreScreenId, long workCaseId, long stepId) throws Exception{
         WorkCasePrescreen workCasePrescreen;
         WorkCase workCase;
 
@@ -929,7 +934,6 @@ public class FullApplicationControl extends BusinessControl {
 
     /** Appraisal [ Cancel Appraisal - BDM after Return from AAD Admin ] **/
     public void cancelRequestAppraisal(String queueName, String wobNumber, int reasonId, String remark, long workCasePreScreenId, long workCaseId, long stepId) throws Exception {
-        //TODO Change Status for WorkCase/WorkCasePreScreen and flag for Collateral
         log.debug("cancelParallelRequestAppraisal : workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
         ProposeLine newCreditFacility = null;
         if(!Util.isZero(workCasePreScreenId)){
@@ -964,6 +968,7 @@ public class FullApplicationControl extends BusinessControl {
                 newCollateralDAO.persist(proposeCol);
             }
         }
+
         bpmExecutor.cancelCase(queueName, wobNumber, ActionCode.CANCEL_APPRAISAL.getVal(), getReasonDescription(reasonId), remark);
     }
 
@@ -1103,6 +1108,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     /** Appraisal [ Submit Appraisal Result to UW ] **/
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void submitForAADCommittee(String queueName, String wobNumber, long workCaseId, long workCasePreScreenId) throws Exception{
         //Update Appraisal Request to Completed
         ProposeLine proposeLine = null;
@@ -1113,22 +1119,52 @@ public class FullApplicationControl extends BusinessControl {
         }
         if(!Util.isNull(proposeLine)){
             if(!Util.isNull(proposeLine.getProposeCollateralInfoList()) && proposeLine.getProposeCollateralInfoList().size() > 0){
-                for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
-                    if(proposeCollateralInfo.getProposeType() == ProposeType.A && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
+                for(int i = 0; i < proposeLine.getProposeCollateralInfoList().size(); i++){
+                    ProposeCollateralInfo proposeCollateralInfo = proposeLine.getProposeCollateralInfoList().get(i);
+                    List<ProposeCollateralInfoHead> tempProposeColHeadList = new ArrayList<ProposeCollateralInfoHead>();
+                    if(proposeCollateralInfo.getProposeType() == ProposeType.R) {
+                        log.debug("Update Propose Type for Collateral id : {}", proposeCollateralInfo.getId());
+                        proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                        proposeCollateralInfo.setProposeType(ProposeType.A);
+                        if (!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0) {
+                            for (int j = 0; j < proposeCollateralInfo.getProposeCollateralInfoHeadList().size(); j++) {
+                                log.debug("Update Propose Type for Collateral Head id : {}", proposeCollateralInfo.getId());
+                                ProposeCollateralInfoHead proposeCollateralInfoHead = proposeCollateralInfo.getProposeCollateralInfoHeadList().get(j);
+                                proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                                proposeCollateralInfoHead.setProposeType(ProposeType.A);
+                                tempProposeColHeadList.add(proposeCollateralInfoHead);
+                            }
+                            proposeCollateralInfo.setProposeCollateralInfoHeadList(tempProposeColHeadList);
+                        }
+                        newCollateralDAO.persist(proposeCollateralInfo);
+                    }
+                }
+                /*for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
+                    if(proposeCollateralInfo.getProposeType() == ProposeType.R && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
                         proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
                         if(!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0){
                             for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()){
-                                if(proposeCollateralInfoHead.getProposeType() == ProposeType.A && proposeCollateralInfoHead.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
+                                if(proposeCollateralInfoHead.getProposeType() == ProposeType.R && proposeCollateralInfoHead.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
                                     proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
+                                    proposeCollateralInfoHead.setProposeType(ProposeType.A);
                                 }
                             }
                         }
                     }
+                    log.debug("submitForAADCommittee : proposeCollateralInfo : {}", proposeCollateralInfo);
                     newCollateralDAO.persist(proposeCollateralInfo);
-                }
+                }*/
             }
         }
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
+    }
+
+    public void deleteUnUseCollateral(long workCaseId, long workCasePreScreenId) {
+        try {
+            stpExecutor.deleteCollateralData(workCaseId, workCasePreScreenId);
+        } catch (Exception ex) {
+            log.error("Exception while deleteCollateralData : ", ex);
+        }
     }
     //---------- End Function for Appraisal ----------//
 

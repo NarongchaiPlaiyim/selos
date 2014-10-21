@@ -421,7 +421,6 @@ public class DecisionControl extends BusinessControl {
             }
 
             decisionView.setApproveTotalGuaranteeAmt(sumGuaranteeAmount);
-
             proposeLineDAO.persist(decision);
 
             //Save Propose Fee Detail
@@ -493,15 +492,21 @@ public class DecisionControl extends BusinessControl {
 
             //Save Collateral
             if(!Util.isNull(decisionView.getApproveCollateralList()) && !Util.isZero(decisionView.getApproveCollateralList().size())) {
+                log.debug("Approve Collateral Size ::: {}", decisionView.getApproveCollateralList().size());
                 for(ProposeCollateralInfoView proposeCollateralInfoView : decisionView.getApproveCollateralList()) {
                     ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, decision, proposeCollateralInfoView, currentUser, proposeType);
                     proposeCollateralInfoDAO.persist(proposeCollateralInfo);
+                    log.debug("Coll ID ::: {}", proposeCollateralInfoView.getId());
+                    log.debug("Coll ID ::: {}", proposeCollateralInfo.getId());
                     if(!Util.isNull(proposeCollateralInfo) && !Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && !Util.isZero(proposeCollateralInfo.getProposeCollateralInfoHeadList().size())) {
                         for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()) {
                             proposeCollateralInfoHeadDAO.persist(proposeCollateralInfoHead);
+                            log.debug("Coll Head ID ::: {}", proposeCollateralInfoHead.getId());
                             if(!Util.isNull(proposeCollateralInfoHead) && !Util.isNull(proposeCollateralInfoHead.getProposeCollateralInfoSubList()) && !Util.isZero(proposeCollateralInfoHead.getProposeCollateralInfoSubList().size())) {
                                 for(ProposeCollateralInfoSub proposeCollateralInfoSub : proposeCollateralInfoHead.getProposeCollateralInfoSubList()) {
                                     proposeCollateralInfoSubDAO.persist(proposeCollateralInfoSub);
+                                    log.debug("Coll Sub ID ::: {}", proposeCollateralInfoSub.getId());
+                                    log.debug("Coll Sub ( Sub ID ) ::: {}", proposeCollateralInfoSub.getSubId());
                                     if(!Util.isNull(proposeCollateralInfoSub) && !Util.isNull(proposeCollateralInfoSub.getProposeCollateralSubOwnerList()) && !Util.isZero(proposeCollateralInfoSub.getProposeCollateralSubOwnerList().size())) {
                                         proposeCollateralSubOwnerDAO.persist(proposeCollateralInfoSub.getProposeCollateralSubOwnerList());
                                     }
@@ -512,7 +517,8 @@ public class DecisionControl extends BusinessControl {
                             }
                         }
                     }
-                    //after persist all collateral sub
+
+                    /*//after persist all collateral sub
                     if (!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
                         for (ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
                             if (!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
@@ -528,7 +534,7 @@ public class DecisionControl extends BusinessControl {
                                 }
                             }
                         }
-                    }
+                    }*/
 
                     if(!Util.isNull(proposeCollateralInfoView.getProposeCreditInfoDetailViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCreditInfoDetailViewList().size())) {
                         for(ProposeCreditInfoDetailView proposeCreditInfoDetailView : proposeCollateralInfoView.getProposeCreditInfoDetailViewList()) {
@@ -543,6 +549,31 @@ public class DecisionControl extends BusinessControl {
                                 ProposeCollateralInfoRelation proposeCollateralInfoRelation = proposeLineTransform.transformProposeCollateralRelationToModel(decision, proposeCollateralInfo, proposeCreditInfo, existingCreditDetail , proposeType, currentUser);
 
                                 proposeCollateralInfoRelationDAO.persist(proposeCollateralInfoRelation);
+                            }
+                        }
+                    }
+                }
+
+                for(ProposeCollateralInfoView proposeCollateralInfoView : decisionView.getApproveCollateralList()) {
+                    //after persist all collateral sub
+                    if (!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
+                        for (ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
+                            if (!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
+                                for (ProposeCollateralInfoSubView proposeCollateralInfoSubView : proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) {
+                                    ProposeCollateralInfoSub mainCollSub = proposeCollateralInfoSubDAO.findBySubId(proposeCollateralInfoSubView.getSubId());
+                                    log.debug("Main Coll Sub :: {}", mainCollSub);
+                                    log.debug("Main Coll Sub ( Sub ID ) :: {}", mainCollSub != null ? mainCollSub.getSubId() : "NULL");
+                                    if (!Util.isNull(proposeCollateralInfoSubView.getRelatedWithList()) && !Util.isZero(proposeCollateralInfoSubView.getRelatedWithList().size())) {
+                                        for (ProposeCollateralInfoSubView relatedCollSubView : proposeCollateralInfoSubView.getRelatedWithList()) {
+                                            ProposeCollateralInfoSub relatedCollSub = proposeCollateralInfoSubDAO.findBySubId(relatedCollSubView.getSubId());
+                                            log.debug("Related Coll Sub :: {}", relatedCollSub);
+                                            log.debug("Related Coll Sub ( Sub ID ) :: {}", relatedCollSub != null ? relatedCollSub.getSubId() : "NULL");
+                                            ProposeCollateralSubRelated proposeCollateralSubRelated = proposeLineTransform.transformProposeCollateralSubRelatedToModel(workCase, mainCollSub, relatedCollSub, proposeType);
+                                            log.debug("Approve Coll Sub Related :::: {}", proposeCollateralSubRelated);
+                                            proposeCollateralSubRelatedDAO.persist(proposeCollateralSubRelated);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -975,7 +1006,7 @@ public class DecisionControl extends BusinessControl {
             }
             BigDecimal totalApproveCommercial = Util.add(decisionView.getExtBorrowerTotalCommercial(), totalApproveCredit);
             BigDecimal totalApproveComAndOBOD = Util.add(decisionView.getExtBorrowerTotalComAndOBOD(), totalApproveCredit);
-            BigDecimal totalApproveExposure = Util.add(decisionView.getExtBorrowerTotalExposure(), totalApproveCredit);
+            BigDecimal totalApproveExposure = Util.add(decisionView.getExtGroupTotalExposure(), totalApproveCredit);
 
             List<ProposeCollateralInfoView> approveCollateralList = decisionView.getApproveCollateralList();
             if (!Util.isNull(approveCollateralList) && !Util.isZero(approveCollateralList.size())) {

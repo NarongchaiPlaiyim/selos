@@ -395,33 +395,6 @@ public class IsaBusinessControl extends BusinessControl {
 
     }
 
-    public List<IsaAuditLogView> getUserMaintenanceReport(Date dateFrom,Date dateTo) throws Exception {
-        log.debug("getUserMaintenanceReport()");
-        List<IsaAuditLogView> list = new ArrayList<IsaAuditLogView>();
-
-         Calendar calendar =Calendar.getInstance();
-         calendar.setTime(dateTo);
-         calendar.add(Calendar.DATE,1);
-
-        List<IsaActivity> isaActivity = isaActivityDAO.findByCriteria(Restrictions.between("actionDate",dateFrom,calendar.getTime()));
-        for (IsaActivity activityList : isaActivity) {
-            IsaAuditLogView isaAuditLogView = new IsaAuditLogView();
-            isaAuditLogView.setUserId(activityList.getUserId());
-            User username = userDAO.findOneByCriteria(Restrictions.eq("id", activityList.getUserId()));
-            isaAuditLogView.setUserName(username != null ? username.getUserName() : "");
-            isaAuditLogView.setAction(activityList.getAction());
-            isaAuditLogView.setActionDesc(activityList.getActionDesc());
-            isaAuditLogView.setIpAddress(activityList.getIpAddress());
-            isaAuditLogView.setActionDate(DateTimeUtil.convertDateToString(activityList.getActionDate(),THAI_LOCALE,DATE_FORMAT));
-            isaAuditLogView.setResult(activityList.getActionResult().name());
-            isaAuditLogView.setResultDesc(activityList.getResultDesc());
-
-            list.add(isaAuditLogView);
-        }
-
-        return list;
-    }
-
     public List<ISAViewReport> getUserProFileByUser() throws SQLException {
         log.debug("--getUserProFile by CSVService.");
         ResultSet rs = stpExecutor.getUserProfileByUserMaster();
@@ -434,7 +407,7 @@ public class IsaBusinessControl extends BusinessControl {
                     viewReport.setUserId(rs.getString("USER_ID"));
                     viewReport.setUserName(rs.getString("USER_NAME"));
                     viewReport.setActive(rs.getString("ACTIVE"));
-                    viewReport.setRole(rs.getString("ROLE_NAME"));
+                    viewReport.setRoleId(rs.getString("ROLE_NAME"));
                     viewReport.setTeam(rs.getString("TEAM_NAME"));
                     viewReport.setDepartment(rs.getString("DEPARTMENT"));
                     viewReport.setDivision(rs.getString("DIVISION"));
@@ -479,132 +452,26 @@ public class IsaBusinessControl extends BusinessControl {
         return viewReportList;
     }
 
+    public List<ISAViewReport> getUserAccessMatrix(final int roleId) throws SQLException{
+        log.debug("--getUserAccessMatrix by CSVSrevice");
+        List<ISAViewReport> viewReportList = new ArrayList<ISAViewReport>();
+        ResultSet rs = stpExecutor.getMatrix(roleId);
 
-    public List<IsaUserDetailView> getUserNotLogonOver(int day) throws Exception {
-        log.debug("getUserNotLogonOver()");
-
-        List<IsaUserDetailView> list = new ArrayList<IsaUserDetailView>();
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -(day + 1));
-
-        log.debug("{}",cal.getTime());
-        List<User> users = userDAO.findByCriteria(Restrictions.le("lastLogon", cal.getTime()));
-        for (User userlist : users) {
-            IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
-            isaUserDetailView.setUserId(userlist.getId());
-            isaUserDetailView.setUserName(userlist.getUserName());
-            isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
-            isaUserDetailView.setBuCode(userlist.getBuCode());
-//            isaUserDetailView.setLastIp(userlist.getLastIP());
-//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
-            isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
-            isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
-            isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
-            isaUserDetailView.setDepartment(userlist.getDepartment()!=null && userlist.getDepartment().getName() != null ? userlist.getDepartment().getName() : " ");
-            isaUserDetailView.setDivision(userlist.getDivision()!=null && userlist.getDivision().getName() != null ? userlist.getDivision().getName() : " ");
-            isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
-            isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
-            isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
-            isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
-
-            list.add(isaUserDetailView);
+        try {
+            if (!Util.isNull(rs)){
+                while (rs.next()){
+                    ISAViewReport isaViewReport = new ISAViewReport();
+                    isaViewReport.setRoleId(rs.getString("ROLE_ID"));
+                    isaViewReport.setRoleName(rs.getString("ROLE_NAME"));
+                    isaViewReport.setScreenId(rs.getString("SCREEN_ID"));
+                    isaViewReport.setScreenName(rs.getString("SCREEN_NAME"));
+                    viewReportList.add(isaViewReport);
+                }
+            }
+        } catch (Exception e){
+            log.debug("getUserAccessMatrix SQLException : ",e);
         }
 
-        return list;
-    }
-
-    public List<IsaAuditLogView> getViolationReport() throws Exception {
-        log.debug("getViolationReport()");
-
-        List<IsaAuditLogView> list = new ArrayList<IsaAuditLogView>();
-
-        List<SecurityActivity> users = securityActivityDAO.findByCriteria(Restrictions.eq("actionResult", ActionResult.FAILED));
-        for (SecurityActivity userlist : users) {
-            IsaAuditLogView isaAuditLogView = new IsaAuditLogView();
-            isaAuditLogView.setUserId(userlist.getUserId());
-
-            User username = userDAO.findOneByCriteria(Restrictions.eq("id", userlist.getUserId()));
-            isaAuditLogView.setUserName(username != null ? username.getUserName() : "");
-            isaAuditLogView.setIpAddress(userlist.getIpAddress());
-            isaAuditLogView.setActionDate(DateTimeUtil.convertDateToString(userlist.getActionDate(),THAI_LOCALE,DATE_FORMAT));
-            isaAuditLogView.setResult(userlist.getActionResult().name());
-            isaAuditLogView.setResultDesc(userlist.getResultDesc());
-            list.add(isaAuditLogView);
-        }
-
-        return list;
-    }
-
-
-    public List<IsaUserDetailView> getUserReportList() throws Exception {
-        log.debug("getUserNotLogonOver");
-
-        List<IsaUserDetailView> list = new ArrayList<IsaUserDetailView>();
-
-        Role role = new Role();
-        role.setId(1);
-
-        List<User> users = userDAO.findByCriteria(Restrictions.gt("role", role));
-        log.debug("{}",users.size());
-        for (User userlist : users) {
-            IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
-            isaUserDetailView.setUserId(userlist.getId());
-            isaUserDetailView.setUserName(userlist.getUserName());
-            isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
-            isaUserDetailView.setBuCode(userlist.getBuCode());
-//            isaUserDetailView.setLastIp(userlist.getLastIP());
-//            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
-            isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
-            isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
-            isaUserDetailView.setRole(userlist.getRole()!=null && userlist.getRole().getName() != null? userlist.getRole().getName() : " ");
-            isaUserDetailView.setDepartment(userlist.getDepartment()!=null && userlist.getDepartment().getName() != null ? userlist.getDepartment().getName() : " ");
-            isaUserDetailView.setDivision(userlist.getDivision()!=null && userlist.getDivision().getName() != null ? userlist.getDivision().getName() : " ");
-            isaUserDetailView.setRegion(userlist.getRegion()!=null && userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
-            isaUserDetailView.setTeam(userlist.getTeam()!=null && userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
-            isaUserDetailView.setTitle(userlist.getTitle()!=null && userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
-//            isaUserDetailView.setZone(userlist.getZone()!=null && userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
-//            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
-            isaUserDetailView.setUserStatus(userlist.getUserStatus()!=null && userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
-
-            list.add(isaUserDetailView);
-        }
-
-        return list;
-    }
-
-
-    public IsaUserDetailView mappingToAudit(final IsaManageUserView isaManageUserView){
-        log.debug("-- mappingToAudit()");
-        IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
-        if(!Util.isNull(isaManageUserView)){
-            isaUserDetailView.setUserId(isaManageUserView.getId());
-            isaUserDetailView.setUserName(isaManageUserView.getUsername());
-            isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
-            isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
-            isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
-            isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());
-            if(!Util.isNull(isaManageUserView.getRole())){
-                isaUserDetailView.setRole(isaManageUserView.getRole().getName());
-            }
-            if(!Util.isNull(isaManageUserView.getUserTeam())){
-                isaUserDetailView.setTeam(isaManageUserView.getUserTeam().getTeam_name());
-            }
-            if(!Util.isNull(isaManageUserView.getUserDepartment())){
-                isaUserDetailView.setDepartment(isaManageUserView.getUserDepartment().getName());
-            }
-            if(!Util.isNull(isaManageUserView.getUserDivision())){
-                isaUserDetailView.setDivision(isaManageUserView.getUserDivision().getName());
-            }
-            if(!Util.isNull(isaManageUserView.getUserRegion())){
-                isaUserDetailView.setRegion(isaManageUserView.getUserRegion().getName());
-            }
-            if(!Util.isNull(isaManageUserView.getUserTitle())){
-                isaUserDetailView.setTitle(isaManageUserView.getUserTitle().getName());
-            }
-            isaUserDetailView.setActive(isaManageUserView.getActive());
-        }
-        return isaUserDetailView;
+        return viewReportList;
     }
 }

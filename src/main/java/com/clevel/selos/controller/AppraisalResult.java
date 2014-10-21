@@ -191,7 +191,7 @@ public class AppraisalResult extends BaseController {
         log.info("onCreation...");
         _initial(session);
         if(checkSession(session)){
-            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId, statusId);
+            appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
             log.debug("onCreation ::: appraisalView : {}", appraisalView);
             if(!Util.isNull(appraisalView)){
                 newCollateralViewList = Util.safetyList(appraisalView.getNewCollateralViewList());
@@ -396,8 +396,8 @@ public class AppraisalResult extends BaseController {
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
             log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
-            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId, statusId);
-            appraisalResultControl.deleteUnUseCollateral(workCaseId, workCasePreScreenId);
+            appraisalResultControl.onSaveAppraisalResultModify(appraisalView, workCaseId, workCasePreScreenId);
+            //appraisalResultControl.deleteUnUseCollateral(workCaseId, workCasePreScreenId);
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");

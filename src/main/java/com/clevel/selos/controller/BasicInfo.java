@@ -321,6 +321,9 @@ public class BasicInfo extends BaseController {
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, queueName, wobNumber);
             calculationControl.calculateBOTClass(workCaseId);
             calculationControl.calForBasicInfo(workCaseId);
+            calculationControl.calculateTotalProposeAmount(workCaseId);
+            calculationControl.calculateMaximumSMELimit(workCaseId);
+
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
