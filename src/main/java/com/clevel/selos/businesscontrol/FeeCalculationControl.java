@@ -62,6 +62,7 @@ public class FeeCalculationControl extends BusinessControl {
 			view.setDescription(data.getDescription());
 			view.setAmount(data.getAmount());
 			view.setAgreementSign(data.getPaymentMethod().isIncludeInAgreementSign());
+            view.setDebitFromCustomer(data.getPaymentMethod().isDebitFromCustomer());
 			views.add(view);
 		}
 		Integer[] keys = map.keySet().toArray(new Integer[map.size()]);

@@ -334,7 +334,7 @@ public class PostAppBusinessControl extends BusinessControl {
 			if (detailList.isEmpty())
 				continue;
 			FeeCollectionDetailView firstView = detailList.get(0);
-			if (!firstView.isAgreementSign()) {
+			if (!firstView.isDebitFromCustomer()) {
 				continue;
 			}
 			for (int i=0;i<detailList.size();i++) {
