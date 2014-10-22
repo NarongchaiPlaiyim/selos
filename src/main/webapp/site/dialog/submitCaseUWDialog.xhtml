@@ -88,20 +88,21 @@
                                      binding="#{btnSubmitCaseUW}"
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
+                                     onclick="PF('blockSubmitCaseUWDlgPanel').show()"
                                      actionListener="#{headerController.onSubmitUW2()}"
-                                     oncomplete="handleSubmitUWDialogRequest(xhr, status, args)"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'submitUWDlg')"
+                                     onsuccess="blockSubmitCaseUWDlgPanel.hide()"
                                      process="@form"
                                      update=":frmMain:submitCaseUWDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                     styleClass="small" onclick="submitUWDlg.hide()"/>
+                                     styleClass="small" onclick="PF('submitUWDlg').hide()"/>
                 </td>
             </tr>
         </table>
     </p:panel>
+    <p:blockUI widgetVar="blockSubmitCaseUWDlgPanel" block="submitCaseUWDlgPanel">
+        <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </p:panel>
-<p:blockUI widgetVar="blockSubmitCaseUWDlgPanel" block="submitCaseUWDlgPanel"
-           trigger=":frmMain:dlgSubmitCaseUWBtn">
-    <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </ui:composition>

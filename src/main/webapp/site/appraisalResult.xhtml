@@ -174,12 +174,14 @@
                                         <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalReport')}"/>
                                     </td>
                                     <td class="left" colspan="3">
-                                        <p:commandButton id="btnAddCollateralDetail" styleClass="smaller" style="width: 150px"
+                                        <p:commandButton id="btnAddCollateralDetail" styleClass="small"
+                                                         onclick="PF('blockUI').show()"
                                                          value="#{msg.get('app.button.add')}"
                                                          disabled="#{appraisalResult.isDisabled('addAppraisalReportButton')}"
                                                          process="@this"
                                                          actionListener="#{appraisalResult.onAddCollateralDetailView()}"
                                                          update=":appraisalComsDlgForm"
+                                                         onsuccess="blockUI.hide()"
                                                          oncomplete="appraisalComsViewDlg.show()"/>
                                     </td>
                                 </tr>
@@ -231,7 +233,7 @@
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                                                         </td>
                                                         <td colspan="3">
-                                                            <h:outputText value="#{collateralDetailView.aadDecision}"/>
+                                                            <h:outputText value="#{collateralDetailView.aadDecisionLabel}"/>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -414,14 +416,14 @@
                 <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
             </div>
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+            <p:blockUI widgetVar="blockUI" block=":frmMain" trigger=":frmMain:btnSave">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
         </h:form>
     </p:panel>
     <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-              modal="true" width="920" height="700" closable="false">
+              modal="true" width="920" height="600" closable="false">
         <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
     </p:dialog>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

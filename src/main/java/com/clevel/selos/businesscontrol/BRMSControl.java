@@ -653,7 +653,7 @@ public class BRMSControl extends BusinessControl {
                         brmsCollateralInfo.setCollateralType(newCollateralHead.getHeadCollType().getCode());
                     //todo:this sub coll type is list on head
                     if(newCollateralHead.getProposeCollateralInfoSubList() != null &&
-                            newCollateralHead.getProposeCollateralInfoSubList().size() > 1){
+                            newCollateralHead.getProposeCollateralInfoSubList().size() > 0){
                         List<String> subCollateral = new ArrayList<String>();
                         for(ProposeCollateralInfoSub subCol : newCollateralHead.getProposeCollateralInfoSubList()){
                             String subColCode = "";

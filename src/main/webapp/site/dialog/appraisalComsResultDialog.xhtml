@@ -56,7 +56,7 @@
                     <h:outputText value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                 </td>
                 <td colspan="3">
-                    <h:outputText value="#{appraisalResult.newCollateralView.aadDecision}"/>
+                    <h:outputText value="#{appraisalResult.newCollateralView.aadDecisionLabel}"/>
                 </td>
             </tr>
             <tr>
@@ -198,16 +198,16 @@
                                      action="#{appraisalResult.onSaveCollateralDetailView()}"
                                      process="@form"
                                      update=":appraisalComsDlgForm,:frmMain,:msgBoxSystemMessagePanel"
-                                     oncomplete="handleCollateralDetailRequest(xhr, status, args)"/>
-                    <p:commandButton styleClass="smaller" value="#{msg.get('app.button.cancel')}" onclick="appraisalComsViewDlg.hide()"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'appraisalComsViewDlg')"/>
+                    <p:commandButton styleClass="smaller" value="#{msg.get('app.button.cancel')}" onclick="PF('appraisalComsViewDlg').hide()"/>
                 </td>
             </tr>
         </table>
     </p:panel>
-    </p:panel>
-    <p:blockUI widgetVar="blockAppraisalComsDlgForm" block="appraisalComsDlgForm" trigger=":appraisalComsDlgForm:btnSaveAppraisalComs">
+    <p:blockUI widgetVar="blockAppraisalComsDlgForm" block="appraisalComsDlgPanel" trigger=":appraisalComsDlgForm:btnSaveAppraisalComs">
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+    </p:panel>
 </h:form>
 </ui:composition>

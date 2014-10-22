@@ -116,9 +116,9 @@
                                         <p:column style='width:100px' styleClass="left"
                                                   headerText="#{msg.get('app.cusaccept.contactRecord.acceptResult')}">
                                             <h:outputText value="#{msg.get('app.cusaccept.contactRecord.acceptResult.accept')}"
-                                                          rendered="#{detail.callingResult eq 2}"/>
+                                                          rendered="#{detail.acceptResult eq 2}"/>
                                             <h:outputText value="#{msg.get('app.cusaccept.contactRecord.acceptResult.notaccept')}"
-                                                          rendered="#{detail.callingResult eq 1}"/>
+                                                          rendered="#{detail.acceptResult eq 1}"/>
                                         </p:column>
 	                           			<p:column style='width:100px' styleClass="center"
 	                           				headerText="#{msg.get('app.cusaccept.contactRecord.nextCallDateTime')}" escape="false" >

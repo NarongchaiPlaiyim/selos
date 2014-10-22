@@ -299,6 +299,7 @@ public class BankStatementDetail extends BaseController {
             bizInfoSummaryControl.calByBankStatement(workCaseId, stepId);
             dbrControl.updateValueOfDBR(workCaseId);
             calculationControl.calForBankStmtSummary(workCaseId);
+            calculationControl.calculateMaximumSMELimit(workCaseId);
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save Bank Statement Detail data success.";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subRelatedRetail" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7d6ab299-257b-4b8e-86be-6cf40296fc0d">
-	<property name="ireport.zoom" value="1.2100000000000055"/>
+	<property name="ireport.zoom" value="1.2100000000000066"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -58,9 +58,6 @@
 	<field name="outstanding" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[outstanding]]></fieldDescription>
 	</field>
-	<field name="existingCreditTierDetailReports" class="java.util.List">
-		<fieldDescription><![CDATA[existingCreditTierDetailReports]]></fieldDescription>
-	</field>
 	<field name="count" class="java.lang.Integer">
 		<fieldDescription><![CDATA[count]]></fieldDescription>
 	</field>
@@ -70,6 +67,15 @@
 	</field>
 	<field name="code" class="java.lang.String">
 		<fieldDescription><![CDATA[code]]></fieldDescription>
+	</field>
+	<field name="installment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[installment]]></fieldDescription>
+	</field>
+	<field name="intFeePercent" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[intFeePercent]]></fieldDescription>
+	</field>
+	<field name="tenor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[tenor]]></fieldDescription>
 	</field>
 	<columnHeader>
 		<band height="38" splitType="Stretch">
@@ -155,16 +161,9 @@
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
-			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="b243a19e-9856-4d4f-a74b-9ca0580eb337" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="413" y="0" width="56" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
-				</textElement>
-			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="e8daa54a-31cc-40dd-b1f5-bef7c415a2ed" style="detail" stretchType="RelativeToBandHeight" x="96" y="0" width="64" height="16"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="3"/>
 				</textElement>
@@ -211,11 +210,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{creditTypeName}]]></textFieldExpression>
 			</textField>
-			<subreport>
-				<reportElement uuid="716c6077-ac80-4207-bc99-6dc936d3d853" stretchType="RelativeToTallestObject" x="413" y="0" width="142" height="16" isRemoveLineWhenBlank="true"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{existingCreditTierDetailReports})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$F{path}+ "DecisionReport_subPersonRetail_subreport1.jasper"]]></subreportExpression>
-			</subreport>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="4aab6f60-67cf-487e-89d2-6cc2a7c18405" style="detail" stretchType="RelativeToTallestObject" x="259" y="0" width="85" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
@@ -230,13 +224,23 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{intFeePercent}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="d85087a4-44f3-4d78-9f2c-9f85e8cb6791" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="510" y="0" width="44" height="16"/>
+				<reportElement uuid="d85087a4-44f3-4d78-9f2c-9f85e8cb6791" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="510" y="0" width="45" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$F{tenor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="b243a19e-9856-4d4f-a74b-9ca0580eb337" style="detail" stretchType="RelativeToBandHeight" mode="Transparent" x="413" y="0" width="56" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font size="6" pdfFontName="fonts/TAHOMA.TTF" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{installment}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

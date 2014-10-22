@@ -95,7 +95,7 @@ public class AppraisalResultControl extends BusinessControl {
 
     }
 
-    public AppraisalView getAppraisalResult(long workCaseId, long workCasePreScreenId, long statusId){
+    public AppraisalView getAppraisalResult(long workCaseId, long workCasePreScreenId){
         log.info("-- getAppraisalResult workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
         if(!Util.isZero(workCaseId)){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
@@ -116,8 +116,7 @@ public class AppraisalResultControl extends BusinessControl {
             newCollateralViewList = new ArrayList<ProposeCollateralInfoView>();
             appraisalView = appraisalTransform.transformToView(appraisal, getCurrentUser());
             if(!Util.isNull(newCreditFacility)){
-                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, ProposeType.A);
-
+                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisalResult(newCreditFacility, ProposeType.R);
                 newCollateralViewList = proposeLineTransform.transformProposeCollateralToViewList(newCollateralList, ProposeType.BOTH);
                 appraisalView.setNewCollateralViewList(newCollateralViewList);
             }
@@ -127,7 +126,7 @@ public class AppraisalResultControl extends BusinessControl {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void onSaveAppraisalResultModify(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId, long statusId) {
+    public void onSaveAppraisalResultModify(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
         log.debug("onSaveAppraisalResultModify ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
         User currentUser = getCurrentUser();
 
@@ -137,10 +136,11 @@ public class AppraisalResultControl extends BusinessControl {
             }else if(workCasePreScreenId != 0){
                 newCreditFacility = proposeLineDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             }
+
             log.debug("onSaveAppraisalResultModify ::: newCreditFacility : {}", newCreditFacility != null ? newCreditFacility.getId() : null);
             if (!Util.isNull(newCreditFacility)){
                 //Update All Collateral : Set appraisal flag = 0
-                newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, ProposeType.A);
+                /*newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, ProposeType.R);
                 //set flag 0 for all collateral
                 log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList != null ? newCollateralList.size() : null);
                 for(ProposeCollateralInfo newCollateral : newCollateralList){
@@ -152,10 +152,10 @@ public class AppraisalResultControl extends BusinessControl {
                     }
                     newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
                     proposeCollateralInfoDAO.persist(newCollateral);
-                }
+                }*/
 
                 newCollateralList.clear();
-                newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.A, null));
+                newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.R, null));
                 //log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
                 proposeCollateralInfoDAO.persist(newCollateralList);
 
