@@ -81,7 +81,7 @@ public class COMSService implements Serializable {
                     appraisalData.setAppraisalDate(collateralJobLevel.getCurApprDate());
                     appraisalData.setMATI(collateralJobLevel.getMATI());
                     appraisalData.setAadDecision(collateralJobLevel.getDecision());
-
+                    appraisalData.setUsages(collateralJobLevel.getUsages());
                     if(collateralJobLevel.getMATI()!=null && collateralJobLevel.getMATI().equalsIgnoreCase("Y")) {
                         isMATI = true;
                     } else {

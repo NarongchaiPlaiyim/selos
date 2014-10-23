@@ -22,6 +22,7 @@ public class ProposeCollateralInfoView implements Serializable {
     private String aadDecisionReason;
     private String aadDecisionReasonDetail;
     private String usage;
+    private String usageLabel;
     private String typeOfUsage;
     private String uwRemark;
     private String mortgageCondition;
@@ -49,6 +50,7 @@ public class ProposeCollateralInfoView implements Serializable {
         this.aadDecisionReason = "";
         this.aadDecisionReasonDetail = "";
         this.usage = "";
+        this.usageLabel = "";
         this.typeOfUsage = "";
         this.uwRemark = "";
         this.mortgageCondition = "";
@@ -134,6 +136,14 @@ public class ProposeCollateralInfoView implements Serializable {
 
     public void setUsage(String usage) {
         this.usage = usage;
+    }
+
+    public String getUsageLabel() {
+        return usageLabel;
+    }
+
+    public void setUsageLabel(String usageLabel) {
+        this.usageLabel = usageLabel;
     }
 
     public String getTypeOfUsage() {
@@ -245,6 +255,7 @@ public class ProposeCollateralInfoView implements Serializable {
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
                 .append("usage", usage)
+                .append("usageLabel", usageLabel)
                 .append("typeOfUsage", typeOfUsage)
                 .append("uwRemark", uwRemark)
                 .append("mortgageCondition", mortgageCondition)
