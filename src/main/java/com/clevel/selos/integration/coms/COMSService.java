@@ -122,7 +122,7 @@ public class COMSService implements Serializable {
                             String location = subDistrictLabel.concat(Util.getStringNotNullOrEmpty(headCollateral.getAddDistrict())).concat(SPACE)
                                     .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getCity())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getCityExpand())).concat(SPACE)
                                     .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getProvName())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getProvExpand())).concat(SPACE)
-                                    .concat(Util.getStringNotNull(headCollateral.getCountryNameThai()));
+                                    .concat(countryLabel).concat(Util.getStringNotNull(headCollateral.getCountryNameThai()));
 
                             /*if(headCollateral.getAddDistrict()!=null){
                                 location = location.concat(headCollateral.getAddDistrict()).concat(SPACE);
@@ -185,7 +185,6 @@ public class COMSService implements Serializable {
                                         subAppraisalValue = subCollateral.getcPrice();
                                     }
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
-                                    //TODO: usage, typeOfUsage
 
                                     //HashMap<String,String> usageMap = new HashMap<String, String>();
 

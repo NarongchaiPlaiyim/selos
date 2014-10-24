@@ -518,7 +518,7 @@ public class Util implements Serializable {
     }
 
     public static String getStringNotNullOrEmpty(String string){
-        if(string==null || (string!=null && !string.trim().equalsIgnoreCase(""))){
+        if(string==null || (string!=null && string.trim().equalsIgnoreCase(""))){
             return "-";
         }
         return string;

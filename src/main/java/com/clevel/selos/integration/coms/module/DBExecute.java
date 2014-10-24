@@ -747,7 +747,7 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType5 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_5 = "SELECT " +
-                                "L.L_NAME as usageType, " +
+                                /*"L.L_NAME as usageType, " +*/
                                 "A.ADD_NO as addNo, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
@@ -758,12 +758,12 @@ public class DBExecute implements Serializable {
                             "FROM APPR_BUILDING A " +
                             "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
                             "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
-                            "LEFT JOIN LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
+                            /*"LEFT JOIN LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +*/
                             "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_5 = "SELECT " +
-                            "L.L_NAME as usageType, " +
+                            /*"L.L_NAME as usageType, " +*/
                             "A.ADD_NO as addNo, " +
                             "A.ADD_DISTRICT as addDistrict, " +
                             "B.CITY_ID as cityId, " +
@@ -774,7 +774,7 @@ public class DBExecute implements Serializable {
                         "FROM "+schema+".APPR_BUILDING A " +
                         "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
                         "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
-                        "LEFT JOIN "+schema+".LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
+                        /*"LEFT JOIN "+schema+".LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +*/
                         "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
         }
 
@@ -791,7 +791,7 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String usageType = Util.getStringNotNull(rs.getString("usageType"));
+                /*String usageType = Util.getStringNotNull(rs.getString("usageType"));*/
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
@@ -804,7 +804,8 @@ public class DBExecute implements Serializable {
                         .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
                         .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
                         .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName)).concat(SPACE)
-                        .concat("<br/>Type of Usage : ").concat(usageType);
+                       /* .concat("<br/>Type of Usage : ").concat(usageType);*/
+                        .concat("Type of Usage : ").concat("-");
             }
             log.debug("address result : {}", address);
             rs.close();
