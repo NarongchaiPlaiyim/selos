@@ -107,10 +107,20 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left">
-                    <p:inputText value="#{proposeLine.proposeCollateralInfoView.usage}"
+                    <p:inputText value="#{proposeLine.proposeCollateralInfoView.usageLabel}"
                                  readonly="#{proposeLine.isDisabled('collateral.usage')}"/>
+                    <!--<p:selectOneMenu id="usagesId" style="min-width: 390px; width: 390px; max-width: 390px;" size="1"
+                                     disabled="#{proposeLine.isDisabled('collateral.usage')}"
+                                     value="#{proposeLine.proposeCollateralInfoView.usage}"
+                                     required="#{not empty param[btnSaveCollateral.clientId]}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{proposeLine.usagesViewList}"
+                                       var="usages"
+                                       itemLabel="#{usages.description}"
+                                       itemValue="#{usages.code}"/>
+                    </p:selectOneMenu>-->
                 </td>
-                <td class="title">
+                <!--<td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
                     <h:outputText value="#{proposeLine.mandate('collateral.typeOfUsage')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
@@ -118,7 +128,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoView.typeOfUsage}"
                                  readonly="#{proposeLine.isDisabled('collateral.typeOfUsage')}"/>
-                </td>
+                </td>-->
             </tr>
 
             <tr>

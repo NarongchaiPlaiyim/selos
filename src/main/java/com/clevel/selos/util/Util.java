@@ -517,6 +517,13 @@ public class Util implements Serializable {
         return string;
     }
 
+    public static String getStringNotNullOrEmpty(String string){
+        if(string==null || (string!=null && string.trim().equalsIgnoreCase(""))){
+            return "-";
+        }
+        return string;
+    }
+
     public static String convertNullToZero(final String string){
         return string == null ? "0" : string;
     }

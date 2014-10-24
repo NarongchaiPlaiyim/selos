@@ -20,9 +20,11 @@ import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
 import com.clevel.selos.model.db.master.AADDecision;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -56,6 +58,19 @@ public class COMSService implements Serializable {
     AADDecisionDAO aadDecisionDAO;
 
     @Inject
+    @Config(name = "interface.coms.label.district.th")
+    String districtLabel;
+    @Inject
+    @Config(name = "interface.coms.label.subdistrict.th")
+    String subDistrictLabel;
+    @Inject
+    @Config(name = "interface.coms.label.province.th")
+    String provinceLabel;
+    @Inject
+    @Config(name = "interface.coms.label.country.th")
+    String countryLabel;
+
+    @Inject
     @ExceptionMessage
     Message msg;
 
@@ -81,7 +96,7 @@ public class COMSService implements Serializable {
                     appraisalData.setAppraisalDate(collateralJobLevel.getCurApprDate());
                     appraisalData.setMATI(collateralJobLevel.getMATI());
                     appraisalData.setAadDecision(collateralJobLevel.getDecision());
-
+                    appraisalData.setUsages(collateralJobLevel.getUsages());
                     if(collateralJobLevel.getMATI()!=null && collateralJobLevel.getMATI().equalsIgnoreCase("Y")) {
                         isMATI = true;
                     } else {
@@ -104,8 +119,12 @@ public class COMSService implements Serializable {
                             HeadCollateralData headCollateralData = new HeadCollateralData();
                             headCollateralData.setCollId(headCollateral.getColId());
                             headCollateralData.setTitleDeed(headCollateral.getColNo());
-                            String location = "";
-                            if(headCollateral.getAddDistrict()!=null){
+                            String location = subDistrictLabel.concat(Util.getStringNotNullOrEmpty(headCollateral.getAddDistrict())).concat(SPACE)
+                                    .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getCity())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getCityExpand())).concat(SPACE)
+                                    .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getProvName())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getProvExpand())).concat(SPACE)
+                                    .concat(countryLabel).concat(Util.getStringNotNull(headCollateral.getCountryNameThai()));
+
+                            /*if(headCollateral.getAddDistrict()!=null){
                                 location = location.concat(headCollateral.getAddDistrict()).concat(SPACE);
                             }
                             if(headCollateral.getCity()!=null){
@@ -122,7 +141,8 @@ public class COMSService implements Serializable {
                             }
                             if(headCollateral.getCountryNameThai()!=null){
                                 location = location.concat(headCollateral.getCountryNameThai());
-                            }
+                            }*/
+
                             headCollateralData.setCollateralLocation(location);
                             BigDecimal headAppraisalValue = BigDecimal.ZERO;
                             if(isMATI){
@@ -165,7 +185,6 @@ public class COMSService implements Serializable {
                                         subAppraisalValue = subCollateral.getcPrice();
                                     }
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
-                                    //TODO: usage, typeOfUsage
 
                                     //HashMap<String,String> usageMap = new HashMap<String, String>();
 
