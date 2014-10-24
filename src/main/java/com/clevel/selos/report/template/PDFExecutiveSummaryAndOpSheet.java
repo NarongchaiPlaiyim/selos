@@ -120,7 +120,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     customerName = customerName.append(Util.checkNullString(view.getTitleTh().getTitleTh()));
                 }
 
-                customerName = customerName.append(Util.checkNullString(view.getFirstNameTh())).append(" ").append(Util.checkNullString(view.getLastNameTh()));
+                customerName = customerName.append(Util.checkNullString(view.getFirstNameTh())).append(SPACE).append(Util.checkNullString(view.getLastNameTh()));
 
                 borrowerExsumReport.setCustomerName(Util.checkNullString(customerName.toString()));
 
@@ -2029,13 +2029,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 guarantorDecisionReport.setCount(count++);
                 guarantorDecisionReport.setPath(pathsub);
 
-                StringBuffer name = new StringBuffer();
+                StringBuilder name = new StringBuilder();
 
                 if (!Util.isNull(view.getGuarantorName())){
                     if (!Util.isNull(view.getGuarantorName().getTitleTh())){
-                        name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(" ");
+                        name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(SPACE);
                     }
-                    name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(" ");
+                    name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(SPACE);
                     name = name.append(Util.checkNullString(view.getGuarantorName().getLastNameTh()));
                 } else {
                     name = name.append(minus);
@@ -2108,13 +2108,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedGuarantorDecisionReport.setPath(pathsub);
                 approvedGuarantorDecisionReport.setCount(count++);
 
-                StringBuffer name = new StringBuffer();
+                StringBuilder name = new StringBuilder();
 
                 if (!Util.isNull(view.getGuarantorName())){
                     if (!Util.isNull(view.getGuarantorName().getTitleTh())){
-                        name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(" ");
+                        name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(SPACE);
                     }
-                    name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(" ");
+                    name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(SPACE);
                     name = name.append(Util.checkNullString(view.getGuarantorName().getLastNameTh()));
                 } else {
                     name = name.append(minus);
@@ -2208,13 +2208,13 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     if ((DecisionType.APPROVED).equals(view.getUwDecision())) {
                         approvedGuarantorDecisionReport.setCount(count++);
 
-                        StringBuffer name = new StringBuffer();
+                        StringBuilder name = new StringBuilder();
 
                         if (!Util.isNull(view.getGuarantorName())){
                             if (!Util.isNull(view.getGuarantorName().getTitleTh())){
-                                name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(" ");
+                                name = name.append(Util.checkNullString(view.getGuarantorName().getTitleTh().getTitleTh())).append(SPACE);
                             }
-                            name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(" ");
+                            name = name.append(Util.checkNullString(view.getGuarantorName().getFirstNameTh())).append(SPACE);
                             name = name.append(Util.checkNullString(view.getGuarantorName().getLastNameTh()));
                         } else {
                             name = name.append(minus);
