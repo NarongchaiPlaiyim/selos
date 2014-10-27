@@ -54,7 +54,7 @@
         <p:resetInput target=":frmMain:returnInfoMakerPanel"/>
     </p:commandButton>
     <!-- Check PreScreen (BRMS)-->
-    <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
+    <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')} [ #{headerController.timesOfPreScreenCheck} ]" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
                      disabled="#{not headerController.canCheckPreScreen}"
                      rendered="#{headerController.checkButton('Check Prescreen')}"
@@ -137,7 +137,7 @@
 
     </p:commandButton>
     <!--Check Criteria (BRMS)-->
-    <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+    <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')} [ #{headerController.timesOfCriteriaCheck} ]" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
                      rendered="#{headerController.checkButton('Check Criteria')}" process="@this"
                      actionListener="#{headerController.onCheckCriteria}"

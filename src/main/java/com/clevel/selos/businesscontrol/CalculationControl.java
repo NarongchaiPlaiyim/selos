@@ -921,8 +921,8 @@ public class CalculationControl extends BusinessControl{
                 proposeLine.setTotalExposure(sumTotalGroupExposure);                        //sumTotalGroupExposure
                 proposeLine.setTotalNewCredit(sumTotalNewCredit);                           //sumTotalNewCredit
             }
+            proposeLineDAO.persist(proposeLine);
         }
-        proposeLineDAO.persist(proposeLine);
     }
 
     public BigDecimal calTotalProposeLoanDBRForIntYear(ProposeCreditInfo proposeCreditInfo, BigDecimal dbrSpread) {
@@ -1113,15 +1113,15 @@ public class CalculationControl extends BusinessControl{
                     }
                 }
             }
+
+            if (maximumSMELimit.compareTo(BigDecimal.ZERO) < 0) {
+                maximumSMELimit = BigDecimal.ZERO;
+            }
+
+            proposeLine.setMaximumSMELimit(maximumSMELimit);
+
+            proposeLineDAO.persist(proposeLine);
         }
-
-        if (maximumSMELimit.compareTo(BigDecimal.ZERO) < 0) {
-            maximumSMELimit = BigDecimal.ZERO;
-        }
-
-        proposeLine.setMaximumSMELimit(maximumSMELimit);
-
-        proposeLineDAO.persist(proposeLine);
     }
 
     public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {

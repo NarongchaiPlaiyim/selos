@@ -32,7 +32,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,13 +65,15 @@ public class FullApplicationControl extends BusinessControl {
     @Inject
     private ProposeLineDAO proposeLineDAO;
     @Inject
-    private ProposeCollateralInfoDAO newCollateralDAO;
+    private ProposeCollateralInfoDAO proposeCollateralInfoDAO;
     @Inject
-    private ProposeCollateralInfoHeadDAO newCollateralHeadDAO;
+    private ProposeCollateralInfoHeadDAO proposeCollateralInfoHeadDAO;
     @Inject
-    private ProposeCollateralInfoSubDAO newCollateralSubDAO;
+    private ProposeCollateralInfoSubDAO proposeCollateralInfoSubDAO;
     @Inject
-    private ProposeCreditInfoDAO newCreditDetailDAO;
+    private ProposeCreditInfoDAO proposeCreditInfoDAO;
+    @Inject
+    private ProposeConditionDAO proposeConditionDAO;
     @Inject
     private ReasonDAO reasonDAO;
     @Inject
@@ -756,6 +757,40 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
+    private boolean checkApproveDecision(long workCaseId){
+        boolean pass = true;
+
+        List<ProposeCreditInfo> proposeCreditInfoList = proposeCreditInfoDAO.findApprovedNewCreditDetail(workCaseId);
+        for(ProposeCreditInfo creditInfo : proposeCreditInfoList){
+            if(creditInfo.getUwDecision() == DecisionType.NO_DECISION){
+                pass = false;
+                break;
+            }
+        }
+
+        if(!pass){
+            List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findNewCollateralByTypeA(workCaseId);
+            for(ProposeCollateralInfo collateralInfo : proposeCollateralInfoList){
+                if(collateralInfo.getUwDecision() == DecisionType.NO_DECISION){
+                    pass = false;
+                    break;
+                }
+            }
+        }
+
+        if(!pass){
+            List<ProposeGuarantorInfo> proposeGuarantorInfoList = proposeGuarantorInfoDAO.findByWorkCaseAndProposeType(workCaseId, ProposeType.A);
+            for(ProposeGuarantorInfo guarantorInfo : proposeGuarantorInfoList){
+                if(guarantorInfo.getUwDecision() == DecisionType.NO_DECISION){
+                    pass = false;
+                    break;
+                }
+            }
+        }
+
+        return pass;
+    }
+
     /** Submit CA for UW to Next Step **/
     public void submitForUW(String queueName, String wobNumber, String submitRemark, String slaRemark, int slaReasonId, String uw2Name, long uw2DOALevelId, long workCaseId) throws Exception {
         String decisionFlag;
@@ -973,7 +1008,7 @@ public class FullApplicationControl extends BusinessControl {
             proposeType = ProposeType.A;
         }
 
-        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
         if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
             for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
                 proposeCol.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
@@ -984,7 +1019,7 @@ public class FullApplicationControl extends BusinessControl {
                         }
                     }
                 }
-                newCollateralDAO.persist(proposeCol);
+                proposeCollateralInfoDAO.persist(proposeCol);
             }
         }
     }
@@ -1017,7 +1052,7 @@ public class FullApplicationControl extends BusinessControl {
                                         }
                                     }
                                 }
-                                newCollateralDAO.persist(proposeCollateralInfo);
+                                proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                             }
                         }
                     }
@@ -1074,7 +1109,7 @@ public class FullApplicationControl extends BusinessControl {
             proposeType = ProposeType.A;
         }
 
-        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
         if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
             for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
                 proposeCol.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
@@ -1083,7 +1118,7 @@ public class FullApplicationControl extends BusinessControl {
                         proposeColHead.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
                     }
                 }
-                newCollateralDAO.persist(proposeCol);
+                proposeCollateralInfoDAO.persist(proposeCol);
             }
         }
     }
@@ -1112,7 +1147,7 @@ public class FullApplicationControl extends BusinessControl {
             proposeType = ProposeType.A;
         }
 
-        List<ProposeCollateralInfo> proposeCollateralInfoList = newCollateralDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
+        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findCollateralForAppraisalRequest(newCreditFacility, proposeType);
         if(proposeCollateralInfoList != null && proposeCollateralInfoList.size() > 0){
             for(ProposeCollateralInfo proposeCol : proposeCollateralInfoList){
                 proposeCol.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
@@ -1121,7 +1156,7 @@ public class FullApplicationControl extends BusinessControl {
                         proposeColHead.setAppraisalRequest(RequestAppraisalValue.READY_FOR_REQUEST.value());
                     }
                 }
-                newCollateralDAO.persist(proposeCol);
+                proposeCollateralInfoDAO.persist(proposeCol);
             }
         }
 
@@ -1292,7 +1327,7 @@ public class FullApplicationControl extends BusinessControl {
                             }
                             proposeCollateralInfo.setProposeCollateralInfoHeadList(tempProposeColHeadList);
                         }
-                        newCollateralDAO.persist(proposeCollateralInfo);
+                        proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                     }
                 }
                 /*for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
@@ -1308,7 +1343,7 @@ public class FullApplicationControl extends BusinessControl {
                         }
                     }
                     log.debug("submitForAADCommittee : proposeCollateralInfo : {}", proposeCollateralInfo);
-                    newCollateralDAO.persist(proposeCollateralInfo);
+                    proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                 }*/
             }
         }
@@ -1425,7 +1460,7 @@ public class FullApplicationControl extends BusinessControl {
 
         if(newCreditFacility != null){
             //List of Credit detail
-            List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCase.getId(), proposeType);
+            List<ProposeCreditInfo> newCreditDetailList = proposeCreditInfoDAO.findNewCreditDetail(workCase.getId(), proposeType);
             //List of Credit tier ( find by Credit detail )
             BigDecimal priceReduceDOA = newCreditFacility.getIntFeeDOA();
             BigDecimal frontEndFeeReduceDOA = newCreditFacility.getFrontendFeeDOA();
@@ -1952,7 +1987,7 @@ public class FullApplicationControl extends BusinessControl {
         int requestType = 1;        //for new = 1, new+change = 2;
         try {
             log.debug("calculateApprovedType");
-            List<ProposeCreditInfo> newCreditDetailApprovedList = newCreditDetailDAO.findNewCreditDetail(workCaseId, ProposeType.A);
+            List<ProposeCreditInfo> newCreditDetailApprovedList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
             log.debug("calculateApprovedType ::: newCreditDetailApprovedList size : {}", newCreditDetailApprovedList != null ? newCreditDetailApprovedList.size() : null);
             for (ProposeCreditInfo newCreditDetail : newCreditDetailApprovedList) {
                 log.debug("calculateApprovedType ::: newCreditDetail : {}", newCreditDetail);
