@@ -201,10 +201,11 @@ public class FullApplicationControl extends BusinessControl {
                 bpmExecutor.submitForABDM(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), ActionCode.SUBMIT_CA.getVal());
                 //Insert Approval History
                 log.debug("submitCAByBDM : add approval History into ApprovalHistory");
-                ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId());
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId(), ApprovalType.CA_APPROVAL.value());
                 if(approvalHistory == null) {
                     log.debug("submitForABDM : add new Approval History");
                     approvalHistory = new ApprovalHistory();
+                    approvalHistory.setApproveType(ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setComments(submitRemark);
                     approvalHistory.setRole(user.getRole());
                     approvalHistory.setStep(workCase.getStep());
@@ -251,11 +252,17 @@ public class FullApplicationControl extends BusinessControl {
                 appraisalRequestRequire = workCase.getRequestAppraisalRequire();
 
                 ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+                ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                 if(proposeLine != null) {
-                    totalCommercial = proposeLine.getTotalExposure();
+                    //totalCommercial = proposeLine.getTotalExposure();
+                    BigDecimal totalNewCredit = proposeLine.getTotalNewCredit() != null ? proposeLine.getTotalNewCredit() : BigDecimal.ZERO;
+                    BigDecimal totalGroupExisting = BigDecimal.ZERO;
+                    if(existingCreditFacility != null){
+                        totalGroupExisting = existingCreditFacility.getTotalGroupCom() != null ? existingCreditFacility.getTotalGroupCom() : BigDecimal.ZERO;
+                    }
+                    totalCommercial = totalNewCredit.add(totalGroupExisting);
                 }
 
-                ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                 if(existingCreditFacility != null) {
                     totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                 }
@@ -280,10 +287,11 @@ public class FullApplicationControl extends BusinessControl {
 
                 //Insert Approval History
                 log.debug("submitCAByBDM : add approval History into ApprovalHistory");
-                ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId());
+                ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId(), ApprovalType.CA_APPROVAL.value());
                 if(approvalHistory == null) {
-                    log.debug("submitZM : add new Approval History");
+                    log.debug("submitCAByBDM : add new Approval History");
                     approvalHistory = new ApprovalHistory();
+                    approvalHistory.setApproveType(ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setComments(submitRemark);
                     approvalHistory.setRole(user.getRole());
                     approvalHistory.setStep(workCase.getStep());
@@ -292,7 +300,7 @@ public class FullApplicationControl extends BusinessControl {
                     approvalHistory.setUser(user);
                     approvalHistory.setWorkCase(workCase);
                 } else {
-                    log.debug("submitZM : replace existing Approval History");
+                    log.debug("submitCAByBDM : replace existing Approval History");
                     approvalHistory.setComments(submitRemark);
                     approvalHistory.setRole(user.getRole());
                     approvalHistory.setStep(workCase.getStep());
@@ -305,6 +313,62 @@ public class FullApplicationControl extends BusinessControl {
             } else {
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
             }
+        } else {
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    /** Submit CA from BDM Reduce Price to NextStep **/
+    public void submitForBDMReducePrice(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId) throws Exception {
+        WorkCase workCase;
+        String deviationCode = "";
+        String resultCode = "G";
+
+        if(workCaseId != 0){
+            workCase = workCaseDAO.findById(workCaseId);
+            User user = getCurrentUser();
+            UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+            if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                if(uwRuleResultSummary.getUwResultColor()!=null){
+                    resultCode = uwRuleResultSummary.getUwResultColor().code();
+                }
+
+                if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                    deviationCode = "AD";
+                    if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getId()>0){
+                        deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                    }
+                }
+            }
+
+            bpmExecutor.submitForBDMReducePrice(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), resultCode, deviationCode, ActionCode.SUBMIT_CA.getVal());
+
+            //Insert Approval History
+            log.debug("submitForBDMReducePrice : add approval History into ApprovalHistory");
+            ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId(), ApprovalType.PRICING_APPROVAL.value());
+            if(approvalHistory == null) {
+                log.debug("submitForBDMReducePrice : add new Approval History");
+                approvalHistory = new ApprovalHistory();
+                approvalHistory.setApproveType(ApprovalType.PRICING_APPROVAL.value());
+                approvalHistory.setComments(submitRemark);
+                approvalHistory.setRole(user.getRole());
+                approvalHistory.setStep(workCase.getStep());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistory.setUser(user);
+                approvalHistory.setWorkCase(workCase);
+            } else {
+                log.debug("submitForBDMReducePrice : replace existing Approval History");
+                approvalHistory.setComments(submitRemark);
+                approvalHistory.setRole(user.getRole());
+                approvalHistory.setStep(workCase.getStep());
+                approvalHistory.setSubmit(1);
+                approvalHistory.setSubmitDate(new Date());
+                approvalHistory.setUser(user);
+                approvalHistory.setWorkCase(workCase);
+            }
+            approvalHistoryDAO.persist(approvalHistory);
+
         } else {
             throw new Exception(msg.get("exception.submit.workitem.notfound"));
         }
@@ -335,11 +399,17 @@ public class FullApplicationControl extends BusinessControl {
                     isPricingRequest = Util.isTrue(workCase.getRequestPricing());
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
+                    ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                     if(proposeLine != null) {
-                        totalCommercial = proposeLine.getTotalExposure() != null ? proposeLine.getTotalExposure() : BigDecimal.ZERO;
+                        //totalCommercial = proposeLine.getTotalExposure();
+                        BigDecimal totalNewCredit = proposeLine.getTotalNewCredit() != null ? proposeLine.getTotalNewCredit() : BigDecimal.ZERO;
+                        BigDecimal totalGroupExisting = BigDecimal.ZERO;
+                        if(existingCreditFacility != null){
+                            totalGroupExisting = existingCreditFacility.getTotalGroupCom() != null ? existingCreditFacility.getTotalGroupCom() : BigDecimal.ZERO;
+                        }
+                        totalCommercial = totalNewCredit.add(totalGroupExisting);
                     }
 
-                    ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
                     if(existingCreditFacility != null) {
                         totalRetail = existingCreditFacility.getTotalBorrowerRetailLimit() != null ? existingCreditFacility.getTotalBorrowerRetailLimit() : BigDecimal.ZERO;
                     }
@@ -444,6 +514,87 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistoryDAO.persist(approvalHistoryApprove);
                     }
                 }
+            }else{
+                throw new Exception(msg.get("exception.submit.workitem.notfound"));
+            }
+        }else{
+            throw new Exception(msg.get("exception.submit.workitem.notfound"));
+        }
+    }
+
+    /** Submit CA from ZM to NextStep **/
+    public void submitForZMReducePrice(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String submitRemark, String slaRemark, int slaReasonId, long workCaseId, long stepId) throws Exception {
+        if(workCaseId != 0){
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(workCase != null){
+                log.debug("submitForZM ::: stepId : {}", stepId);
+                String zmDecisionFlag = "";
+                String zmPricingRequestFlag = "";
+                String resultCode = "G";
+                String deviationCode = "";
+                int priceDOALevel;
+                ApprovalHistory approvalHistoryEndorseCA = null;
+                ApprovalHistory approvalHistoryEndorsePricing = null;
+                priceDOALevel = workCase.getPricingDoaLevel();
+
+                approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+                approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
+                //--Check for Decision from Zone --//
+                if(approvalHistoryEndorseCA != null){
+                    if(approvalHistoryEndorseCA.getApproveDecision() != DecisionType.NO_DECISION.value()){
+                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                        approvalHistoryEndorseCA.setSubmit(1);
+                        approvalHistoryEndorseCA.setSubmitDate(new Date());
+                    } else {
+                        log.debug("submitForZM :: no decision found. ( endorse )");
+                        throw new Exception("Please make decision ( Endorse CA ) before submit.");
+                    }
+                } else {
+                    log.debug("submitForZM :: no decision found. ( pricing and endorse )");
+                    throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
+                }
+                //--Check for Decision (Pricing) from Zone--//
+                if(approvalHistoryEndorsePricing != null){
+                    if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
+                        if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
+                            zmPricingRequestFlag = "NA";
+                        } else {
+                            if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
+                                zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
+                            } else {
+                                zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                            }
+                        }
+                        approvalHistoryEndorsePricing.setSubmit(1);
+                        approvalHistoryEndorsePricing.setSubmitDate(new Date());
+                    } else {
+                        log.debug("submitForZM :: no decision found. ( endorse )");
+                        throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
+                    }
+                } else {
+                    log.debug("submitForZM :: no decision found. ( pricing and endorse )");
+                    throw new Exception("Please make decision ( Endorse Pricing ) before submit.");
+                }
+
+
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+                if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
+                    if(uwRuleResultSummary.getUwResultColor() != null){
+                        resultCode = uwRuleResultSummary.getUwResultColor().code();
+                    }
+
+                    if(!Util.isEmpty(resultCode) && resultCode.trim().equalsIgnoreCase(UWResultColor.RED.code())){
+                        deviationCode = "AD";
+                        if(uwRuleResultSummary.getUwDeviationFlag() != null && uwRuleResultSummary.getUwDeviationFlag().getId() > 0){
+                            deviationCode = uwRuleResultSummary.getUwDeviationFlag().getBrmsCode();
+                        }
+                    }
+                }
+
+                bpmExecutor.submitForZMReducePrice(queueName, wobNumber, rgmUserId, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), zmDecisionFlag, zmPricingRequestFlag, resultCode, deviationCode, ActionCode.SUBMIT_CA.getVal());
+
+                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+                approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
             }else{
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
             }
