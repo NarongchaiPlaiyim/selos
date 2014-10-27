@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7807b48b-7db8-442b-aba7-a40737540d02">
-	<property name="ireport.zoom" value="1.331000000000011"/>
+	<property name="ireport.zoom" value="1.100000000000009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="277"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/SLOSSharedLib/reportTemplate/"]]></defaultValueExpression>
 	</parameter>
@@ -598,8 +598,8 @@
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="1" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
 				<text><![CDATA[          กรุณาติดต่อผู้จัดการความสัมพันธ์ลูกค้าธุรกิจของท่าน เพื่อดำเนินการจัดทำนิติกรรมสัญญาและดำเนินการอื่นๆ ที่เกี่ยวข้องตามขั้นตอนต่อไป
-หากเกินกำหนดระยะเวลา 90 วัน นับจากวันที่อนุมัติ ธนาคารขอสงวนสิทธิในการพิจารณายกเลิกการอนุมัติครั้งนี้ หากมีข้อสงสัยประการใดหรือต้องการสอบ
-ถามข้อมูลเพิ่มเติม กรุณาติดต่อ ผู้จัดการความสัมพันธ์ลูกค้าธุรกิจ ของท่าน]]></text>
+โดยจะต้องดำเนินการทำนิติกรรมสัญญาตั้งวงเงินภายใน 90 วัน นับจากที่อนุมัติ หากเกินกว่าเวลาที่กำหนด ธนาคารขอสงวนสิทธิในการพิจารณายกเลิก
+การอนุมัติครั้งนี้ หากมีข้อสงสัยประการใดหรือต้องการสอบถามข้อมูลเพิ่มเติม กรุณาติดต่อ ผู้จัดการความสัมพันธ์ลูกค้าธุรกิจ ของท่าน]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="6df1386e-9b35-4f7d-92ec-0efa77999b4e" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="26"/>
