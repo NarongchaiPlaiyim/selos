@@ -255,6 +255,10 @@ public class PDFOfferLetter implements Serializable {
 
                             reports.add(collateralAndGuarantorOfferLetterReport); ///
                         }
+                    } else {
+                        ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
+                        collateralAndGuarantorOfferLetterReport.setPath(path);
+                        reports.add(collateralAndGuarantorOfferLetterReport); ///
                     }
                 }
             }
@@ -267,7 +271,7 @@ public class PDFOfferLetter implements Serializable {
                     for (ProposeCreditInfoDetailView detailView : guarantorDetailView.getProposeCreditInfoDetailViewList()){
                         ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
                         ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
-
+                        collateralAndGuarantorOfferLetterReport.setPath(path);
 
                         if (!Util.isNull(guarantorDetailView.getGuarantorName()) && !Util.isNull(guarantorDetailView.getGuarantorName().getTitleTh())){
                             guarantorName = guarantorName.append(guarantorDetailView.getGuarantorName().getTitleTh().getTitleTh());
@@ -291,6 +295,7 @@ public class PDFOfferLetter implements Serializable {
         } else {
             log.debug("--Approved Collateral Size is Empty. [{}],Approved Guarantor Size is Empty. [{}]",collateralViews.size(),guarantorDetailViews.size());
             ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
+            collateralAndGuarantorOfferLetterReport.setPath(path);
             reports.add(collateralAndGuarantorOfferLetterReport);
         }
 
