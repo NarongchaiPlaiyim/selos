@@ -99,6 +99,10 @@ public class PEDBExecute extends BusinessControl
     String deMakerViewName;
 
     @Inject
+    @Config(name = "interface.pe.exclude.stepNames")
+    String stepNames;
+
+    @Inject
     private UserDAO userDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
@@ -649,7 +653,7 @@ public class PEDBExecute extends BusinessControl
 
             query = " select "+queryForRosterColumns+" from ";
 
-            sqlForCreatedByMe = query +prefix+"."+tableName+ " where BDMUserName = '" + userName + "'";
+            sqlForCreatedByMe = query +prefix+"."+tableName+ " where lower(BDMUserName) = lower('" + userName + "')";
 
             sqlpequery = sqlForCreatedByMe;
         }
@@ -665,6 +669,9 @@ public class PEDBExecute extends BusinessControl
 
 
         }
+
+        sqlpequery = sqlpequery+" AND F_STEPNAME NOT IN ("+stepNames+")";
+
         log.info("sql roster query is : {}", sqlpequery);
 
         try
@@ -1084,6 +1091,8 @@ public class PEDBExecute extends BusinessControl
                 log.info("sqlquery with our where condition is :::::::::::::{}",sqlpequery1);
 
                 sqlpequery = sqlpequery1 + wherecondition;
+
+                sqlpequery = sqlpequery.contains("where")? sqlpequery+" AND F_STEPNAME NOT IN ("+stepNames+")": sqlpequery;
 
                 log.info("sqlquery in getPESearchList is ::::::::: {}",sqlpequery);
 
@@ -1989,9 +1998,9 @@ public class PEDBExecute extends BusinessControl
 
         username = username.toLowerCase();
 
-        peSqlQuery[0] = sqlquery1 + " where lower(CurrentUser) in ("+username+") ";
+        peSqlQuery[0] = sqlquery1 + " where lower(CurrentUser) in ("+username+") AND F_STEPNAME NOT IN ("+stepNames+")";
 
-        peSqlQuery[1] = sqlquery2 + " where lower(CurrentUser) in ("+username+") ";
+        peSqlQuery[1] = sqlquery2 + " where lower(CurrentUser) in ("+username+") AND F_STEPNAME NOT IN ("+stepNames+")";
 
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[0]);
         log.info("sqlquery is ::::::::::::: {}",peSqlQuery[1]);
@@ -2133,12 +2142,12 @@ public class PEDBExecute extends BusinessControl
 
         if(applicationNos != null && applicationNos.length() > 0)
         {
-            queryChangeOwner = query +prefix+"."+tableName+ " where AppNumber in(" + applicationNos + ") or lower(CurrentUser) = lower('"+selectedUser+"')";
+            queryChangeOwner = query +prefix+"."+tableName+ " where ( AppNumber in(" + applicationNos + ") or lower(CurrentUser) = lower('"+selectedUser+"') ) AND F_STEPNAME NOT IN ("+stepNames+")";
         }
 
         else
         {
-            queryChangeOwner = query +prefix+"."+tableName+ " where lower(CurrentUser) = lower('"+selectedUser+"')";
+            queryChangeOwner = query +prefix+"."+tableName+ " where lower(CurrentUser) = lower('"+selectedUser+"') AND F_STEPNAME NOT IN ("+stepNames+")";
         }
 
 
