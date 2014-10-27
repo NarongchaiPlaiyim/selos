@@ -285,6 +285,11 @@ public class FullApplicationControl extends BusinessControl {
                 log.debug("submitForBDM :: Duplicate Facility data complete...");
                 bpmExecutor.submitForBDM(queueName, wobNumber, zmUserId, rgmUserId, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), totalCommercial, totalRetail, resultCode, productGroup, deviationCode, requestType, appraisalRequestRequire, ActionCode.SUBMIT_CA.getVal());
 
+                BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                if(!Util.isNull(basicInfo)){
+                    basicInfo.setBdmSubmitDate(new Date());
+                    basicInfoDAO.persist(basicInfo);
+                }
                 //Insert Approval History
                 log.debug("submitCAByBDM : add approval History into ApprovalHistory");
                 ApprovalHistory approvalHistory = approvalHistoryDAO.findExistHistoryByUser(workCaseId, user.getId(), ApprovalType.CA_APPROVAL.value());
