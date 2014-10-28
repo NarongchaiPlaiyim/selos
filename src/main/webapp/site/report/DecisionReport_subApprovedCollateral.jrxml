@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DecisionReport_subApprovedCollateral" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bd6c9e68-5dda-4a77-a73c-83d34f5693d9">
-	<property name="ireport.zoom" value="1.1000000000000005"/>
+	<property name="ireport.zoom" value="1.0000000000000007"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="header" mode="Opaque" forecolor="#FFFFFF" backcolor="#666666" hAlign="Center" vAlign="Middle" fontSize="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H">
@@ -91,13 +91,21 @@
 	<field name="proposeCollateralInfoSubReports" class="java.util.List">
 		<fieldDescription><![CDATA[proposeCollateralInfoSubReports]]></fieldDescription>
 	</field>
+	<field name="uwRemark" class="java.lang.String">
+		<fieldDescription><![CDATA[uwRemark]]></fieldDescription>
+	</field>
 	<detail>
-		<band height="134">
+		<band height="40">
 			<frame>
-				<reportElement uuid="fa18a4c3-a001-4c82-99f3-a861f7d8e53f" x="0" y="0" width="555" height="134"/>
-				<box>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-				</box>
+				<reportElement uuid="b465900f-9dca-4f66-ae74-2565fc9b840d" x="0" y="0" width="555" height="40"/>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="f03d0be9-9b8e-4ab4-8df1-460d92fd0465" x="117" y="13" width="133" height="13"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{appraisalDate}]]></textFieldExpression>
+				</textField>
 				<staticText>
 					<reportElement uuid="e3fa267a-7a91-48da-a72f-500a05eb3f5b" x="0" y="0" width="111" height="13"/>
 					<textElement verticalAlignment="Top">
@@ -106,6 +114,30 @@
 					</textElement>
 					<text><![CDATA[JOB ID :]]></text>
 				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="d1547373-84c0-4252-b5c2-153016f942fb" x="287" y="13" width="100" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{aadDecisionReasonDetail}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="c8031116-c037-414a-b01b-d95bd99d6194" x="117" y="26" width="436" height="13"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{aadDecision}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="ded036ac-b8e6-441c-ac44-36680caa5c09" x="117" y="0" width="133" height="13"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{jobID}]]></textFieldExpression>
+				</textField>
 				<staticText>
 					<reportElement uuid="826556b2-b833-48f2-8b29-3f50f80241b6" x="0" y="13" width="111" height="13"/>
 					<textElement verticalAlignment="Top">
@@ -122,165 +154,37 @@
 					</textElement>
 					<text><![CDATA[AAD Decision :]]></text>
 				</staticText>
-				<staticText>
-					<reportElement uuid="9bf2d5dd-0442-4ac3-a648-82716bc7d80f" x="0" y="39" width="111" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[AAD Decision Reason :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="ff07815c-e3c5-4c88-bdbe-e745c09475ff" x="0" y="53" width="111" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[Usage :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="84c5347e-e850-454c-9091-0b9bfe29269d" x="0" y="81" width="111" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[Mortgage Condition :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="06f0e227-752c-450f-a7a1-056d800992e9" x="0" y="105" width="66" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[Credit Type :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="3ad42e0d-a5db-4a5c-8ca3-20021f7f0290" x="297" y="81" width="156" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[Mortgage Condition (Detail) :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="11343652-9c3c-41c3-9b93-df021474b1db" x="297" y="53" width="156" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[Type of Usage :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="2a2649cf-7cde-4963-8a21-a0eeb96ac80f" x="297" y="39" width="156" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<text><![CDATA[AAD Decision Reason (Detail) :]]></text>
-				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="ded036ac-b8e6-441c-ac44-36680caa5c09" x="117" y="0" width="133" height="13"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{jobID}]]></textFieldExpression>
-				</textField>
-				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement uuid="f03d0be9-9b8e-4ab4-8df1-460d92fd0465" x="117" y="13" width="133" height="13"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{appraisalDate}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="c8031116-c037-414a-b01b-d95bd99d6194" x="117" y="26" width="133" height="13"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{aadDecision}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="43a1bc9c-665e-4a87-94b1-4c911b06378f" x="117" y="39" width="133" height="14"/>
+			</frame>
+		</band>
+		<band height="16">
+			<frame>
+				<reportElement uuid="33b52196-cf3e-4253-bcc4-c88c69956685" x="0" y="0" width="555" height="16"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="43a1bc9c-665e-4a87-94b1-4c911b06378f" x="117" y="0" width="170" height="14"/>
 					<textElement verticalAlignment="Top">
 						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{aadDecisionReason}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="e3eb03ff-3bb2-4eae-83b8-63674a8b5eb0" x="117" y="53" width="133" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{usage}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="f70b9417-d984-4e97-864e-c439e4a5a6cc" x="117" y="81" width="133" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{mortgageCondition}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="df785d99-300f-4566-a195-96aebdde2333" x="453" y="39" width="100" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{aadDecisionReasonDetail}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="44c9330c-8d25-432c-b5ad-cc8015c22356" x="453" y="53" width="100" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{typeOfUsage}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="02346873-6d6b-4d9e-bf2d-3f9e190dbbb7" x="453" y="81" width="100" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{mortgageConditionDetail}]]></textFieldExpression>
-				</textField>
 				<staticText>
-					<reportElement uuid="17fdca7f-a46f-4ee2-8641-25f2039e2d25" x="0" y="67" width="111" height="14"/>
+					<reportElement uuid="2a2649cf-7cde-4963-8a21-a0eeb96ac80f" x="297" y="0" width="128" height="14"/>
 					<textElement verticalAlignment="Top">
 						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<text><![CDATA[UW Decision :]]></text>
+					<text><![CDATA[AAD Decision Reason (Detail) :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="273a0de1-432a-4e40-99d4-7000f09ae69a" x="111" y="67" width="49" height="14"/>
+					<reportElement uuid="9bf2d5dd-0442-4ac3-a648-82716bc7d80f" x="0" y="0" width="111" height="14"/>
 					<textElement verticalAlignment="Top">
 						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 					</textElement>
-					<text><![CDATA[Approved :	]]></text>
+					<text><![CDATA[AAD Decision Reason :]]></text>
 				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="bcde9b74-a082-45ff-bdc7-4d3970b5df31" x="160" y="67" width="100" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{approved}]]></textFieldExpression>
-				</textField>
-				<subreport>
-					<reportElement uuid="3a7f13c0-0237-400b-a48f-bb1ad213da98" x="66" y="95" width="489" height="39"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoDetailReports})]]></dataSourceExpression>
-					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
-				</subreport>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="d1547373-84c0-4252-b5c2-153016f942fb" x="287" y="13" width="100" height="14"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="df785d99-300f-4566-a195-96aebdde2333" x="425" y="0" width="128" height="14"/>
 					<textElement verticalAlignment="Top">
 						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
@@ -289,26 +193,153 @@
 				</textField>
 			</frame>
 		</band>
-		<band height="19">
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="34164a13-7434-435d-8444-53b63c79eded" x="111" y="0" width="133" height="14"/>
-				<textElement verticalAlignment="Top">
-					<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{bdmComments}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="3d3f4913-8aa2-48d0-bb34-090e7eedf8a3" x="0" y="0" width="111" height="14"/>
-				<textElement verticalAlignment="Top">
-					<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-				</textElement>
-				<text><![CDATA[BDM Comments :]]></text>
-			</staticText>
-			<line>
-				<reportElement uuid="2bbe29b9-95ac-4ea2-a1cd-788a5fee349c" x="0" y="18" width="553" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF"/>
-			</line>
+		<band height="14">
+			<frame>
+				<reportElement uuid="a001c321-65a1-4b3c-837e-4610d6a584da" x="0" y="0" width="555" height="14"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="e3eb03ff-3bb2-4eae-83b8-63674a8b5eb0" x="117" y="0" width="436" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{usage}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="ff07815c-e3c5-4c88-bdbe-e745c09475ff" x="0" y="0" width="111" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[Usage :]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="27">
+			<frame>
+				<reportElement uuid="fa18a4c3-a001-4c82-99f3-a861f7d8e53f" x="0" y="0" width="555" height="27"/>
+				<box>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+				<staticText>
+					<reportElement uuid="17fdca7f-a46f-4ee2-8641-25f2039e2d25" x="0" y="0" width="111" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[UW Decision :]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="bcde9b74-a082-45ff-bdc7-4d3970b5df31" x="160" y="0" width="100" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{approved}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="273a0de1-432a-4e40-99d4-7000f09ae69a" x="111" y="0" width="49" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[Approved :	]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1f3d8423-3f86-46fa-aedc-069a79861890" x="0" y="13" width="111" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[UW Remark :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="5670a335-c0b8-4cd9-8b3e-f866aae670d0" x="117" y="13" width="396" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{uwRemark}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="15">
+			<frame>
+				<reportElement uuid="50d63425-12d2-40d2-8978-b664c4e2f01f" x="0" y="0" width="555" height="15"/>
+				<staticText>
+					<reportElement uuid="3ad42e0d-a5db-4a5c-8ca3-20021f7f0290" x="297" y="0" width="128" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[Mortgage Condition (Detail) :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="f70b9417-d984-4e97-864e-c439e4a5a6cc" x="117" y="0" width="170" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mortgageCondition}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="02346873-6d6b-4d9e-bf2d-3f9e190dbbb7" x="425" y="0" width="128" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mortgageConditionDetail}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="84c5347e-e850-454c-9091-0b9bfe29269d" x="0" y="0" width="111" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[Mortgage Condition :]]></text>
+				</staticText>
+			</frame>
+		</band>
+		<band height="40">
+			<frame>
+				<reportElement uuid="3ce6619f-b851-4b14-8abe-b774111e0569" x="0" y="0" width="555" height="40"/>
+				<staticText>
+					<reportElement uuid="06f0e227-752c-450f-a7a1-056d800992e9" x="0" y="10" width="66" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[Credit Type :]]></text>
+				</staticText>
+				<subreport>
+					<reportElement uuid="3a7f13c0-0237-400b-a48f-bb1ad213da98" x="66" y="0" width="489" height="39"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proposeCreditInfoDetailReports})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$F{path} + "DecisionReport_subApprovedCollateral_subCollateral.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+		<band height="20">
+			<frame>
+				<reportElement uuid="2c6162cc-ae3c-4e3b-9f0b-a3b5ad6138a2" x="0" y="0" width="555" height="20"/>
+				<staticText>
+					<reportElement uuid="3d3f4913-8aa2-48d0-bb34-090e7eedf8a3" x="0" y="0" width="111" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<text><![CDATA[BDM Comments :]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="34164a13-7434-435d-8444-53b63c79eded" x="111" y="0" width="133" height="14"/>
+					<textElement verticalAlignment="Top">
+						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bdmComments}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="2bbe29b9-95ac-4ea2-a1cd-788a5fee349c" x="0" y="18" width="553" height="1" forecolor="#CCCCCC" backcolor="#FFFFFF"/>
+				</line>
+			</frame>
 		</band>
 		<band height="154">
 			<frame>

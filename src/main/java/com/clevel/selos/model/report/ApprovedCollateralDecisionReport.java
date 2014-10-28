@@ -26,6 +26,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private String path;
     private String UwDecision;
     private String approved;
+    private String uwRemark;
 
     private List<ProposeCreditInfoDetailView> proposeCreditDetailViewList;
     private List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports;
@@ -278,6 +279,14 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.proposeCollateralInfoSubReports = proposeCollateralInfoSubReports;
     }
 
+    public String getUwRemark() {
+        return uwRemark;
+    }
+
+    public void setUwRemark(String uwRemark) {
+        this.uwRemark = uwRemark;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -294,6 +303,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
                 .append("path", path)
                 .append("UwDecision", UwDecision)
                 .append("approved", approved)
+                .append("uwRemark", uwRemark)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("proposeCreditInfoDetailReports", proposeCreditInfoDetailReports)
                 .append("collateralDescription", collateralDescription)

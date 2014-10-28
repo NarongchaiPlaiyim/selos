@@ -12,6 +12,7 @@ import com.clevel.selos.dao.working.ProposeLineDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.Usages;
 import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.db.working.ProposeLine;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -1507,14 +1508,15 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 collateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-//                collateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
-//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
-//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
-//                        } else {
-//                            approvedCollateralDecisionReport.setUsageLabel("-");
-//                        }
-//                collateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+                collateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+
+                if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+                    Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+                    collateralDecisionReport.setUsage(aadDecision.getDescription());
+                } else {
+                    collateralDecisionReport.setUsage("-");
+                }
+
                 collateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 collateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
                 collateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
@@ -1603,6 +1605,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 }
 
                                 subCollType = subCollType.append("Address : ").append(Util.checkNullString(proposeCollateralInfoSubView.getAddress())).append(enter);
+                                subCollType = subCollType.append("Type of Usage : ").append(Util.checkNullString(proposeCollateralInfoSubView.getTypeOfUsage())).append(enter);
                                 subCollType = subCollType.append("Land Office : ").append(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice())).append(enter);
 
                                 proposeCollateralInfoSubReport.setDeceptionSubCollType(subCollType.toString());
@@ -1685,14 +1688,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                 approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-//                approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
-//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
-//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
-//                        } else {
-//                            approvedCollateralDecisionReport.setUsageLabel("-");
-//                        }
-//                approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+
+                if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+                    Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+                    approvedCollateralDecisionReport.setUsage(aadDecision.getDescription());
+                } else {
+                    approvedCollateralDecisionReport.setUsage("-");
+                }
+
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
                 if (!Util.isNull(view.getUwDecision())){
@@ -1707,6 +1710,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                     approvedCollateralDecisionReport.setApproved(minus);
                 }
 
+                approvedCollateralDecisionReport.setUwRemark(Util.checkNullString(view.getUwRemark()));
                 approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
@@ -1792,6 +1796,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                 }
 
                                 subCollType = subCollType.append("Address : ").append(Util.checkNullString(proposeCollateralInfoSubView.getAddress())).append(enter);
+                                subCollType = subCollType.append("Type of Usage : ").append(Util.checkNullString(proposeCollateralInfoSubView.getTypeOfUsage())).append(enter);
                                 subCollType = subCollType.append("Land Office : ").append(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice())).append(enter);
 
                                 proposeCollateralInfoSubReport.setDeceptionSubCollType(subCollType.toString());
@@ -1875,18 +1880,17 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                         approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                         approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-//                        approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
-//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
-//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
-//                        } else {
-//                            approvedCollateralDecisionReport.setUsageLabel("-");
-//                        }
-//                        approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+
+                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+                            approvedCollateralDecisionReport.setUsage(aadDecision.getDescription());
+                        } else {
+                            approvedCollateralDecisionReport.setUsage("-");
+                        }
+
                         approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
-
                         approvedCollateralDecisionReport.setApproved("Yes");
-
+                        approvedCollateralDecisionReport.setUwRemark(Util.checkNullString(view.getUwRemark()));
                         approvedCollateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                         approvedCollateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
 
@@ -1973,6 +1977,7 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                                         }
 
                                         subCollType = subCollType.append("Address : ").append(Util.checkNullString(proposeCollateralInfoSubView.getAddress())).append(enter);
+                                        subCollType = subCollType.append("Type of Usage : ").append(Util.checkNullString(proposeCollateralInfoSubView.getTypeOfUsage())).append(enter);
                                         subCollType = subCollType.append("Land Office : ").append(Util.checkNullString(proposeCollateralInfoSubView.getLandOffice())).append(enter);
 
                                         proposeCollateralInfoSubReport.setDeceptionSubCollType(subCollType.toString());
