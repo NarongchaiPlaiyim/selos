@@ -1216,7 +1216,7 @@ public class HeaderController extends BaseController {
 
             if(checkUW){
                 if(canSubmitWithoutReturn()){
-                    fullApplicationControl.calculateApprovedResult(workCaseId);
+                    fullApplicationControl.calculateApprovedResult(workCaseId, StepValue.CREDIT_DECISION_UW1);
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
                     message = msg.get("app.message.dialog.submit.success");
@@ -1250,7 +1250,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             if(canSubmitWithoutReturn()){
-                fullApplicationControl.calculateApprovedResult(workCaseId);
+                fullApplicationControl.calculateApprovedResult(workCaseId, StepValue.CREDIT_DECISION_UW2);
                 fullApplicationControl.submitForUW2(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
 
                 messageHeader = msg.get("app.messageHeader.info");

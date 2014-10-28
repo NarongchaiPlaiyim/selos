@@ -124,6 +124,14 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         return workCaseOwner;
     }
 
+    public WorkCaseOwner getWorkCaseOwnerByStep(long stepId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("step.id", stepId));
+        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+
+        return workCaseOwner;
+    }
+
     public WorkCaseOwner getWorkCaseOwnerByRole(long workCaseId, int roleId, String userId, long stepId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));

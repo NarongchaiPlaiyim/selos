@@ -1959,7 +1959,7 @@ public class FullApplicationControl extends BusinessControl {
         return caseUpdateFlag;
     }
 
-    public void calculateApprovedResult(long workCaseId){
+    public void calculateApprovedResult(long workCaseId, StepValue stepValue){
         log.debug("calculateApprovedResult");
         try {
             Decision decision = decisionDAO.findByWorkCaseId(workCaseId);
@@ -1988,7 +1988,9 @@ public class FullApplicationControl extends BusinessControl {
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
             basicInfo.setApproveResult(sameRequest == 1 ? ApproveResult.SAME_REQUEST : ApproveResult.DIFF_REQUEST);
             basicInfo.setApproveType(approvedType == 1 ? ApproveType.NEW : ApproveType.NEW_CHANGE);
-            basicInfo.setLimitSetupExpiryDate(limitSetupExpiryDate);
+            if(stepValue != StepValue.CREDIT_DECISION_UW1) {
+                basicInfo.setLimitSetupExpiryDate(limitSetupExpiryDate);
+            }
             basicInfo.setTcgFlag(tcgFlag);
             basicInfo.setPremiumQuote(premiumQuote);
 

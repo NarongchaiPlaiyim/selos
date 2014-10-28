@@ -26,27 +26,28 @@ public class WorkCaseOwner {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_OWNER_ID")
     @Column(name = "id", nullable = false)
     private long id;
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(name = "step_id")
     private Step step;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "create_by")
     private User createBy;
 
@@ -54,7 +55,7 @@ public class WorkCaseOwner {
     @Column(name = "create_date")
     private Date createDate;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "modify_by")
     private User modifyBy;
 
