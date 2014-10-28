@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
+import com.clevel.selos.dao.master.UsagesDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.ExSummaryDAO;
 import com.clevel.selos.dao.working.ProposeLineDAO;
@@ -53,6 +54,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     @Inject private BizInfoSummaryView bizInfoSummaryView;
     @Inject private ProposeLineDAO proposeLineDAO;
     @Inject private ProposeLineTransform proposeLineTransform;
+    @Inject
+    private UsagesDAO usagesDAO;
     @Inject
     @NormalMessage
     Message msg;
@@ -1504,8 +1507,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 collateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                 collateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 collateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-                collateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-                collateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+//                collateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
+//                        } else {
+//                            approvedCollateralDecisionReport.setUsageLabel("-");
+//                        }
+//                collateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 collateralDecisionReport.setMortgageCondition(Util.checkNullString(view.getMortgageCondition()));
                 collateralDecisionReport.setMortgageConditionDetail(Util.checkNullString(view.getMortgageConditionDetail()));
                 collateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
@@ -1676,8 +1685,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                 approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                 approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                 approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-                approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-                approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+//                approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
+//                        } else {
+//                            approvedCollateralDecisionReport.setUsageLabel("-");
+//                        }
+//                approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                 approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
                 if (!Util.isNull(view.getUwDecision())){
@@ -1860,8 +1875,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
                         approvedCollateralDecisionReport.setAadDecision(Util.checkNullString(view.getAadDecisionLabel()));
                         approvedCollateralDecisionReport.setAadDecisionReason(Util.checkNullString(view.getAadDecisionReason()));
                         approvedCollateralDecisionReport.setAadDecisionReasonDetail(Util.checkNullString(view.getAadDecisionReasonDetail()));
-                        approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
-                        approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
+//                        approvedCollateralDecisionReport.setUsage(Util.checkNullString(view.getUsage()));
+//                        if(view.getUsage()!=null && !view.getUsage().trim().equalsIgnoreCase("")){
+//                            Usages aadDecision = usagesDAO.getByCode(view.getUsage());
+//                            approvedCollateralDecisionReport.setUsageLabel(aadDecision.getDescription());
+//                        } else {
+//                            approvedCollateralDecisionReport.setUsageLabel("-");
+//                        }
+//                        approvedCollateralDecisionReport.setTypeOfUsage(Util.checkNullString(view.getTypeOfUsage()));
                         approvedCollateralDecisionReport.setBdmComments(Util.checkNullString(view.getBdmComments()));
 
                         approvedCollateralDecisionReport.setApproved("Yes");
