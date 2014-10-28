@@ -181,8 +181,8 @@ public class AppraisalDetailTransform extends Transform {
             log.debug("transformToView ::: newCollateralHeadList : {}", newCollateralHeadList);
             for (ProposeCollateralInfoHead model  : newCollateralHeadList) {
 
-                if(!Util.isNull(model.getPotentialCollateral()) && !Util.isTrue(model.getPotentialCollateral().getAppraisalFlag()))
-                    continue;
+                /*if(!Util.isNull(model.getPotentialCollateral()) && !Util.isTrue(model.getPotentialCollateral().getAppraisalFlag()))
+                    continue;*/
 
                 view = new AppraisalDetailView();
                 view.setNewCollateralId(newCollateral.getId());
