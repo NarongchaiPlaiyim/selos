@@ -2380,26 +2380,48 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
-                                        <td class="left" colspan="3">#{proposeColl.aadDecisionLabel}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.aadDecisionLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReason}</td>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReasonDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.aadDecisionReason}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.aadDecisionReasonDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.usage')}</td>
-                                        <td class="left">#{proposeColl.usageLabel}</td>
-                                        <!--<td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
-                                        <td class="left">#{proposeColl.typeOfUsage}</td>-->
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.usageLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
-                                        <td class="left">#{proposeColl.mortgageCondition}</td>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
-                                        <td class="left">#{proposeColl.mortgageConditionDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.mortgageCondition}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.mortgageConditionDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.creditType')}</td>
@@ -2453,7 +2475,9 @@
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
-                                        <td class="left" colspan="3">#{proposeColl.bdmComments}</td>
+                                        <td class="left" colspan="3" style="max-width: 700px; word-wrap: break-word;">
+                                            <h:outputText value="#{proposeColl.bdmComments}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
@@ -2671,19 +2695,31 @@
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.aadDecisionLabel}</td>
+                                        <td class="left" colspan="3" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.aadDecisionLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                        <td class="left">#{approveCollView.aadDecisionReason}</td>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left" style="width: 35%">#{approveCollView.aadDecisionReasonDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.aadDecisionReason}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.aadDecisionReasonDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.usage')}</td>
-                                        <td class="left">#{approveCollView.usageLabel}</td>
-                                        <!--<td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
-                                        <td class="left">#{approveCollView.typeOfUsage}</td>-->
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.usageLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
@@ -2702,13 +2738,23 @@
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.UWRemark')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.uwRemark}</td>
+                                        <td class="left" colspan="3" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.uwRemark}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
-                                        <td class="left">#{approveCollView.mortgageCondition}</td>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
-                                        <td class="left">#{approveCollView.mortgageConditionDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.mortgageCondition}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left" style="max-width: 300px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.mortgageConditionDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.creditType')}</td>
@@ -2761,8 +2807,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.bdmComments}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.BDMComments')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="max-width: 700px; word-wrap: break-word;">
+                                            <h:outputText value="#{approveCollView.bdmComments}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
