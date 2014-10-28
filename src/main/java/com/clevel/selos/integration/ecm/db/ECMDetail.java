@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ECMDetail implements Serializable{
     private String ecmDocId;//ECM_DOC_ID   ---
@@ -12,6 +13,8 @@ public class ECMDetail implements Serializable{
     private String orgFileName;//ORG_FILENAME
     private String typeCode;//TYPE_CODE
     private String typeNameTH;//TYPE_NAME_TH
+    private Date importDate;
+    private Date createDate;
 
     public String getEcmDocId() {
         return ecmDocId;
@@ -61,6 +64,22 @@ public class ECMDetail implements Serializable{
         this.typeNameTH = typeNameTH;
     }
 
+    public Date getImportDate() {
+        return importDate;
+    }
+
+    public void setImportDate(Date importDate) {
+        this.importDate = importDate;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -70,6 +89,8 @@ public class ECMDetail implements Serializable{
                 .append("orgFileName", orgFileName)
                 .append("typeCode", typeCode)
                 .append("typeNameTH", typeNameTH)
+                .append("importDate", importDate)
+                .append("createDate", createDate)
                 .toString();
     }
 }

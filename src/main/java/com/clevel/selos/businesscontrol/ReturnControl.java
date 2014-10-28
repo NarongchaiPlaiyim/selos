@@ -4,7 +4,7 @@ import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.StepDAO;
-import com.clevel.selos.dao.working.MandateDocDAO;
+import com.clevel.selos.dao.working.MandateDocDetailDAO;
 import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -14,7 +14,7 @@ import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.MandateDocDetail;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -54,7 +54,7 @@ public class ReturnControl extends BusinessControl {
     @Inject
     StepDAO stepDAO;
     @Inject
-    MandateDocDAO mandateDocDAO;
+    MandateDocDetailDAO mandateDocDetailDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -117,21 +117,21 @@ public class ReturnControl extends BusinessControl {
 
     public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId, long workCasePrescreenId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        List<MandateDoc> mandateDocList;
+        List<MandateDocDetail> mandateDocList;
         User user = getCurrentUser();
         Map<String, ReturnInfoView> returnInfoViewMap = new HashMap<String, ReturnInfoView>();
         if((workCaseId!=0 || workCasePrescreenId!=0) && user!=null){
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             if(workCaseId!=0) {
-                mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+                mandateDocList = mandateDocDetailDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             } else {
-                mandateDocList = mandateDocDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
+                mandateDocList = mandateDocDetailDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptListPreScreen(workCasePrescreenId);
             }
 
             if(mandateDocList!=null && mandateDocList.size()>0){
-                for(MandateDoc mandateDoc: mandateDocList){
+                for(MandateDocDetail mandateDoc: mandateDocList){
                     ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
                     returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
                 }

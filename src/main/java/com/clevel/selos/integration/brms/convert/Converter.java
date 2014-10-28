@@ -165,6 +165,7 @@ public class Converter implements Serializable {
                 logger.debug("transform document type {}", documentType);
                 DocumentDetail documentDetail = new DocumentDetail();
                 documentDetail.setId(documentType.getID());
+
                 documentDetail.setDescription(documentType.getDescription());
                 documentDetail.setMandateFlag(documentType.isMandatoryFlag());
 

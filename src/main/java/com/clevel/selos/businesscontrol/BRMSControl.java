@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.businesscontrol.master.StepControl;
 import com.clevel.selos.dao.master.MandateDocumentDAO;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
@@ -25,6 +26,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Stateless
 public class BRMSControl extends BusinessControl {
@@ -78,6 +80,8 @@ public class BRMSControl extends BusinessControl {
     @Inject
     private WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
+    private WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
     private DBRDAO dbrdao;
     @Inject
     private BAPAInfoDAO bapaInfoDAO;
@@ -108,6 +112,8 @@ public class BRMSControl extends BusinessControl {
 
     @Inject
     private MandateFieldValidationControl mandateFieldValidationControl;
+    @Inject
+    private StepControl stepControl;
 
     @Inject
     public BRMSControl(){}
@@ -356,32 +362,6 @@ public class BRMSControl extends BusinessControl {
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
         mandateFieldValidationControl.validate(prescreenFacilityList, PrescreenFacility.class.getName());
-        //Check PreScreen Product Program
-        /*boolean validateFacility = true;
-        if(prescreenFacilityList == null){
-            validateFacility = false;
-        }else{
-            if(prescreenFacilityList.size() == 0){
-                validateFacility = false;
-            }
-        }
-
-        if(!validateFacility){
-            //logger.debug("Juristic should have at least one guarantor. mainBorrower : {}, numberOfGuarantor : {}", mainBorrower, numberOfGuarantor);
-            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
-            mandateFieldMessageView.setFieldName("Product Program");
-            mandateFieldMessageView.setFieldDesc("Product facility detail.");
-            mandateFieldMessageView.setMessage("Product facility should have at least one.");
-            mandateFieldMessageView.setPageName("Prescreen.");
-            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
-            mandateFieldMessageViewList.add(mandateFieldMessageView);
-
-            uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Mandatory fields are missing!!");
-            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
-
-            return uwRuleResponseView;
-        }*/
 
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
@@ -431,7 +411,6 @@ public class BRMSControl extends BusinessControl {
 
             /** To Change to use test Data using second line**/
             UWRulesResponse uwRulesResponse = brmsInterface.checkPreScreenRule(applicationInfo);
-            //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
 
              //Transform to View//
             uwRuleResponseView.setActionResult(uwRulesResponse.getActionResult());
@@ -834,8 +813,6 @@ public class BRMSControl extends BusinessControl {
             uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldValidationResult.getMandateFieldMessageViewList());
         }
 
-        //UWRulesResponse uwRulesResponse = getTestUWRulesResponse();
-
         logger.debug("-- uwRuleResponseView : {}", uwRuleResponseView);
 
         return uwRuleResponseView;
@@ -854,14 +831,13 @@ public class BRMSControl extends BusinessControl {
             logger.debug("MandateDocumentList.size()[{}]", mandateDocumentList.size());
         }
 
-        MandateDocResponseView mandateDocResponseView = null;
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(mandateDocumentList != null && mandateDocumentList.size() > 0){
-            mandateDocResponseView = new MandateDocResponseView();
             logger.debug("-- Get Mandate Document from mst_mandate_document {}", mandateDocumentList);
-            mandateDocResponseView.setActionResult(ActionResult.SUCCESS);
             List<Customer> customerInfoList = Util.safetyList(customerDAO.findCustomerByWorkCasePreScreenId(workCasePrescreenId));
-            logger.debug("CustomerInfoList.size()[{}]", customerInfoList.size());
-            mandateDocResponseView.setMandateDocViewMap(getMandateDocViewMap(mandateDocumentList, customerInfoList));
+
+            mandateDocResponseView = getMandateDocViewMap(mandateDocumentList, customerInfoList);
+            mandateDocResponseView.setActionResult(ActionResult.SUCCESS);
             logger.debug("-- Get Mandate Document from mandate_master {}", mandateDocResponseView);
         } else {
             Date checkDate = Calendar.getInstance().getTime();
@@ -943,13 +919,12 @@ public class BRMSControl extends BusinessControl {
             if(!Util.isNull(applicationInfo)){
                 docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
                 if(!Util.isNull(docCustomerResponse)){
-                    mandateDocResponseView = new MandateDocResponseView();
                     logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
                     if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                        Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
+                        mandateDocResponseView = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCasePrescreen.getStep());
                         mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
-                        mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
                     } else {
+                        mandateDocResponseView = new MandateDocResponseView();
                         mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                         mandateDocResponseView.setReason(docCustomerResponse.getReason());
                     }
@@ -992,8 +967,7 @@ public class BRMSControl extends BusinessControl {
         } else {
             logger.debug("WorkCase is {}", workCase);
         }
-        mandateDocResponseView = new MandateDocResponseView();
-        logger.debug("[NEW] MandateDocResponseView created");
+
 
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("-- check at date {}", checkDate);
@@ -1112,18 +1086,13 @@ public class BRMSControl extends BusinessControl {
             logger.debug("BizInfoSummary is {}", bizInfoSummary);
         }
         docCustomerResponse = brmsInterface.checkDocCustomerRule(applicationInfo);
+
+        mandateDocResponseView = new MandateDocResponseView();
         if(!Util.isNull(docCustomerResponse)){
             logger.debug("-- docCustomerResponse return {}", docCustomerResponse);
             if(ActionResult.SUCCESS.equals(docCustomerResponse.getActionResult())){
-                Step step =  workCase.getStep();
-                if(step!=null){
-                    if(step.getId() == StepValue.FULLAPP_ABDM.value()){//2023
-                        step = stepDAO.findById(Util.parseLong(StepValue.FULLAPP_BDM.value(), 1));
-                    }
-                }
-                Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, step);
+                mandateDocResponseView = getMandateDocViewMap(docCustomerResponse.getDocumentDetailList(), customerList, workCase.getStep());
                 mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
-                mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
             } else {
                 mandateDocResponseView.setActionResult(docCustomerResponse.getActionResult());
                 mandateDocResponseView.setReason(docCustomerResponse.getReason());
@@ -1135,34 +1104,46 @@ public class BRMSControl extends BusinessControl {
         return mandateDocResponseView;
     }
 
-    public MandateDocResponseView getDocAppraisal(long workCaseId){
+    public MandateDocResponseView getDocAppraisal(long stepId, long workCaseId){
         logger.debug("getDocAppraisal from workCaseId {}", workCaseId);
         Date checkDate = Calendar.getInstance().getTime();
         logger.debug("check at date {}", checkDate);
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         BRMSApplicationInfo applicationInfo = new BRMSApplicationInfo();
+
+        StepView stepView = stepControl.getStepView(stepId);
+        StageView stageView = stepView.getStageView();
+        AbstractWorkCase workCase = null;
+        if(StageValue.PRESCREEN.value() == stageView.getId()){
+            workCase = workCasePrescreenDAO.findById(workCaseId);
+            applicationInfo.setBdmSubmitDate(checkDate);
+
+        } else {
+            workCase = workCaseDAO.findById(workCaseId);
+            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+            applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
+        }
+
+        if(workCase.getProductGroup() != null) {
+            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
+        }
+
         applicationInfo.setApplicationNo(workCase.getAppNumber());
         applicationInfo.setProcessDate(checkDate);
-        applicationInfo.setBdmSubmitDate(basicInfo.getBdmSubmitDate());
-        if(workCase.getProductGroup() != null)
-            applicationInfo.setProductGroup(workCase.getProductGroup().getBrmsCode());
 
         DocAppraisalResponse docAppraisalResponse = brmsInterface.checkDocAppraisalRule(applicationInfo);
         logger.debug("-- end getDocAppraisal ", docAppraisalResponse);
 
         MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
         if(ActionResult.SUCCESS.equals(docAppraisalResponse.getActionResult())){
-            Map<String, MandateDocView> mandateDocViewMap = getMandateDocViewMap(docAppraisalResponse.getDocumentDetailList(), null, workCase.getStep());
+            mandateDocResponseView = getMandateDocViewMap(docAppraisalResponse.getDocumentDetailList(), null, workCase.getStep());
             mandateDocResponseView.setActionResult(docAppraisalResponse.getActionResult());
-            mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
         } else {
             mandateDocResponseView.setActionResult(docAppraisalResponse.getActionResult());
             mandateDocResponseView.setReason(docAppraisalResponse.getReason());
         }
 
-        logger.debug("-- end getDocCustomer return {}", mandateDocResponseView);
+        logger.debug("-- end getDocAppraisal return {}", mandateDocResponseView);
         return mandateDocResponseView;
     }
 
@@ -1512,34 +1493,76 @@ public class BRMSControl extends BusinessControl {
         return brmsBizInfo;
     }
 
-    private Map<String, MandateDocView> getMandateDocViewMap(List<DocumentDetail> documentDetailList, List<Customer> customerList, Step step){
+    private MandateDocResponseView getMandateDocViewMap(List<DocumentDetail> documentDetailList, List<Customer> customerList, Step step){
         logger.debug("-- begin getMandateDocResponseView with documentDetailList {}, customerList {}", documentDetailList, customerList);
 
         //Transform Result from Document Customer Response//
-        Map<String, MandateDocView> mandateDocViewMap = new HashMap<String, MandateDocView>();
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+        Map<String, MandateDocView> mandateDocViewMap = new ConcurrentHashMap<String, MandateDocView>();
+        Map<String, MandateDocView> optionalDocViewMap = new ConcurrentHashMap<String, MandateDocView>();
+        List<String> ecmDocTypeIdList = new ArrayList<String>();
+
         if(documentDetailList != null){
             logger.debug("- documentDetailList is NOT null");
             for(DocumentDetail documentDetail : documentDetailList){
-                MandateDocView mandateDocView = mandateDocViewMap.get(documentDetail.getId());
-                if(mandateDocView == null){
-                    mandateDocView = new MandateDocView();
-                    mandateDocView.setNumberOfDoc(0);
-                }
-                //TODO : mandateDocView.setEcmDocTypeDesc(
+                MandateDocView mandateDocView = null;
+                //1. check mandate doc/optional doc type
+                long stepId = getLong(documentDetail.getStep());
 
-                //1. Set ECM Document Type ID
+                //Check if the step is in Post Approval Process, the mandatory flag must check against Operation Flag.
+                boolean isMandate = Boolean.FALSE;
+                boolean showFlag = Boolean.FALSE;
+                if(step.getStage().getId() == StageValue.AGREEMENT_PLEDGE_REGISTRATION.value() ||
+                        step.getStage().getId() == StageValue.CUSTOMER_ACCEPTANCE_FINAL_APPROVAL.value() ||
+                        step.getStage().getId() == StageValue.DISBURSEMENT.value() ||
+                        step.getStage().getId() == StageValue.LIMIT_SET_UP.value()){
+                    if(documentDetail.isOperMandateFlag()){
+                        long operStepId = getLong(documentDetail.getOperStep());
+                        if(operStepId == step.getId()){
+                            isMandate = Boolean.TRUE;
+                        } else {
+                            isMandate = Boolean.FALSE;
+                        }
+                    }
+                    showFlag = BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue();
+                } else {
+                    if(documentDetail.isMandateFlag()){
+                        if(stepId != 0 && stepId == step.getId()){
+                            logger.debug("Document is Mandate for this step {}.", step);
+                            isMandate = Boolean.TRUE;
+                        }
+                    }
+                    showFlag = BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue();
+                }
+
+                if(isMandate){
+                    mandateDocView = mandateDocViewMap.get(documentDetail.getId());
+                    if(mandateDocView == null){
+                        mandateDocView = _intialMandateDocView();
+                    }
+                    mandateDocView.setDocMandateType(DocMandateType.MANDATE);
+                } else {
+                    mandateDocView = optionalDocViewMap.get(documentDetail.getId());
+                    if(mandateDocView == null){
+                        mandateDocView = _intialMandateDocView();
+                    }
+                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
+                }
+                mandateDocView.setDisplay(showFlag);
+
+                //2. Set ECM Document Type ID
                 mandateDocView.setEcmDocTypeId(documentDetail.getId());
-                //2. Set Doc Level (Application or Customer)
+                //3. Set Doc Level (Application or Customer)
                 mandateDocView.setDocLevel(documentDetail.getDocLevel());
 
-                //3. Set BRMS Document Description
+                //4. Set BRMS Document Description
                 List<String> brmsList = mandateDocView.getBrmsDescList();
                 if(brmsList == null)
                     brmsList = new ArrayList<String>();
                 brmsList.add(documentDetail.getDescription());
                 mandateDocView.setBrmsDescList(brmsList);
 
-                //4. Set Document Owner - CustomerInfoSimpleView if it is Customer Level
+                //5. Set Document Owner - CustomerInfoSimpleView if it is Customer Level
                 if(DocLevel.CUS_LEVEL.equals(documentDetail.getDocLevel())) {
                     long _customerId = getLong(documentDetail.getDocOwner());
                     List<CustomerInfoSimpleView> customerInfoSimpleViewList = mandateDocView.getCustomerInfoSimpleViewList();
@@ -1547,11 +1570,11 @@ public class BRMSControl extends BusinessControl {
                         customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
 
                     CustomerInfoSimpleView customerInfoSimpleView = null;
-                    logger.debug("------------------------------------------ customerInfoSimpleViewList[{}]", customerInfoSimpleViewList);
+                    logger.debug("- customerInfoSimpleViewList[{}]", customerInfoSimpleViewList);
                     for(CustomerInfoSimpleView _customerInfoSimpleView : customerInfoSimpleViewList){
                         if(_customerInfoSimpleView.getId() == _customerId){
                             customerInfoSimpleView = _customerInfoSimpleView;
-                            logger.debug("------------------------------------------ Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
+                            logger.debug("- Already Found Customer in MandateDocCustomerList {}", _customerInfoSimpleView);
                             break;
                         }
                     }
@@ -1572,54 +1595,45 @@ public class BRMSControl extends BusinessControl {
                     mandateDocView.setCustomerInfoSimpleViewList(customerInfoSimpleViewList);
                 }
 
-                //5. set number of document
+                //6. set number of document
                 mandateDocView.setNumberOfDoc(mandateDocView.getNumberOfDoc() + 1);
 
-                //6. set mandate doc/optional doc type
-                long stepId = getLong(documentDetail.getStep());
-                if(documentDetail.isMandateFlag()){
-                    if(stepId != 0 && stepId == step.getId()){
-                        logger.debug("Document is Mandate for this step {}.", step);
-                        mandateDocView.setDocMandateType(DocMandateType.MANDATE);
-                    } else {
-                        logger.debug("Document is Optional for this ");
-                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                    }
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                if(isMandate){
+                    logger.debug("put into Mandate Doc List");
+                    mandateDocViewMap.put(documentDetail.getId(), mandateDocView);
                 } else {
-                    logger.debug("Document is NOT mandate for any steps.");
-                    mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                    mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getShowFlag()).boolValue());
+                    logger.debug("put into Optional Doc List");
+                    optionalDocViewMap.put(documentDetail.getId(), mandateDocView);
                 }
 
-                //7. check step which operation flag
-                if(step.getOperationFlag() != 0) {
-                    stepId = getLong(documentDetail.getOperStep());
-                    if (documentDetail.isOperMandateFlag()) {
-                        if (stepId != 0 && stepId == step.getId()) {
-                            logger.debug("Document is Mandate for Oper step {}.", step);
-                            mandateDocView.setDocMandateType(DocMandateType.MANDATE);
-                        } else {
-                            mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                        }
-                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
-                    } else {
-                        logger.debug("Document is NOT mandate for any steps.");
-                        mandateDocView.setDocMandateType(DocMandateType.OPTIONAL);
-                        mandateDocView.setDisplay(BRMSYesNo.lookup(documentDetail.getOperShowFlag()).boolValue());
-                    }
-                }
-
-                mandateDocViewMap.put(documentDetail.getId(), mandateDocView);
+                //7. Store ecmDocId to query doc description
+                ecmDocTypeIdList.add(documentDetail.getId());
             }
         }
-        logger.debug("-- end getMandateDocViewMap return {}", mandateDocViewMap);
-        return mandateDocViewMap;
+
+        logger.debug("-- ecmDocTypeId: {}", ecmDocTypeIdList);
+
+        mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+        mandateDocResponseView.setOptionalDocViewMap(optionalDocViewMap);
+        mandateDocResponseView.setEcmDocTypeIDList(ecmDocTypeIdList);
+
+        logger.debug("-- end getMandateDocViewMap return {}", mandateDocResponseView);
+        return mandateDocResponseView;
     }
 
-    private Map<String, MandateDocView> getMandateDocViewMap(List<MandateDocument> mandateDocumentList, List<Customer> customerList){
+    private MandateDocView _intialMandateDocView(){
+        MandateDocView mandateDocView = new MandateDocView();
+        mandateDocView.setNumberOfDoc(0);
+        return mandateDocView;
+    }
+
+    private MandateDocResponseView getMandateDocViewMap(List<MandateDocument> mandateDocumentList, List<Customer> customerList){
         //Transform Result from Document Customer Response//
+        MandateDocResponseView mandateDocResponseView = new MandateDocResponseView();
+
         Map<String, MandateDocView> mandateDocViewMap = new HashMap<String, MandateDocView>();
+        List<String> ecmDocTypeIdList = new ArrayList<String>();
+
         for(MandateDocument mandateDocument : mandateDocumentList){
 
             MandateDocView mandateDocView = mandateDocViewMap.get(mandateDocument.getId());
@@ -1630,8 +1644,6 @@ public class BRMSControl extends BusinessControl {
 
             mandateDocView.setEcmDocTypeId(mandateDocument.getEcmDocId());
             mandateDocView.setDocLevel(mandateDocument.getDocLevel());
-
-            //TODO remove -- Chai
             mandateDocView.setDocMandateType(DocMandateType.MANDATE);
 
             //2. Set BRMS Document Description
@@ -1673,9 +1685,16 @@ public class BRMSControl extends BusinessControl {
             }
 
             mandateDocView.setNumberOfDoc(numberOfDoc);
+            mandateDocView.setDisplay(true);
             mandateDocViewMap.put(mandateDocView.getEcmDocTypeId(), mandateDocView);
+
+            //3. Store ecmDocId to query doc description
+            ecmDocTypeIdList.add(mandateDocView.getEcmDocTypeId());
         }
-        return mandateDocViewMap;
+
+        mandateDocResponseView.setMandateDocViewMap(mandateDocViewMap);
+        mandateDocResponseView.setEcmDocTypeIDList(ecmDocTypeIdList);
+        return mandateDocResponseView;
     }
 
     //For Converting Document ID

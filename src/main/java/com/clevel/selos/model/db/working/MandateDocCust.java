@@ -16,10 +16,11 @@ public class MandateDocCust implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "mandate_doc_id")
-    private MandateDoc mandateDoc;
+    private MandateDocDetail mandateDocDetail;
 
-    @Column(name = "cust_name")
-    private String custName;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     public long getId() {
         return id;
@@ -29,28 +30,27 @@ public class MandateDocCust implements Serializable {
         this.id = id;
     }
 
-    public MandateDoc getMandateDoc() {
-        return mandateDoc;
+    public MandateDocDetail getMandateDocDetail() {
+        return mandateDocDetail;
     }
 
-    public void setMandateDoc(MandateDoc mandateDoc) {
-        this.mandateDoc = mandateDoc;
+    public void setMandateDocDetail(MandateDocDetail mandateDocDetail) {
+        this.mandateDocDetail = mandateDocDetail;
     }
 
-    public String getCustName() {
-        return custName;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustName(String custName) {
-        this.custName = custName;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("mandateDoc", mandateDoc)
-                .append("custName", custName)
+                .append("customer", customer)
                 .toString();
     }
 }

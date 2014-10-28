@@ -5,235 +5,244 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 <p:panel id="checkMandateDlgPanel" styleClass="panel-dialog">
-        <table class="table_content" border="0">
-            <tr>
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-                <td style="width: 100px; min-width: 100px; max-width: 100px;" />
-            </tr>
-            <tr>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.documentType')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.brmsDocumentType')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.fileName')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.isComplete')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason')}"/>
-                </th>
-                <th>
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.remark')}"/>
-                </th>
-            </tr>
-            <tr>
-                <td class="title" colspan="7" style="background-color: lightcoral">
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.mandatory')}"/>
-                </td>
-            </tr>
-            <ui:repeat value="#{headerController.checkMandateDocView.mandatoryDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
-                <tr >
+    <table class="content_table_form">
+        <tr>
+            <td colspan="100%"></td>
+        </tr>
+        <tr>
+            <td colspan="100%"><table class="table_content" style="overflow-y: scroll; width: 100%;">
+                <tr>
+                    <th style="width: 200px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.documentType')}"/>
+                    </th>
+                    <th style="width: 150px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.brmsDocumentType')}"/>
+                    </th>
+                    <th style="width: 150px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners')}"/>
+                    </th>
+                    <th style="width: 100px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.fileName')}"/>
+                    </th>
+                    <th style="width: 80px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.isComplete')}"/>
+                    </th>
+                    <th style="width: 120px; margin:2px">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason')}"/>
+                    </th>
+                    <th style="width: 150px;">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.remark')}"/>
+                    </th>
+                </tr>
+                <tr>
+                    <td class="title" colspan="7" style="background-color: lightcoral">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.mandatory')}"/>
+                    </td>
+                </tr>
+                <p:panel rendered="#{checkMandateDoc.checkMandateDocView.mandateDocumentsList == null or checkMandateDoc.checkMandateDocView.mandateDocumentsList.size() == 0}">
+                    <tr>
+                        <td colspan="7">
+                            <p:outputLabel value="#{msg.get('app.label.noRecordsFound')}"/>
+                        </td>
+                    </tr>
+                </p:panel>
+                <ui:repeat value="#{checkMandateDoc.checkMandateDocView.mandateDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
+                <tr>
                     <td >
-                        <p:outputLabel value="#{mandatoryItem.documentType}"/>
+                        <p:outputLabel value="#{mandatoryItem.ecmDocTypeDesc}"/>
                     </td>
                     <td >
-                        <ui:repeat value="#{mandatoryItem.BRMSDocumentTypeList}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
-                            <p:outputLabel value="#{mandatoryBrmsDocument.BRMSDocType}"/>
+                        <ui:repeat value="#{mandatoryItem.brmsDescList}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
+                            <p:outputLabel value="#{mandatoryBrmsDocument}"/>
                             <h:panelGroup rendered="#{!rowMandatoryBRMSIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
                     <td >
-                        <ui:repeat value="#{mandatoryItem.ownewList}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
-                            <p:outputLabel value="#{mandatoryOwners.custName}"/>
+                        <p:panel style="border: none" id="no_optional_owners" rendered="#{checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                            <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners.application')}"/>
+                        </p:panel>
+                        <p:panel style="border: none" id="mandate_owners" rendered="#{!checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                        <ui:repeat value="#{mandatoryItem.customerInfoSimpleViewList}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
+                            <p:outputLabel value="#{mandatoryOwners.customerName}"/>
                             <h:panelGroup rendered="#{!rowMandatoryOwnersIndex.last}">
+                                <br/>
+                            </h:panelGroup>
+                        </ui:repeat>
+                        </p:panel>
+                    </td>
+                    <td >
+                        <ui:repeat value="#{mandatoryItem.mandateDocFileNameViewList}" var="fileName" varStatus="rowFileNameIndex">
+                            <h:outputLink value="#{fileName.url}" target="_blank">#{fileName.fileName}</h:outputLink>
+                            <h:panelGroup rendered="#{!rowFileNameIndex.last}">
+                                <br/>
+                            </h:panelGroup>
+                        </ui:repeat>
+                    </td>
+                    <td class="center" style="#{mandatoryItem.completedFlag.value() == 1 ? 'background-color: #F04C05': ''}">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.completedFlag}" columns="1" disabled="#{!checkMandateDoc.checkMandateDocView.allowCheckComplete}">
+                            <f:selectItems value="#{enumGeneralControl.radioYesNoNA}" var="radioValue"
+                                           itemLabel="#{msg.get(radioValue.msgKey)}" itemValue="#{radioValue}"/>
+                        </p:selectOneRadio>
+                    </td>
+                    <td class="left">
+                        <p:selectManyCheckbox layout="pageDirection" value="#{mandatoryItem.selectedReasonList}" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateReason}">
+                            <f:selectItems value="#{checkMandateDoc.reasonList}" var="reason" itemLabel="#{reason.label}" itemValue="#{reason.value}"/>
+                        </p:selectManyCheckbox>
+                    </td>
+                    <td class="center">
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="20" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateRemark}"/>
+                    </td>
+                </tr>
+                </ui:repeat>
+
+                <tr>
+                    <td class="title" colspan="7" style="background-color: darkseagreen">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.optional')}"/>
+                    </td>
+                </tr>
+                <ui:fragment rendered="#{checkMandateDoc.checkMandateDocView.optionalDocumentsList == null or checkMandateDoc.checkMandateDocView.optionalDocumentsList.size() == 0}">
+                <tr>
+                    <td colspan="7">
+                        <p:outputLabel value="#{msg.get('app.label.noRecordsFound')}"/>
+                    </td>
+                </tr>
+                </ui:fragment>
+                <ui:repeat value="#{checkMandateDoc.checkMandateDocView.optionalDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
+                <tr >
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem.ecmDocTypeDesc}"/>
+                    </td>
+                    <td >
+                        <ui:repeat value="#{mandatoryItem.brmsDescList}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
+                            <p:outputLabel value="#{mandatoryBrmsDocument}"/>
+                            <h:panelGroup rendered="#{!rowMandatoryBRMSIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
                     <td >
-                        <ui:repeat value="#{mandatoryItem.fileNameViewList}" var="fileNmae" varStatus="rowFileNameIndex">
-                            <h:outputLink value="#{fileNmae.url}" target="_blank">#{fileNmae.fileName}</h:outputLink>
+                        <p:panel style="border: none" id="no_optional_owners" rendered="#{checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                            <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners.application')}"/>
+                        </p:panel>
+                        <p:panel style="border: none" id="optional_owners" rendered="#{!checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                            <ui:repeat value="#{mandatoryItem.customerInfoSimpleViewList}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
+                                <p:outputLabel value="#{mandatoryOwners.customerName}"/>
+                                <h:panelGroup rendered="#{!rowMandatoryOwnersIndex.last}">
+                                    <br/>
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </p:panel>
+                    </td>
+                    <td >
+                        <ui:repeat value="#{mandatoryItem.mandateDocFileNameViewList}" var="fileName" varStatus="rowFileNameIndex">
+                            <h:outputLink value="#{fileName.url}" target="_blank">#{fileName.fileName}</h:outputLink>
 
                             <h:panelGroup rendered="#{!rowFileNameIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td class="center" style="#{mandatoryItem.complete == 2 ? 'background-color: #F04C05': ''}">
-                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or mandatoryItem.completeFlag}">
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
+                    <td class="center" style="#{mandatoryItem.completedFlag.value() == 1 ? 'background-color: #F04C05': ''}">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.completedFlag}" columns="1" disabled="#{!checkMandateDoc.checkMandateDocView.allowCheckComplete}">
+                            <f:selectItems value="#{enumGeneralControl.radioYesNoNA}" var="radioValue"
+                                           itemLabel="#{msg.get(radioValue.msgKey)}" itemValue="#{radioValue}"/>
                         </p:selectOneRadio>
                     </td>
                     <td class="left">
-                        <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}" /><br /> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{mandatoryItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or mandatoryItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
-                        <br />
+                        <p:selectManyCheckbox layout="pageDirection" value="#{mandatoryItem.selectedReasonList}" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateReason}">
+                            <f:selectItems value="#{checkMandateDoc.reasonList}" var="reason" itemLabel="#{reason.label}" itemValue="#{reason.value}"/>
+                        </p:selectManyCheckbox>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or mandatoryItem.remarkFlag}"/>
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="20" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateRemark}"/>
                     </td>
                 </tr>
-            </ui:repeat>
+                </ui:repeat>
 
+                <tr>
+                    <td class="title" colspan="7" style="background-color: #868686">
+                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.other')}"/>
+                    </td>
+                </tr>
+                <ui:fragment rendered="#{checkMandateDoc.checkMandateDocView.otherDocumentsList == null or checkMandateDoc.checkMandateDocView.otherDocumentsList.size() == 0}">
+                    <tr>
+                        <td colspan="7">
+                            <p:outputLabel value="#{msg.get('app.label.noRecordsFound')}"/>
+                        </td>
+                    </tr>
+                </ui:fragment>
+                <ui:repeat value="#{checkMandateDoc.checkMandateDocView.otherDocumentsList}" var="mandatoryItem" varStatus="mandatoryItemIndex">
+                <tr>
+                    <td >
+                        <p:outputLabel value="#{mandatoryItem.ecmDocTypeDesc}"/>
+                    </td>
+                    <td >
+                        <ui:repeat value="#{mandatoryItem.brmsDescList}" var="mandatoryBrmsDocument" varStatus="rowMandatoryBRMSIndex">
+                            <p:outputLabel value="#{mandatoryBrmsDocument}"/>
+                            <h:panelGroup rendered="#{!rowMandatoryBRMSIndex.last}">
+                                <br/>
+                            </h:panelGroup>
+                        </ui:repeat>
+                    </td>
+                    <td >
+                        <p:panel style="border: none" id="no_optional_owners" rendered="#{checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                            <p:outputLabel value="#{msg.get('app.checkmandatedoc.owners.application')}"/>
+                        </p:panel>
+                        <p:panel style="border: none" id="other_owners" rendered="#{!checkMandateDoc.isApplicationLevel(mandatoryItem.docLevel)}">
+                            <ui:repeat value="#{mandatoryItem.customerInfoSimpleViewList}" var="mandatoryOwners" varStatus="rowMandatoryOwnersIndex">
+                                <p:outputLabel value="#{mandatoryOwners.customerName}"/>
+                                <h:panelGroup rendered="#{!rowMandatoryOwnersIndex.last}">
+                                    <br/>
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </p:panel>
+                    </td>
+                    <td >
+                        <ui:repeat value="#{mandatoryItem.mandateDocFileNameViewList}" var="fileName" varStatus="rowFileNameIndex">
+                            <h:outputLink value="#{fileName.url}" target="_blank">#{fileName.fileName}</h:outputLink>
 
-            <tr>
-                <td class="title" colspan="7" style="background-color: darkseagreen">
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.optional')}"/>
-                </td>
-            </tr>
-            <ui:repeat value="#{headerController.checkMandateDocView.optionalDocumentsList}" var="optionalItem" varStatus="optionalItemIndex">
-                <tr >
-                    <td >
-                        <p:outputLabel value="#{optionalItem.documentType}"/>
-                    </td>
-                    <td >
-                        <ui:repeat value="#{optionalItem.BRMSDocumentTypeList}" var="optionalBRMSDocument" varStatus="rowOptionalBRMSIndex">
-                            <p:outputLabel value="#{optionalBRMSDocument.BRMSDocType}"/>
-                            <h:panelGroup rendered="#{!rowOptionalBRMSIndex.last}">
+                            <h:panelGroup rendered="#{!rowFileNameIndex.last}">
                                 <br/>
                             </h:panelGroup>
                         </ui:repeat>
                     </td>
-                    <td >
-                        <ui:repeat value="#{optionalItem.ownewList}" var="optionalOwners" varStatus="rowOptionalOwnersIndex">
-                            <p:outputLabel value="#{optionalOwners.custName}"/>
-                            <h:panelGroup rendered="#{!rowOptionalOwnersIndex.last}">
-                                <br/>
-                            </h:panelGroup>
-                        </ui:repeat>
-                    </td>
-                    <td >
-                        <ui:repeat value="#{optionalItem.fileNameViewList}" var="optionalFileName" varStatus="rowOptionalFileNameIndex">
-                            <h:outputLink value="#{optionalFileName.url}" target="_blank">#{optionalFileName.fileName}</h:outputLink>
-                            <h:panelGroup rendered="#{!rowOptionalFileNameIndex.last}">
-                                <br/>
-                            </h:panelGroup>
-                        </ui:repeat>
-                    </td>
-                    <td class="center" style="#{optionalItem.complete == 2 ? 'background-color: #F04C05': ''}">
-                        <p:selectOneRadio layout="grid" value="#{optionalItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or optionalItem.completeFlag}">
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
+                    <td class="center" style="#{mandatoryItem.completedFlag.value() == 1 ? 'background-color: #F04C05': ''}">
+                        <p:selectOneRadio layout="grid" value="#{mandatoryItem.completedFlag}" columns="1" disabled="#{!checkMandateDoc.checkMandateDocView.allowCheckComplete}">
+                            <f:selectItems value="#{enumGeneralControl.radioYesNoNA}" var="radioValue"
+                                           itemLabel="#{msg.get(radioValue.msgKey)}" itemValue="#{radioValue}"/>
                         </p:selectOneRadio>
                     </td>
-                    <td >
-                        <br />
-                        <p:selectBooleanCheckbox value="#{optionalItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"  /><br /> <br />
-                        <p:selectBooleanCheckbox value="#{optionalItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')} "/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{optionalItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{optionalItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or optionalItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
-                        <br />
+                    <td class="left">
+                        <p:selectManyCheckbox layout="pageDirection" value="#{mandatoryItem.selectedReasonList}" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateReason}">
+                            <f:selectItems value="#{checkMandateDoc.reasonList}" var="reason" itemLabel="#{reason.label}" itemValue="#{reason.value}"/>
+                        </p:selectManyCheckbox>
                     </td>
                     <td class="center">
-                        <p:inputTextarea value="#{optionalItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or optionalItem.remarkFlag}"/>
+                        <p:inputTextarea value="#{mandatoryItem.remark}" rows="3" cols="20" disabled="#{!checkMandateDoc.checkMandateDocView.allowUpdateRemark}"/>
                     </td>
                 </tr>
-            </ui:repeat>
+                </ui:repeat>
+            </table></td>
+        </tr>
+        <tr>
+            <td class="center" colspan="100%">
+                <p:commandButton id="btnSaveMandateDoc"
+                                 value="#{msg.get('app.button.save')}"
+                                 styleClass="medium"
+                                 process="@form"
+                                 action="#{checkMandateDoc.onSaveCheckMandateDoc()}"
+                                 update=":frmMain:msgBoxMandateDocMessagePanel"/>
 
-            <tr>
-                <td class="title" colspan="7" style="background-color: #868686">
-                    <p:outputLabel value="#{msg.get('app.checkmandatedoc.other')}"/>
-                </td>
-            </tr>
-            <ui:repeat value="#{headerController.checkMandateDocView.otherDocumentsList}" var="otherItem" varStatus="otherItemIndex">
-                <tr >
-                    <td >
-                        <p:outputLabel value="#{otherItem.documentType}"/>
-                    </td>
-                    <td >
-                        <ui:repeat value="#{otherItem.BRMSDocumentTypeList}" var="otherBRMSDocument" varStatus="rowOtherBRMSIndex">
-                            <p:outputLabel value="#{otherBRMSDocument.BRMSDocType}"/>
-                            <h:panelGroup rendered="#{!rowOtherBRMSIndex.last}">
-                                <br/>
-                            </h:panelGroup>
-                        </ui:repeat>
-                    </td>
-                    <td >
-                        <ui:repeat value="#{otherItem.ownewList}" var="otherOwners" varStatus="rowOtherOwnersIndex">
-                            <p:outputLabel value="#{otherOwners.custName}"/>
-                            <h:panelGroup rendered="#{!rowOtherOwnersIndex.last}">
-                                <br/>
-                            </h:panelGroup>
-                        </ui:repeat>
-                    </td>
-                    <td >
-                        <ui:repeat value="#{otherItem.fileNameViewList}" var="otherFileName" varStatus="rowOtherFileNameIndex">
-                            <h:outputLink value="#{otherFileName.url}" target="_blank">#{otherFileName.fileName}</h:outputLink>
-                            <h:panelGroup rendered="#{!rowOtherFileNameIndex.last}">
-                                <br/>
-                            </h:panelGroup>
-                        </ui:repeat>
-                    </td>
-                    <td class="center" style="#{otherItem.complete == 2 ? 'background-color: #F04C05': ''}">
-                        <p:selectOneRadio layout="grid" value="#{otherItem.complete}" columns="1" disabled="#{headerController.checkMandateDocView.completeFlag or otherItem.completeFlag}">
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.yes')}" itemValue="1"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.no')}" itemValue="2"/>
-                            <f:selectItem itemLabel="#{msg.get('app.checkmandatedoc.isComplete.enable')}" itemValue="3"/>
-                        </p:selectOneRadio>
-                    </td>
-                    <td class="left" >
-                        <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.incomplete}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.a')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.indistinct}" disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.b')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.incorrect}"  disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.c')}"/><br /> <br />
-                        <p:selectBooleanCheckbox value="#{otherItem.expire}"     disabled="#{headerController.checkMandateDocView.reasonFlag or otherItem.reasonFlag}"/>
-                        <p:outputLabel value="#{msg.get('app.checkmandatedoc.reason.d')}"/>
-                        <br />
-                    </td>
-                    <td class="center" >
-                        <p:inputTextarea value="#{otherItem.remark}" rows="3" cols="25" readonly="#{headerController.checkMandateDocView.remarkFlag or otherItem.remarkFlag}"/>
-                    </td>
-                </tr>
-            </ui:repeat>
-
-            <tr>
-                <td class="center" colspan="7">
-                    <p:commandButton id="btnSaveMandateDoc"
-                                     value="#{msg.get('app.button.save')}"
-                                     styleClass="medium"
-                                     process="@form"
-                                     action="#{headerController.onSaveCheckMandateDoc()}"
-                                     update=":frmMain:msgBoxBaseMessagePanel"/>
-
-                    <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                     id="btnCancelMandateDoc"
-                                     styleClass="medium"
-                                     process="@form"
-                                     onclick="checkMandateDlg.hide()"/>
-                </td>
-            </tr>
-        </table>
+                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                 id="btnCancelMandateDoc"
+                                 styleClass="medium"
+                                 process="@form"
+                                 onclick="checkMandateDlg.hide()"/>
+            </td>
+        </tr>
+    </table>
 </p:panel>
 
 <p:blockUI widgetVar="blockReturnInfoDlg" block="checkMandateDlgPanel" trigger=":frmMain:btnSaveMandateDoc">

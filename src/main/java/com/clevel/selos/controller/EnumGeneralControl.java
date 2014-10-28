@@ -53,4 +53,11 @@ public class EnumGeneralControl implements Serializable{
     public MandateConditionType[] getMandateConditionType(){
         return MandateConditionType.values();
     }
+    public RadioValue[] getRadioYesNoNA(){
+        RadioValue[] radioValues = new RadioValue[3];
+        radioValues[0] = RadioValue.YES;
+        radioValues[1] = RadioValue.NO;
+        radioValues[2] = RadioValue.NA;
+        return radioValues;
+    }
 }

@@ -16,13 +16,16 @@ public class MandateDocFileName implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "mandate_doc_id")
-    private MandateDoc mandateDoc;
+    private MandateDocDetail mandateDocDetail;
 
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "url", length = 500)
-    private String url;
+    @Column(name = "fn_doc_id", length = 19)
+    private String fnDocId;
+
+    @Column(name = "ecm_doc_id", length = 19)
+    private String ecmDocId;
 
     public long getId() {
         return id;
@@ -32,12 +35,12 @@ public class MandateDocFileName implements Serializable {
         this.id = id;
     }
 
-    public MandateDoc getMandateDoc() {
-        return mandateDoc;
+    public MandateDocDetail getMandateDocDetail() {
+        return mandateDocDetail;
     }
 
-    public void setMandateDoc(MandateDoc mandateDoc) {
-        this.mandateDoc = mandateDoc;
+    public void setMandateDocDetail(MandateDocDetail mandateDocDetail) {
+        this.mandateDocDetail = mandateDocDetail;
     }
 
     public String getFileName() {
@@ -48,21 +51,29 @@ public class MandateDocFileName implements Serializable {
         this.fileName = fileName;
     }
 
-    public String getUrl() {
-        return url;
+    public String getFnDocId() {
+        return fnDocId;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setFnDocId(String fnDocId) {
+        this.fnDocId = fnDocId;
+    }
+
+    public String getEcmDocId() {
+        return ecmDocId;
+    }
+
+    public void setEcmDocId(String ecmDocId) {
+        this.ecmDocId = ecmDocId;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("mandateDoc", mandateDoc)
                 .append("fileName", fileName)
-                .append("url", url)
+                .append("fnDocId", fnDocId)
+                .append("ecmDocId", ecmDocId)
                 .toString();
     }
 }

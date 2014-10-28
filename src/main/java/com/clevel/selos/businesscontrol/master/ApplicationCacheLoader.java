@@ -123,6 +123,15 @@ public class ApplicationCacheLoader implements Serializable{
     @Inject private StepDAO stepDAO;
     @Inject private StepTransform stepTransform;
 
+    @Inject private MandateDocAccessDAO mandateDocAccessDAO;
+    @Inject private MandateDocAccessTransform mandateDocAccessTransform;
+
+    @Inject private ReasonDAO reasonDAO;
+    @Inject private ReasonTransform reasonTransform;
+
+    @Inject private ReasonTypeDAO reasonTypeDAO;
+    @Inject private ReasonTypeTransform reasonTypeTransform;
+
     @Inject
     public ApplicationCacheLoader() {
     }
@@ -230,6 +239,15 @@ public class ApplicationCacheLoader implements Serializable{
 
         List<Step> stepList = stepDAO.findAll();
         indexHash.put(Step.class.getName(), stepTransform.transformToCache(stepList));
+
+        List<MandateDocAccess> mandateDocAccessList = mandateDocAccessDAO.findAll();
+        indexHash.put(MandateDocAccess.class.getName(), mandateDocAccessTransform.transformToCache(mandateDocAccessList));
+
+        List<Reason> reasonList = reasonDAO.findAll();
+        indexHash.put(Reason.class.getName(), reasonTransform.transformToCache(reasonList));
+
+        List<ReasonType> reasonTypeList = reasonTypeDAO.findAll();
+        indexHash.put(ReasonType.class.getName(), reasonTypeTransform.transformToCache(reasonTypeList));
 
         Util.listMap(indexHash);
         logger.debug("-- finished load cache DB --");

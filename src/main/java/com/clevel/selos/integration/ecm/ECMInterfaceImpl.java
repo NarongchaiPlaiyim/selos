@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 public class ECMInterfaceImpl implements ECMInterface, Serializable {
     @Inject
@@ -52,11 +53,11 @@ public class ECMInterfaceImpl implements ECMInterface, Serializable {
     }
 
     @Override
-    public ECMDataResult getECMTypeName(final String ecmDocId) {
+    public ECMDataResult getECMTypeName(final List<String> ecmDocId) {
         ECMDataResult ecmDataResult = null;
         try {
             ecmDataResult = new ECMDataResult();
-            ecmDataResult.setEcmTypeName(ecmService.getECMTypeName(ecmDocId));
+            ecmDataResult.setEcmTypeNameMap(ecmService.getECMTypeName(ecmDocId));
             ecmDataResult.setActionResult(ActionResult.SUCCESS);
             return ecmDataResult;
         } catch (ECMInterfaceException e){

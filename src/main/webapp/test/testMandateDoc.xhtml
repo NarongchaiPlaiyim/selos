@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
+
+    <h:head>
+        <h:outputScript library="js" name="custom.js" />
+        <title>Welcome</title>
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer" styleClass="panel">
+        <!-- Check Mandate Doc for Maker -->
+            <h:form id="frmMain">
+                <table class="content_table_form">
+                    <tr>
+                        <td style="width: 250px">Work Case Id:</td>
+                        <td><p:inputText value="#{checkMandateDoc.testInfo.testWorkCaseId}" styleClass="larger"/></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 250px">Work Case Prescreen Id :</td>
+                        <td><p:inputText value="#{checkMandateDoc.testInfo.testWorkCasePrescreenId}" styleClass="larger"/></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 250px">Step Id :</td>
+                        <td><p:inputText value="#{checkMandateDoc.testInfo.stepId}" styleClass="larger"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="100%">
+                            <p:commandButton id="btnChkMandateDoc" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                                             actionListener="#{checkMandateDoc.onTestMandateDocControl}"
+                                             disabled="false"
+                                             oncomplete="checkMandateDlg.show()"
+                                             update=":frmMain:checkMandatePanel, :frmMain:msgBoxMandateDocMessagePanel">
+                                <p:resetInput target=":frmMain:checkMandatePanel"/>
+                            </p:commandButton>
+                        </td>
+                    </tr>
+                </table>
+                <p:panel id="checkMandatePanel" styleClass="panel">
+                    <p:dialog id="checkMandateDialog" widgetVar="checkMandateDlg" header="Check MandateDoc"
+                              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+                              modal="true" width="1024" height="500" closable="false">
+                        <ui:include src="/site/dialog/checkMandateDocDialog.xhtml"/>
+                    </p:dialog>
+                </p:panel>
+                <p:panel id="msgBoxMandateDocMessagePanel" styleClass="panel">
+                    <p:confirmDialog id="msgBoxMandateDocMessageDialog" widgetVar="msgBoxMandateDocMessagePanel" styleClass="messageDialog" closable="false"
+                                     header="#{checkMandateDoc.messageHeader}">
+                        <f:facet name="message">
+                            <h:outputText value="#{checkMandateDoc.message}" escape="false"/>
+                        </f:facet>
+                        <p:commandButton value="OK"
+                                         onclick="showWindowsScrollBar()"
+                                         process="@this"
+                                         update=":frmMain"
+                                         oncomplete="msgBoxMandateDocMessagePanel.hide()"/>
+                    </p:confirmDialog>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>

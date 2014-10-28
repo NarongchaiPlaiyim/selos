@@ -7,7 +7,7 @@ import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.MandateDocDetail;
 import com.clevel.selos.model.db.working.ReturnInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -215,7 +215,7 @@ public class ReturnInfoTransform extends Transform {
         return returnInfoView;
     }
 
-    public ReturnInfoView transformToNewView(MandateDoc mandateDoc){
+    public ReturnInfoView transformToNewView(MandateDocDetail mandateDoc){
         log.info("Start - transformToView ::: mandateDoc : {}", mandateDoc);
         ReturnInfoView returnInfoView = new ReturnInfoView();
 

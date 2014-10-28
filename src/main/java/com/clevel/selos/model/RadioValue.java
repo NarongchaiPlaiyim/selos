@@ -6,7 +6,7 @@ public enum RadioValue {
     YES(2, "Yes","app.button.yes", true),
     PASS(3, "Pass","app.button.pass", true),
     FAIL(4, "Fail","app.button.fail", false),
-    NA(5, "N/A","app.button.notselected", false);
+    NA(5, "N/A","app.button.na", false);
 
     private final int value;
     private final String shortName;

@@ -2,22 +2,45 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.DocLevel;
 import com.clevel.selos.model.DocMandateType;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.view.master.ReasonView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MandateDocView implements Serializable{
-
+public class MandateDocView implements Serializable {
+    private long id;
     private String ecmDocTypeId;
-    private String ecmDocTypeDesc; //--
+    private String ecmDocTypeDesc;
     private List<String> brmsDescList;
     private List<CustomerInfoSimpleView> customerInfoSimpleViewList;
     private DocLevel docLevel;
     private int numberOfDoc;
     private DocMandateType docMandateType;
     private boolean display;
+    private List<MandateDocFileNameView> mandateDocFileNameViewList;
+    private RadioValue completedFlag;
+    private List<Integer> selectedReasonList;
+    private String remark;
+
+    public MandateDocView(){
+        selectedReasonList = new ArrayList<Integer>();
+        customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
+        mandateDocFileNameViewList = new ArrayList<MandateDocFileNameView>();
+        brmsDescList = new ArrayList<String>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getEcmDocTypeId() {
         return ecmDocTypeId;
@@ -81,6 +104,38 @@ public class MandateDocView implements Serializable{
 
     public void setDisplay(boolean display) {
         this.display = display;
+    }
+
+    public List<MandateDocFileNameView> getMandateDocFileNameViewList() {
+        return mandateDocFileNameViewList;
+    }
+
+    public void setMandateDocFileNameViewList(List<MandateDocFileNameView> mandateDocFileNameViewList) {
+        this.mandateDocFileNameViewList = mandateDocFileNameViewList;
+    }
+
+    public RadioValue getCompletedFlag() {
+        return completedFlag;
+    }
+
+    public void setCompletedFlag(RadioValue completedFlag) {
+        this.completedFlag = completedFlag;
+    }
+
+    public List<Integer> getSelectedReasonList() {
+        return selectedReasonList;
+    }
+
+    public void setSelectedReasonList(List<Integer> selectedReasonList) {
+        this.selectedReasonList = selectedReasonList;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override

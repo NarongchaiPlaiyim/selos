@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ECMService implements Serializable {
     @Inject
@@ -52,17 +53,18 @@ public class ECMService implements Serializable {
     }
 
 
-    public ECMTypeName getECMTypeName(final String ECM_DOC_ID) throws Exception{
-        ECMTypeName ecmTypeName = null;
+    public Map<String, ECMTypeName> getECMTypeName(final List<String> ecmDocTypeIDList) throws Exception{
+        log.debug("-- begin getECMTypeName: {}", ecmDocTypeIDList);
+        Map<String, ECMTypeName> ecmTypeNameMap = null;
         try {
-            if(!Util.isNull(ECM_DOC_ID) && !Util.isZero(ECM_DOC_ID.length())){
-                ecmTypeName = dbExecute.findByEcmDocId(ECM_DOC_ID);
-                if(Util.isNull(ecmTypeName)){
+            if(!Util.isNull(ecmDocTypeIDList) && ecmDocTypeIDList.size() > 0){
+                ecmTypeNameMap = dbExecute.findByEcmDocId(ecmDocTypeIDList);
+                if(Util.isNull(ecmTypeNameMap) || ecmTypeNameMap.size() == 0){
                     log.debug("Data Not Found!");
                     throw new ECMInterfaceException(new Exception(msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND)),ExceptionMapping.ECM_DATA_NOT_FOUND, msg.get(ExceptionMapping.ECM_DATA_NOT_FOUND));
                 }
             }
-            return ecmTypeName;
+            return ecmTypeNameMap;
         } catch (ECMInterfaceException e){
             log.error("ECMInterfaceException while get ECM Type Name!",e);
             throw e;

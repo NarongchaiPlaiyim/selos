@@ -382,7 +382,7 @@ public class EndPoint implements Serializable {
             mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             mResponse.marshal(response, new FileWriter(responseFile, true));
 
-            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
+            logger.debug("callDocumentCustomerRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
             logger.error("callDocumentCustomerRulesService() Error : {}", e);
@@ -428,7 +428,7 @@ public class EndPoint implements Serializable {
             mResponse.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             mResponse.marshal(response, new FileWriter(responseFile, true));
 
-            logger.debug("callStandardPricingFeeRulesService() Done... {}", response);
+            logger.debug("callDocumentAppraisalRulesService() Done... {}", response);
             return response;
         } catch (Exception e) {
             logger.error("callDocumentAppraisalRulesService() Error : {}", e);

@@ -15,12 +15,11 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DBExecute implements Serializable {
     @Inject
@@ -60,71 +59,75 @@ public class DBExecute implements Serializable {
     private Message msg;
     private Connection connection = null;
     private transient ResultSet resultSet = null;
+    private PreparedStatement prepStmt = null;
+    private Statement stmt = null;
+
     @Inject
     public DBExecute() {
 
     }
 
-    public ECMTypeName findByEcmDocId(final String ECM_DOC_ID){
-        log.debug("-- findByEcmDocId.[{}]",ECM_DOC_ID);
-        ECMTypeName ecmTypeName = null;
-        StringBuilder stringBuilder = null;
+    public Map<String, ECMTypeName> findByEcmDocId(final List<String> ecmDocTypeIdList){
+        log.debug("-- findByEcmDocId.[{}]",ecmDocTypeIdList);
 
-        stringBuilder = new StringBuilder();
-        if(!Util.isNull(schema) && !Util.isZero(schema.length())){
-            stringBuilder
-                    .append("SELECT ")
-                    .append("DOCUMENTTYPE.TYPE_NAME_TH, ")
-                    .append("DOCUMENTTYPE.TYPE_NAME_EN ")
-                    .append("FROM "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ")
-                    .append("WHERE ")
-                    .append("DOCUMENTTYPE.TYPE_CODE = ?");
-        } else {
-            stringBuilder
-                    .append("SELECT ")
-                    .append("DOCUMENTTYPE.TYPE_NAME_TH, ")
-                    .append("DOCUMENTTYPE.TYPE_NAME_EN ")
-                    .append("FROM WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ")
-                    .append("WHERE ")
-                    .append("DOCUMENTTYPE.TYPE_CODE = ?");
+        String schemaDot = null;
+        if(!Util.isNull(schema) && !Util.isZero(schema.length()))
+            schemaDot = schema + ".";
+
+        StringBuilder ecmDocTypeIdBuilder = new StringBuilder();
+        int count = 1;
+        for(String ecmDocTypeID : ecmDocTypeIdList){
+            ecmDocTypeIdBuilder.append(ecmDocTypeID);
+            if(count < ecmDocTypeIdList.size()){
+                ecmDocTypeIdBuilder.append(", ");
+            }
+            count++;
         }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("SELECT DOCUMENTTYPE.TYPE_CODE, DOCUMENTTYPE.TYPE_NAME_TH, DOCUMENTTYPE.TYPE_NAME_EN ")
+                .append("FROM ").append(schemaDot).append("WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ")
+                .append("WHERE DOCUMENTTYPE.TYPE_CODE in (").append(ecmDocTypeIdBuilder.toString()).append(")");
 
         try{
             connection = dbContext.getConnection(connECM, ecmUser, ecmPassword);
         } catch (ECMInterfaceException ex){
+            ex.printStackTrace();
             throw ex;
         }
 
+        Map<String, ECMTypeName> ecmDocTypeMap = new ConcurrentHashMap<String, ECMTypeName>();
         try {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, ECM_DOC_ID);
-            resultSet = statement.executeQuery();
+            stmt = connection.createStatement();
+            resultSet = stmt.executeQuery(sql);
+
             while (resultSet.next()) {
-                ecmTypeName = new ECMTypeName();
-                ecmTypeName.setTypeNameTH(resultSet.getString(1));
-                ecmTypeName.setTypeNameEN(resultSet.getString(2));
+                ECMTypeName ecmTypeName = new ECMTypeName();
+                ecmTypeName.setId(resultSet.getString(1));
+                ecmTypeName.setTypeNameTH(resultSet.getString(2));
+                ecmTypeName.setTypeNameEN(resultSet.getString(3));
+                ecmDocTypeMap.put(ecmTypeName.getId(), ecmTypeName);
             }
 
-            if(!Util.isNull(ecmTypeName)){
-                log.debug("-- ECMTypeName : [{}]", ecmTypeName.toString());
+            if(!Util.isNull(ecmDocTypeMap)){
+                log.debug("-- ECMTypeName : [{}]", ecmDocTypeMap);
             } else {
                 log.debug("-- ECMTypeName is null.");
             }
 
-            resultSet.close();
-            connection.close();
-            connection = null;
             log.debug("connection closed.");
         } catch (SQLException e) {
+            e.printStackTrace();
             log.error("execute query exception!",e);
             throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
         } finally {
             closeConnection();
         }
-        return ecmTypeName;
+        log.debug("return ecmDocTypeMap: {}", ecmDocTypeMap);
+        return ecmDocTypeMap;
     }
 
     public List<ECMDetail> findByCANumber(final String caNumber){
@@ -132,70 +135,26 @@ public class DBExecute implements Serializable {
         List<ECMDetail> ecmDetailList = null;
         StringBuilder stringBuilder = null;
 
+        String schemaDot = null;
+        if(!Util.isNull(schema) && !Util.isZero(schema.length()))
+            schemaDot = schema + ".";
+
         stringBuilder = new StringBuilder();
-        if(!Util.isNull(schema) && !Util.isZero(schema.length())){
-            stringBuilder.append("SELECT ");
-            stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER, ");
-            stringBuilder.append("DOCUMENT.FN_DOC_ID, ");
-            stringBuilder.append("TXDETAIL.ORG_FILENAME, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_CODE, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_NAME_TH ");
-            stringBuilder.append("FROM "+schema+".WCAP_WK_DOCUMENT DOCUMENT ");
-            stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_WK_TXDETAIL TXDETAIL ON DOCUMENT.TX_DETAIL_ID = TXDETAIL.TX_DETAIL_ID ");
-            stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
-            stringBuilder.append("WHERE ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
-            stringBuilder.append("UNION ");
-            stringBuilder.append("SELECT ");
-            stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
-            stringBuilder.append("CATOCUST.CA_NUMBER, ");
-            stringBuilder.append("DOCUMENT.FN_DOC_ID, ");
-            stringBuilder.append("TXDETAIL.ORG_FILENAME, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_CODE, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_NAME_TH ");
-            stringBuilder.append("FROM "+schema+".WCAP_RE_CATOCUST CATOCUST ");
-            stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_WK_DOCUMENT DOCUMENT ON CATOCUST.ECM_CUS_ID = DOCUMENT.ECM_CUS_ID ");
-            stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_WK_TXDETAIL TXDETAIL ON DOCUMENT.TX_DETAIL_ID = TXDETAIL.TX_DETAIL_ID ");
-            stringBuilder.append("LEFT OUTER JOIN "+schema+".WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
-            stringBuilder.append("WHERE ");
-            stringBuilder.append("CATOCUST.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0");
-        } else {
-            stringBuilder.append("SELECT ");
-            stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER, ");
-            stringBuilder.append("DOCUMENT.FN_DOC_ID, ");
-            stringBuilder.append("TXDETAIL.ORG_FILENAME, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_CODE, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_NAME_TH ");
-            stringBuilder.append("FROM WCAP_WK_DOCUMENT DOCUMENT ");
-            stringBuilder.append("LEFT OUTER JOIN WCAP_WK_TXDETAIL TXDETAIL ON DOCUMENT.TX_DETAIL_ID = TXDETAIL.TX_DETAIL_ID ");
-            stringBuilder.append("LEFT OUTER JOIN WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
-            stringBuilder.append("WHERE ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.TX_DETAIL_ID <> 0 ");
-            stringBuilder.append("UNION ");
-            stringBuilder.append("SELECT ");
-            stringBuilder.append("DOCUMENT.ECM_DOC_ID, ");
-            stringBuilder.append("CATOCUST.CA_NUMBER, ");
-            stringBuilder.append("DOCUMENT.FN_DOC_ID, ");
-            stringBuilder.append("TXDETAIL.ORG_FILENAME, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_CODE, ");
-            stringBuilder.append("DOCUMENTTYPE.TYPE_NAME_TH ");
-            stringBuilder.append("FROM WCAP_RE_CATOCUST CATOCUST ");
-            stringBuilder.append("LEFT OUTER JOIN WCAP_WK_DOCUMENT DOCUMENT ON CATOCUST.ECM_CUS_ID = DOCUMENT.ECM_CUS_ID ");
-            stringBuilder.append("LEFT OUTER JOIN WCAP_WK_TXDETAIL TXDETAIL ON DOCUMENT.TX_DETAIL_ID = TXDETAIL.TX_DETAIL_ID ");
-            stringBuilder.append("LEFT OUTER JOIN WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ");
-            stringBuilder.append("WHERE ");
-            stringBuilder.append("CATOCUST.CA_NUMBER = ? AND ");
-            stringBuilder.append("DOCUMENT.CA_NUMBER IS NULL AND DOCUMENT.TX_DETAIL_ID <> 0");
-        }
+        stringBuilder.append("SELECT DOCUMENT.ECM_DOC_ID, DOCUMENT.CA_NUMBER, DOCUMENT.FN_DOC_ID, DOCUMENTTYPE.TYPE_CODE, DOCUMENTTYPE.TYPE_NAME_TH, DOCUMENT.IMPORT_DATE, DOCUMENT.CREATE_DATE ")
+                .append("FROM ").append(schemaDot).append("WCAP_WK_DOCUMENT DOCUMENT ")
+                .append("LEFT OUTER JOIN ").append(schemaDot).append("WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ")
+                .append("WHERE DOCUMENT.CA_NUMBER = ? ")
+                .append("UNION ")
+                .append("SELECT DOCUMENT.ECM_DOC_ID, CATOCUST.CA_NUMBER, DOCUMENT.FN_DOC_ID, DOCUMENTTYPE.TYPE_CODE, DOCUMENTTYPE.TYPE_NAME_TH, DOCUMENT.IMPORT_DATE, DOCUMENT.CREATE_DATE ")
+                .append("FROM ").append(schemaDot).append("WCAP_RE_CATOCUST CATOCUST ")
+                .append("LEFT OUTER JOIN ").append(schemaDot).append("WCAP_WK_DOCUMENT DOCUMENT ON CATOCUST.ECM_CUS_ID = DOCUMENT.ECM_CUS_ID ")
+                .append("LEFT OUTER JOIN ").append(schemaDot).append("WCAP_MS_DOCUMENTTYPE DOCUMENTTYPE ON DOCUMENT.TYPE_CODE = DOCUMENTTYPE.TYPE_CODE ")
+                .append("WHERE CATOCUST.CA_NUMBER = ? AND DOCUMENT.CA_NUMBER IS NULL");
 
         try{
             connection = dbContext.getConnection(connECM, ecmUser, ecmPassword);
         } catch (ECMInterfaceException ex){
+            ex.printStackTrace();
             throw ex;
         }
 
@@ -203,29 +162,26 @@ public class DBExecute implements Serializable {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
-            PreparedStatement statement = connection.prepareStatement(sql);
+            prepStmt = connection.prepareStatement(sql);
 
-            statement.setString(1, caNumber);
-            statement.setString(2, caNumber);
-            resultSet = statement.executeQuery();
-            ECMDetail ecmDetail = null;
+            prepStmt.setString(1, caNumber);
+            prepStmt.setString(2, caNumber);
+            resultSet = prepStmt.executeQuery();
             ecmDetailList = new ArrayList<ECMDetail>();
             while (resultSet.next()) {
-                ecmDetail = new ECMDetail();
+                ECMDetail ecmDetail = new ECMDetail();
                 ecmDetail.setEcmDocId(resultSet.getString(1));
                 ecmDetail.setCaNumber(resultSet.getString(2));
                 ecmDetail.setFnDocId(resultSet.getString(3));
-                ecmDetail.setOrgFileName(resultSet.getString(4));
-                ecmDetail.setTypeCode(resultSet.getString(5));
-                ecmDetail.setTypeNameTH(resultSet.getString(6));
+                ecmDetail.setTypeCode(resultSet.getString(4));
+                ecmDetail.setTypeNameTH(resultSet.getString(5));
+                ecmDetail.setImportDate(resultSet.getDate(6));
+                ecmDetail.setCreateDate(resultSet.getDate(7));
                 ecmDetailList.add(ecmDetail);
             }
             log.debug("-- ECMDetail was added to ecmDetailList[Size {}]", ecmDetailList.size());
-            resultSet.close();
-            connection.close();
-            connection = null;
-            log.debug("connection closed.");
         } catch (SQLException e) {
+            e.printStackTrace();
             log.error("execute query exception!",e);
             throw new ECMInterfaceException(e, ExceptionMapping.ECM_GETDATA_ERROR, msg.get(ExceptionMapping.ECM_GETDATA_ERROR));
         } finally {
@@ -318,23 +274,22 @@ public class DBExecute implements Serializable {
             log.debug("open connection.");
             String sql = stringBuilder.toString();
             log.debug("-- SQL[{}]", sql);
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, Util.convertNullToZero(ecmcapShare.getCrsBranchCode()));
-            statement.setString(2,  ecmcapShare.getCrsCancelCA() == null ? "N" : ecmcapShare.getCrsCancelCA());
-            statement.setDate(3, ecmcapShare.getCrsCreateDate());
-            statement.setString(4, ecmcapShare.getCrsCustName());
-            statement.setString(5,  Util.convertNullToZero(ecmcapShare.getCrsCusType()));
-            statement.setString(6,  Util.convertNullToZero(ecmcapShare.getCrsHubCode()));
-            statement.setDate(7, ecmcapShare.getCrsLastUpdate());
-            statement.setString(8,  Util.convertNullToZero(ecmcapShare.getCrsRegionCode()));
-            statement.setString(9,  Util.convertNullToZero(ecmcapShare.getCrsRoCode()));
-            statement.setString(10, ecmcapShare.getCrsUKCANumber());
-            int flag = statement.executeUpdate();
+            prepStmt = connection.prepareStatement(sql);
+            prepStmt.setString(1, Util.convertNullToZero(ecmcapShare.getCrsBranchCode()));
+            prepStmt.setString(2,  ecmcapShare.getCrsCancelCA() == null ? "N" : ecmcapShare.getCrsCancelCA());
+            prepStmt.setDate(3, ecmcapShare.getCrsCreateDate());
+            prepStmt.setString(4, ecmcapShare.getCrsCustName());
+            prepStmt.setString(5,  Util.convertNullToZero(ecmcapShare.getCrsCusType()));
+            prepStmt.setString(6,  Util.convertNullToZero(ecmcapShare.getCrsHubCode()));
+            prepStmt.setDate(7, ecmcapShare.getCrsLastUpdate());
+            prepStmt.setString(8,  Util.convertNullToZero(ecmcapShare.getCrsRegionCode()));
+            prepStmt.setString(9,  Util.convertNullToZero(ecmcapShare.getCrsRoCode()));
+            prepStmt.setString(10, ecmcapShare.getCrsUKCANumber());
+            int flag = prepStmt.executeUpdate();
             if(flag != -1){
                 return !result;
             }
-            connection.close();
-            connection = null;
+
             log.debug("connection closed.");
         } catch (SQLException e) {
             log.error("execute query exception!",e);
@@ -352,6 +307,20 @@ public class DBExecute implements Serializable {
                 log.debug("result set closed. (in finally)");
             } catch (SQLException e) {
                 resultSet = null;
+            }
+        }
+        if(!Util.isNull(stmt)){
+            try{
+                stmt.close();
+            }catch (SQLException ex){
+                stmt = null;
+            }
+        }
+        if(!Util.isNull(prepStmt)){
+            try{
+                prepStmt.close();
+            }catch (SQLException ex){
+                prepStmt = null;
             }
         }
         if (!Util.isNull(connection)) {

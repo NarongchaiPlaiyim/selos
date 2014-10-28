@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.working.MandateDoc;
+import com.clevel.selos.model.db.working.MandateDocDetail;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class MandateDocBRMSView implements Serializable {
     private long id;
     private String BRMSDocType;
-    private MandateDoc mandateDoc;
+    private MandateDocDetail mandateDoc;
 
     public MandateDocBRMSView() {
 
@@ -31,11 +31,11 @@ public class MandateDocBRMSView implements Serializable {
         this.BRMSDocType = BRMSDocType;
     }
 
-    public MandateDoc getMandateDoc() {
+    public MandateDocDetail getMandateDoc() {
         return mandateDoc;
     }
 
-    public void setMandateDoc(MandateDoc mandateDoc) {
+    public void setMandateDoc(MandateDocDetail mandateDoc) {
         this.mandateDoc = mandateDoc;
     }
 

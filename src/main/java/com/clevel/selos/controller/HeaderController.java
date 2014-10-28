@@ -1850,7 +1850,7 @@ public class HeaderController extends BaseController {
         stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         checkMandateDocView = null;
         try{
-            checkMandateDocView = checkMandateDocControl.getMandateDocViewByMaker(workCasePreScreenId);
+            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByMaker(workCasePreScreenId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -1874,7 +1874,7 @@ public class HeaderController extends BaseController {
         String result = null;
         checkMandateDocView = null;
         try{
-            checkMandateDocView = checkMandateDocControl.getMandateDocViewByChecker(workCasePreScreenId);
+            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByChecker(workCasePreScreenId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -1962,7 +1962,7 @@ public class HeaderController extends BaseController {
         String result = null;
         checkMandateDocView = null;
         try{
-            checkMandateDocView = checkMandateDocControl.getMandateDocViewByFullApp(workCaseId);
+            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByFullApp(workCaseId);
             if(!Util.isNull(checkMandateDocView)){
                 log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
             } else {
@@ -1981,9 +1981,9 @@ public class HeaderController extends BaseController {
         log.debug("-- onSaveCheckMandateDoc().");
         try {
             if(!Util.isZero(workCaseId)){
-                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
+                //checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
             } else {
-                checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
+                //checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
             }
             messageHeader = "Information";
             message = "Success";

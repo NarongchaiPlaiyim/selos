@@ -8,12 +8,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ECMDataResult implements Serializable {
     private ActionResult actionResult;
     private String reason;
     private List<ECMDetail> ecmDetailList;
-    private ECMTypeName ecmTypeName;
+    private Map<String, ECMTypeName> ecmTypeNameMap;
 
     public ActionResult getActionResult() {
         return actionResult;
@@ -39,12 +40,12 @@ public class ECMDataResult implements Serializable {
         this.ecmDetailList = ecmDetailList;
     }
 
-    public ECMTypeName getEcmTypeName() {
-        return ecmTypeName;
+    public Map<String, ECMTypeName> getEcmTypeNameMap() {
+        return ecmTypeNameMap;
     }
 
-    public void setEcmTypeName(ECMTypeName ecmTypeName) {
-        this.ecmTypeName = ecmTypeName;
+    public void setEcmTypeNameMap(Map<String, ECMTypeName> ecmTypeNameMap) {
+        this.ecmTypeNameMap = ecmTypeNameMap;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ECMDataResult implements Serializable {
                 .append("actionResult", actionResult)
                 .append("reason", reason)
                 .append("ecmDetailList", ecmDetailList)
-                .append("ecmTypeName", ecmTypeName)
+                .append("ecmTypeNameMap", ecmTypeNameMap)
                 .toString();
     }
 }
