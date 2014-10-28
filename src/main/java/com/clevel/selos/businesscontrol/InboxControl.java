@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
+import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.StepLandingPageDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
@@ -8,9 +9,13 @@ import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.StepLandingPage;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.StepToStatus;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.PEInbox;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.InboxBizTransform;
@@ -19,6 +24,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.Date;
 
 @Stateless
 public class InboxControl extends BusinessControl {
@@ -42,6 +48,10 @@ public class InboxControl extends BusinessControl {
     WorkCaseAppraisalDAO workCaseAppraisalDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
+    StepDAO stepDAO;
     @Inject
     CustomerDAO customerDAO;
     @Inject
@@ -129,5 +139,41 @@ public class InboxControl extends BusinessControl {
         }
 
         return tempPeInbox;
+    }
+
+    public void updateWorkCaseOwner(long workCasePreScreenId, long workCaseId, long stepId, String caseOwner){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByStep(workCasePreScreenId, workCaseId, stepId);
+            WorkCasePrescreen workCasePrescreen = null;
+            WorkCase workCase = null;
+            User currentUser = userDAO.findById(caseOwner);
+            Step step = stepDAO.findById(stepId);
+
+            if(!Util.isZero(workCasePreScreenId))
+                workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
+            if(!Util.isZero(workCaseId))
+                workCase = workCaseDAO.findById(workCaseId);
+
+            if(!Util.isNull(workCaseOwner)){
+                workCaseOwner.setWorkCase(workCase);
+                workCaseOwner.setWorkCasePrescreen(workCasePrescreen);
+                workCaseOwner.setUser(currentUser);
+                workCaseOwner.setRole(currentUser != null ? currentUser.getRole() : null);
+                workCaseOwner.setModifyDate(new Date());
+            }else{
+                workCaseOwner = new WorkCaseOwner();
+                workCaseOwner.setWorkCase(workCase);
+                workCaseOwner.setWorkCasePrescreen(workCasePrescreen);
+                workCaseOwner.setTimesOfCriteriaChecked(0);
+                workCaseOwner.setUser(currentUser);
+                workCaseOwner.setRole(currentUser != null ? currentUser.getRole() : null);
+                workCaseOwner.setStep(step);
+                workCaseOwner.setCreateDate(new Date());
+            }
+            workCaseOwnerDAO.persist(workCaseOwner);
+        }catch (Exception ex){
+            log.error("Exception while insert to WorkCaseOwner : ", ex);
+        }
     }
 }

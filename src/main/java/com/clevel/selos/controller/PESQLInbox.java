@@ -300,30 +300,7 @@ public class PESQLInbox implements Serializable
                 wrkCaseAppraisalId = workCaseAppraisal.getId();
             }
 
-            try{
-                WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByStep(stepId);
-                User currentUser = userDAO.findById(caseOwner);
-                Step step = stepDAO.findById(stepId);
-                if(!Util.isNull(workCaseOwner)){
-                    workCaseOwner.setWorkCase(workCase);
-                    workCaseOwner.setWorkCasePrescreen(workCasePrescreen);
-                    workCaseOwner.setUser(currentUser);
-                    workCaseOwner.setRole(currentUser != null ? currentUser.getRole() : null);
-                    workCaseOwner.setModifyDate(new Date());
-                }else{
-                    workCaseOwner = new WorkCaseOwner();
-                    workCaseOwner.setWorkCase(workCase);
-                    workCaseOwner.setWorkCasePrescreen(workCasePrescreen);
-                    workCaseOwner.setTimesOfCriteriaChecked(0);
-                    workCaseOwner.setUser(currentUser);
-                    workCaseOwner.setRole(currentUser != null ? currentUser.getRole() : null);
-                    workCaseOwner.setStep(step);
-                    workCaseOwner.setCreateDate(new Date());
-                }
-                workCaseOwnerDAO.persist(workCaseOwner);
-            }catch (Exception ex){
-                log.error("Exception while insert to WorkCaseOwner : ", ex);
-            }
+            inboxControl.updateWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, stepId, caseOwner);
 
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
