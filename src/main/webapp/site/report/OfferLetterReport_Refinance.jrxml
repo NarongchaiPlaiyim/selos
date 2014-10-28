@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OfferLetterReport_Refinance" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ca39f32e-a87c-4639-8f11-6ce5ffae141c">
-	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.zoom" value="1.4641000000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="productProgram" class="java.lang.String"/>
@@ -74,7 +74,7 @@
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="a9657600-7d62-4e6b-aabc-5bc6e935ac73" mode="Opaque" x="0" y="0" width="88" height="13" backcolor="#FFFFFF"/>
+				<reportElement uuid="a9657600-7d62-4e6b-aabc-5bc6e935ac73" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="88" height="13" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -83,9 +83,9 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{productProgram} + "เพื่อ" + $F{loanPurPose}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{productProgram} + " เพื่อ" + $F{loanPurPose}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement uuid="4bcece24-28ad-4d2b-8711-79eca1067af7" stretchType="RelativeToBandHeight" mode="Opaque" x="88" y="0" width="179" height="13" backcolor="#FFFFFF"/>
@@ -97,7 +97,7 @@
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
@@ -111,7 +111,7 @@
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{limit}]]></textFieldExpression>
 			</textField>
@@ -125,7 +125,7 @@
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
+					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>

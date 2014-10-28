@@ -237,7 +237,7 @@
 			<subreport>
 				<reportElement uuid="8f642151-cafe-4ebd-8a3b-9d0f0c97d193" x="0" y="0" width="555" height="13"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{approvedGuarantorOfferLetterReport})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OfferLetterReport_Guarantor_ApprovedGuarantor.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$F{path} + "OfferLetterReport_Guarantor_ApprovedGuarantor.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
