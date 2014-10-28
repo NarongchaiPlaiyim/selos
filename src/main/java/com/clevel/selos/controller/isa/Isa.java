@@ -158,7 +158,6 @@ public class Isa implements Serializable {
         try {
             if(!Util.isNull(isaManageUserView)){
                 log.debug("-- Mode : {}", modeForButton);
-//                IsaUserDetailView isaUserDetailView = isaBusinessControl.mappingToAudit(isaManageUserView);
                 if(ModeForButton.ADD == modeForButton){
                     messageHeader = "Add New User.";
                     if(!isaBusinessControl.isExistId(isaManageUserView.getId())){
