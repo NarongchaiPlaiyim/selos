@@ -223,7 +223,7 @@ public class CustomerInfoPostAddressView implements Serializable {
 		for (int i=1;i<=index;i++)
 			rtnDatas.add(i);
 		rtnDatas.add(3);
-        System.out.println("getAvailableFlagList (index: "+index+", rtnDatas : "+rtnDatas+")");
+        //System.out.println("getAvailableFlagList (index: "+index+", rtnDatas : "+rtnDatas+")");
 		return rtnDatas;
 	}
 	public void updateValue(CustomerInfoPostAddressView view) {
