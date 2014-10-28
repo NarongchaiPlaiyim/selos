@@ -685,6 +685,7 @@ public class HeaderController extends BaseController {
                             //TO Get all owner of case
                             getUserOwnerBU();
 
+                            log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
                             if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
                             //if(stepId <= StepValue.FULLAPP_BDM.value()) {
                                 zmUserList = fullApplicationControl.getUserList(user);
