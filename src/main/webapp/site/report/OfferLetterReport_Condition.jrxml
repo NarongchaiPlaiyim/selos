@@ -37,7 +37,8 @@
 					<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{count}.intValue() == 0 ?
+"" : $F{count}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

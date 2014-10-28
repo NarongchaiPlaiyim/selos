@@ -606,7 +606,7 @@ public class CalculationControl extends BusinessControl{
                         if (bidv.getBizDesc() != null) {
                             cog = bidv.getBizDesc().getCog();
                         }
-                        aaaValue = Util.add(aaaValue, Util.divide(Util.multiply(cog, salesIncome), oneHundred));
+                        aaaValue = Util.add(aaaValue, Util.multiply(cog, salesIncome));
                     }
                 }
             }

@@ -2546,6 +2546,8 @@
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
                                                         <br/>
+                                                        #{msg.get('app.decision.tb.td.label.typeOfUsage')} #{subColl.typeOfUsage}
+                                                        <br/>
                                                         #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
                                                     </p:column>
 
@@ -2848,6 +2850,8 @@
                                                         <h:outputText value="#{subColl.subCollateralType.description}" rendered="#{not empty subColl.subCollateralType}"/>
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
+                                                        <br/>
+                                                        #{msg.get('app.decision.tb.td.label.typeOfUsage')} #{subColl.typeOfUsage}
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
                                                     </p:column>

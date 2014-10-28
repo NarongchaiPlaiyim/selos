@@ -159,6 +159,7 @@ public class COMSService implements Serializable {
                             Map<String,SubCollateralData> subCollateralDataMap = new HashMap<String, SubCollateralData>();
                             if(subCollateralList!=null && subCollateralList.size()>0){
                                 for(SubCollateral subCollateral: subCollateralList){
+                                    String typeOfUsage = "-";
                                     SubCollateralData subCollateralData = new SubCollateralData();
                                     subCollateralData.setCollId(subCollateral.getColId());
                                     subCollateralData.setHeadCollId(subCollateral.getHeadColId());
@@ -206,8 +207,10 @@ public class COMSService implements Serializable {
                                                 address = dbExecute.getAddressType4(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
                                                 break;
                                             case TYPE5: //Building
-                                                address = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
-                                                //usageMap = dbExecute.getUsageForBuilding(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                Map<String,String> addrMap = new HashMap<String, String>();
+                                                addrMap = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                address = addrMap.get("address");
+                                                typeOfUsage = addrMap.get("usageType");
                                                 break;
                                             case TYPE6:
                                                 address = dbExecute.getAddressType6(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
@@ -235,6 +238,7 @@ public class COMSService implements Serializable {
                                         }
                                     }
                                     subCollateralData.setAddress(address);
+                                    subCollateralData.setTypeOfUsage(typeOfUsage);
 
                                     if(subCollateralDataMap.containsKey(subCollateral.getColId())){
                                         SubCollateralData subCollateralDataTmp = subCollateralDataMap.get(subCollateral.getColId());
