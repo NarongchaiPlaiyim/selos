@@ -1,12 +1,16 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.BAResultHCDAO;
+import com.clevel.selos.dao.master.FeePaymentMethodDAO;
+import com.clevel.selos.dao.master.FeeTypeDAO;
 import com.clevel.selos.dao.master.InsuranceCompanyDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BAPAType;
+import com.clevel.selos.model.FeeLevel;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.BAResultHC;
+import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.master.InsuranceCompany;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
@@ -41,6 +45,12 @@ public class BAPAInfoControl extends BusinessControl {
 	 private BAPAInfoCreditDAO bapaInfoCreditDAO;
 	 @Inject
 	 private ProposeCreditInfoDAO newCreditDetailDAO;
+     @Inject
+     private ProposeFeeDetailDAO feeDetailDAO;
+     @Inject
+     private FeePaymentMethodDAO feePaymentMethodDAO;
+     @Inject
+     private FeeTypeDAO feeTypeDAO;
 	 
 	  @Inject 
 	 private InsuranceCompanyDAO insuranceCompanyDAO;
@@ -88,6 +98,37 @@ public class BAPAInfoControl extends BusinessControl {
 			 bapaInfoTransform.updateModelFromView(bapaInfo, bapaInfoView, user);
 			 bapaInfoDAO.persist(bapaInfo);
 		 }
+
+         //Save Fee Collection
+         BigDecimal feeAmount = bapaInfoView.getTotalExpense();
+         long baPaFeeId = 13;
+         FeeType type = feeTypeDAO.findById(baPaFeeId); //BA/PA
+         log.debug("saveBAPAInfo : get fee type (type : {})",type);
+
+         if(type!=null){
+             ProposeFeeDetail model = feeDetailDAO.findByType(workCase.getId(), type.getId());
+             log.debug("saveBAPAInfo : wrk_fee_detail (model : {})",model);
+             if(feeAmount!=null && feeAmount.compareTo(BigDecimal.ZERO)>0){
+                 if (model == null) {
+                     model = new ProposeFeeDetail();
+                     model.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode("01"));
+                     model.setFeeType(type);
+                     model.setWorkCase(workCase);
+                 }
+                 model.setPercentFee(BigDecimal.ZERO);
+                 model.setPercentFeeAfter(BigDecimal.ZERO);
+                 model.setFeeYear(BigDecimal.ZERO);
+                 model.setAmount(feeAmount);
+                 model.setFeeLevel(FeeLevel.APP_LEVEL);
+                 model.setDescription(type.getFormula());
+                 model.setProposeType(null);
+                 model.setProposeCreditInfo(null);
+                 feeDetailDAO.save(model);
+             } else {
+                 if(model!=null)
+                 feeDetailDAO.delete(model);
+             }
+         }
 		 
 		 //Customer
 		 for (BAPAInfoCustomerView customer  : customers) {

@@ -126,9 +126,11 @@ public class PostCustomerInfoIndv implements Serializable {
 	}
 	
 	public String getAddressFlagLabel(int index) {
-		if (index >= addressTypes.size())
+        log.debug("getAddressFlagLabel (index : {})",index);
+		if (index >= addressTypes.size()-1)
 			return message.get("app.custInfoIndi.content.button.other");
 		SelectItem type = addressTypes.get(index);
+        log.debug("getAddressFlagLabel (type.getLabel() : {}, type.getValue() : {})",type.getLabel(),type.getValue());
 		return type.getLabel();
 	}
 	public boolean isAttorneyDetailEditable() {
@@ -334,6 +336,7 @@ public class PostCustomerInfoIndv implements Serializable {
 			basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 		}
 		customer = postCustomerInfoIndvControl.getCustomer(customerId);
+        log.debug("_loadInitData (customer address list: {})",customer.getAddresses());
 		
 		boolean back = false;
 		if (customer.getIndividualId() <= 0) {

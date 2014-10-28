@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -217,9 +220,10 @@ public class CustomerInfoPostAddressView implements Serializable {
 		if (index == 0)
 			return Collections.emptyList();
 		List<Integer> rtnDatas = new ArrayList<Integer>();
-		for (int i=0;i<index;i++)
+		for (int i=1;i<=index;i++)
 			rtnDatas.add(i);
 		rtnDatas.add(3);
+        System.out.println("getAvailableFlagList (index: "+index+", rtnDatas : "+rtnDatas+")");
 		return rtnDatas;
 	}
 	public void updateValue(CustomerInfoPostAddressView view) {
@@ -249,4 +253,32 @@ public class CustomerInfoPostAddressView implements Serializable {
 		this.displaySubDistrict = view.displaySubDistrict;
 		this.displayCountry = view.displayCountry;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("addressType", addressType)
+                .append("displayAddressType", displayAddressType)
+                .append("addressNo", addressNo)
+                .append("moo", moo)
+                .append("building", building)
+                .append("road", road)
+                .append("provinceId", provinceId)
+                .append("districtId", districtId)
+                .append("subDistrictId", subDistrictId)
+                .append("postalCode", postalCode)
+                .append("countryId", countryId)
+                .append("phoneNumber", phoneNumber)
+                .append("phoneExt", phoneExt)
+                .append("displayProvince", displayProvince)
+                .append("displayDistrict", displayDistrict)
+                .append("displaySubDistrict", displaySubDistrict)
+                .append("displayCountry", displayCountry)
+                .append("index", index)
+                .append("addressFlag", addressFlag)
+                .append("districtList", districtList)
+                .append("subDistrictList", subDistrictList)
+                .toString();
+    }
 }

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class FeeTypeDAO  extends GenericDAO<FeeType,Integer>{
+public class FeeTypeDAO  extends GenericDAO<FeeType,Long>{
 	private static final long serialVersionUID = 8051678631586999828L;
 	@Inject @SELOS
     private Logger logger;

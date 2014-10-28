@@ -156,7 +156,11 @@ public class FeeCalculationControl extends BusinessControl {
 				coll = new FeeCollectionDetail();
 				coll.setPaymentMethod(paymentMethod);
 				coll.setFeeType(paymentType);
-				coll.setDescription(detail.getDescription());
+                if(detail.getDescription()!=null && !detail.getDescription().trim().equalsIgnoreCase("")) {
+                    coll.setDescription(detail.getDescription());
+                } else {
+                    coll.setDescription(paymentType.getFormula());
+                }
 				coll.setAmount(BigDecimal.ZERO);
 				map.put(key, coll);
 			}

@@ -1242,8 +1242,32 @@ public class CustomerTransform extends Transform {
     		if (address != null) {
     			int flag = address.getAddressTypeFlag();
     			addressView.setId(address.getId());
+                addressView.setAddressNo(address.getAddressNo());
+                addressView.setMoo(address.getMoo());
+                addressView.setBuilding(address.getBuilding());
+                addressView.setRoad(address.getRoad());
+                if (address.getProvince() != null) {
+                    addressView.setProvinceId(address.getProvince().getCode());
+                    addressView.setDisplayProvince(address.getProvince().getName());
+                }
+                if (address.getDistrict() != null) {
+                    addressView.setDistrictId(address.getDistrict().getId());
+                    addressView.setDisplayDistrict(address.getDistrict().getName());
+                }
+                if (address.getSubDistrict() != null) {
+                    addressView.setSubDistrictId(address.getSubDistrict().getCode());
+                    addressView.setDisplaySubDistrict(address.getSubDistrict().getName());
+                }
+                addressView.setPostalCode(address.getPostalCode());
+                if (address.getCountry() != null) {
+                    addressView.setCountryId(address.getCountry().getId());
+                    addressView.setDisplayCountry(address.getCountry().getName());
+                }
+                addressView.setPhoneNumber(address.getPhoneNumber());
+                addressView.setPhoneExt(address.getExtension());
+                addressView.setAddressFlag(flag);
     			
-    			if (index != 0 && flag != 3 && flag < index
+    			/*if (index != 0 && flag != 3 && flag < index
     					) { //dup data from address flag
     				CustomerInfoPostAddressView toClone = view.getAddresses().get(flag);
     				addressView.duplicateData(toClone);
@@ -1273,7 +1297,7 @@ public class CustomerTransform extends Transform {
 	    			addressView.setPhoneNumber(address.getPhoneNumber());
 	    			addressView.setPhoneExt(address.getExtension());
 	    			addressView.setAddressFlag(3);
-    			}
+    			}*/
     		} else {
     			addressView.setAddressFlag(0);
     			if (index != 0) {
