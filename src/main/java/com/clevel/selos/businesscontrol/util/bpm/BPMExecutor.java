@@ -766,12 +766,20 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitForAADAdmin(String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
+    public void submitForAADAdmin( String queueName, String wobNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String remark, String reason, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
             fields.put("AppointmentDate", appointmentDate.toString());
             fields.put("AppraisalLocationCode", Long.toString(appraisalLocationCode));
             fields.put("AADCommitteeUserName", aadCommitteeUserId);

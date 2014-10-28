@@ -694,7 +694,7 @@
          rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}">
     <p:dialog id="submitAADCDialog" widgetVar="submitAADCDlg" header="Submit case to AAD Committee"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="260">
+              modal="true" width="550" closable="false">
         <ui:include src="/site/dialog/submitAADCDialog.xhtml"/>
     </p:dialog>
 </p:panel>

@@ -1500,6 +1500,13 @@ public class HeaderController extends BaseController {
         log.debug("onOpenSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
         if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+            slaRemark = "";
+            submitRemark = "";
+            aadCommitteeId = "";
+            submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+            if (submitOverSLA == 1) {
+                slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+            }
             //List AAD Admin by team structure
             aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
             RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
@@ -1535,7 +1542,7 @@ public class HeaderController extends BaseController {
             }
 
             if(canSubmit){
-                fullApplicationControl.submitForAADAdmin(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+                fullApplicationControl.submitForAADAdmin(queueName, wobNumber, aadCommitteeId, submitRemark, slaReasonId, slaRemark, workCaseId, workCasePreScreenId);
                 messageHeader = "Information.";
                 message = "Request for appraisal success.";
                 showMessageRedirect();
