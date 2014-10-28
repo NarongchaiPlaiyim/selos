@@ -468,15 +468,19 @@ public class PostAppBusinessControl extends BusinessControl {
 		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
 		BigDecimal amount;
 		InsuranceInfo info = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCase.getId());
+        log.debug("_3002_InsurancePremiumQuote (info : {})",info);
 		if (info != null && info.getTotalPremiumAmount() != null) {
 			amount = info.getTotalPremiumAmount();
 		} else {
 			amount = BigDecimal.ZERO;
 		}
+        log.debug("_3002_InsurancePremiumQuote (amount : {})",amount);
 		FeeType type = feeTypeDAO.findByDescription("Insurance Premium");
+        log.debug("_3002_InsurancePremiumQuote (type : {})",type);
 		if (type == null)
 			return;
 		ProposeFeeDetail model = feeDetailDAO.findByType(workCase.getId(), type.getId());
+        log.debug("_3002_InsurancePremiumQuote (model : {})",model);
 		if (model == null) {
 			model = new ProposeFeeDetail();
 			model.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode("01"));
@@ -491,7 +495,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setDescription(null);
 		model.setProposeType(null);
 		model.setProposeCreditInfo(null);
-
+        log.debug("_3002_InsurancePremiumQuote (model : {})",model);
 		feeDetailDAO.save(model);
 	}
 	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
