@@ -210,7 +210,7 @@
                                                  style="width: 192px; max-width: 192px; min-width: 192px;"
                                                  onkeydown="return onKeyDownNumber(event);"
                                                  onkeypress="return onKeyPressNumber(event);"
-                                                 disabled="#{not custInfoSumJuris.enableCitizenId || not custInfoSumJuris.enableAllFieldCus}"
+                                                 disabled="#{not custInfoSumJuris.enableCitizenId || not custInfoSumJuris.enableAllFieldCus || custInfoSumJuris.editBorrower}"
                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegId}"/>
                                 </td>
                             </tr>
@@ -273,7 +273,7 @@
                                                 <p:inputText value="#{custInfoSumJuris.customerInfoView.firstNameTh}"
                                                              required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqStNameTh}"
                                                              style="width: 200px; max-width: 200px; min-width: 200px;"
-                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus}"/>
+                                                             disabled="#{not custInfoSumJuris.enableAllFieldCus || custInfoSumJuris.editBorrower}"/>
                                             </td>
                                         </tr>
                                     </table>
