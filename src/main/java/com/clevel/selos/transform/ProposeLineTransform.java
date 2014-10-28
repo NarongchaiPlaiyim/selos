@@ -1664,6 +1664,7 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
@@ -1713,6 +1714,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSubView.setSubCollateralType(proposeCollateralInfoSub.getSubCollateralType());
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
