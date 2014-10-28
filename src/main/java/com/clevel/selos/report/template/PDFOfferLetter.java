@@ -13,7 +13,6 @@ import com.clevel.selos.model.report.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -58,9 +57,7 @@ public class PDFOfferLetter implements Serializable {
     private long customerId = -1;
     private long workCaseId;
     private final String SPACE = " ";
-    private WorkCase workCase;
     private String minus = "-";
-    private String add = "+";
     private char enter = '\n';
     private int firstIndex = 0;
     private int noCalculation;
@@ -91,8 +88,6 @@ public class PDFOfferLetter implements Serializable {
         if(!Util.isNull(workCaseId)){
             decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
             feeCollectionDetails = feeCollectionDetailDAO.findAllByWorkCaseId(workCaseId);
-        } else {
-            log.debug("--workcaseId is Null. {}",workCaseId);
         }
 
         noCalculation = 1;
@@ -479,7 +474,6 @@ public class PDFOfferLetter implements Serializable {
                                                 disbursementOfferLetterReport.setProductProgram(minus);
                                             }
 
-
                                             disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(credit.getDisburseAmount())); //33
                                             disbursementOfferLetterReport.setName(msg.get("report.offerletter.mc"));  //34
 
@@ -678,7 +672,6 @@ public class PDFOfferLetter implements Serializable {
 
         }
         dateValue = dateValue.append(spDate[firstIndex]).append(SPACE).append(setMonth).append(SPACE).append(spDate[2]);
-        log.debug("--DATE. {}",dateValue.toString());
         report.setDateValue(dateValue.toString());
 
         //23,24,25
@@ -690,8 +683,6 @@ public class PDFOfferLetter implements Serializable {
                 report.setTelPhone(Util.checkNullString(letter.getTelPhone()));
                 report.setTelFax(Util.checkNullString(letter.getTelFax()));
             }
-        } else {
-            log.debug("--offerLetter is Null",offerLetter);
         }
 
         if (Util.isZero(workCaseId)){
@@ -699,7 +690,6 @@ public class PDFOfferLetter implements Serializable {
             customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
 
             if (!Util.isNull(agreementInfo)) {
-                log.debug("--agreementInfo. {}",agreementInfo);
                 if (!Util.isNull(agreementInfo.getLoanContractDate())) {
                     loanDate =  Util.checkNullString(Util.createDateTh(agreementInfo.getLoanContractDate()));
                     loanTime = Util.checkNullString(Util.createTime(agreementInfo.getLoanContractDate()));
@@ -721,7 +711,8 @@ public class PDFOfferLetter implements Serializable {
                         default : //DO NOTHING
                             break;
                     }
-                }             }
+                }
+            }
 
             //30.1
             List<Customer> list = customerDAO.findCustomerByCommitteeId(customerId);
@@ -733,8 +724,6 @@ public class PDFOfferLetter implements Serializable {
 
                 customerName = customerName.append(Util.checkNullString(list.get(firstIndex).getNameTh())).append(Util.checkNullString(list.get(firstIndex).getLastNameTh()));
                 report.setLoanCustomerName(Util.checkNullString(customerName.toString()));
-            } else {
-                log.debug("Customer findCustomerByCommitteeId. {}",list);
             }
 
             List<MortgageInfo> mortgageInfoList = mortgageInfoDAO.findAllByWorkCaseId(workCaseId);
