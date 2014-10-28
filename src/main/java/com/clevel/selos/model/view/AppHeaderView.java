@@ -29,6 +29,8 @@ public class AppHeaderView implements Serializable {
     private List<AppBorrowerHeaderView> borrowerHeaderViewList;
     private List<String> productProgramList;
     private String productGroup;
+    private String lastDecisionDate;
+    private String limitSetupExpireDate;
 
     public String getCaseStatus() {
         return caseStatus;
@@ -206,6 +208,22 @@ public class AppHeaderView implements Serializable {
         this.refinanceOut = refinanceOut;
     }
 
+    public String getLastDecisionDate() {
+        return lastDecisionDate;
+    }
+
+    public void setLastDecisionDate(String lastDecisionDate) {
+        this.lastDecisionDate = lastDecisionDate;
+    }
+
+    public String getLimitSetupExpireDate() {
+        return limitSetupExpireDate;
+    }
+
+    public void setLimitSetupExpireDate(String limitSetupExpireDate) {
+        this.limitSetupExpireDate = limitSetupExpireDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -213,6 +231,7 @@ public class AppHeaderView implements Serializable {
                 .append("submitDate", submitDate)
                 .append("requestType", requestType)
                 .append("refinance", refinance)
+                .append("refinanceOut", refinanceOut)
                 .append("bdmName", bdmName)
                 .append("bdmPhoneNumber", bdmPhoneNumber)
                 .append("bdmPhoneExtNumber", bdmPhoneExtNumber)
@@ -230,6 +249,8 @@ public class AppHeaderView implements Serializable {
                 .append("borrowerHeaderViewList", borrowerHeaderViewList)
                 .append("productProgramList", productProgramList)
                 .append("productGroup", productGroup)
+                .append("lastDecisionDate", lastDecisionDate)
+                .append("limitSetupExpireDate", limitSetupExpireDate)
                 .toString();
     }
 }

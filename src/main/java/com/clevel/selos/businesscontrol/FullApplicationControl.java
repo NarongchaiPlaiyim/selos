@@ -823,10 +823,17 @@ public class FullApplicationControl extends BusinessControl {
 
                     bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA != null ? authorizationDOA.getDescription() : "", decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
 
+                    Date submitDate = new Date();
+
                     ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setSubmit(1);
-                    approvalHistory.setSubmitDate(new Date());
+                    approvalHistory.setSubmitDate(submitDate);
                     approvalHistoryDAO.persist(approvalHistory);
+
+                    //Set submit date for UW1
+                    BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                    basicInfo.setUwSubmitDate(submitDate);
+                    basicInfoDAO.persist(basicInfo);
                 }
             }else{
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));

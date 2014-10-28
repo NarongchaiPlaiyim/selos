@@ -787,12 +787,6 @@ function handleContactRecordRequest(xhr, status, args) {
     }
 }
 
-function handleAppraisalDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        appraisalDetailViewDlg.hide();
-    }
-}
-
 function handleRequestAppraisal(xhr, status, args) {
     if(args.functionComplete){
         reqApprDlg.hide();
