@@ -65,8 +65,8 @@
                                          actionListener="#{appraisalAppointment.onSaveAppraisalDetailView()}"
                                          process="@form"
                                          update=":appraisalDetailDlgForm, :frmMain:appraisalDetailViewTable"
-                                         oncomplete="handleAppraisalDetailRequest(xhr, status, args)"/>
-                        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalDetailViewDlg.hide()"/>
+                                         oncomplete="handleDialogRequest(xhr, status, args, 'appraisalDetailViewDlg')"/>
+                        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="PF('appraisalDetailViewDlg').hide()"/>
                     </td>
                 </tr>
             </table>

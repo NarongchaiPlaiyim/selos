@@ -685,21 +685,22 @@ public class HeaderController extends BaseController {
                             //TO Get all owner of case
                             getUserOwnerBU();
 
-                            //if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
-                            if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                            log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
+                            if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
+                            //if(stepId <= StepValue.FULLAPP_BDM.value()) {
                                 zmUserList = fullApplicationControl.getUserList(user);
                                 log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
                             }
 
                             //TO Disabled DDL DOA Lower than RGM
-                            //if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                            //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
                                 isSubmitToZM = false;
                             }
 
                             //TO Disabled DDL DOA Lower than GH
-                            //if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
-                            if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
+                            //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                             }
@@ -768,9 +769,12 @@ public class HeaderController extends BaseController {
             submitForZM();
         }else if(stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {
             submitForZMFCash();
-        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()){
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
             //Submit case from BDM to ZM ( Price Reduction ) ( Step 2018 )
-
+            submitForBDMReducePrice();
+        }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()){
+            //Submit case from BDM to ZM ( Price Reduction ) ( Step 2019 )
+            submitForZMReducePrice();
         }else if(stepId == StepValue.REVIEW_PRICING_REQUEST_RGM.value()){
             //Submit case from RGM to GH or UW ( DOA Level ) ( Step 2020 )
             submitForRGM();
@@ -840,6 +844,42 @@ public class HeaderController extends BaseController {
         sendCallBackParam(complete);
     }
 
+    private void submitForBDMReducePrice(){
+        log.debug("Submit Case from BDM to ZM Pricing Starting..., stepId : {}", stepId);
+        boolean complete = false;
+        if(zmUserId != null && !zmUserId.equals("")){
+            try{
+                if(canSubmitWithoutReplyDetail(workCaseId, workCasePreScreenId)){
+                    fullApplicationControl.submitForBDMReducePrice(queueName, wobNumber, zmUserId, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId);
+                    log.debug("submitForBDMReducePrice ::: success.");
+                    log.debug("submitForBDMReducePrice ::: Backup return info to History Start...");
+                    returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
+                    log.debug("submitForBDMReducePrice ::: Backup return info to History Success...");
+                    messageHeader = msg.get("app.messageHeader.info");
+                    message = msg.get("app.message.dialog.submit.success");
+                    showMessageRedirect();
+                    complete = true;
+                } else {
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "Please update return reply detail before submit.";
+                    showMessageBox();
+                    log.error("submitForBDMReducePrice ::: submit failed (reply detail invalid)");
+                }
+            } catch (Exception ex){
+                messageHeader = msg.get("app.messageHeader.exception");
+                message = Util.getMessageException(ex);
+                showMessageBox();
+                log.error("submitForBDMReducePrice ::: exception occurred : ", ex);
+            }
+        } else {
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = "Submit case failed, cause : ZM not selected";
+            showMessageBox();
+            log.error("submitForBDMReducePrice ::: submit failed (ZM not selected)");
+        }
+        sendCallBackParam(complete);
+    }
+
     private void submitForZM(){
         log.debug("Submit case from ZM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
         boolean complete = false;
@@ -856,6 +896,26 @@ public class HeaderController extends BaseController {
             message = Util.getMessageException(ex);
             showMessageBox();
             log.error("onSubmitRM ::: exception occurred : ", ex);
+        }
+        sendCallBackParam(complete);
+    }
+
+    private void submitForZMReducePrice(){
+        log.debug("Submit case from ZM to Next Step ::: Starting..., stepId : {}, statusId : {}", stepId, statusId);
+        boolean complete = false;
+        try{
+            fullApplicationControl.submitForZMReducePrice(queueName, wobNumber, rgmUserId, ghmUserId, cssoUserId, submitRemark, slaRemark, slaReasonId, workCaseId, stepId);
+            returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.message.dialog.submit.success");
+            showMessageRedirect();
+            complete = true;
+            log.debug("submitForZMReducePrice ::: success.");
+        } catch (Exception ex){
+            messageHeader = msg.get("app.messageHeader.exception");
+            message = Util.getMessageException(ex);
+            showMessageBox();
+            log.error("submitForZMReducePrice ::: exception occurred : ", ex);
         }
         sendCallBackParam(complete);
     }
@@ -1157,7 +1217,7 @@ public class HeaderController extends BaseController {
 
             if(checkUW){
                 if(canSubmitWithoutReturn()){
-                    fullApplicationControl.calculateApprovedResult(workCaseId);
+                    fullApplicationControl.calculateApprovedResult(workCaseId, StepValue.CREDIT_DECISION_UW1);
                     fullApplicationControl.submitForUW(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, selectedUW2User, selectedDOALevel, workCaseId);
                     messageHeader = msg.get("app.messageHeader.info");
                     message = msg.get("app.message.dialog.submit.success");
@@ -1191,7 +1251,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             if(canSubmitWithoutReturn()){
-                fullApplicationControl.calculateApprovedResult(workCaseId);
+                fullApplicationControl.calculateApprovedResult(workCaseId, StepValue.CREDIT_DECISION_UW2);
                 fullApplicationControl.submitForUW2(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
 
                 messageHeader = msg.get("app.messageHeader.info");
@@ -1441,6 +1501,13 @@ public class HeaderController extends BaseController {
         log.debug("onOpenSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
         if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+            slaRemark = "";
+            submitRemark = "";
+            aadCommitteeId = "";
+            submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+            if (submitOverSLA == 1) {
+                slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+            }
             //List AAD Admin by team structure
             aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
             RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
@@ -1476,7 +1543,7 @@ public class HeaderController extends BaseController {
             }
 
             if(canSubmit){
-                fullApplicationControl.submitForAADAdmin(aadCommitteeId, workCaseId, workCasePreScreenId, queueName, wobNumber);
+                fullApplicationControl.submitForAADAdmin(queueName, wobNumber, aadCommitteeId, submitRemark, slaReasonId, slaRemark, workCaseId, workCasePreScreenId);
                 messageHeader = "Information.";
                 message = "Request for appraisal success.";
                 showMessageRedirect();

@@ -24,6 +24,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
     private BigDecimal appraisalValue;
     private BigDecimal mortgageValue;
     private String subId;
+    private String typeOfUsage;
 
     //create by bird
     private String path;
@@ -38,7 +39,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
     public void reset() {
         this.subCollateralType = new SubCollateralType();
         this.address = "";
-        this.landOffice = "";
+        this.landOffice = "-";
         this.titleDeed  = "";
         this.collateralOwnerAAD = "";
         this.collateralOwnerUWList = new ArrayList<CustomerInfoView>();
@@ -48,6 +49,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.mortgageValue = BigDecimal.ZERO;
         this.subId = "";
         this.coms = 0;
+        this.typeOfUsage = "-";
     }
 
     public long getId() {
@@ -170,6 +172,14 @@ public class ProposeCollateralInfoSubView implements Serializable {
         this.coms = coms;
     }
 
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -188,6 +198,7 @@ public class ProposeCollateralInfoSubView implements Serializable {
                 .append("path", path)
                 .append("no", no)
                 .append("coms", coms)
+                .append("typeOfUsage", typeOfUsage)
                 .toString();
     }
 }

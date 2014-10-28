@@ -1,27 +1,15 @@
-package com.clevel.selos.model.db.master;
+package com.clevel.selos.model.view.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-@Entity
-@Table(name = "mst_potential_collateral")
-public class PotentialCollateral implements Serializable {
-    @Id
-    @Column(name = "id")
+public class UsagesView implements Serializable{
     private int id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "description")
+    private String code;
     private String description;
-    @Column(name = "appraisal_flag", columnDefinition = "int default 0")
-    private int appraisalFlag;
-    @Column(name = "active")
     private int active;
 
     public int getId() {
@@ -32,12 +20,12 @@ public class PotentialCollateral implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
@@ -56,21 +44,12 @@ public class PotentialCollateral implements Serializable {
         this.active = active;
     }
 
-    public int getAppraisalFlag() {
-        return appraisalFlag;
-    }
-
-    public void setAppraisalFlag(int appraisalFlag) {
-        this.appraisalFlag = appraisalFlag;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("name", name)
+                .append("code", code)
                 .append("description", description)
-                .append("appraisalFlag", appraisalFlag)
                 .append("active", active)
                 .toString();
     }

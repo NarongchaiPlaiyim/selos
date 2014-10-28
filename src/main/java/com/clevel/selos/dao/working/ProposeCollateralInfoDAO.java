@@ -5,7 +5,9 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.working.ProposeCollateralInfo;
+import com.clevel.selos.model.db.working.ProposeCollateralInfoHead;
 import com.clevel.selos.model.db.working.ProposeLine;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
@@ -14,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, Long> {
@@ -29,9 +32,23 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
         criteria.add(Restrictions.eq("proposeType", proposeType));
+        //criteria.add(Restrictions.eq(""))
         criteria.add(Restrictions.or(Restrictions.eq("appraisalRequest", RequestAppraisalValue.READY_FOR_REQUEST.value()), Restrictions.eq("appraisalRequest", RequestAppraisalValue.REQUESTED.value())));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
+
+        /*List<ProposeCollateralInfo> proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
+        boolean isCash = false;
+        for(ProposeCollateralInfo collateralInfo : tempCollateralInfoList){
+            if(!Util.isNull(collateralInfo.getProposeCollateralInfoHeadList())){
+                for(ProposeCollateralInfoHead collateralInfoHead : collateralInfo.getProposeCollateralInfoHeadList()){
+                    if(!Util.isNull(collateralInfoHead.getPotentialCollateral()) && !Util.isTrue(collateralInfoHead.getPotentialCollateral().getAppraisalFlag())){
+                        isCash = true;
+                    }
+                }
+            }
+            if(isCash)
+        }*/
 
         return proposeCollateralInfoList;
     }

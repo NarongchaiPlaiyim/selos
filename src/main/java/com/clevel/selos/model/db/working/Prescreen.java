@@ -102,6 +102,10 @@ public class Prescreen implements Serializable {
     @Column(name = "modify_flag")
     private int modifyFlag;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_decision_date")
+    private Date lastDecisionDate;
+
     public Prescreen() {
 
     }
@@ -298,6 +302,14 @@ public class Prescreen implements Serializable {
         this.existingSMECustomer = existingSMECustomer;
     }
 
+    public Date getLastDecisionDate() {
+        return lastDecisionDate;
+    }
+
+    public void setLastDecisionDate(Date lastDecisionDate) {
+        this.lastDecisionDate = lastDecisionDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -308,6 +320,7 @@ public class Prescreen implements Serializable {
                 .append("groupIncome", groupIncome)
                 .append("groupExposure", groupExposure)
                 .append("businessLocation", businessLocation)
+                .append("countryOfRegister", countryOfRegister)
                 .append("registerDate", registerDate)
                 .append("referredDate", referredDate)
                 .append("referredExperience", referredExperience)
@@ -324,6 +337,7 @@ public class Prescreen implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("modifyFlag", modifyFlag)
+                .append("lastDecisionDate", lastDecisionDate)
                 .toString();
     }
 }

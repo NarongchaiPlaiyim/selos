@@ -76,6 +76,9 @@ public class ProposeCollateralInfoSub implements Serializable {
     @Column (name = "coms", columnDefinition = "int default 0")
     private int coms;
 
+    @Column(name = "type_of_usage")
+    private String typeOfUsage;
+
     public long getId() {
         return id;
     }
@@ -220,6 +223,14 @@ public class ProposeCollateralInfoSub implements Serializable {
         this.coms = coms;
     }
 
+    public String getTypeOfUsage() {
+        return typeOfUsage;
+    }
+
+    public void setTypeOfUsage(String typeOfUsage) {
+        this.typeOfUsage = typeOfUsage;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -239,6 +250,7 @@ public class ProposeCollateralInfoSub implements Serializable {
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("coms", coms)
+                .append("typeOfUsage", typeOfUsage)
                 .toString();
     }
 }

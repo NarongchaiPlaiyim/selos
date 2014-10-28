@@ -93,6 +93,8 @@ public class ProposeLineTransform extends Transform {
     private ApprovalHistoryTransform approvalHistoryTransform;
     @Inject
     private AADDecisionDAO aadDecisionDAO;
+    @Inject
+    private UsagesDAO usagesDAO;
 
     @Inject
     @NormalMessage
@@ -1222,7 +1224,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setAadDecisionReason(proposeCollateralInfoView.getAadDecisionReason());
             proposeCollateralInfo.setAadDecisionReasonDetail(proposeCollateralInfoView.getAadDecisionReasonDetail());
             proposeCollateralInfo.setUsage(proposeCollateralInfoView.getUsage());
-            proposeCollateralInfo.setTypeOfUsage(proposeCollateralInfoView.getTypeOfUsage());
             proposeCollateralInfo.setUwRemark(proposeCollateralInfoView.getUwRemark());
             proposeCollateralInfo.setMortgageCondition(proposeCollateralInfoView.getMortgageCondition());
             proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
@@ -1339,6 +1340,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
             proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
             proposeCollateralInfoSub.setComs(proposeCollateralInfoSubView.getComs());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
 
@@ -1491,7 +1493,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
-            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            if(proposeCollateralInfo.getUsage()!=null && !proposeCollateralInfo.getUsage().trim().equalsIgnoreCase("")){
+                Usages aadDecision = usagesDAO.getByCode(proposeCollateralInfo.getUsage());
+                proposeCollateralInfoView.setUsageLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setUsageLabel("-");
+            }
             proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
             proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
             proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
@@ -1521,18 +1528,6 @@ public class ProposeLineTransform extends Transform {
             log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
             log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
             proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
-
-            /*if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
-                for(ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
-                    if(!Util.isNull(proposeCollateralInfoHeadView) && !Util.isNull(proposeCollateralInfoHeadView.getHeadCollType())) {
-                        if(proposeCollateralInfoHeadView.getHeadCollType().getAppraisalRequire() != 0) {
-                            proposeCollateralInfoView.setHeadCollAppraisal(true);
-                        } else {
-                            proposeCollateralInfoView.setHeadCollAppraisal(false);
-                        }
-                    }
-                }
-            }*/
         } else if (!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && ProposeType.BOTH == proposeType) {
             proposeCollateralInfoView = new ProposeCollateralInfoView();
 
@@ -1553,7 +1548,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
-            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            if(proposeCollateralInfo.getUsage()!=null && !proposeCollateralInfo.getUsage().trim().equalsIgnoreCase("")){
+                Usages aadDecision = usagesDAO.getByCode(proposeCollateralInfo.getUsage());
+                proposeCollateralInfoView.setUsageLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setUsageLabel("-");
+            }
             proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
             proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
             proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
@@ -1665,6 +1665,7 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
@@ -1714,6 +1715,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSubView.setSubCollateralType(proposeCollateralInfoSub.getSubCollateralType());
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
@@ -1968,7 +1970,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setAadDecisionReason(proposeCollateralInfoView.getAadDecisionReason());
             proposeCollateralInfo.setAadDecisionReasonDetail(proposeCollateralInfoView.getAadDecisionReasonDetail());
             proposeCollateralInfo.setUsage(proposeCollateralInfoView.getUsage());
-            proposeCollateralInfo.setTypeOfUsage(proposeCollateralInfoView.getTypeOfUsage());
             proposeCollateralInfo.setUwRemark(proposeCollateralInfoView.getUwRemark());
             proposeCollateralInfo.setMortgageCondition(proposeCollateralInfoView.getMortgageCondition());
             proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
@@ -2084,6 +2085,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setCollateralOwnerAAD(proposeCollateralInfoSubView.getCollateralOwnerAAD());
             proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00e");
             proposeCollateralInfoSub.setSubId(uid.randomUUID().toString());

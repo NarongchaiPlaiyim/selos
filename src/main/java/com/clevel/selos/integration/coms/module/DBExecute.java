@@ -44,6 +44,55 @@ public class DBExecute implements Serializable {
     String schema;
 
     @Inject
+    @Config(name = "interface.coms.label.deedno1.th")
+    String deedNo1Label;
+    @Inject
+    @Config(name = "interface.coms.label.deedno2.th")
+    String deedNo2Label;
+    @Inject
+    @Config(name = "interface.coms.label.deedno3.th")
+    String deedNo3Label;
+    @Inject
+    @Config(name = "interface.coms.label.deedno4.th")
+    String deedNo4Label;
+    @Inject
+    @Config(name = "interface.coms.label.roomno.th")
+    String roomNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.floorno.th")
+    String floorNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.building.th")
+    String buildingNameLabel;
+    @Inject
+    @Config(name = "interface.coms.label.landno.th")
+    String landNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.regisno.th")
+    String regisNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.addno.th")
+    String addNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.pawnno.th")
+    String pawnNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.transferno.th")
+    String transferNoLabel;
+    @Inject
+    @Config(name = "interface.coms.label.district.th")
+    String districtLabel;
+    @Inject
+    @Config(name = "interface.coms.label.subdistrict.th")
+    String subDistrictLabel;
+    @Inject
+    @Config(name = "interface.coms.label.province.th")
+    String provinceLabel;
+    @Inject
+    @Config(name = "interface.coms.label.country.th")
+    String countryLabel;
+
+    @Inject
     DBContext dbContext;
 
     @Inject
@@ -68,6 +117,7 @@ public class DBExecute implements Serializable {
                                                 "APPR_PRICE.JOB_NO as jobNo, " +
                                                 "APPR_PRICE.CUR_APPR_DATE as curApprDate, " +
                                                 "APPR_PRICE.IS_MATI as isMATI, " +
+                                                "APPR_PRICE.APPR_USAGES as usages, " +
                                                 "APPR_PRICE.DECISION as decision " +
                                             "FROM APPR_PRICE " +
                                             "WHERE APPR_PRICE.JOB_NO = ?";
@@ -77,6 +127,7 @@ public class DBExecute implements Serializable {
                                             "A.JOB_NO as jobNo, " +
                                             "A.CUR_APPR_DATE as curApprDate, " +
                                             "A.IS_MATI as isMATI, " +
+                                            "A.APPR_USAGES as usages, " +
                                             "A.DECISION as decision " +
                                         "FROM "+schema+".APPR_PRICE A " +
                                         "WHERE A.JOB_NO = ?";
@@ -99,7 +150,8 @@ public class DBExecute implements Serializable {
                 collateralJobLevel.setJobNo(rs.getString(1));
                 collateralJobLevel.setCurApprDate(rs.getDate(2));
                 collateralJobLevel.setMATI(rs.getString(3));
-                collateralJobLevel.setDecision(rs.getString(4));
+                collateralJobLevel.setUsages(rs.getString(4));
+                collateralJobLevel.setDecision(rs.getString(5));
                 log.debug("collateralJobLevel result : {}", collateralJobLevel);
             }
             rs.close();
@@ -408,11 +460,6 @@ public class DBExecute implements Serializable {
         String address = "";
         String SQL_TYPE_1 = "SELECT " +
                                 "A.DEED_NO as deedNo, " +
-                                "A.COORDINATE_NO as coordinateNo, " +
-                                "A.LAND_NO as landNo, " +
-                                "A.SURVEY_NO as surveyNo, " +
-                                "A.BOOK_NO as bookNo, " +
-                                "A.PAGE_NO as pageNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -427,11 +474,6 @@ public class DBExecute implements Serializable {
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_1 = "SELECT " +
                             "A.DEED_NO as deedNo, " +
-                            "A.COORDINATE_NO as coordinateNo, " +
-                            "A.LAND_NO as landNo, " +
-                            "A.SURVEY_NO as surveyNo, " +
-                            "A.BOOK_NO as bookNo, " +
-                            "A.PAGE_NO as pageNo, " +
                             "A.CONDO_DISTRICT as condoDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -458,27 +500,14 @@ public class DBExecute implements Serializable {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
-                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
-                String landNo = Util.getStringNotNull(rs.getString("landNo"));
-                String surveyNo = Util.getStringNotNull(rs.getString("surveyNo"));
-                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
-                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
                 String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
-                String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
-                String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
-                String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = deedNo.concat(COMMA)
-                            .concat(coordinateNo).concat(COMMA)
-                            .concat(landNo).concat(COMMA)
-                            .concat(surveyNo).concat(COMMA)
-                            .concat(bookNo).concat(COMMA)
-                            .concat(pageNo).concat(COMMA)
-                            .concat(condoDistrict).concat(SPACE)
-                            .concat(city).concat(SPACE)
-                            .concat(provName);
+                address = deedNo1Label.concat(SPACE).concat(Util.getStringNotNullOrEmpty(deedNo)).concat(SPACE)
+                            .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(condoDistrict)).concat(SPACE)
+                            .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                            .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -500,9 +529,6 @@ public class DBExecute implements Serializable {
         String address = "";
         String SQL_TYPE_2 = "SELECT " +
                                 "A.DEED_NO as deedNo, " +
-                                "A.LAND_NO as landNo, " +
-                                "A.BOOK_NO as bookNo, " +
-                                "A.PAGE_NO as pageNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -517,9 +543,6 @@ public class DBExecute implements Serializable {
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_2 = "SELECT " +
                                 "A.DEED_NO as deedNo, " +
-                                "A.LAND_NO as landNo, " +
-                                "A.BOOK_NO as bookNo, " +
-                                "A.PAGE_NO as pageNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -546,9 +569,6 @@ public class DBExecute implements Serializable {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
-                String landNo = Util.getStringNotNull(rs.getString("landNo"));
-                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
-                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
                 String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -556,13 +576,11 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = deedNo.concat(COMMA)
-                        .concat(landNo).concat(COMMA)
-                        .concat(bookNo).concat(COMMA)
-                        .concat(pageNo).concat(COMMA)
-                        .concat(condoDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = deedNo2Label.concat(SPACE).concat(Util.getStringNotNullOrEmpty(deedNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(condoDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
+
                 log.debug("-- address result : {}", address);
             }
             log.debug("address result : {}", address);
@@ -585,12 +603,6 @@ public class DBExecute implements Serializable {
         String address = "";
         String SQL_TYPE_3 = "SELECT " +
                                 "A.DEED_NO as deedNo, " +
-                                "A.BOOK_NO as bookNo, " +
-                                "A.PAGE_NO as pageNo, " +
-                                "A.LAND_NO as landNo, " +
-                                "A.AIRIAL_PHOTO_NO as airialPhotoNo, " +
-                                "A.COORDINATE_NO as coordinateNo, " +
-                                "A.SHEET_NO as sheetNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -605,12 +617,6 @@ public class DBExecute implements Serializable {
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_3 = "SELECT " +
                             "A.DEED_NO as deedNo, " +
-                            "A.BOOK_NO as bookNo, " +
-                            "A.PAGE_NO as pageNo, " +
-                            "A.LAND_NO as landNo, " +
-                            "A.AIRIAL_PHOTO_NO as airialPhotoNo, " +
-                            "A.COORDINATE_NO as coordinateNo, " +
-                            "A.SHEET_NO as sheetNo, " +
                             "A.CONDO_DISTRICT as condoDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -637,12 +643,6 @@ public class DBExecute implements Serializable {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
-                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
-                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
-                String landNo = Util.getStringNotNull(rs.getString("landNo"));
-                String airialPhotoNo = Util.getStringNotNull(rs.getString("airialPhotoNo"));
-                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
-                String sheetNo = Util.getStringNotNull(rs.getString("sheetNo"));
                 String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -650,16 +650,10 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = deedNo.concat(COMMA)
-                        .concat(bookNo).concat(COMMA)
-                        .concat(pageNo).concat(COMMA)
-                        .concat(landNo).concat(COMMA)
-                        .concat(airialPhotoNo).concat(COMMA)
-                        .concat(coordinateNo).concat(COMMA)
-                        .concat(sheetNo).concat(COMMA)
-                        .concat(condoDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = deedNo3Label.concat(SPACE).concat(Util.getStringNotNullOrEmpty(deedNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(condoDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -681,11 +675,6 @@ public class DBExecute implements Serializable {
         String address = "";
         String SQL_TYPE_4 = "SELECT " +
                                 "A.DEED_NO as deedNo, " +
-                                "A.BOOK_NO as bookNo, " +
-                                "A.PAGE_NO as pageNo, " +
-                                "A.LAND_NO as landNo, " +
-                                "A.SURVEY_NO as surveyNo, " +
-                                "A.COORDINATE_NO as coordinateNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -700,11 +689,6 @@ public class DBExecute implements Serializable {
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_4 = "SELECT " +
                             "A.DEED_NO as deedNo, " +
-                            "A.BOOK_NO as bookNo, " +
-                            "A.PAGE_NO as pageNo, " +
-                            "A.LAND_NO as landNo, " +
-                            "A.SURVEY_NO as surveyNo, " +
-                            "A.COORDINATE_NO as coordinateNo, " +
                             "A.CONDO_DISTRICT as condoDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -731,11 +715,6 @@ public class DBExecute implements Serializable {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
-                String bookNo = Util.getStringNotNull(rs.getString("bookNo"));
-                String pageNo = Util.getStringNotNull(rs.getString("pageNo"));
-                String landNo = Util.getStringNotNull(rs.getString("landNo"));
-                String surveyNo = Util.getStringNotNull(rs.getString("surveyNo"));
-                String coordinateNo = Util.getStringNotNull(rs.getString("coordinateNo"));
                 String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -743,15 +722,11 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = deedNo.concat(COMMA)
-                        .concat(bookNo).concat(COMMA)
-                        .concat(pageNo).concat(COMMA)
-                        .concat(landNo).concat(COMMA)
-                        .concat(surveyNo).concat(COMMA)
-                        .concat(coordinateNo).concat(COMMA)
-                        .concat(condoDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+
+                address = deedNo4Label.concat(SPACE).concat(Util.getStringNotNullOrEmpty(deedNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(condoDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -768,15 +743,14 @@ public class DBExecute implements Serializable {
         return address;
     }
 
-    public String getAddressType5(String colId, String headColId){
+    public Map<String,String> getAddressType5(String colId, String headColId){
         log.debug("getAddressType5 colId: {}, headColId: {}",colId, headColId);
         String address = "";
+        String usagesType = "";
+        Map<String,String> addrMap = new HashMap<String, String>();
         String SQL_TYPE_5 = "SELECT " +
+                                "L.L_NAME as usageType, " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_ROAD as addRoad, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -786,15 +760,13 @@ public class DBExecute implements Serializable {
                             "FROM APPR_BUILDING A " +
                             "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
                             "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                            "LEFT JOIN LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
                             "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_5 = "SELECT " +
+                            "L.L_NAME as usageType, " +
                             "A.ADD_NO as addNo, " +
-                            "A.ADD_MOO as addMoo, " +
-                            "A.ADD_ROAD as addRoad, " +
-                            "A.ADD_BANN as addBann, " +
-                            "A.ADD_SOI as addSoi, " +
                             "A.ADD_DISTRICT as addDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -804,6 +776,7 @@ public class DBExecute implements Serializable {
                         "FROM "+schema+".APPR_BUILDING A " +
                         "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
                         "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
+                        "LEFT JOIN "+schema+".LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
                         "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
         }
 
@@ -820,11 +793,8 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String usageType = Util.getStringNotNull(rs.getString("usageType"));
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
-                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
-                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
-                String addBann = Util.getStringNotNull(rs.getString("addBann"));
-                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -832,16 +802,15 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = addNo.concat(SPACE)
-                        .concat(addMoo).concat(SPACE)
-                        .concat(addRoad).concat(SPACE)
-                        .concat(addBann).concat(SPACE)
-                        .concat(addSoi).concat(SPACE)
-                        .concat(addDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = addNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
+                usagesType = usageType;
             }
-            log.debug("address result : {}", address);
+            addrMap.put("address",address);
+            addrMap.put("usageType",usagesType);
+            log.debug("address result : (address: {},usageType: {})", address,usagesType);
             rs.close();
             conn.close();
             conn = null;
@@ -853,7 +822,7 @@ public class DBExecute implements Serializable {
             closeConnection();
         }
 
-        return address;
+        return addrMap;
     }
 
     public String getAddressType6(String colId, String headColId){
@@ -864,17 +833,12 @@ public class DBExecute implements Serializable {
                                 "A.FLOOR_NO as floorNo, " +
                                 "A.LAND_NO as landNo, " +
                                 "A.BUILDING_NAME as buildingName, " +
-                                "A.CONDO_NO as condoNo, " +
-                                "A.NO_OF_FLOOR as noOfFloor, " +
-                                "A.DEED_NO as deedNo, " +
                                 "A.CONDO_DISTRICT as condoDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
                                 "B.PROVINCE_ID as provinceId, " +
                                 "C.PROV_ID as provId, " +
                                 "C.PROV_NAME as provName, " +
-                                "A.AREA_METER as areaMeter, " +
-                                "A.BALCONY_METER as balconyMeter " +
                             "FROM APPR_LAND A " +
                             "LEFT JOIN CITY B ON A.CONDO_CITY = B.CITY_ID " +
                             "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
@@ -886,17 +850,12 @@ public class DBExecute implements Serializable {
                             "A.FLOOR_NO as floorNo, " +
                             "A.LAND_NO as landNo, " +
                             "A.BUILDING_NAME as buildingName, " +
-                            "A.CONDO_NO as condoNo, " +
-                            "A.NO_OF_FLOOR as noOfFloor, " +
-                            "A.DEED_NO as deedNo, " +
                             "A.CONDO_DISTRICT as condoDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
                             "B.PROVINCE_ID as provinceId, " +
                             "C.PROV_ID as provId, " +
                             "C.PROV_NAME as provName, " +
-                            "A.AREA_METER as areaMeter, " +
-                            "A.BALCONY_METER as balconyMeter " +
                         "FROM "+schema+"APPR_LAND A " +
                         "LEFT JOIN "+schema+"CITY B ON A.CONDO_CITY = B.CITY_ID " +
                         "LEFT JOIN "+schema+"PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
@@ -920,34 +879,20 @@ public class DBExecute implements Serializable {
                 String floorNo = Util.getStringNotNull(rs.getString("floorNo"));
                 String landNo = Util.getStringNotNull(rs.getString("landNo"));
                 String buildingName = Util.getStringNotNull(rs.getString("buildingName"));
-                String condoNo = Util.getStringNotNull(rs.getString("condoNo"));
-                String noOfFloor = Util.getStringNotNull(rs.getString("noOfFloor"));
-                String deedNo = Util.getStringNotNull(rs.getString("deedNo"));
                 String condoDistrict = Util.getStringNotNull(rs.getString("condoDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
                 String provinceId = Util.getStringNotNull(rs.getString("provinceId"));
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
-                BigDecimal areaMeter = rs.getBigDecimal("areaMeter");
-                BigDecimal balconyMeter = rs.getBigDecimal("balconyMeter");
 
-                address = roomNo.concat(COMMA)
-                        .concat(floorNo).concat(COMMA)
-                        .concat(landNo).concat(COMMA)
-                        .concat(buildingName).concat(COMMA)
-                        .concat(condoNo).concat(COMMA)
-                        .concat(noOfFloor).concat(COMMA)
-                        .concat(deedNo).concat(COMMA)
-                        .concat(condoDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
-                if(areaMeter!=null){
-                    address = address.concat(COMMA).concat(areaMeter.toString());
-                }
-                if(balconyMeter!=null){
-                    address = address.concat(COMMA).concat(balconyMeter.toString());
-                }
+                address = roomNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(roomNo)).concat(SPACE)
+                        .concat(floorNoLabel).concat(Util.getStringNotNullOrEmpty(floorNo)).concat(SPACE)
+                        .concat(buildingNameLabel).concat(Util.getStringNotNullOrEmpty(buildingName)).concat(SPACE)
+                        .concat(landNoLabel).concat(Util.getStringNotNullOrEmpty(landNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(condoDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -968,11 +913,8 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType7 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_7 = "SELECT " +
+                                "A.REGISTRATION_NO as regisNo, " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -986,11 +928,8 @@ public class DBExecute implements Serializable {
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_7 = "SELECT " +
+                            "A.REGISTRATION_NO as regisNo, " +
                             "A.ADD_NO as addNo, " +
-                            "A.ADD_MOO as addMoo, " +
-                            "A.ADD_BANN as addBann, " +
-                            "A.ADD_SOI as addSoi, " +
-                            "A.ADD_ROAD as addRoad, " +
                             "A.ADD_DISTRICT as addDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -1016,11 +955,8 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String regisNo = Util.getStringNotNull(rs.getString("regisNo"));
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
-                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
-                String addBann = Util.getStringNotNull(rs.getString("addBann"));
-                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
-                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -1028,14 +964,11 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = addNo.concat(SPACE)
-                        .concat(addMoo).concat(SPACE)
-                        .concat(addBann).concat(SPACE)
-                        .concat(addSoi).concat(SPACE)
-                        .concat(addRoad).concat(SPACE)
-                        .concat(addDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = regisNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(regisNo)).concat(SPACE)
+                        .concat(addNoLabel).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -1056,11 +989,8 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType8 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_8 = "SELECT " +
+                                "A.PAWN_NO as pawnNo, " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -1074,11 +1004,8 @@ public class DBExecute implements Serializable {
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_8 = "SELECT " +
+                            "A.PAWN_NO as pawnNo, " +
                             "A.ADD_NO as addNo, " +
-                            "A.ADD_MOO as addMoo, " +
-                            "A.ADD_BANN as addBann, " +
-                            "A.ADD_SOI as addSoi, " +
-                            "A.ADD_ROAD as addRoad, " +
                             "A.ADD_DISTRICT as addDistrict, " +
                             "B.CITY_ID as cityId, " +
                             "B.CITY as city, " +
@@ -1104,11 +1031,8 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String pawnNo = Util.getStringNotNull(rs.getString("pawnNo"));
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
-                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
-                String addBann = Util.getStringNotNull(rs.getString("addBann"));
-                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
-                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -1116,14 +1040,11 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = addNo.concat(SPACE)
-                        .concat(addMoo).concat(SPACE)
-                        .concat(addBann).concat(SPACE)
-                        .concat(addSoi).concat(SPACE)
-                        .concat(addRoad).concat(SPACE)
-                        .concat(addDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = pawnNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(pawnNo)).concat(SPACE)
+                        .concat(addNoLabel).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -1144,6 +1065,7 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType9 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_9 = "SELECT " +
+                                "A.REGISTRATION_NO as regisNo, " +
                                 "B.NAME_THAI as nameThai, " +
                                 "C.PROV_ID as provId, " +
                                 "C.PROV_NAME as provName " +
@@ -1154,6 +1076,7 @@ public class DBExecute implements Serializable {
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_9 = "SELECT " +
+                            "A.REGISTRATION_NO as regisNo, " +
                             "B.NAME_THAI as nameThai, " +
                             "C.PROV_ID as provId, " +
                             "C.PROV_NAME as provName " +
@@ -1176,11 +1099,13 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String regisNo = Util.getStringNotNull(rs.getString("regisNo"));
                 String nameThai = Util.getStringNotNull(rs.getString("nameThai"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = nameThai.concat(SPACE)
-                        .concat(provName);
+                address = regisNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(regisNo)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName)).concat(SPACE)
+                        .concat(countryLabel).concat(Util.getStringNotNullOrEmpty(nameThai));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -1201,16 +1126,24 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType10 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_10 = "SELECT " +
-                                "B.NAME_THAI as nameThai " +
+                                "A.REGISTRATION_NO as regNo, " +
+                                "B.NAME_THAI as nameThai, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
                             "FROM APPR_SHIP A " +
                             "LEFT JOIN SET_COUNTRY B ON A.REGISTRATION_PLACE = B.CODE " +
+                            "LEFT JOIN PROVINCE C ON A.REGISTRATION_PROV = C.PROV_ID " +
                             "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_10 = "SELECT " +
-                                "B.NAME_THAI as nameThai " +
+                                "A.REGISTRATION_NO as regNo, " +
+                                "B.NAME_THAI as nameThai, " +
+                                "C.PROV_ID as provId, " +
+                                "C.PROV_NAME as provName " +
                             "FROM "+schema+"APPR_SHIP A " +
                             "LEFT JOIN "+schema+"SET_COUNTRY B ON A.REGISTRATION_PLACE = B.CODE " +
+                            "LEFT JOIN "+schema+"PROVINCE C ON A.REGISTRATION_PROV = C.PROV_ID " +
                             "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
         }
 
@@ -1227,8 +1160,13 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String nameThai = rs.getString("nameThai");
-                address = nameThai;
+                String regisNo = Util.getStringNotNull(rs.getString("regisNo"));
+                String nameThai = Util.getStringNotNull(rs.getString("nameThai"));
+                String provName = Util.getStringNotNull(rs.getString("provName"));
+
+                address = regisNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(regisNo)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName)).concat(SPACE)
+                        .concat(countryLabel).concat(Util.getStringNotNullOrEmpty(nameThai));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -1249,11 +1187,8 @@ public class DBExecute implements Serializable {
         log.debug("getAddressType11 colId: {}, headColId: {}",colId, headColId);
         String address = "";
         String SQL_TYPE_11 = "SELECT " +
+                                "A.TRANSFER_NO as transferNo, " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -1267,11 +1202,8 @@ public class DBExecute implements Serializable {
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_11 = "SELECT " +
+                                "A.TRANSFER_NO as transferNo, " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -1297,11 +1229,8 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String transferNo = Util.getStringNotNull(rs.getString("transferNo"));
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
-                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
-                String addBann = Util.getStringNotNull(rs.getString("addBann"));
-                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
-                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -1309,14 +1238,12 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = addNo.concat(SPACE)
-                        .concat(addMoo).concat(SPACE)
-                        .concat(addBann).concat(SPACE)
-                        .concat(addSoi).concat(SPACE)
-                        .concat(addRoad).concat(SPACE)
-                        .concat(addDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+
+                address = transferNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(transferNo)).concat(SPACE)
+                        .concat(addNoLabel).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();
@@ -1338,10 +1265,6 @@ public class DBExecute implements Serializable {
         String address = "";
         String SQL_TYPE_12 = "SELECT " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -1356,10 +1279,6 @@ public class DBExecute implements Serializable {
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_12 = "SELECT " +
                                 "A.ADD_NO as addNo, " +
-                                "A.ADD_MOO as addMoo, " +
-                                "A.ADD_BANN as addBann, " +
-                                "A.ADD_SOI as addSoi, " +
-                                "A.ADD_ROAD as addRoad, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
                                 "B.CITY as city, " +
@@ -1386,10 +1305,6 @@ public class DBExecute implements Serializable {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
-                String addMoo = Util.getStringNotNull(rs.getString("addMoo"));
-                String addBann = Util.getStringNotNull(rs.getString("addBann"));
-                String addSoi = Util.getStringNotNull(rs.getString("addSoi"));
-                String addRoad = Util.getStringNotNull(rs.getString("addRoad"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
                 String city = Util.getStringNotNull(rs.getString("city"));
@@ -1397,14 +1312,10 @@ public class DBExecute implements Serializable {
                 String provId = Util.getStringNotNull(rs.getString("provId"));
                 String provName = Util.getStringNotNull(rs.getString("provName"));
 
-                address = addNo.concat(SPACE)
-                        .concat(addMoo).concat(SPACE)
-                        .concat(addBann).concat(SPACE)
-                        .concat(addSoi).concat(SPACE)
-                        .concat(addRoad).concat(SPACE)
-                        .concat(addDistrict).concat(SPACE)
-                        .concat(city).concat(SPACE)
-                        .concat(provName);
+                address = addNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
+                        .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
+                        .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
             }
             log.debug("address result : {}", address);
             rs.close();

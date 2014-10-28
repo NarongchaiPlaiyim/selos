@@ -255,14 +255,14 @@
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.usage')}"/>
                                                         </td>
                                                         <td>
-                                                            <h:outputText value="#{collateralDetailView.usage}"/>
+                                                            <h:outputText value="#{collateralDetailView.usageLabel}"/>
                                                         </td>
-                                                        <td class="title">
+                                                        <!--<td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.typeOfUsage')}"/>
                                                         </td>
                                                         <td>
                                                             <h:outputText value="#{collateralDetailView.typeOfUsage}"/>
-                                                        </td>
+                                                        </td>-->
                                                     </tr>
                                                     <tr>
                                                         <td class="title">
@@ -345,8 +345,9 @@
                                                                     </p:column>
                                                                     <p:column  styleClass="left">
                                                                         <h:outputText value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
-                                                                        <h:outputText value="#{subCollateralDetailView.address}"/><br/>
-                                                                        <h:outputText value="#{subCollateralDetailView.landOffice}"/>
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.address')} #{subCollateralDetailView.address}"/><br/>
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.typeOfUsage')} #{subCollateralDetailView.typeOfUsage}"/><br/>
+                                                                        <h:outputText value="#{msg.get('app.decision.tb.td.label.landOffice')} #{subCollateralDetailView.landOffice}"/>
                                                                     </p:column>
                                                                     <p:column  styleClass="left">
                                                                         <h:outputText value="#{subCollateralDetailView.titleDeed}"/> <br/>

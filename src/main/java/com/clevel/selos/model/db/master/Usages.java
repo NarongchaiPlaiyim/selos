@@ -10,19 +10,20 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_potential_collateral")
-public class PotentialCollateral implements Serializable {
+@Table(name = "mst_usages")
+public class Usages implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "code")
+    private String code;
     @Column(name = "description")
     private String description;
-    @Column(name = "appraisal_flag", columnDefinition = "int default 0")
-    private int appraisalFlag;
     @Column(name = "active")
     private int active;
+
+    public Usages() {
+    }
 
     public int getId() {
         return id;
@@ -32,12 +33,12 @@ public class PotentialCollateral implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
@@ -56,22 +57,13 @@ public class PotentialCollateral implements Serializable {
         this.active = active;
     }
 
-    public int getAppraisalFlag() {
-        return appraisalFlag;
-    }
-
-    public void setAppraisalFlag(int appraisalFlag) {
-        this.appraisalFlag = appraisalFlag;
-    }
-
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("name", name)
-                .append("description", description)
-                .append("appraisalFlag", appraisalFlag)
-                .append("active", active)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("code", code).
+                append("name", description).
+                append("active", active).
+                toString();
     }
 }

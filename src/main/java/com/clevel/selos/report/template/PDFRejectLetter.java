@@ -46,7 +46,7 @@ public class PDFRejectLetter implements Serializable {
     @NormalMessage
     Message msg;
 
-    @Inject CustomerDAO customerDAO;
+    @Inject private CustomerDAO customerDAO;
     @Inject private WorkCaseDAO workCaseDAO;
     @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject private AddressDAO addressDAO;
@@ -56,10 +56,10 @@ public class PDFRejectLetter implements Serializable {
     @Inject private UserDAO userDAO;
     @Inject private UserTeamDAO userTeamDAO;
     @Inject private UserTeam userTeam;
-    @Inject CancelRejectInfoDAO cancelRejectInfoDAO;
-    @Inject ExSummaryDAO exSummaryDAO;
-    @Inject ExSumDeviateDAO exSumDeviateDAO;
-    @Inject ReasonDAO reasonDAO;
+    @Inject private CancelRejectInfoDAO cancelRejectInfoDAO;
+    @Inject private ExSummaryDAO exSummaryDAO;
+    @Inject private ExSumDeviateDAO exSumDeviateDAO;
+    @Inject private ReasonDAO reasonDAO;
 
     private List<Customer> customers;
     private AppHeaderView appHeaderView;
@@ -74,7 +74,6 @@ public class PDFRejectLetter implements Serializable {
     private ExSummary exSummary;
     private List<ExSumDeviate> exSumDeviate;
     private Reason reason;
-    private RejectLetterReport rejectLetterReport;
     private HttpSession session;
     private final String SPACE = " ";
     private int typeNCB;
@@ -97,7 +96,6 @@ public class PDFRejectLetter implements Serializable {
     public void init(){
         log.debug("--on init()");
         session = FacesUtil.getSession(true);
-        rejectLetterReport = new RejectLetterReport();
 
         if(checkSession(session)){
             if((Long)session.getAttribute("workCaseId") != 0){
