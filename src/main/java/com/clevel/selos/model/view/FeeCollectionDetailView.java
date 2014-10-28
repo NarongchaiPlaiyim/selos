@@ -11,6 +11,7 @@ public class FeeCollectionDetailView implements Serializable  {
 	private String description;
 	private BigDecimal amount;
 	private boolean agreementSign;
+    private boolean debitFromCustomer;
 	
 	public long getId() {
 		return id;
@@ -48,4 +49,12 @@ public class FeeCollectionDetailView implements Serializable  {
 	public void setAgreementSign(boolean agreementSign) {
 		this.agreementSign = agreementSign;
 	}
+
+    public boolean isDebitFromCustomer() {
+        return debitFromCustomer;
+    }
+
+    public void setDebitFromCustomer(boolean debitFromCustomer) {
+        this.debitFromCustomer = debitFromCustomer;
+    }
 }

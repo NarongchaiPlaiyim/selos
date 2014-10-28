@@ -27,6 +27,9 @@ public class FeeType {
     @Column (name = "active")
     private int active;
 
+    @Column (name = "formula", length = 200)
+    private String formula;
+
     public long getId() {
         return id;
     }
@@ -67,6 +70,14 @@ public class FeeType {
         this.active = active;
     }
 
+    public String getFormula() {
+        return formula;
+    }
+
+    public void setFormula(String formula) {
+        this.formula = formula;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -74,6 +85,7 @@ public class FeeType {
                 .append("brmsCode", brmsCode)
                 .append("description", description)
                 .append("active", active)
+                .append("formula", formula)
                 .toString();
     }
 }

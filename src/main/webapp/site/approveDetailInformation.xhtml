@@ -416,10 +416,13 @@
 													for="loan_signdate"
 													value="#{msg.get('app.approveDetail.loanPaymentDetail.signingDate')}" />
 											</td>
-											<td><p:inputText id='loan_signdate' readonly="true"
-													styleClass="readonly">
-													<f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH" />
-												</p:inputText></td>
+											<td>
+                                                <clv:BECalendar id='loan_signdate' value="#{approveDetailInformation.approveDetailInformationView.signingDate}"
+                                                            readonlyInput="true" disabled="true"
+                                                            pattern="dd/MM/yyyy" showOn="button"
+                                                            autocomplete="false" locale="th_TH"
+                                                    />
+                                            </td>
 										</tr>
 										<tr>
 											<td class="title" style="width: 180px"><p:outputLabel

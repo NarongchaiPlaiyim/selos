@@ -157,9 +157,7 @@ public class FeeCalculation implements Serializable {
 		
 		summary = feeCalculationControl.getFeeSummary(workCaseId);
 		if (!ignoreRecalculate) {
-			if ("true".equals(FacesUtil.getParameter("force")) || summary.getId() <= 0) {
-				summary = feeCalculationControl.calculateFeeCollection( workCaseId);
-			}
+            summary = feeCalculationControl.calculateFeeCollection( workCaseId);
 		}
 		accounts = feeCalculationControl.getFeeCollectionAccounts(workCaseId);
 		

@@ -185,14 +185,16 @@ public class DisbursementControl extends BusinessControl {
 		for (DisbursementTR disbursementTR : disbursementTRList) {
 			DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
 			depositBaDetailView.setId(disbursementTR.getId());
-			depositBaDetailView.setOpenAccountId(disbursementTR.getOpenAccount().getId());
-			depositBaDetailView.setAccountNumber(disbursementTR.getOpenAccount().getAccountNumber());
-			List<OpenAccountName> openAccountNameList = disbursementTR.getOpenAccount().getOpenAccountNameList();
-			String accountName = "";
-			for (OpenAccountName openAccountName : openAccountNameList) {
-				accountName += openAccountName.getCustomer().getNameEn() + ", ";
-			}
-			depositBaDetailView.setAccountName(accountName.substring(0, accountName.length() - 2));
+            if(disbursementTR.getOpenAccount()!=null){
+                depositBaDetailView.setOpenAccountId(disbursementTR.getOpenAccount().getId());
+                depositBaDetailView.setAccountNumber(disbursementTR.getOpenAccount().getAccountNumber());
+                List<OpenAccountName> openAccountNameList = disbursementTR.getOpenAccount().getOpenAccountNameList();
+                String accountName = "";
+                for (OpenAccountName openAccountName : openAccountNameList) {
+                    accountName += openAccountName.getCustomer().getNameEn() + ", ";
+                }
+                depositBaDetailView.setAccountName(accountName.substring(0, accountName.length() - 2));
+            }
 			depositBaDetailView.setDisbursementCreditTypeView(this.getDisbursementCreditView(disbursementTR, depositBaDetailView));
 			disbursementDepositBaDetailViewList.add(depositBaDetailView);
 		}

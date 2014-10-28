@@ -264,21 +264,29 @@ public class GeneralPeopleInfoControl extends BusinessControl {
 	 
 	 public List<SelectItem> listIndividualAddressTypes() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
-		 
+         SelectItem selectItem = new SelectItem();
+         selectItem.setValue(0);
+         selectItem.setLabel("");
+         selectItem.setDescription("");
+         rtnDatas.add(selectItem);
 		 List<AddressType> list = addressTypeDAO.findByCustomerEntityId(CUSTOMER_ENTITY_INDIVIDUAL);
 		 for (AddressType data : list) {
 			 SelectItem item = new SelectItem();
 			 item.setValue(data.getId());
 			 item.setLabel(data.getName());
 			 item.setDescription(data.getName());
-			 
+             log.debug("listIndividualAddressTypes (AddressType : {})",data);
 			 rtnDatas.add(item);
 		 }
 		 return rtnDatas; 
 	 }
 	 public List<SelectItem> listJuristicAddressTypes() {
 		 List<SelectItem> rtnDatas = new ArrayList<SelectItem>();
-		 
+         SelectItem selectItem = new SelectItem();
+         selectItem.setValue(0);
+         selectItem.setLabel("");
+         selectItem.setDescription("");
+         rtnDatas.add(selectItem);
 		 List<AddressType> list = addressTypeDAO.findByCustomerEntityId(CUSTOMER_ENTITY_JURISTIC);
 		 for (AddressType data : list) {
 			 SelectItem item = new SelectItem();
