@@ -11,7 +11,8 @@ public enum ReasonTypeValue {
     CALLING_RECORD_REASON(8),
     APPRAISAL_REASON(9),
     PENDING_REASON(10),
-    APPEAL_REASON(11);
+    APPEAL_REASON(11),
+    MANDATE_DOC(12);
 
     int value;
 

@@ -31,16 +31,18 @@ public class ReasonControl extends BusinessControl {
     public ReasonControl(){}
 
     public List<SelectItem> getReasonSelectItem(int reasonTypeId){
+        logger.debug("-- begin getReasonSelectItem: {}", reasonTypeId);
         List<SelectItem> _tmpList = new ArrayList<SelectItem>();
         Map<Integer, ReasonView> _tmpMap = getInternalCacheMap();
         for(ReasonView reasonView : _tmpMap.values()){
             if(reasonView.getReasonTypeId() == reasonTypeId){
                 SelectItem selectItem = new SelectItem();
                 selectItem.setValue(reasonView.getId());
-                selectItem.setDescription(reasonView.getDescription());
+                selectItem.setLabel(reasonView.getDescription());
                 _tmpList.add(selectItem);
             }
         }
+        logger.debug("-- end getReasonSelectItem return: {}", _tmpList.size());
         return _tmpList;
     }
 
