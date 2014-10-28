@@ -1339,6 +1339,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
             proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
             proposeCollateralInfoSub.setComs(proposeCollateralInfoSubView.getComs());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
 
@@ -2082,6 +2083,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setCollateralOwnerAAD(proposeCollateralInfoSubView.getCollateralOwnerAAD());
             proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00e");
             proposeCollateralInfoSub.setSubId(uid.randomUUID().toString());
