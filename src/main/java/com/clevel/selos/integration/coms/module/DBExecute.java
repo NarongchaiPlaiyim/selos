@@ -171,19 +171,23 @@ public class DBExecute implements Serializable {
         log.debug("geCollateralDecisionDetail jobNo: {}",jobNo);
         CollateralDecisionDetail collateralDecisionDetail = null;
         String SQL_COLLATERAL_DECISIONDETAIL =  "SELECT " +
-                                                    "APPR_COND.COND_NO as condNo, " +
-                                                    "APPR_COND.COND_REMARK as remark, " +
-                                                    "APPR_COND.COND_TYPE as condType " +
-                                                "FROM APPR_COND " +
-                                                "WHERE (APPR_COND.COND_TYPE = 'REA' OR APPR_COND.COND_TYPE = 'CON') " +
-                                                "AND APPR_COND.JOB_NO = ?";
+                                                    "L.L_NAME as lName, " +
+                                                    "A.COND_NO as condNo, " +
+                                                    "A.COND_REMARK as remark, " +
+                                                    "A.COND_TYPE as condType " +
+                                                "FROM APPR_COND A " +
+                                                "LEFT JOIN LOOK_MST L ON A.COND_NO = L.L_ID AND (L.L_TYPE='DECISION' OR L.L_TYPE='MORT_COND') " +
+                                                "WHERE (A.COND_TYPE = 'REA' OR A.COND_TYPE = 'CON') " +
+                                                "AND A.JOB_NO = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_COLLATERAL_DECISIONDETAIL =     "SELECT " +
+                                                    "L.L_NAME as lName, " +
                                                     "A.COND_NO as condNo, " +
                                                     "A.COND_REMARK as remark, " +
                                                     "A.COND_TYPE as condType " +
                                                 "FROM "+schema+".APPR_COND A " +
+                                                "LEFT JOIN "+schema+".LOOK_MST L ON A.COND_NO = L.L_ID AND (L.L_TYPE='DECISION' OR L.L_TYPE='MORT_COND') " +
                                                 "WHERE (A.COND_TYPE = 'REA' OR A.COND_TYPE = 'CON') " +
                                                 "AND A.JOB_NO = ?";
         }
@@ -205,33 +209,34 @@ public class DBExecute implements Serializable {
             String condNoCond = null;
             String condRemark = null;
             while (rs.next()) {
-                String condNo = rs.getString(1);
-                String remark = rs.getString(2);
-                String condType = rs.getString(3);
+                String lName = Util.getStringNotNullOrEmpty(rs.getString(1));
+                String condNo = rs.getString(2);
+                String remark = Util.getStringNotNullOrEmpty(rs.getString(3));
+                String condType = rs.getString(4);
 
                 if("REA".equalsIgnoreCase(condType)){
                     if(reasonCondNo == null){
-                        reasonCondNo = condNo;
+                        reasonCondNo = lName;
                     } else {
-                        reasonCondNo = reasonCondNo.concat(",").concat(condNo);
+                        reasonCondNo = reasonCondNo.concat(", ").concat(lName);
                     }
 
                     if(reasonCondRemark == null){
                         reasonCondRemark = remark;
                     } else {
-                        reasonCondRemark = reasonCondRemark.concat(",").concat(remark);
+                        reasonCondRemark = reasonCondRemark.concat(", ").concat(remark);
                     }
                 } else {
                     if(condNoCond == null){
-                        condNoCond = condNo;
+                        condNoCond = lName;
                     } else {
-                        condNoCond = condNoCond.concat(",").concat(condNo);
+                        condNoCond = condNoCond.concat(", ").concat(lName);
                     }
 
                     if(condRemark == null){
                         condRemark = remark;
                     } else {
-                        condRemark = condRemark.concat(",").concat(remark);
+                        condRemark = condRemark.concat(", ").concat(remark);
                     }
                 }
             }
