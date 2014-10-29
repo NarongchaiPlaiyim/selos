@@ -205,7 +205,7 @@
                                      disabled="#{prescreenMaker.isDisabled('customer.firstName')}"
                                      onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.ncbFlag == 2)}"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
@@ -213,7 +213,7 @@
                                      disabled="#{prescreenMaker.isDisabled('customer.lastName')}"
                                      onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.ncbFlag == 2)}"/>
                     </td>
                 </tr>
                 <tr>
@@ -419,6 +419,7 @@
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.spouse.personalId')}"
                                      onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onblur="checkSpouseThaiID(this)"
                                      rendered="#{prescreenMaker.borrowerInfo.spouse.documentType.id != 2}"
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.spouse.ncbFlag == 2)}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"/>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.citizenId}" styleClass="large" maxlength="13"
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.spouse.personalId')}"
@@ -513,12 +514,14 @@
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.firstNameTh}" styleClass="large"
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.spouse.firstName')}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.spouse.ncbFlag == 2)}"
                                      onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.lastNameTh}" styleClass="large"
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.spouse.lastName')}"
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.spouse.ncbFlag == 2)}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event);"/>
                     </td>
@@ -681,7 +684,7 @@
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.juristic.personalId')}"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);" onblur="checkJuristicThaiID(this)"
-                                     readonly="#{not prescreenMaker.enableCitizenId}"/>
+                                     readonly="#{( not prescreenMaker.enableCitizenId ) or (prescreenMaker.borrowerInfo.ncbFlag == 2)}"/>
                     </td>
                 </tr>
                 <tr>
@@ -772,7 +775,7 @@
                                      disabled="#{(not prescreenMaker.enableCustomerForm) or prescreenMaker.isDisabled('customer.juristic.nameTh')}"
                                      onkeydown="return onKeyDownText(event);" onkeypress="return onKeyPressText(event)"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     readonly="#{( not prescreenMaker.enableCustomerForm ) or (prescreenMaker.borrowerInfo.ncbFlag == 2)}"/>
                     </td>
                 </tr>
                 <tr>

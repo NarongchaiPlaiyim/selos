@@ -96,9 +96,11 @@ public class BasicInfo implements Serializable {
     @Column(name = "existing_since")
     private String existingSMECustomerSince;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_review_date")
     private Date lastReviewDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "extended_review_date")
     private Date extendedReviewDate;
 
@@ -125,8 +127,13 @@ public class BasicInfo implements Serializable {
     @Column(name = "referral_id")
     private String referralID;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "bdm_submit_date")
     private Date bdmSubmitDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "uw_submit_date")
+    private Date uwSubmitDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -159,6 +166,10 @@ public class BasicInfo implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "limit_setup_expiry_date")
     private Date limitSetupExpiryDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_decision_date")
+    private Date lastDecisionDate;
 
     @Column(name = "premium_quote", columnDefinition = "int default 0")
     private int premiumQuote;
@@ -578,6 +589,22 @@ public class BasicInfo implements Serializable {
         this.cssoUser = cssoUser;
     }
 
+    public Date getUwSubmitDate() {
+        return uwSubmitDate;
+    }
+
+    public void setUwSubmitDate(Date uwSubmitDate) {
+        this.uwSubmitDate = uwSubmitDate;
+    }
+
+    public Date getLastDecisionDate() {
+        return lastDecisionDate;
+    }
+
+    public void setLastDecisionDate(Date lastDecisionDate) {
+        this.lastDecisionDate = lastDecisionDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -615,6 +642,7 @@ public class BasicInfo implements Serializable {
                 .append("referralName", referralName)
                 .append("referralID", referralID)
                 .append("bdmSubmitDate", bdmSubmitDate)
+                .append("uwSubmitDate", uwSubmitDate)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
@@ -623,8 +651,14 @@ public class BasicInfo implements Serializable {
                 .append("approveType", approveType)
                 .append("approveResult", approveResult)
                 .append("limitSetupExpiryDate", limitSetupExpiryDate)
+                .append("lastDecisionDate", lastDecisionDate)
                 .append("premiumQuote", premiumQuote)
                 .append("tcgFlag", tcgFlag)
+                .append("appealResubmitReason", appealResubmitReason)
+                .append("zmUser", zmUser)
+                .append("rgmUser", rgmUser)
+                .append("ghUser", ghUser)
+                .append("cssoUser", cssoUser)
                 .toString();
     }
 }

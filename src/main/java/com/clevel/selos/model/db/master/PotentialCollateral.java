@@ -19,6 +19,8 @@ public class PotentialCollateral implements Serializable {
     private String name;
     @Column(name = "description")
     private String description;
+    @Column(name = "appraisal_flag", columnDefinition = "int default 0")
+    private int appraisalFlag;
     @Column(name = "active")
     private int active;
 
@@ -54,12 +56,21 @@ public class PotentialCollateral implements Serializable {
         this.active = active;
     }
 
+    public int getAppraisalFlag() {
+        return appraisalFlag;
+    }
+
+    public void setAppraisalFlag(int appraisalFlag) {
+        this.appraisalFlag = appraisalFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
                 .append("description", description)
+                .append("appraisalFlag", appraisalFlag)
                 .append("active", active)
                 .toString();
     }

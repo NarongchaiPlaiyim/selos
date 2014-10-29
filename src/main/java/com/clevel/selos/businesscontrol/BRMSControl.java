@@ -638,12 +638,21 @@ public class BRMSControl extends BusinessControl {
                 List<ProposeCollateralInfoSub> newCollateralSubList = newCollateralHead.getProposeCollateralInfoSubList();
                 for(ProposeCollateralInfoSub newCollateralSub : newCollateralSubList){
                     List<ProposeCollateralSubMortgage> mortgageList = newCollateralSub.getProposeCollateralSubMortgageList();
-                    for(ProposeCollateralSubMortgage mortgage : mortgageList){
-                        if(mortgage.getMortgageType() != null && MortgageCategory.INBOUND.equals(mortgage.getMortgageType().getMortgageCategory())){
+                    if(!Util.isNull(mortgageList)){
+                        if(mortgageList.size() > 0){
+                            for(ProposeCollateralSubMortgage mortgage : mortgageList){
+                                if(mortgage.getMortgageType() != null && MortgageCategory.INBOUND.equals(mortgage.getMortgageType().getMortgageCategory())){
+                                    isInboundMortgage = Boolean.TRUE;
+                                    break;
+                                }
+                            }
+                        }else{
                             isInboundMortgage = Boolean.TRUE;
-                            break;
                         }
+                    }else{
+                        isInboundMortgage = Boolean.TRUE;
                     }
+
                     if(isInboundMortgage)
                         break;
                 }

@@ -787,12 +787,6 @@ function handleContactRecordRequest(xhr, status, args) {
     }
 }
 
-function handleAppraisalDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        appraisalDetailViewDlg.hide();
-    }
-}
-
 function handleRequestAppraisal(xhr, status, args) {
     if(args.functionComplete){
         reqApprDlg.hide();
@@ -923,12 +917,6 @@ function handlePrintRerportDialogRequest(xhr, status, args) {
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
-    }
-}
-
-function handleSubmitAADCDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        submitAADCDlg.hide();
     }
 }
 

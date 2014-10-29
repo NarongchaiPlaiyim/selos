@@ -56,9 +56,6 @@ public class ProposeCollateralInfo implements Serializable {
     @Column(name = "usage")
     private String usage;
 
-    @Column(name = "type_of_usage")
-    private String typeOfUsage;
-
     @Column(name = "uw_remark")
     private String uwRemark;
 
@@ -201,14 +198,6 @@ public class ProposeCollateralInfo implements Serializable {
         this.usage = usage;
     }
 
-    public String getTypeOfUsage() {
-        return typeOfUsage;
-    }
-
-    public void setTypeOfUsage(String typeOfUsage) {
-        this.typeOfUsage = typeOfUsage;
-    }
-
     public String getUwRemark() {
         return uwRemark;
     }
@@ -328,7 +317,6 @@ public class ProposeCollateralInfo implements Serializable {
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
                 .append("usage", usage)
-                .append("typeOfUsage", typeOfUsage)
                 .append("uwRemark", uwRemark)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)
