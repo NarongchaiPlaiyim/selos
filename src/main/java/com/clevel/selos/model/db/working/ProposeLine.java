@@ -220,7 +220,7 @@ public class ProposeLine implements Serializable {
     private User modifyBy;
 
     @OneToMany(mappedBy = "proposeLine")
-    @Sort(type = SortType.NATURAL)
+    //@OrderColumn(name = "id")
     private List<ProposeCreditInfo> proposeCreditInfoList;
 
     @OneToMany(mappedBy = "proposeLine")

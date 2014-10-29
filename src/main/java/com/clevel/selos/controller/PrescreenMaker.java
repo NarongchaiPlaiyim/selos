@@ -315,7 +315,7 @@ public class PrescreenMaker extends BaseController {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.debug("workCasePrescreen Request Type : {}", workCasePrescreen.getRequestType().getId());
 
-            //if(workCasePrescreen.getRequestType().getId() != CaseRequestTypes.NEW_CASE.value()) {
+            //if(workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
                 String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
                 if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
                     loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);

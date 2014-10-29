@@ -142,11 +142,12 @@ public class InboxControl extends BusinessControl {
     }
 
     public void updateWorkCaseOwner(long workCasePreScreenId, long workCaseId, long stepId, String caseOwner){
+        log.debug("updateWorkCaseOwner : workCasePreScreenId : {}, workCaseId : {}, stepId : {}, caseOwner : {}", workCasePreScreenId, workCaseId, stepId, caseOwner);
         try{
             WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByStep(workCasePreScreenId, workCaseId, stepId);
             WorkCasePrescreen workCasePrescreen = null;
             WorkCase workCase = null;
-            User currentUser = userDAO.findById(caseOwner);
+            User currentUser = userDAO.findById(Util.upperCase(caseOwner));
             Step step = stepDAO.findById(stepId);
 
             if(!Util.isZero(workCasePreScreenId))

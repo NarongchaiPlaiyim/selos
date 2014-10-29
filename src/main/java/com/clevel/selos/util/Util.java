@@ -575,4 +575,13 @@ public class Util implements Serializable {
         }
         return accountNumber;
     }
+
+    public static String upperCase(String str){
+        String upperStr = "";
+        if(!isEmpty(str)){
+            upperStr = str.toUpperCase();
+        }
+
+        return upperStr;
+    }
 }
