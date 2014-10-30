@@ -15,7 +15,6 @@ public class ProposeFeeDetailView implements Serializable {
     private FeeDetailView prepaymentFee;
     private FeeDetailView cancellationFee;
 
-
     public ProposeFeeDetailView() {
         reset();
     }

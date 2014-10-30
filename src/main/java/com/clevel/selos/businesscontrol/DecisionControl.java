@@ -424,9 +424,13 @@ public class DecisionControl extends BusinessControl {
             proposeLineDAO.persist(decision);
 
             //Save Propose Fee Detail
-            List<ProposeFeeDetail> proposeFeeDetailList = proposeLineTransform.transformProposeFeeToModelList(decision, decisionView.getApproveFeeDetailViewOriginalList(), proposeType);
+            List<ProposeFeeDetail> proposeFeeDetailList = proposeLineTransform.transformProposeFeeToModelList(workCase, decisionView.getApproveFeeDetailViewOriginalList(), proposeType);
             if(!Util.isNull(proposeFeeDetailList) && !Util.isZero(proposeFeeDetailList.size())) {
                 proposeFeeDetailDAO.persist(proposeFeeDetailList);
+            }
+            List<ProposeFeeDetail> proposeAppFeeDetailList = proposeLineTransform.transformFeeDetailToModelList(workCase, decisionView.getApproveAppFeeDetailViewList(), proposeType);
+            if(!Util.isNull(proposeAppFeeDetailList) && !Util.isZero(proposeAppFeeDetailList.size())) {
+                proposeFeeDetailDAO.persist(proposeAppFeeDetailList);
             }
 
             // ------------------------------------------ Collateral ------------------------------------------- //

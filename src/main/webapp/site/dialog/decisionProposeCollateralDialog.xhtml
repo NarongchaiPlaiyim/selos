@@ -9,12 +9,12 @@
     <h:form id="collateralDlgForm">
         <table class="content_form content_table_form">
             <tr>
-                <td class="title" style="width: 20%;">
+                <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
                     <h:outputText value="#{decision.mandate('collateral.jobID')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 80%" colspan="3">
+                <td class="left" colspan="3">
                     <h:outputText value="#{decision.approveCollateralInfoView.jobID}"/>
                 </td>
             </tr>
@@ -41,21 +41,23 @@
                 </td>
             </tr>
             <tr>
-                <td class="title" style="width: 20%;">
+                <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
                     <h:outputText value="#{decision.mandate('collateral.AADDecisionReason')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 30%;">
-                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReason}"/>
+                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
+                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReason}"
+                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
                 </td>
-                <td class="title" style="width: 20%;">
+                <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
                     <h:outputText value="#{decision.mandate('collateral.AADDecisionReasonDetail')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 30%">
-                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"/>
+                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
+                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"
+                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
                 </td>
             </tr>
             <tr>
@@ -67,14 +69,6 @@
                 <td class="left">
                     <h:outputText value="#{decision.approveCollateralInfoView.usageLabel}"/>
                 </td>
-                <!--<td class="title">
-                    <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
-                    <h:outputText value="#{decision.mandate('collateral.typeOfUsage')}" styleClass="require-field"/>
-                    <h:outputText value=" :"/>
-                </td>
-                <td class="left">
-                    <h:outputText value="#{decision.approveCollateralInfoView.typeOfUsage}"/>
-                </td>-->
             </tr>
             <tr>
                 <td class="title">
@@ -119,16 +113,18 @@
                     <h:outputText value="#{decision.mandate('collateral.mortgageCondition')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left">
-                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageCondition}"/>
+                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
+                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageCondition}"
+                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
                     <h:outputText value="#{decision.mandate('collateral.mortgageConditionDetail')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left">
-                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"/>
+                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
+                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"
+                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
                 </td>
             </tr>
             <tr>
