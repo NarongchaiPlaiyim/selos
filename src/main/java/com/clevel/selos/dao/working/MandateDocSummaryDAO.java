@@ -22,23 +22,24 @@ public class MandateDocSummaryDAO extends GenericDAO<MandateDocSummary, Long> {
 
     }
 
-    public MandateDocSummary findByWorkCaseIdForStepRole(long workCaseId, long stepId, int roleId) {
+    public MandateDocSummary findByWorkCaseIdForStepRole(long workCaseId, long stepId, int stageId, int roleId) {
         log.info("--findByWorkCaseIdForStepRole : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("stage.id", stageId));
         criteria.add(Restrictions.eq("role.id", roleId));
         MandateDocSummary mandateDocSummary = (MandateDocSummary)criteria.uniqueResult();
         return mandateDocSummary;
     }
 
-    public MandateDocSummary findByWorkCasePrescreenIdForStepRole(long workCasePrescreenId, long stepId, int roleId){
+    public MandateDocSummary findByWorkCasePrescreenIdForStepRole(long workCasePrescreenId, long stepId, int stageId, int roleId){
         log.info("-- begin findByWorkCasePrescreenId: {}", workCasePrescreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
         criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("stage.id", stageId));
         criteria.add(Restrictions.eq("role.id", roleId));
-
         MandateDocSummary mandateDocSummary = (MandateDocSummary) criteria.uniqueResult();
 
         return mandateDocSummary;

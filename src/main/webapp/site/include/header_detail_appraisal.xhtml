@@ -10,9 +10,13 @@
 <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
 <div id="header_button_bar">
 <p:panel id="header_panel" styleClass="panel">
-    <!-- Check Mandate Doc for Maker -->
-    <p:commandButton id="btnChkMandateAppraisalRequest" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
-                     disabled="true">
+    <!-- Check Mandate Doc -->
+    <p:commandButton id="btnMandateDocFullApp" value="#{msg.get('app.header.button.mandateDoc')}" title="#{msg.get('app.header.button.mandateDoc')}" styleClass="blueButton"
+                     rendered="#{headerController.checkButton('Check Mandate Doc')}"
+                     actionListener="#{checkMandateDoc.onCheckMandateDoc}"
+                     oncomplete="checkMandateDlg.show()"
+                     update=":frmMain:checkMandatePanel, :frmMain:msgBoxMandateDocMessagePanel">
+        <p:resetInput target=":frmMain:checkMandatePanel"/>
     </p:commandButton>
     <p:commandButton id="btnCancelRequestAppraisal" value="#{msg.get('app.header.button.cancelAppraisalRequest')}" title="#{msg.get('app.header.button.cancelAppraisalRequest')}" styleClass="blueButton"
                      onclick="PF('confirmCancelReqAppraisal').show()"/>
@@ -103,4 +107,17 @@
         <ui:include src="/site/dialog/submitReqParallelApprDialog.xhtml"/>
     </p:dialog>
 </p:panel>
+    <p:panel id="msgBoxMandateDocMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxMandateDocMessageDialog" widgetVar="msgBoxMandateDocMessagePanel" styleClass="messageDialog" closable="false"
+                         header="#{checkMandateDoc.messageHeader}">
+            <f:facet name="message">
+                <h:outputText value="#{checkMandateDoc.message}" escape="false"/>
+            </f:facet>
+            <p:commandButton value="OK"
+                             onclick="showWindowsScrollBar()"
+                             process="@this"
+                             update=":frmMain"
+                             oncomplete="msgBoxMandateDocMessagePanel.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
 </ui:composition>

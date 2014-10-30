@@ -7,7 +7,9 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.StageValue;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Step;
@@ -118,14 +120,21 @@ public class ReturnControl extends BusinessControl {
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             MandateDocSummary mandateDocSummary = null;
             if(workCaseId!=0) {
-                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, user.getRole().getId());
+                WorkCase workCase = workCaseDAO.findById(workCaseId);
+                if(workCase.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, StageValue.APPRAISAL.value(), user.getRole().getId());
+                } else {
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, StageValue.FULL_APPLICATION.value(), user.getRole().getId());
+                }
 
-                //mandateDocList = mandateDocDetailDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             } else {
-                //mandateDocList = mandateDocDetailDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
-                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, user.getRole().getId());
-
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+                if(workCasePrescreen.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, StageValue.APPRAISAL.value(),user.getRole().getId());
+                } else {
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, StageValue.PRESCREEN.value(),user.getRole().getId());
+                }
                 returnInfoList = returnInfoDAO.findByNotAcceptListPreScreen(workCasePrescreenId);
             }
 

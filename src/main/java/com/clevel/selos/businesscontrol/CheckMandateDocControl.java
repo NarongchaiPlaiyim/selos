@@ -130,23 +130,36 @@ public class CheckMandateDocControl extends BusinessControl {
         log.debug("get Mandate Doc list from DB");
         MandateDocSummary mandateDocSummary = null;
         try{
+            //When the mandateDocSummary is not Found for each step, stage, role. Then only query once again for user who has AccessType.VIEWER
             if(stageView.getId() == StageValue.PRESCREEN.value()){
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(caseId);
                 if(workCasePrescreen.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
-                    mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCasePrescreenId(caseId, StageValue.APPRAISAL);
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(caseId, stepId, StageValue.APPRAISAL.value(), role.getId());
+                    if(mandateDocSummary == null && AccessType.VIEWER.equals(mandateDocAccessView.getAccessType())) {
+                        mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCasePrescreenId(caseId, StageValue.APPRAISAL);
+                    }
                     stageId = StageValue.APPRAISAL.value();
                 } else {
-                    mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCasePrescreenId(caseId, StageValue.PRESCREEN);
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(caseId, stepId, StageValue.PRESCREEN.value(), role.getId());
+                    if(mandateDocSummary == null && AccessType.VIEWER.equals(mandateDocAccessView.getAccessType())) {
+                        mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCasePrescreenId(caseId, StageValue.PRESCREEN);
+                    }
                 }
             } else if(stageView.getId() == StageValue.APPRAISAL.value()){
                 mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCaseId(caseId, StageValue.APPRAISAL);
             } else {
                 WorkCase workCase = workCaseDAO.findById(caseId);
                 if(workCase.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
-                    mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCaseId(caseId, StageValue.APPRAISAL);
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(caseId, stepId, StageValue.APPRAISAL.value(), role.getId());
+                    if(mandateDocSummary == null && AccessType.VIEWER.equals(mandateDocAccessView.getAccessType())) {
+                        mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCaseId(caseId, StageValue.APPRAISAL);
+                    }
                     stageId = StageValue.APPRAISAL.value();
                 } else {
-                    mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCaseId(caseId, StageValue.FULL_APPLICATION);
+                    mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(caseId, stepId, StageValue.FULL_APPLICATION.value(), role.getId());
+                    if(mandateDocSummary == null && AccessType.VIEWER.equals(mandateDocAccessView.getAccessType())) {
+                        mandateDocSummary = mandateDocSummaryDAO.findLatestInfoByWorkCaseId(caseId, StageValue.FULL_APPLICATION);
+                    }
                 }
             }
         }catch (Exception ex){
@@ -481,7 +494,14 @@ public class CheckMandateDocControl extends BusinessControl {
         Role role = user.getRole();
 
         if(StageValue.PRESCREEN.value() == stageView.getId()){
-            MandateDocSummary mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(caseId, stepId, role.getId());
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(caseId);
+            MandateDocSummary mandateDocSummary = null;
+            if(workCasePrescreen.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(caseId, stepId, StageValue.APPRAISAL.value(), role.getId());
+            } else {
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(caseId, stepId, StageValue.PRESCREEN.value(), role.getId());
+            }
+
             if(mandateDocSummary != null){
                 if(mandateDocSummary.getMandateDocDetailList() != null && mandateDocSummary.getMandateDocDetailList().size() > 0){
                     mandateDocDetailDAO.delete(mandateDocSummary.getMandateDocDetailList());
@@ -489,7 +509,13 @@ public class CheckMandateDocControl extends BusinessControl {
                 }
             }
         } else {
-            MandateDocSummary mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(caseId, stepId, role.getId());
+            WorkCase workCase = workCaseDAO.findById(caseId);
+            MandateDocSummary mandateDocSummary = null;
+            if(workCase.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(caseId, stepId, StageValue.APPRAISAL.value(), role.getId());
+            } else {
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(caseId, stepId, StageValue.FULL_APPLICATION.value(), role.getId());
+            }
             if(mandateDocSummary != null){
                 if(mandateDocSummary.getMandateDocDetailList() != null && mandateDocSummary.getMandateDocDetailList().size() > 0){
                     mandateDocDetailDAO.delete(mandateDocSummary.getMandateDocDetailList());
@@ -507,10 +533,22 @@ public class CheckMandateDocControl extends BusinessControl {
         Role role = user.getRole();
 
         MandateDocSummary mandateDocSummary = null;
-        if(workCasePrescreenId > 0)
-            mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, role.getId());
-        else
-            mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, user.getRole().getId());
+        if(workCasePrescreenId > 0){
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+            if(workCasePrescreen.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, StageValue.APPRAISAL.value(), role.getId());
+            } else {
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, StageValue.PRESCREEN.value(), role.getId());
+            }
+        }
+        else {
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            if(workCase.getParallelAppraisalFlag() == ParallelAppraisalStatus.REQUESTING_PARALLEL.value()){
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, StageValue.APPRAISAL.value(),user.getRole().getId());
+            } else {
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, StageValue.FULL_APPLICATION.value(),user.getRole().getId());
+            }
+        }
 
         MandateDocAccessView mandateDocAccessView = mandateDocAccessControl.getMandateDocAccessView(stepId, role.getId());
         if(mandateDocSummary == null){

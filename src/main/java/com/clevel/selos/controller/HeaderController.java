@@ -1405,10 +1405,16 @@ public class HeaderController extends BaseController {
     //*   Step 2001/1003
     public void onOpenSubmitParallelRequestAppraisal(){
         _loadSessionVariable();
-        slaReasonId = 0;
-        submitRemark = "";
-        slaRemark = "";
-        RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
+
+        if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)) {
+            slaReasonId = 0;
+            submitRemark = "";
+            slaRemark = "";
+            RequestContext.getCurrentInstance().execute("requestParallelAppraisalDlg.show()");
+        } else {
+            messageHeader = "Warning.";
+            message = "Cannot " + ActionCode.REQUEST_APPRAISAL.getActionName() + ". Some Mandate Document are incompleted.";
+        }
     }
 
     //*** For BDM Request from RequestAppraisal Screen
@@ -1482,14 +1488,19 @@ public class HeaderController extends BaseController {
         log.debug("onOpenRequestAppraisalCustomerAccepted ( after customer acceptance )");
         _loadSessionVariable();
 
-        //Check Appraisal data exist.
-        if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
-            RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
+        if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
+            //Check Appraisal data exist.
+            if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
+                RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
+            } else {
+                log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
+                messageHeader = "Information.";
+                message = "Please complete request appraisal form.";
+                RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            }
         } else {
-            log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
-            messageHeader = "Information.";
-            message = "Please complete request appraisal form.";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
+            messageHeader = "Warning.";
+            message = "Cannot " + ActionCode.REQUEST_APPRAISAL.getActionName() + ". Some Mandate Document are incompleted.";
         }
 
     }
@@ -1518,21 +1529,26 @@ public class HeaderController extends BaseController {
     public void onOpenSubmitForAADAdmin(){
         log.debug("onOpenSubmitForAADAdmin ( submit to AAD committee )");
         _loadSessionVariable();
-        if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
-            slaRemark = "";
-            submitRemark = "";
-            aadCommitteeId = "";
-            submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-            if (submitOverSLA == 1) {
-                slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+        if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)) {
+            if(fullApplicationControl.checkAppointmentInformation(workCaseId, workCasePreScreenId)){
+                slaRemark = "";
+                submitRemark = "";
+                aadCommitteeId = "";
+                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                if (submitOverSLA == 1) {
+                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                }
+                //List AAD Admin by team structure
+                aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
+                RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
+            } else {
+                messageHeader = "Exception.";
+                message = "Please input Appointment Date first.";
+                showMessageBox();
             }
-            //List AAD Admin by team structure
-            aadCommiteeList = fullApplicationControl.getUserListByRole(RoleValue.AAD_COMITTEE);
-            RequestContext.getCurrentInstance().execute("submitAADCDlg.show()");
         } else {
-            messageHeader = "Exception.";
-            message = "Please input Appointment Date first.";
-            showMessageBox();
+            messageHeader = "Warning.";
+            message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
         }
     }
 

@@ -214,9 +214,9 @@ public class CheckMandateDocTransform extends Transform {
             mandateDocSummary = mandateDocSummaryDAO.findById(checkMandateDocView.getId());
         } else {
             if(checkMandateDocView.getWorkCasePrescreenId() > 0)
-                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(checkMandateDocView.getWorkCasePrescreenId(), checkMandateDocView.getStepId(), checkMandateDocView.getRoleId());
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(checkMandateDocView.getWorkCasePrescreenId(), checkMandateDocView.getStepId(), checkMandateDocView.getForStageId(), checkMandateDocView.getRoleId());
             if(checkMandateDocView.getWorkCaseId() > 0)
-                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(checkMandateDocView.getWorkCaseId(), checkMandateDocView.getStepId(), checkMandateDocView.getRoleId());
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(checkMandateDocView.getWorkCaseId(), checkMandateDocView.getStepId(), checkMandateDocView.getForStageId(), checkMandateDocView.getRoleId());
         }
 
         if(mandateDocSummary == null)
