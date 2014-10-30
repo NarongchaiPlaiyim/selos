@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.working.WorkCaseOwner;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -93,10 +94,6 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
 
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
 
-        //criteria.setFetchMode("user.id", FetchMode.SELECT);
-        //criteria.setFetchMode("createBy", FetchMode.SELECT);
-        //criteria.setFetchMode("modifyBy", FetchMode.SELECT);
-
         List<WorkCaseOwner> workCaseOwnerList = criteria.list();
 
         Iterator<WorkCaseOwner> it = workCaseOwnerList.iterator();
@@ -110,6 +107,36 @@ public class WorkCaseOwnerDAO extends GenericDAO<WorkCaseOwner, Long> {
         }
 
         return userList;
+    }
+
+    public WorkCaseOwner getWorkCaseOwnerByStep(long workCasePreScreenId, long workCaseId, int roleId, long stepId){
+        Criteria criteria = createCriteria();
+
+        if(!Util.isZero(workCasePreScreenId))
+            criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        if(!Util.isZero(workCaseId))
+            criteria.add(Restrictions.eq("workCase.id", workCaseId));
+
+        criteria.add(Restrictions.eq("step.id", stepId));
+        criteria.add(Restrictions.eq("role.id", roleId));
+        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+
+        return workCaseOwner;
+    }
+
+    public WorkCaseOwner getWorkCaseOwnerByStep(long workCasePreScreenId, long workCaseId, long stepId){
+        log.debug("getWorkCaseOwnerByStep : workCasePreScreenId : {}, workCaseId : {}, stepId : {}", workCasePreScreenId, workCaseId, stepId);
+        Criteria criteria = createCriteria();
+
+        if(!Util.isZero(workCasePreScreenId))
+            criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        if(!Util.isZero(workCaseId))
+            criteria.add(Restrictions.eq("workCase.id", workCaseId));
+
+        criteria.add(Restrictions.eq("step.id", stepId));
+        WorkCaseOwner workCaseOwner = (WorkCaseOwner)criteria.uniqueResult();
+
+        return workCaseOwner;
     }
 
     public WorkCaseOwner getWorkCaseOwnerByRole(long workCaseId, int roleId, String userId, long stepId){

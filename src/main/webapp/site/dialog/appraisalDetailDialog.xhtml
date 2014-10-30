@@ -12,11 +12,11 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
                     </td>
                     <td class="title" style="width: 200px;">
-                        <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style = "#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                        <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style="#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}"
+                                     disabled="#{appraisalRequest.isDisabled('appraisal.titleDeed')}"
                                      onkeydown="return onKeyPressName2(event);"
                                      onkeypress="return onKeyPressName2(event);" maxlength="50"
-                                     counterTemplate="{0} characters remaining." autoResize="false"
-                                />
+                                     counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                 </tr>
                 <tr>
@@ -24,22 +24,14 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
                     </td>
                     <td id="checkBox" style = "#{appraisalRequest.purposeFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} ">
-                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewAppraisalB}">
-                            <!--<p:ajax update="appraisalDetailDlgForm"-->
-                            <!--listener="#{appraisalRequest.onSaveAppraisalDetailView()}"/>-->
-                        </h:selectBooleanCheckbox>
-                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" />
-                        <br/>
-                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeNewAppraisalB}">
-                            <!--<p:ajax update="appraisalDetailDlgForm"-->
-                            <!--listener="#{appraisalRequest.appraisalDetailViewMandate()}"/>-->
-                        </h:selectBooleanCheckbox>
-                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" />
-                        <br/>
-                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewBuildingB}" >
-                            <!--<p:ajax update="appraisalDetailDlgForm"-->
-                            <!--listener="#{appraisalRequest.appraisalDetailViewMandate()}"/>-->
-                        </h:selectBooleanCheckbox>
+                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewAppraisalB}"
+                                                 disabled="#{appraisalRequest.isDisabled('appraisal.purpose')}"/>
+                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}" /><br/>
+                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeNewAppraisalB}"
+                                                 disabled="#{appraisalRequest.isDisabled('appraisal.purpose')}"/>
+                        <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}" /><br/>
+                        <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailViewDialog.purposeReviewBuildingB}"
+                                                 disabled="#{appraisalRequest.isDisabled('appraisal.purpose')}"/>
                         <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}" />
                     </td>
                 </tr>
@@ -47,8 +39,8 @@
                     <td class="title" style="width: 200px;">
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
                     </td>
-                    <td style="mid-width: 250px;width: 250px;max-width: 250px;">
-                        <p:selectOneRadio id="characteristicRadio" value="#{appraisalRequest.appraisalDetailViewDialog.characteristic}" >
+                    <td style="mid-width: 250px; width: 250px; max-width: 250px;">
+                        <p:selectOneRadio id="characteristicRadio" value="#{appraisalRequest.appraisalDetailViewDialog.characteristic}" disabled="#{appraisalRequest.isDisabled('document.characteristic')}" >
                             <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
                             <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
                         </p:selectOneRadio>
@@ -59,10 +51,10 @@
                         <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.numberOfDocuments')}"/>
                     </td>
                     <td class="title" style="width: 200px;">
-                        <p:inputText id="numberOfDocuments"  styleClass="right"
-                                     onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
+                        <p:inputText id="numberOfDocuments" styleClass="right" style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
                                      value="#{appraisalRequest.appraisalDetailViewDialog.numberOfDocuments}"
-                                     style = "#{appraisalRequest.numberOfDocumentsFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "
+                                     disabled="#{appraisalRequest.isDisabled('document.numberOfDocument')}"
+                                     onkeypress="return onKeyPressNumber(event);" onkeydown="return onKeyDownNumber(event);"
                                      maxlength="3">
                             <p:ajax event="blur" update=":appraisalDetailDlgForm:numberOfDocuments"/>
                         </p:inputText>
@@ -71,14 +63,13 @@
                 </tr>
                 <tr>
                     <td class="center" colspan="2" style="margin-top: 20px;">
-                        <p:commandButton id="btnSaveAppraisalDetail"
-                                         value="#{msg.get('app.button.ok')}"
+                        <p:commandButton id="btnSaveAppraisalDetail" value="#{msg.get('app.button.ok')}"
+                                         disabled="#{appraisalRequest.isDisabled('appraisal.okButton')}"
                                          actionListener="#{appraisalRequest.onSaveAppraisalDetailView()}"
                                          process="@form"
-                                         update=":appraisalDetailDlgForm,:frmMain:appraisalDetailViewTable"
-                                         oncomplete="handleAppraisalDetailRequest(xhr, status, args)"/>
-
-                        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalDetailViewDlg.hide()" />
+                                         update=":appraisalDetailDlgForm, :frmMain:appraisalDetailViewTable"
+                                         oncomplete="handleDialogRequest(xhr, status, args, 'appraisalDetailViewDlg')"/>
+                        <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="PF('appraisalDetailViewDlg').hide()" />
                     </td>
                 </tr>
             </table>
