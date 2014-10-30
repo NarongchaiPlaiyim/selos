@@ -5,18 +5,20 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<p:panel id="collateralDlgPanel" styleClass="panel-dialog" style="font-size: 12px !important;">
+<p:panel id="collateralDlgPanel" styleClass="panel-dialog">
     <h:form id="collateralDlgForm">
-        <table class="content_form content_table_form">
+        <table class="content_form content_table_form" border="1">
             <tr>
-                <td class="title">
+                <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
                     <h:outputText value="#{decision.mandate('collateral.jobID')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" colspan="3">
+                <td class="left" style="width: 226px; min-width: 226px; max-width: 226px;">
                     <h:outputText value="#{decision.approveCollateralInfoView.jobID}"/>
                 </td>
+                <td style="width: 226px; min-width: 226px; max-width: 226px;"></td>
+                <td></td>
             </tr>
             <tr>
                 <td class="title">
@@ -36,9 +38,12 @@
                     <h:outputText value="#{decision.mandate('collateral.AADDecision')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" colspan="3">
-                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionLabel}"/>
+                <td class="left">
+                    <h:inputText value="#{decision.approveCollateralInfoView.aadDecisionLabel}"
+                                 readonly="true"
+                                 style="width: 210px; min-width: 210px; max-width: 210px;"/>
                 </td>
+                <td colspan="2"></td>
             </tr>
             <tr>
                 <td class="title">
@@ -46,18 +51,20 @@
                     <h:outputText value="#{decision.mandate('collateral.AADDecisionReason')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
-                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReason}"
-                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
+                <td class="left">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.aadDecisionReason}"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
+                                     readonly="true"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
                     <h:outputText value="#{decision.mandate('collateral.AADDecisionReasonDetail')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
-                    <h:outputText value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"
-                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
+                <td class="left">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.aadDecisionReasonDetail}"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
+                                     readonly="true"/>
                 </td>
             </tr>
             <tr>
@@ -67,8 +74,11 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left">
-                    <h:outputText value="#{decision.approveCollateralInfoView.usageLabel}"/>
+                    <p:inputText value="#{decision.approveCollateralInfoView.usageLabel}"
+                                 readonly="true"
+                                 style="width: 210px; min-width: 210px; max-width: 210px;"/>
                 </td>
+                <td colspan="2"></td>
             </tr>
             <tr>
                 <td class="title">
@@ -101,7 +111,8 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.approveCollateralInfoView.uwRemark}" rows="3" cols="100"
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.uwRemark}"
+                                     rows="3" style="width: 680px; min-width: 680px; max-width: 680px;"
                                      readonly="#{decision.isDisabled('collateral.UWRemark')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
@@ -113,18 +124,20 @@
                     <h:outputText value="#{decision.mandate('collateral.mortgageCondition')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
-                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageCondition}"
-                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
+                <td class="left">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.mortgageCondition}"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
+                                     readonly="true"/>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
                     <h:outputText value="#{decision.mandate('collateral.mortgageConditionDetail')}" styleClass="require-field"/>
                     <h:outputText value=" :"/>
                 </td>
-                <td class="left" style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;">
-                    <h:outputText value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"
-                                  style="width: 250px; min-width: 250px; max-width: 250px; word-wrap: break-word; word-break: break-all;"/>
+                <td class="left">
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.mortgageConditionDetail}"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
+                                     readonly="true"/>
                 </td>
             </tr>
             <tr>
@@ -221,7 +234,7 @@
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgPotentialColl"
                                          value="#{collHeadDetail.potentialCollateral.id}"
-                                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          required="#{not empty param[saveCollateralButton.clientId]}"
                                          disabled="#{decision.isDisabled('collateral.headcoll.potential')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -267,13 +280,13 @@
                     </td>
                     <td class="left">
                         <p:inputText id="dlgExistingCredit"
+                                     style="text-align: right"
                                      value="#{collHeadDetail.existingCredit}"
                                      maxlength="14"
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);"
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
-                                     style="width:200px;text-align: right"
                                      readonly="#{decision.isDisabled('collateral.headcoll.existingCredit')}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
@@ -304,7 +317,6 @@
                     </td>
                     <td class="left">
                         <p:inputText id="dlgCollLocation" value="#{collHeadDetail.collateralLocation}"
-                                     style="width: 400px;"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
                                      readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.collateralLocation')}">
                             <p:ajax event="blur" update="@this"/>
@@ -327,7 +339,7 @@
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
                                      required="#{not empty param[saveCollateralButton.clientId]}"
-                                     style="width:200px;text-align: right"
+                                     style="text-align: right"
                                      readonly="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.headcoll.appraisalValue')}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>

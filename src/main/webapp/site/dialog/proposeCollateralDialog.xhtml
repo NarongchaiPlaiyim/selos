@@ -9,7 +9,7 @@
 
 <p:panel id="collateralDlgPanel" styleClass="panel-dialog">
     <h:form id="collateralDlgForm">
-        <table class="content_form content_table_form" border="1">
+        <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
@@ -17,7 +17,7 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left" style="width: 226px; min-width: 226px; max-width: 226px;">
-                    <p:inputText id="jobID" style="width: 95%"
+                    <p:inputText id="jobID" style="width: 210px; min-width: 210px; max-width: 210px;"
                                  value="#{proposeLine.proposeCollateralInfoView.jobID}"
                                  onclick="this.select()"
                                  required="#{not empty param[retrieveButton.clientId]}"
@@ -78,7 +78,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoView.aadDecisionLabel}"
                                  readonly="#{proposeLine.isDisabled('collateral.AADDecision')}"
-                                 style="width: 95%"/>
+                                 style="width: 210px; min-width: 210px; max-width: 210px;"/>
                 </td>
                 <td colspan="2"></td>
             </tr>
@@ -91,7 +91,7 @@
                 </td>
                 <td class="left">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.aadDecisionReason}"
-                                     autoResize="false" rows="3" scrollHeight="50" style="width: 95%"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
                                      readonly="#{proposeLine.isDisabled('collateral.AADDecisionReason')}"/>
                 </td>
                 <td class="title">
@@ -101,7 +101,7 @@
                 </td>
                 <td class="left">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.aadDecisionReasonDetail}"
-                                     autoResize="false" rows="3" scrollHeight="50" style="width: 95%"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
                                      readonly="#{proposeLine.isDisabled('collateral.AADDecisionReasonDetail')}"/>
                 </td>
             </tr>
@@ -115,7 +115,7 @@
                 <td class="left">
                     <p:inputText value="#{proposeLine.proposeCollateralInfoView.usageLabel}"
                                  readonly="#{proposeLine.isDisabled('collateral.usage')}"
-                                 style="width: 95%"/>
+                                 style="width: 210px; min-width: 210px; max-width: 210px;"/>
                 </td>
                 <td colspan="2"></td>
             </tr>
@@ -128,7 +128,7 @@
                 </td>
                 <td class="left">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.mortgageCondition}"
-                                     autoResize="false" rows="3" scrollHeight="50" style="width: 95%"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
                                      readonly="#{proposeLine.isDisabled('collateral.mortgageCondition')}"/>
                 </td>
                 <td class="title">
@@ -138,7 +138,7 @@
                 </td>
                 <td class="left">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.mortgageConditionDetail}"
-                                     autoResize="false" rows="3" scrollHeight="50" style="width: 95%"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
                                      readonly="#{proposeLine.isDisabled('collateral.mortgageConditionDetail')}"/>
                 </td>
             </tr>
@@ -212,7 +212,7 @@
                 </td>
                 <td class="left" colspan="3">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.bdmComments}"
-                                     rows="3"
+                                     rows="3" style="width: 680px; min-width: 680px; max-width: 680px;"
                                      readonly="#{proposeLine.isDisabled('collateral.BDMComments')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
@@ -235,6 +235,7 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgPotentialColl"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          value="#{collHeadDetView.potentialCollateral.id}"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
                                          disabled="#{proposeLine.isDisabled('collateral.headcoll.potential')}">
@@ -256,9 +257,9 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgCollTypePercentLTV"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          value="#{collHeadDetView.tcgCollateralType.id}"
-                                         styleClass="largest"
-                                         size="1"
+                                         styleClass="largest" size="1"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
                                          disabled="#{proposeLine.isDisabled('collateral.headcoll.collTypePercentLTV')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -278,12 +279,12 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:inputText value="#{collHeadDetView.existingCredit}"
+                                     style="text-align: right; width: 210px; min-width: 210px; max-width: 210px;"
                                      maxlength="14"
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);"
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
-                                     style="text-align: right"
                                      readonly="#{proposeLine.isDisabled('collateral.headcoll.existingCredit')}}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
@@ -298,6 +299,7 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:inputText value="#{collHeadDetView.titleDeed}"
+                                     style="width: 210px; min-width: 210px; max-width: 210px;"
                                      required="#{not empty param[btnSaveCollateral.clientId]}"
                                      readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.headcoll.titleDeed')}">
                             <p:ajax event="blur" update="@this"/>
@@ -312,6 +314,7 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:inputText value="#{collHeadDetView.collateralLocation}"
+                                     style="width: 210px; min-width: 210px; max-width: 210px;"
                                      required="#{not empty param[btnSaveCollateral.clientId]}"
                                      readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.headcoll.collateralLocation')}">
                             <p:ajax event="blur" update="@this"/>
@@ -326,13 +329,13 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:inputText value="#{collHeadDetView.appraisalValue}"
+                                     style="text-align: right; width: 210px; min-width: 210px; max-width: 210px;"
                                      maxlength="14"
                                      onclick="this.select()"
                                      onkeydown="return onKeyDownMoney(event);"
                                      onkeypress="return onKeyPressMoney(event);"
                                      onfocus="removeComma(this)"
                                      required="#{not empty param[btnSaveCollateral.clientId]}"
-                                     style="text-align: right"
                                      readonly="#{proposeLine.proposeCollateralInfoView.coms or proposeLine.isDisabled('collateral.headcoll.appraisalValue')}">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                             <p:ajax event="blur" update="@this"/>
@@ -347,6 +350,7 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgHeadCollType"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          value="#{collHeadDetView.headCollType.id}"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
                                          disabled="#{proposeLine.proposeCollateralInfoView.coms or collHeadDetView.haveSubColl or proposeLine.isDisabled('collateral.headcoll.headCollType')}">
