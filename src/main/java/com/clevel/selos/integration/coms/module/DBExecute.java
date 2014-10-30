@@ -243,10 +243,10 @@ public class DBExecute implements Serializable {
 
             if(reasonCondNo!=null || reasonCondRemark!=null || condNoCond!=null || condRemark!=null){
                 collateralDecisionDetail = new CollateralDecisionDetail();
-                collateralDecisionDetail.setReasonCondNo(reasonCondNo);
-                collateralDecisionDetail.setReasonCondRemark(reasonCondRemark);
-                collateralDecisionDetail.setCondNo(condNoCond);
-                collateralDecisionDetail.setCondRemark(condRemark);
+                collateralDecisionDetail.setReasonCondNo(Util.getStringWithLength(reasonCondNo,1000));
+                collateralDecisionDetail.setReasonCondRemark(Util.getStringWithLength(reasonCondRemark,1000));
+                collateralDecisionDetail.setCondNo(Util.getStringWithLength(condNoCond,1000));
+                collateralDecisionDetail.setCondRemark(Util.getStringWithLength(condRemark,1000));
             }
 
             log.debug("collateralDecisionDetail result : {}",collateralDecisionDetail);

@@ -524,6 +524,18 @@ public class Util implements Serializable {
         return string;
     }
 
+    public static String getStringWithLength(String string, int len){
+        if(string==null){
+            return "";
+        } else {
+            if(string.length()>len){
+                return string.substring(0,len);
+            } else {
+                return string;
+            }
+        }
+    }
+
     public static String convertNullToZero(final String string){
         return string == null ? "0" : string;
     }

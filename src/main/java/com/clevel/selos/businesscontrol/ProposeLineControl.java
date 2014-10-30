@@ -353,6 +353,7 @@ public class ProposeLineControl extends BusinessControl {
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     Map<Long, ProposeFeeDetailView> newFeeDetailViewMap = new HashMap<Long, ProposeFeeDetailView>();
                     ProposeFeeDetailView proposeFeeDetailView;
+                    List<FeeDetailView> appFeeDetailView = new ArrayList<FeeDetailView>();
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
@@ -387,6 +388,8 @@ public class ProposeLineControl extends BusinessControl {
                                     }
                                 }
                             }
+                        } else if (feeDetailView.getFeeLevel() == FeeLevel.APP_LEVEL) {
+                            appFeeDetailView.add(feeDetailView);
                         }
                     }
 
@@ -413,6 +416,7 @@ public class ProposeLineControl extends BusinessControl {
 
                     proposeLineView.setProposeFeeDetailViewList(proposeFeeDetailViewList);
                     proposeLineView.setProposeFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
+                    proposeLineView.setProposeAppFeeDetailViewList(appFeeDetailView);
 
                     if (standardPricingResponse.getPricingInterest() != null && standardPricingResponse.getPricingInterest().size() > 0) {
                         for (PricingInterest pricingInterest : standardPricingResponse.getPricingInterest()) {
@@ -462,6 +466,7 @@ public class ProposeLineControl extends BusinessControl {
                 if (ActionResult.SUCCESS.equals(standardPricingResponse.getActionResult())) {
                     Map<Long, ProposeFeeDetailView> newFeeDetailViewMap = new HashMap<Long, ProposeFeeDetailView>();
                     ProposeFeeDetailView proposeFeeDetailView;
+                    List<FeeDetailView> appFeeDetailViewList = new ArrayList<FeeDetailView>();
                     for (PricingFee pricingFee : standardPricingResponse.getPricingFeeList()) {
                         FeeDetailView feeDetailView = feeTransform.transformToView(pricingFee);
                         if (feeDetailView.getFeeLevel() == FeeLevel.CREDIT_LEVEL) {
@@ -495,6 +500,8 @@ public class ProposeLineControl extends BusinessControl {
                                     }
                                 }
                             }
+                        } else if (feeDetailView.getFeeLevel() == FeeLevel.APP_LEVEL) {
+                            appFeeDetailViewList.add(feeDetailView);
                         }
                     }
 
@@ -521,6 +528,7 @@ public class ProposeLineControl extends BusinessControl {
 
                     decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
                     decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
+                    decisionView.setApproveAppFeeDetailViewList(appFeeDetailViewList);
 
                     Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
                     for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
@@ -2238,9 +2246,13 @@ public class ProposeLineControl extends BusinessControl {
             proposeLineDAO.persist(proposeLine);
 
             //Save Propose Fee Detail
-            List<ProposeFeeDetail> proposeFeeDetailList = proposeLineTransform.transformProposeFeeToModelList(proposeLine, proposeLineView.getProposeFeeDetailViewOriginalList(), proposeType);
+            List<ProposeFeeDetail> proposeFeeDetailList = proposeLineTransform.transformProposeFeeToModelList(workCase, proposeLineView.getProposeFeeDetailViewOriginalList(), proposeType);
             if(!Util.isNull(proposeFeeDetailList) && !Util.isZero(proposeFeeDetailList.size())) {
                 proposeFeeDetailDAO.persist(proposeFeeDetailList);
+            }
+            List<ProposeFeeDetail> proposeAppFeeDetailList = proposeLineTransform.transformFeeDetailToModelList(workCase, proposeLineView.getProposeAppFeeDetailViewList(), proposeType);
+            if(!Util.isNull(proposeAppFeeDetailList) && !Util.isZero(proposeAppFeeDetailList.size())) {
+                proposeFeeDetailDAO.persist(proposeAppFeeDetailList);
             }
 
             // ------------------------------------------ Collateral ------------------------------------------- //
