@@ -152,8 +152,8 @@ public class Isa implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         complete = true;
 
-        String oldData = user.toStringForAudit();
-        String newData = isaBusinessControl.getNewData(user.getId());
+        String oldData = "";
+        String newData = "";
         StringBuilder stringBuilder = new StringBuilder();
         try {
             if(!Util.isNull(isaManageUserView)){
@@ -166,9 +166,12 @@ public class Isa implements Serializable {
                         isaAuditor.audit(isaManageUserView.getId(), modeForButton.name(), isaManageUserView.toStringForAudit(),  ActionResult.SUCCESS, null, user, "", isaBusinessControl.getNewData(isaManageUserView.getId()));
                     } else if (isaBusinessControl.isExistIdAndActivityAndStatus(isaManageUserView.getId())){
                         log.debug("--Update user.");
+                        oldData = isaBusinessControl.getOldData(isaManageUserView.getId());
                         isaBusinessControl.editUserAfterDelete(isaManageUserView, user);
-                        String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to Edit").append(" By ").append(this.user.getId()).toString();
-                        isaAuditor.audit(id , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
+                        newData = isaBusinessControl.getNewData(isaManageUserView.getId());
+                        log.debug("---------oldData. {} ,newData. {}",oldData,newData);
+                        String actionDetail = stringBuilder.append("ID ").append(isaManageUserView.getId()).append(" change status to Edit").append(" By ").append(this.user.getId()).toString();
+                        isaAuditor.audit(isaManageUserView.getId() , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                         message = Result.Success.toString();
                     } else {
                         message = "User ID already exists";
@@ -176,9 +179,12 @@ public class Isa implements Serializable {
                     }
                 } else if(ModeForButton.EDIT == modeForButton) {
                     messageHeader = "Edit User.";
+                    oldData = isaBusinessControl.getOldData(isaManageUserView.getId());
                     isaBusinessControl.editUser(isaManageUserView, user);
-                    String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to Edit").append(" By ").append(this.user.getId()).toString();
-                    isaAuditor.audit(id , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
+                    newData = isaBusinessControl.getNewData(isaManageUserView.getId());
+                    log.debug("---------oldData. {} ,newData. {}",oldData,newData);
+                    String actionDetail = stringBuilder.append("ID ").append(isaManageUserView.getId()).append(" change status to Edit").append(" By ").append(this.user.getId()).toString();
+                    isaAuditor.audit(isaManageUserView.getId() , ModeForButton.EDIT.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                     message = Result.Success.toString();
                 }
                 context.execute("manageUserDlg.hide()");
@@ -243,10 +249,11 @@ public class Isa implements Serializable {
             messageHeader = "Delete User.";
             if (!Util.isNull(id)){
                 String oldData = isaBusinessControl.getOldData(id);
+                String userIdFromDelete = isaManageUserView.getId();
                 isaBusinessControl.deleteUserById(id);
                 String newData = isaBusinessControl.getNewData(id);
-                String actionDetail = stringBuilder.append("ID ").append(user.getId()).append(" change status to ").append(UserStatus.MARK_AS_DELETED).append(" By ").append(this.user.getId()).toString();
-                isaAuditor.audit(id , ModeForButton.DELETE.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
+                String actionDetail = stringBuilder.append("ID ").append(userIdFromDelete).append(" change status to ").append(UserStatus.MARK_AS_DELETED).append(" By ").append(this.user.getId()).toString();
+                isaAuditor.audit(userIdFromDelete , ModeForButton.DELETE.name(), actionDetail,  ActionResult.SUCCESS, null, this.user, oldData, newData);
                 message = Result.Success.toString();
                 log.debug("messageHeader [{}] message [{}]",messageHeader,message);
             }

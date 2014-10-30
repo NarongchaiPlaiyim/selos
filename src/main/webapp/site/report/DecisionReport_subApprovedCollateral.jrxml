@@ -91,9 +91,6 @@
 	<field name="proposeCollateralInfoSubReports" class="java.util.List">
 		<fieldDescription><![CDATA[proposeCollateralInfoSubReports]]></fieldDescription>
 	</field>
-	<field name="uwRemark" class="java.lang.String">
-		<fieldDescription><![CDATA[uwRemark]]></fieldDescription>
-	</field>
 	<detail>
 		<band height="40">
 			<frame>
@@ -252,14 +249,6 @@
 					</textElement>
 					<text><![CDATA[UW Remark :]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="5670a335-c0b8-4cd9-8b3e-f866aae670d0" x="117" y="13" width="396" height="14"/>
-					<textElement verticalAlignment="Top">
-						<font size="7" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-						<paragraph firstLineIndent="1" leftIndent="1" rightIndent="2" spacingBefore="1" spacingAfter="1"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{uwRemark}]]></textFieldExpression>
-				</textField>
 			</frame>
 		</band>
 		<band height="15">
