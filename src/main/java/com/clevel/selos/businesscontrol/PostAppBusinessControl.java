@@ -12,7 +12,9 @@ import java.util.Locale;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.model.ConfirmAccountType;
+import com.clevel.selos.model.db.working.*;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
@@ -20,17 +22,6 @@ import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.FeePaymentMethodDAO;
 import com.clevel.selos.dao.master.FeeTypeDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.dao.working.AgreementInfoDAO;
-import com.clevel.selos.dao.working.DisbursementDAO;
-import com.clevel.selos.dao.working.InsuranceInfoDAO;
-import com.clevel.selos.dao.working.MortgageInfoDAO;
-import com.clevel.selos.dao.working.OpenAccountDAO;
-import com.clevel.selos.dao.working.PerfectionReviewDAO;
-import com.clevel.selos.dao.working.PledgeInfoDAO;
-import com.clevel.selos.dao.working.ProposeFeeDetailDAO;
-import com.clevel.selos.dao.working.ReturnInfoDAO;
-import com.clevel.selos.dao.working.TCGInfoDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.COMSInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.FeeLevel;
@@ -40,17 +31,6 @@ import com.clevel.selos.model.db.master.Action;
 import com.clevel.selos.model.db.master.FeeType;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.AgreementInfo;
-import com.clevel.selos.model.db.working.InsuranceInfo;
-import com.clevel.selos.model.db.working.MortgageInfo;
-import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.OpenAccountPurpose;
-import com.clevel.selos.model.db.working.PerfectionReview;
-import com.clevel.selos.model.db.working.PledgeInfo;
-import com.clevel.selos.model.db.working.ProposeFeeDetail;
-import com.clevel.selos.model.db.working.ReturnInfo;
-import com.clevel.selos.model.db.working.TCGInfo;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.FeeCollectionDetailView;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.model.view.StepView;
@@ -118,6 +98,8 @@ public class PostAppBusinessControl extends BusinessControl {
 	private FeeTypeDAO feeTypeDAO;
 	@Inject
 	private InsuranceInfoDAO insuranceInfoDAO;
+    @Inject
+    ProposeCreditInfoDAO newCreditDetailDAO;
 	
 	
 	public void submitCA(long workCaseId, String queueName,String wobNumber,String remark, long stepId) throws Exception {
@@ -450,9 +432,19 @@ public class PostAppBusinessControl extends BusinessControl {
 		BigDecimal disbursementAmt = disbursementDAO.getTotalDisbursementAmount(workCase.getId());
 		if (disbursementAmt != null && disbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
 			disbursementRequired = "Y";
-		}	
-		
-		//TODO -	BasicConditionCheckRequired
+		}
+
+        List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findApprovedNewCreditDetail(workCase.getId());
+		for(ProposeCreditInfo proposeCreditInfo : newCreditDetailList){
+            if(proposeCreditInfo!=null && proposeCreditInfo.getId()>0){
+                if(proposeCreditInfo.getProductProgram()!=null && proposeCreditInfo.getProductProgram().getId()>0){
+                    if(proposeCreditInfo.getProductProgram().getBasicCond()==1){
+                        basicCheckRequired = "Y";
+                        break;
+                    }
+                }
+            }
+        }
 		
 		fields.put("DisbursementRequired", disbursementRequired);
 		fields.put("BasicConditionCheckRequired", basicCheckRequired);
