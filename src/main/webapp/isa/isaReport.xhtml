@@ -24,52 +24,40 @@
                         <div class="body_rpane">
                             <label class="subject">ISA Reports</label>
                             <table border="0">
-                                <tr>
-                                    <td style="width: 50px; min-width: 50px; max-width: 50px;" />
-                                    <td style="width: 200px; min-width: 200px; max-width: 300px;" />
-                                    <td style="width: 80px; min-width: 50px; max-width: 80px;" />
-                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
-                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
-                                    <td style="width: 220px; min-width: 220px; max-width: 220px;" />
-                                    <td style="width: 120px; min-width: 120px; max-width: 120px;" />
-
+                                <tr style="height: 20px; min-height: 20px; max-height: 40px">
+                                    <td class="title" colspan="5" style="width: 200px; min-width: 200px; max-width: 300px;">
+                                        <p:outputLabel value="#{msg.get('isareport.useractivity')}" />
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td class="title" colspan="2" >
-                                        <p:outputLabel value="รายงานสิทธิของกลุ่มผู้ใช้งาน : " />
+                                <tr style="height: 50px; min-height: 50px; max-height: 100px" class="top">
+                                    <td class="right" style="width: 50px; min-width: 50px; max-width: 100px">
+                                        <p:outputLabel value="#{msg.get('isareport.todate')}" />
                                     </td>
-                                    <td class="title" >
-                                        <p:outputLabel value="จากวันที่ : " />
-                                    </td>
-                                    <td>
+                                    <td class="left" style="width: 100px; min-width: 100px; max-width: 150px">
                                         <clv:BECalendar value="#{isaReport.dateFrom}"
-                                        id="dateOfFrom"
-                                        showOn="button"
-                                        pattern="dd/MM/yyyy"
-                                        yearRange="1950:2100"
-                                        mindate="01/01/1950"
-                                        navigator="true"
-                                        locale="th_TH"
-                                        showButtonPanel="true">
-                                        </clv:BECalendar>
-                                    </td>
-                                    <td class="title" >
-                                        <p:outputLabel value="ถึงวันที่ : " />
-                                    </td>
-                                    <td >
-                                        <clv:BECalendar value="#{isaReport.dateTo}"
-                                        id="dateOfTo"
-                                        showOn="button"
-                                        pattern="dd/MM/yyyy"
-                                        yearRange="1950:2100"
-                                        mindate="01/01/1950"
-                                        navigator="true"
-                                        locale="th_TH"
-                                        showButtonPanel="true">
+                                                        id="dateOfFrom"
+                                                        showOn="button"
+                                                        pattern="dd/MM/yyyy"
+                                                        yearRange="1950:2100"
+                                                        mindate="01/01/1950"
+                                                        navigator="true"
+                                                        locale="th_TH"
+                                                        showButtonPanel="true">
                                         </clv:BECalendar>
                                     </td>
                                     <td>
-                                        <p:commandButton value="ส่งออกรายงาน" styleClass="medium"
+                                        <p:outputLabel value="#{msg.get('isareport.fromdate')}" />
+                                        <clv:BECalendar value="#{isaReport.dateTo}"
+                                                        id="dateOfTo"
+                                                        showOn="button"
+                                                        pattern="dd/MM/yyyy"
+                                                        yearRange="1950:2100"
+                                                        mindate="01/01/1950"
+                                                        navigator="true"
+                                                        locale="th_TH"
+                                                        showButtonPanel="true">
+                                        </clv:BECalendar>
+                                        <p:commandButton value="#{msg.get('isareport.export')}" styleClass="medium"
                                                          actionListener="#{isaReport.onPrintActivity()}"
                                                          update=":msgBoxSystemMessagePanel, @form"
                                                          allowTypes="/(\.|\/)(csv)$/"
@@ -77,14 +65,45 @@
                                         </p:commandButton>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="title" colspan="2" >
-                                        <p:outputLabel value="รายงานข้อมูลผู้ใช้ : " />
+                                <tr style="height: 50px; min-height: 50px; max-height: 100px" class="top">
+
+                                <td class="title" style="width: 150px; min-width: 150px; max-width: 200px;">
+                                        <p:outputLabel value="#{msg.get('isareport.userprofile')}" />
                                     </td>
                                     <td>
-                                        <p:commandButton value="ส่งออกรายงาน"
+                                        <p:commandButton value="#{msg.get('isareport.export')}"
                                                          styleClass="medium"
                                                          actionListener="#{isaReport.onSubmitExportCSV()}"
+                                                         update=":msgBoxSystemMessagePanel, @form"
+                                                         allowTypes="/(\.|\/)(csv)$/"
+                                                         ajax="false">
+                                            <p:fileDownload value="#{isaReport.streamedContent}" />
+                                        </p:commandButton>
+                                    </td>
+                                </tr>
+                                <tr style="height: 20px; min-height: 20px; max-height: 40px">
+                                    <td class="title" colspan="5" >
+                                        <p:outputLabel value="#{msg.get('isareport.matrix')}" />
+                                    </td>
+                                </tr>
+                                <tr style="height: 50px; min-height: 50px; max-height: 100px" class="top">
+                                    <td class="right" style="width: 50px; min-width: 50px; max-width: 100px">
+                                        <p:outputLabel value="#{msg.get('isareport.role')}" />
+                                    </td>
+                                    <td>
+                                        <p:selectOneMenu value="#{isaReport.isaViewReport.role}"
+                                                         style="width: 190px; min-width: 190px; max-width: 190px;">
+                                            <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                                            <f:selectItems value="#{isaReport.userRoleList}"
+                                                           var="roleItem"
+                                                           itemLabel="#{roleItem.name}"
+                                                           itemValue="#{roleItem.id}"/>
+                                        </p:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:commandButton value="#{msg.get('isareport.export')}"
+                                                         styleClass="medium"
+                                                         actionListener="#{isaReport.onPrintMatrix()}"
                                                          update=":msgBoxSystemMessagePanel, @form"
                                                          allowTypes="/(\.|\/)(csv)$/"
                                                          ajax="false">

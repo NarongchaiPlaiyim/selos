@@ -91,6 +91,8 @@ public class DisbursementInfo implements Serializable {
 	private HashMap<Long, BigDecimal> totalDisburseTRAmount = new HashMap<Long, BigDecimal>();
 	private HashMap<Long, BigDecimal> totalDisburseBAAmount = new HashMap<Long, BigDecimal>();
 
+    private String messageBody;
+
 	@Inject
 	DisbursementControl disbursementControl;
 
@@ -106,6 +108,9 @@ public class DisbursementInfo implements Serializable {
 		_loadDropdown();
 		_loadData();
 		this.disbursementInfoView = disbursementControl.getDisbursementInfoView(workCaseId);
+        disbursementMcDeleteList = new ArrayList<Long>();
+        disbursementDepositDeleteList = new ArrayList<Long>();
+        disbursementBahtnetDeleteList = new ArrayList<Long>();
 		calculationSummaryTotalMc();
 		calculationSummaryTotalDeposit();
 		calculationSummaryTotalBahtnet();
@@ -225,6 +230,8 @@ public class DisbursementInfo implements Serializable {
 				if (disbursementDepositDetailView.getOpenAccountId() == ((Long) item.getValue())) {
 					log.debug("updateAccountName description: " + item.getDescription());
 					disbursementDepositDetailView.setAccountName(item.getDescription());
+                    disbursementDepositDetailView.setAccountNumber(item.getLabel());
+                    disbursementDepositDetailView.setOpenAccountId(((Long)item.getValue()).longValue());
 					break;
 				}
 			}
@@ -333,6 +340,7 @@ public class DisbursementInfo implements Serializable {
 				if (falseCount == 0) {
 					disbursementMcDetailView.setTotalAmount(totalAmount);
 					disbursementMcDetailView.setPayeeName(disbursementMcDetailView.getPayeeName());
+                    disbursementMcDetailView.setPayeeSubname(disbursementMcDetailView.getPayeeSubname());
 					this.disbursementInfoView.getDisburseMcList().add(disbursementMcDetailView);
 					// disbursementInfoView.setDisburseMcList(disbursementMcList);
 					complete = true;
@@ -374,6 +382,10 @@ public class DisbursementInfo implements Serializable {
 
 		calculationSummaryTotalMc();
 		calculationSummary();
+        if(!complete){
+            messageBody = "Disbursement amount should be less than or equal to Limit!!!";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
+        }
 		context.addCallbackParam("functionComplete", complete);
 	}
 
@@ -441,6 +453,10 @@ public class DisbursementInfo implements Serializable {
 
 			calculationSummaryTotalDeposit();
 			calculationSummary();
+            if(!complete){
+                messageBody = "Disbursement amount should be less than or equal to Limit!!!";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
+            }
 			context.addCallbackParam("functionComplete", complete);
 		}
 	}
@@ -511,6 +527,10 @@ public class DisbursementInfo implements Serializable {
 		}
 		calculationSummaryTotalBahtnet();
 		calculationSummary();
+        if(!complete){
+            messageBody = "Disbursement amount should be less than or equal to Limit!!!";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg2.show()");
+        }
 		context.addCallbackParam("functionComplete", complete);
 	}
 
@@ -761,4 +781,11 @@ public class DisbursementInfo implements Serializable {
 
 	}
 
+    public String getMessageBody() {
+        return messageBody;
+    }
+
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
+    }
 }

@@ -13,6 +13,9 @@ public class ExistingCreditTierDetailReport {
     private int tenor;
 
     public ExistingCreditTierDetailReport() {
+        this.installment = BigDecimal.ZERO;
+        this.finalBasePriceAndInterest = "-";
+        this.tenor = 0;
     }
 
     public BigDecimal getInstallment() {

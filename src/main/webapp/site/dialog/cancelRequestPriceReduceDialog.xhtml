@@ -10,10 +10,10 @@
             <td class="title right" style="min-width: 140px; width: 80px;">Cancel Reason :</td>
             <td>
                 <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
-                                 value="#{headerController.reasonId}"
+                                 value="#{headerController.cancelReasonId}"
                                  required="#{not empty param[btnCancelRequestPrice.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{headerController.cancelPriceReduceReasonId}"
+                    <f:selectItems value="#{headerController.reasonList}"
                                    var="reasonItem"
                                    itemLabel="#{reasonItem.code} - #{reasonItem.description}"
                                    itemValue="#{reasonItem.id}"/>
@@ -24,7 +24,7 @@
         <tr>
             <td class="title right top">Remark :</td>
             <td>
-                <p:inputTextarea value="#{headerController.cancelPriceReduceRemark}" autoResize="false" cols="35" rows="5"></p:inputTextarea>
+                <p:inputTextarea value="#{headerController.cancelRemark}" autoResize="false" cols="35" rows="5"></p:inputTextarea>
             </td>
         </tr>
         <tr>

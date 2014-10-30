@@ -243,7 +243,20 @@ public class MortgageSummaryControl extends BusinessControl {
     		mortgageSummaryTransform.updateMortgageSummary(model, view,user);
     		mortgageSummaryDAO.persist(model);
     	}
-    	
+
+        //calculate for first payment date
+        Calendar calendar = Calendar.getInstance();
+        if (agreementView.getLoanContractDate() != null){
+            calendar.setTime(agreementView.getLoanContractDate());
+            if ( calendar.get(Calendar.DAY_OF_MONTH) < 16 ){
+                calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH) );
+                agreementView.setFirstPaymentDate(calendar.getTime());
+            }else{
+                calendar.add(Calendar.MONTH, 1);
+                calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH) );
+                agreementView.setFirstPaymentDate(calendar.getTime());
+            }
+        }
     	if (agreementView.getId() <= 0) {
     		AgreementInfo model = agreementInfoTransform.creatAgreementInfo(agreementView, workCase,user);
     		agreementInfoDAO.save(model);

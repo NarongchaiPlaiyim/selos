@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.coms;
 
 import com.clevel.selos.dao.ext.coms.AgreementAppIndexDAO;
+import com.clevel.selos.dao.master.AADDecisionDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.exception.COMSInterfaceException;
@@ -16,21 +17,21 @@ import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.integration.coms.module.AddressTypeMapping;
 import com.clevel.selos.integration.coms.module.DBExecute;
 import com.clevel.selos.model.db.ext.coms.AgreementAppIndex;
+import com.clevel.selos.model.db.master.AADDecision;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class COMSService implements Serializable {
@@ -52,6 +53,22 @@ public class COMSService implements Serializable {
 
     @Inject
     UserDAO userDAO;
+
+    @Inject
+    AADDecisionDAO aadDecisionDAO;
+
+    @Inject
+    @Config(name = "interface.coms.label.district.th")
+    String districtLabel;
+    @Inject
+    @Config(name = "interface.coms.label.subdistrict.th")
+    String subDistrictLabel;
+    @Inject
+    @Config(name = "interface.coms.label.province.th")
+    String provinceLabel;
+    @Inject
+    @Config(name = "interface.coms.label.country.th")
+    String countryLabel;
 
     @Inject
     @ExceptionMessage
@@ -79,7 +96,7 @@ public class COMSService implements Serializable {
                     appraisalData.setAppraisalDate(collateralJobLevel.getCurApprDate());
                     appraisalData.setMATI(collateralJobLevel.getMATI());
                     appraisalData.setAadDecision(collateralJobLevel.getDecision());
-
+                    appraisalData.setUsages(collateralJobLevel.getUsages());
                     if(collateralJobLevel.getMATI()!=null && collateralJobLevel.getMATI().equalsIgnoreCase("Y")) {
                         isMATI = true;
                     } else {
@@ -102,8 +119,12 @@ public class COMSService implements Serializable {
                             HeadCollateralData headCollateralData = new HeadCollateralData();
                             headCollateralData.setCollId(headCollateral.getColId());
                             headCollateralData.setTitleDeed(headCollateral.getColNo());
-                            String location = "";
-                            if(headCollateral.getAddDistrict()!=null){
+                            String location = subDistrictLabel.concat(Util.getStringNotNullOrEmpty(headCollateral.getAddDistrict())).concat(SPACE)
+                                    .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getCity())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getCityExpand())).concat(SPACE)
+                                    .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(headCollateral.getProvName())).concat(SPACE).concat(Util.getStringNotNull(headCollateral.getProvExpand())).concat(SPACE)
+                                    .concat(countryLabel).concat(Util.getStringNotNull(headCollateral.getCountryNameThai()));
+
+                            /*if(headCollateral.getAddDistrict()!=null){
                                 location = location.concat(headCollateral.getAddDistrict()).concat(SPACE);
                             }
                             if(headCollateral.getCity()!=null){
@@ -120,7 +141,8 @@ public class COMSService implements Serializable {
                             }
                             if(headCollateral.getCountryNameThai()!=null){
                                 location = location.concat(headCollateral.getCountryNameThai());
-                            }
+                            }*/
+
                             headCollateralData.setCollateralLocation(location);
                             BigDecimal headAppraisalValue = BigDecimal.ZERO;
                             if(isMATI){
@@ -134,8 +156,10 @@ public class COMSService implements Serializable {
                             ////Get Sub Collateral
                             List<SubCollateralData> subCollateralDataList = new ArrayList<SubCollateralData>();
                             List<SubCollateral> subCollateralList = dbExecute.getSubCollateral(jobNo.trim(),headCollateral.getColId());
+                            Map<String,SubCollateralData> subCollateralDataMap = new HashMap<String, SubCollateralData>();
                             if(subCollateralList!=null && subCollateralList.size()>0){
                                 for(SubCollateral subCollateral: subCollateralList){
+                                    String typeOfUsage = "-";
                                     SubCollateralData subCollateralData = new SubCollateralData();
                                     subCollateralData.setCollId(subCollateral.getColId());
                                     subCollateralData.setHeadCollId(subCollateral.getHeadColId());
@@ -162,9 +186,8 @@ public class COMSService implements Serializable {
                                         subAppraisalValue = subCollateral.getcPrice();
                                     }
                                     subCollateralData.setAppraisalValue(subAppraisalValue);
-                                    //TODO: usage, typeOfUsage
 
-                                    HashMap<String,String> usageMap = new HashMap<String, String>();
+                                    //HashMap<String,String> usageMap = new HashMap<String, String>();
 
                                     //Get Address
                                     String address = "";
@@ -184,8 +207,10 @@ public class COMSService implements Serializable {
                                                 address = dbExecute.getAddressType4(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
                                                 break;
                                             case TYPE5: //Building
-                                                address = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
-                                                usageMap = dbExecute.getUsageForBuilding(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                Map<String,String> addrMap = new HashMap<String, String>();
+                                                addrMap = dbExecute.getAddressType5(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
+                                                address = addrMap.get("address");
+                                                typeOfUsage = addrMap.get("usageType");
                                                 break;
                                             case TYPE6:
                                                 address = dbExecute.getAddressType6(subCollateralData.getCollId(), subCollateralData.getHeadCollId());
@@ -213,16 +238,36 @@ public class COMSService implements Serializable {
                                         }
                                     }
                                     subCollateralData.setAddress(address);
-                                    subCollateralDataList.add(subCollateralData);
+                                    subCollateralData.setTypeOfUsage(typeOfUsage);
 
-                                    if(usageMap.containsKey("usages")){
+                                    if(subCollateralDataMap.containsKey(subCollateral.getColId())){
+                                        SubCollateralData subCollateralDataTmp = subCollateralDataMap.get(subCollateral.getColId());
+                                        String collateralOwnerStr = subCollateralDataTmp.getCollateralOwner();
+                                        if(collateralOwnerStr!=null && !collateralOwnerStr.trim().equalsIgnoreCase("")){
+                                            collateralOwnerStr = collateralOwnerStr.concat(", ").concat(subCollateralData.getCollateralOwner());
+                                        } else {
+                                            collateralOwnerStr = subCollateralData.getCollateralOwner();
+                                        }
+                                        subCollateralDataTmp.setCollateralOwner(collateralOwnerStr);
+                                        subCollateralDataMap.put(subCollateral.getColId(),subCollateralDataTmp);
+                                    } else {
+                                        subCollateralDataMap.put(subCollateral.getColId(),subCollateralData);
+                                    }
+
+                                    //subCollateralDataList.add(subCollateralData);
+
+                                    /*if(usageMap.containsKey("usages")){
                                         subCollateralData.setUsage(usageMap.get("usages"));
                                     }
 
                                     if(usageMap.containsKey("usageType")){
                                         subCollateralData.setTypeOfUsage(usageMap.get("usageType"));
-                                    }
+                                    }*/
                                 }
+                            }
+
+                            if(subCollateralDataMap!=null && subCollateralDataMap.size()>0){
+                                subCollateralDataList = new ArrayList<SubCollateralData>(subCollateralDataMap.values());
                             }
 
                             headCollateralData.setSubCollateralDataList(subCollateralDataList);

@@ -461,9 +461,11 @@ public class ReturnControl extends BusinessControl {
                 returnInfoView.setDateOfReturn(returnDate);
                 returnInfoView.setChallenge(0); //not selected
                 returnInfoView.setAcceptChallenge(0); //not selected
+
                 if(returnInfoView.getReturnCode()!=null && returnInfoView.getReturnCode().equalsIgnoreCase("RG001")){
                     hasRG001 = true;
                 }
+
                 ReturnInfo returnInfo = returnInfoTransform.transformToModel(returnInfoView, workCase, workCasePrescreen, user);
                 returnInfoList.add(returnInfo);
 
@@ -501,7 +503,7 @@ public class ReturnControl extends BusinessControl {
             }
 
             log.debug("execute bpm (dispatch)");
-            bpmExecutor.returnCase(queueName,wobNumber,remark,reason,ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+            bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
         }
     }
 

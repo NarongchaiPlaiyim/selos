@@ -9,10 +9,7 @@ import com.clevel.selos.model.db.master.BankAccountPurpose;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.ApproveDetailInformationTransform;
-import com.clevel.selos.transform.CreditDetailSimpleTransform;
-import com.clevel.selos.transform.OpenAccountTransform;
-import com.clevel.selos.transform.ProposeLineTransform;
+import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -59,6 +56,12 @@ public class ApproveDetailInformationControl extends BusinessControl {
 	@Inject
 	ApproveDetailInformationTransform approveDetailInformationTransform;
 
+    @Inject
+    private DecisionFollowConditionTransform decisionFollowConditionTransform;
+
+    @Inject
+    private DecisionFollowConditionDAO decisionFollowConditionDAO;
+
 	@Inject
 	public ApproveDetailInformationControl() {
 
@@ -84,6 +87,7 @@ public class ApproveDetailInformationControl extends BusinessControl {
 			approveDetailInformationView.setNewCreditDetailViewList(newCreditDetailViewList);
 			approveDetailInformationView.setTotalApprovedCredit(totalApprovedLimit);
 			approveDetailInformationView.setOpenAccountFullViewList(getOpenAccountViewList(workCaseId));
+            approveDetailInformationView.setDecisionFollowConditionViewList(decisionFollowConditionTransform.transformToView(decisionFollowConditionDAO.findByWorkCase(workCaseId)));
 		}
 		return approveDetailInformationView;
 	}

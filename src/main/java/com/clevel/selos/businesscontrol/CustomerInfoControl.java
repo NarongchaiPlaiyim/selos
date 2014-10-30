@@ -10,6 +10,7 @@ import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateRes
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.User;
@@ -481,7 +482,42 @@ public class CustomerInfoControl extends BusinessControl {
         log.info("getAllCustomerByWorkCase ::: workCaseId : {}", workCaseId);
 
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
-        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+        List<CustomerInfoView> cusViewList = customerTransform.transformToViewList(customerList);
+
+        List<CustomerInfoView> cusBorrower = new ArrayList<CustomerInfoView>();
+        List<CustomerInfoView> cusGuarantor = new ArrayList<CustomerInfoView>();
+        List<CustomerInfoView> cusRelated = new ArrayList<CustomerInfoView>();
+
+        for(CustomerInfoView customerInfoView : cusViewList) {
+            if(!Util.isNull(customerInfoView)) {
+                if (!Util.isNull(customerInfoView.getRelation())) {
+                    if (customerInfoView.getRelation().getId() == RelationValue.BORROWER.value()) {
+                        cusBorrower.add(customerInfoView);
+                    } else if (customerInfoView.getRelation().getId() == RelationValue.GUARANTOR.value()) {
+                        cusGuarantor.add(customerInfoView);
+                    } else if (customerInfoView.getRelation().getId() == RelationValue.DIRECTLY_RELATED.value() || customerInfoView.getRelation().getId() == RelationValue.INDIRECTLY_RELATED.value()) {
+                        cusRelated.add(customerInfoView);
+                    }
+                }
+            }
+        }
+
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        for(CustomerInfoView borrower : cusBorrower) {
+            if(!Util.isNull(borrower)) {
+                customerInfoViewList.add(borrower);
+            }
+        }
+        for(CustomerInfoView guarantor : cusGuarantor) {
+            if(!Util.isNull(guarantor)) {
+                customerInfoViewList.add(guarantor);
+            }
+        }
+        for(CustomerInfoView related : cusRelated) {
+            if(!Util.isNull(related)) {
+                customerInfoViewList.add(related);
+            }
+        }
 
         return customerInfoViewList;
     }

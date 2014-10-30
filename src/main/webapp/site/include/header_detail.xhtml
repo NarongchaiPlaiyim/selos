@@ -44,7 +44,7 @@
         <p:resetInput target=":frmMain:returnInfoMakerPanel"/>
     </p:commandButton>
     <!-- Check PreScreen (BRMS)-->
-    <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')}" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
+    <p:commandButton id="btnChkPreScreen" value="#{msg.get('app.header.button.checkPreScreen')} [ #{headerController.timesOfPreScreenCheck} ]" title="#{msg.get('app.header.button.checkPreScreen')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
                      disabled="#{not headerController.canCheckPreScreen}"
                      rendered="#{headerController.checkButton('Check Prescreen')}"
@@ -92,6 +92,7 @@
     <p:commandButton id="btnCloseSale" value="#{msg.get('app.header.button.closeSale')}" styleClass="blueButton"
                      title="#{msg.get('app.header.button.closeSale')}"
                      rendered="#{headerController.checkButton('Close Sales')}"
+                     process="@this"
                      onclick="PF('blockUI').show()"
                      actionListener="#{headerController.onOpenCloseSales()}"
                      oncomplete="blockUI.hide()"
@@ -126,7 +127,7 @@
 
     </p:commandButton>
     <!--Check Criteria (BRMS)-->
-    <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')}" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
+    <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')} [ #{headerController.timesOfCriteriaCheck} ]" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
                      rendered="#{headerController.checkButton('Check Criteria')}" process="@this"
                      actionListener="#{headerController.onCheckCriteria}"
@@ -454,6 +455,7 @@
                          rendered="#{headerController.checkButton('Request for Price Reduction')}"
                          onclick="PF('confirmRequestPriceReduction').show()"/>
             <p:confirmDialog header="Confirmation" message="Please click 'OK' to Request for Price Reduction" styleClass="left"
+                             closeOnEscape="false" closable="false"
                              icon="ui-icon-alert"
                              widgetVar="confirmRequestPriceReduction" global="false" showEffect="fade"
                              rendered="#{headerController.checkButton('Request for Price Reduction')}">
@@ -489,7 +491,7 @@
                                  oncomplete="PF('confirmPendingDecision').hide(); pendingDecisionOKBtn.enable(); pendingDecisionCancelBtn.enable()"
                                  onclick="pendingDecisionOKBtn.disable(); pendingDecisionCancelBtn.disable()"/>
                 <p:commandButton value="#{msg.get('app.button.cancel')}" type="button"
-                                 onclick="PF('confirmRequestPriceReduction').hide()"
+                                 onclick="PF('confirmPendingDecision').hide()"
                                  styleClass="ui-confirmdialog-no"
                                  widgetVar="pendingDecisionCancelBtn"/>
             </p:confirmDialog>
@@ -646,7 +648,7 @@
          rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}">
     <p:dialog id="submitAADCDialog" widgetVar="submitAADCDlg" header="Submit case to AAD Committee"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="260">
+              modal="true" width="550" closable="false">
         <ui:include src="/site/dialog/submitAADCDialog.xhtml"/>
     </p:dialog>
 </p:panel>
@@ -862,23 +864,23 @@
 </p:panel>
 
 <!-- Appraisal Parallel Request -->
-<p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
+<!--<p:panel id="reqApprPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDialog" widgetVar="reqApprDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="1210" height = "500" closable="false">
         <ui:include src="/site/dialog/reqApprDialog.xhtml"/>
     </p:dialog>
-</p:panel>
+</p:panel>-->
 
-<p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
+<!--<p:panel id="reqApprDetailPanel" styleClass="panel" rendered="#{headerController.checkButton('Request Appraisal') and not headerController.checkAccessStage('APPRAISAL')}">
     <p:dialog id="reqApprDetailDialog" widgetVar="reqApprDetailDlg" header="Appraisal Detail Information"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="500" height="200" closable="false">
         <ui:include src="/site/dialog/reqApprDetailDialog.xhtml"/>
     </p:dialog>
-</p:panel>
+</p:panel>-->
 
-<p:confirmDialog id="confirmDeleteAppraisalDetailViewDialog" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.delete.confirm.message')}"
+<!--<p:confirmDialog id="confirmDeleteAppraisalDetailViewDialog" header="#{msg.get('app.messageHeader.info')}" message="#{msg.get('dialog.delete.confirm.message')}"
                  showEffect="fade" hideEffect="fade" width="250"
                  severity="alert" widgetVar="confirmDeleteAppraisalDetailViewDlg">
     <div class="onRight">
@@ -886,7 +888,7 @@
                          action="#{headerController.onDeleteAppraisalDetailView}"/>
         <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="PF('confirmDeleteAppraisalDetailViewDlg').hide()"/>
     </div>
-</p:confirmDialog>
+</p:confirmDialog>-->
 <!-- End Appraisal Parallel Request -->
 
 <p:panel id="pendingDecisionPanel" styleClass="panel"
@@ -930,7 +932,7 @@
     <p:dialog id="reqAppr_BDMDialog" widgetVar="reqAppr_BDMDlg" header="Request Appraisal"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="430" height="240" closable="false">
-        <ui:include src="/site/dialog/submitReqApprDialog.xhtml"/>
+        <ui:include src="/site/dialog/submitReqApprCustAcceptDialog.xhtml"/>
     </p:dialog>
 </p:panel>
 

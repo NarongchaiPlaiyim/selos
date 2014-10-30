@@ -13,6 +13,8 @@ import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -29,6 +31,9 @@ public class CustomerTransform extends Transform {
     @Inject
     @SELOS
     Logger log;
+    @Inject
+    @NormalMessage
+    Message msg;
 
     @Inject
     private CustomerCSITransform customerCSITransform;
@@ -416,7 +421,7 @@ public class CustomerTransform extends Transform {
         //for show jurLv
         if(customer.getIsCommittee() == 1){
             Customer cusCommittee = customerDAO.findById(customer.getJuristicId());
-            if(customer.getReference() != null){
+            if(customer.getReference() != null && cusCommittee != null) {
                 customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
             }
         } else {
@@ -427,12 +432,12 @@ public class CustomerTransform extends Transform {
         if(customer.getIsSpouse() == 1){ // is spouse
             Customer mainCus = customerDAO.findMainCustomerBySpouseId(customer.getId());
             if(customer.getReference() != null && mainCus != null){
-                customerInfoView.setIndLv(customer.getReference().getDescription()+" of "+mainCus.getNameTh()+" "+mainCus.getLastNameTh());
+                customerInfoView.setIndLv(msg.get("app.custInfoSummary.indLv") + " " + mainCus.getNameTh() + " " + mainCus.getLastNameTh());
             }
             if(mainCus != null && mainCus.getIsCommittee() == 1){ // is customer from spouse is committee
-                Customer mainJur = customerDAO.findById(mainCus.getJuristicId());
-                if(mainCus.getReference() != null && mainJur != null){
-                    customerInfoView.setJurLv(mainCus.getReference().getDescription()+" of "+mainJur.getNameTh());
+                Customer cusCommittee = customerDAO.findById(mainCus.getJuristicId());
+                if(customer.getReference() != null && cusCommittee != null){
+                    customerInfoView.setJurLv(customer.getReference().getDescription()+" of "+cusCommittee.getNameTh());
                 }
             }
         } else {
@@ -1237,8 +1242,32 @@ public class CustomerTransform extends Transform {
     		if (address != null) {
     			int flag = address.getAddressTypeFlag();
     			addressView.setId(address.getId());
+                addressView.setAddressNo(address.getAddressNo());
+                addressView.setMoo(address.getMoo());
+                addressView.setBuilding(address.getBuilding());
+                addressView.setRoad(address.getRoad());
+                if (address.getProvince() != null) {
+                    addressView.setProvinceId(address.getProvince().getCode());
+                    addressView.setDisplayProvince(address.getProvince().getName());
+                }
+                if (address.getDistrict() != null) {
+                    addressView.setDistrictId(address.getDistrict().getId());
+                    addressView.setDisplayDistrict(address.getDistrict().getName());
+                }
+                if (address.getSubDistrict() != null) {
+                    addressView.setSubDistrictId(address.getSubDistrict().getCode());
+                    addressView.setDisplaySubDistrict(address.getSubDistrict().getName());
+                }
+                addressView.setPostalCode(address.getPostalCode());
+                if (address.getCountry() != null) {
+                    addressView.setCountryId(address.getCountry().getId());
+                    addressView.setDisplayCountry(address.getCountry().getName());
+                }
+                addressView.setPhoneNumber(address.getPhoneNumber());
+                addressView.setPhoneExt(address.getExtension());
+                addressView.setAddressFlag(flag);
     			
-    			if (index != 0 && flag != 3 && flag < index
+    			/*if (index != 0 && flag != 3 && flag < index
     					) { //dup data from address flag
     				CustomerInfoPostAddressView toClone = view.getAddresses().get(flag);
     				addressView.duplicateData(toClone);
@@ -1268,7 +1297,7 @@ public class CustomerTransform extends Transform {
 	    			addressView.setPhoneNumber(address.getPhoneNumber());
 	    			addressView.setPhoneExt(address.getExtension());
 	    			addressView.setAddressFlag(3);
-    			}
+    			}*/
     		} else {
     			addressView.setAddressFlag(0);
     			if (index != 0) {

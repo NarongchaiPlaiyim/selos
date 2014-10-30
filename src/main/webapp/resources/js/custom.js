@@ -619,12 +619,6 @@ function handleSubmitZMDialogRequest(xhr, status, args) {
     }
 }
 
-function handleSubmitUWDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        submitUWDlg.hide();
-    }
-}
-
 function handleAssignABDMDialogRequest(xhr, status, args) {
     if (args.functionComplete) {
         assignABDMDlg.hide();
@@ -793,12 +787,6 @@ function handleContactRecordRequest(xhr, status, args) {
     }
 }
 
-function handleAppraisalDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        appraisalDetailViewDlg.hide();
-    }
-}
-
 function handleRequestAppraisal(xhr, status, args) {
     if(args.functionComplete){
         reqApprDlg.hide();
@@ -814,12 +802,6 @@ function handleRequestAppraisalDetail(xhr, status, args) {
 function handleAppraisalContactDetailRequest(xhr, status, args) {
     if(args.functionComplete){
         contactRecordViewDlg.hide();
-    }
-}
-
-function handleCollateralDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        appraisalComsViewDlg.hide();
     }
 }
 
@@ -935,12 +917,6 @@ function handlePrintRerportDialogRequest(xhr, status, args) {
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
-    }
-}
-
-function handleSubmitAADCDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        submitAADCDlg.hide();
     }
 }
 

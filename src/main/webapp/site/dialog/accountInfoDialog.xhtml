@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
+<p:panel id="openAccountPanel" styleClass="panel-dialog">
 <h:form id="openAccountFrm">
 	<p:scrollPanel style="height:530px" styleClass="panel-dialog"
 	mode="native" 
@@ -247,7 +248,8 @@
 	                         value="#{msg.get('app.button.ok')}"
 	                         actionListener="#{accountInfo.onAddOpenAccount()}"
 	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
-	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
+                             onclick="PF('blockOpenAccount').show()"
+	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg'); blockOpenAccount.hide()"
 	                         styleClass="small"
 	                         disabled="#{accountInfo.isDialogDisable('okButton')}"
 	                         rendered="#{accountInfo.addDialog}"/>
@@ -256,7 +258,8 @@
 	                         value="#{msg.get('app.button.ok')}"
 	                         actionListener="#{accountInfo.onUpdateOpenAccount()}"
 	                         update=":frmMain:accountinfo_tbl,:openAccountFrm"
-	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg')"
+                             onclick="PF('blockOpenAccount').show()"
+	                         oncomplete="handleDialogRequest(xhr, status, args,'p_openAccountDlg'); blockOpenAccount.hide()"
 	                         styleClass="small"
 	                         disabled="#{accountInfo.isDialogDisable('okButton')}"
 	                         rendered="#{not accountInfo.addDialog}"/>
@@ -279,5 +282,10 @@
 	    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 	</p:blockUI>
 </h:form>
+</p:panel>
+<p:blockUI widgetVar="blockOpenAccount" block=":openAccountPanel">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 
 </ui:composition>

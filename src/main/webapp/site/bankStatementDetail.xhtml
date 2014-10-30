@@ -1225,8 +1225,7 @@
                                              actionListener="#{bankStatementDetail.onCancel()}"
                                              process="@form"
                                              update=":frmMain"
-                                             styleClass="smaller"
-                                             disabled="#{bankStatementDetail.isDisabled('cancelButton')}"/>
+                                             styleClass="smaller"/>
                         </td>
                     </tr>
                 </table>
@@ -1251,7 +1250,7 @@
     </p:panel>
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" closable="false"
                      severity="#{bankStatementDetail.severity}"
                      header="#{bankStatementDetail.messageHeader}" message="#{bankStatementDetail.message}">
         <p:commandButton value="OK"

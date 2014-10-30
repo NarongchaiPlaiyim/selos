@@ -17,11 +17,12 @@ public class ProposeCollateralInfoView implements Serializable {
     private String jobID;
     private Date appraisalDate;
     private int numberMonthsFromApprDate;
-    private String aadDecision;
+    private String aadDecision;             // for insert in DB ( Code for find Master )
+    private String aadDecisionLabel;        // for show on Screen
     private String aadDecisionReason;
     private String aadDecisionReasonDetail;
-    private String usage;
-    private String typeOfUsage;
+    private String usage;                   // for insert in DB ( Code for find Master )
+    private String usageLabel;              // for show on Screen
     private String uwRemark;
     private String mortgageCondition;
     private String mortgageConditionDetail;
@@ -48,7 +49,7 @@ public class ProposeCollateralInfoView implements Serializable {
         this.aadDecisionReason = "";
         this.aadDecisionReasonDetail = "";
         this.usage = "";
-        this.typeOfUsage = "";
+        this.usageLabel = "";
         this.uwRemark = "";
         this.mortgageCondition = "";
         this.mortgageConditionDetail = "";
@@ -103,6 +104,14 @@ public class ProposeCollateralInfoView implements Serializable {
         this.aadDecision = aadDecision;
     }
 
+    public String getAadDecisionLabel() {
+        return aadDecisionLabel;
+    }
+
+    public void setAadDecisionLabel(String aadDecisionLabel) {
+        this.aadDecisionLabel = aadDecisionLabel;
+    }
+
     public String getAadDecisionReason() {
         return aadDecisionReason;
     }
@@ -127,12 +136,12 @@ public class ProposeCollateralInfoView implements Serializable {
         this.usage = usage;
     }
 
-    public String getTypeOfUsage() {
-        return typeOfUsage;
+    public String getUsageLabel() {
+        return usageLabel;
     }
 
-    public void setTypeOfUsage(String typeOfUsage) {
-        this.typeOfUsage = typeOfUsage;
+    public void setUsageLabel(String usageLabel) {
+        this.usageLabel = usageLabel;
     }
 
     public DecisionType getUwDecision() {
@@ -232,10 +241,11 @@ public class ProposeCollateralInfoView implements Serializable {
                 .append("appraisalDate", appraisalDate)
                 .append("numberMonthsFromApprDate", numberMonthsFromApprDate)
                 .append("aadDecision", aadDecision)
+                .append("aadDecisionLabel", aadDecisionLabel)
                 .append("aadDecisionReason", aadDecisionReason)
                 .append("aadDecisionReasonDetail", aadDecisionReasonDetail)
                 .append("usage", usage)
-                .append("typeOfUsage", typeOfUsage)
+                .append("usageLabel", usageLabel)
                 .append("uwRemark", uwRemark)
                 .append("mortgageCondition", mortgageCondition)
                 .append("mortgageConditionDetail", mortgageConditionDetail)

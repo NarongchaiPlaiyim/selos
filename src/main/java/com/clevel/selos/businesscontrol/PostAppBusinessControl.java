@@ -12,6 +12,7 @@ import java.util.Locale;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.clevel.selos.model.ConfirmAccountType;
 import org.slf4j.Logger;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
@@ -291,6 +292,13 @@ public class PostAppBusinessControl extends BusinessControl {
 	private void _Before_3023_CreateCustProfile(WorkCase workCase, long actionId,HashMap<String, String> fields) {
 		log.debug("_Before_3023_CreateCustProfile");
 		String accOpenRequired = "N";
+        List<OpenAccount> models = openAccountDAO.findByWorkCaseId(workCase.getId());
+        for(OpenAccount openAccount : models){
+            if(openAccount.getConfirmOpenAccount()!=null && openAccount.getConfirmOpenAccount()==ConfirmAccountType.OPEN){
+                accOpenRequired = "Y";
+                break;
+            }
+        }
 		fields.put("AccOpenRequired", accOpenRequired);
 	}
 	private void _Before_3029_GenerateAgreement(WorkCase workCase, long actionId,HashMap<String,String> fields) {
@@ -326,7 +334,7 @@ public class PostAppBusinessControl extends BusinessControl {
 			if (detailList.isEmpty())
 				continue;
 			FeeCollectionDetailView firstView = detailList.get(0);
-			if (!firstView.isAgreementSign()) {
+			if (!firstView.isDebitFromCustomer()) {
 				continue;
 			}
 			for (int i=0;i<detailList.size();i++) {
@@ -460,15 +468,19 @@ public class PostAppBusinessControl extends BusinessControl {
 		//Step Insurance Premium Quote (3002) , Action Submit CA (1015)
 		BigDecimal amount;
 		InsuranceInfo info = insuranceInfoDAO.findInsuranceInfoByWorkCaseId(workCase.getId());
+        log.debug("_3002_InsurancePremiumQuote (info : {})",info);
 		if (info != null && info.getTotalPremiumAmount() != null) {
 			amount = info.getTotalPremiumAmount();
 		} else {
 			amount = BigDecimal.ZERO;
 		}
+        log.debug("_3002_InsurancePremiumQuote (amount : {})",amount);
 		FeeType type = feeTypeDAO.findByDescription("Insurance Premium");
+        log.debug("_3002_InsurancePremiumQuote (type : {})",type);
 		if (type == null)
 			return;
 		ProposeFeeDetail model = feeDetailDAO.findByType(workCase.getId(), type.getId());
+        log.debug("_3002_InsurancePremiumQuote (model : {})",model);
 		if (model == null) {
 			model = new ProposeFeeDetail();
 			model.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode("01"));
@@ -483,7 +495,7 @@ public class PostAppBusinessControl extends BusinessControl {
 		model.setDescription(null);
 		model.setProposeType(null);
 		model.setProposeCreditInfo(null);
-
+        log.debug("_3002_InsurancePremiumQuote (model : {})",model);
 		feeDetailDAO.save(model);
 	}
 	private void _3009_FixDataInDecision(WorkCase workCase,long actionId) {
@@ -614,8 +626,8 @@ public class PostAppBusinessControl extends BusinessControl {
 			model.setCreateBy(user);
 			model.setCreateDate(currDate);
 			model.setWorkCase(workCase);
-		} 
-		
+		}
+        model.setType(type);
 		model.setStatus(status);
 		model.setDate(currDate);
 		if (PerfectReviewStatus.COMPLETE.equals(status))

@@ -12,12 +12,14 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.master.UsagesView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.master.SpecialProgramTransform;
+import com.clevel.selos.transform.master.UsagesTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
@@ -84,6 +86,8 @@ public class ProposeLine extends BaseController {
     private CollateralTypeTransform collateralTypeTransform;
     @Inject
     private MortgageTypeTransform mortgageTypeTransform;
+    @Inject
+    private UsagesTransform usagesTransform;
 
     @Inject
     private CreditRequestTypeDAO creditRequestTypeDAO;
@@ -103,6 +107,8 @@ public class ProposeLine extends BaseController {
     private SubCollateralTypeDAO subCollateralTypeDAO;
     @Inject
     private MortgageTypeDAO mortgageTypeDAO;
+    @Inject
+    private UsagesDAO usagesDAO;
 
     @Inject
     private PotentialColToTCGColDAO potentialColToTCGColDAO;
@@ -179,6 +185,9 @@ public class ProposeLine extends BaseController {
     enum Mode {ADD, EDIT}
     private Mode mode;
     private Mode modeSubColl;
+
+    //UsagesList
+    private List<UsagesView> usagesViewList;
 
     public ProposeLine(){
     }
@@ -292,6 +301,9 @@ public class ProposeLine extends BaseController {
             collateralOwnerUwAllList = customerInfoControl.getCollateralOwnerUWByWorkCase(workCaseId);
             mortgageTypeViewList = mortgageTypeTransform.transformToView(mortgageTypeDAO.findAll());
             relateWithList = new ArrayList<ProposeCollateralInfoSubView>();
+
+            //UsagesList
+            usagesViewList = usagesTransform.transformToViewList(usagesDAO.findActiveAll());
         } else {
             log.debug("preRender ::: No session for case found. Redirect to Inbox");
             FacesUtil.redirect("/site/inbox.jsf");
@@ -552,7 +564,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onRetrieveAppraisalReportInfo() {
-        Map<String, Object> resultMapVal = proposeLineControl.onRetrieveAppraisalReport(proposeCollateralInfoView.getJobID(), user, proposeLineView.getProposeCollateralInfoViewList());
+        Map<String, Object> resultMapVal = proposeLineControl.onRetrieveAppraisalReport(proposeCollateralInfoView.getJobID(), user, proposeLineView.getProposeCollateralInfoViewList(), isModeEdit);
 
         headCollTypeViewList = collateralTypeTransform.transformToView(collateralTypeDAO.findAll());
 
@@ -1091,5 +1103,13 @@ public class ProposeLine extends BaseController {
 
     public void setRowHeadCollIndex(int rowHeadCollIndex) {
         this.rowHeadCollIndex = rowHeadCollIndex;
+    }
+
+    public List<UsagesView> getUsagesViewList() {
+        return usagesViewList;
+    }
+
+    public void setUsagesViewList(List<UsagesView> usagesViewList) {
+        this.usagesViewList = usagesViewList;
     }
 }

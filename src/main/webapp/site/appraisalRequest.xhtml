@@ -43,10 +43,10 @@
 <ui:include src="include/header_logo.xhtml" />
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<c:if test="#{headerController.stepId != 2032}">
+<c:if test="#{headerController.stepId != 2032 and headerController.stepId != 2007}">
     <ui:include src="include/header_detail_appraisal.xhtml" />
 </c:if>
-<c:if test="#{headerController.stepId == 2032}">
+<c:if test="#{headerController.stepId == 2032 or headerController.stepId == 2007}">
     <ui:include src="include/header_detail.xhtml" />
 </c:if>
 <!-- End Header Detail -->
@@ -90,9 +90,8 @@
     <td class="left" colspan="2">
         <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" styleClass="title" style="font-size: 15px"/>
         <p:spacer width="10" height="5"></p:spacer>
-        <p:commandButton id="btnAddAppraisalDetail"
-                         value="#{msg.get('app.button.add')}"
-                         styleClass="smaller"
+        <p:commandButton id="btnAddAppraisalDetail" value="#{msg.get('app.button.add')}" styleClass="smaller"
+                         disabled="#{appraisalRequest.isDisabled('addAppraisalDetailButton')}"
                          process="@this"
                          actionListener="#{appraisalRequest.onAddAppraisalDetailView()}"
                          update=":appraisalDetailDlgForm"
@@ -156,6 +155,7 @@
                 </p:commandButton>
 
                 <p:commandButton title="Remove" process="@this"
+                                 disabled="#{appraisalRequest.isDisabled('appraisal.deleteButton')}"
                                  icon="ui-icon-trash"
                                  oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
                     <f:setPropertyActionListener value="#{appraisalDetailViewItem}"
@@ -199,6 +199,7 @@
                 <td class="center">
                     <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName1}"
                                  required="#{not empty param[submitAppraisalRequsest.clientId] }"
+                                 readonly="#{appraisalRequest.isDisabled('contact.cusname1')}"
                                  onkeydown="return onKeyDownName(event);"
                                  onkeypress="return onKeyPressName(event);" maxlength="50"
                                  counterTemplate="{0} characters remaining." autoResize="false"/>
@@ -206,10 +207,8 @@
                 </td>
                 <td class="center">
                     <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo1}"
+                                 readonly="#{appraisalRequest.isDisabled('contact.contactNo1')}"
                                  required="#{not empty param[submitAppraisalRequsest.clientId] }"  />
-                    <!--onkeydown="return onKeyDownTelNo(event);"-->
-                    <!--onkeypress="return onKeyPressTelNo(event);" />-->
-                    <!--style = "#{appraisalRequest.contactFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''} "-->
                 </td>
             </tr>
             <tr>
@@ -218,14 +217,15 @@
                 </td>
                 <td class="center">
                     <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName2}"
+                                 readonly="#{appraisalRequest.isDisabled('contact.cusname2')}"
                                  onkeydown="return onKeyDownName(event);"
                                  onkeypress="return onKeyPressName(event);" maxlength="50"
                                  counterTemplate="{0} characters remaining." autoResize="false"/>
                 </td>
                 <td class="center">
-                    <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo2}" />
-                    <!--onkeydown="return onKeyDownTelNo(event);"-->
-                    <!--onkeypress="return onKeyPressTelNo(event);" />-->
+                    <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo2}"
+                                 readonly="#{appraisalRequest.isDisabled('contact.contactNo2')}"/>
+
                 </td>
             </tr>
             <tr>
@@ -234,14 +234,14 @@
                 </td>
                 <td class="center">
                     <p:inputText value="#{appraisalRequest.appraisalContactDetailView.customerName3}"
+                                 readonly="#{appraisalRequest.isDisabled('contact.cusname3')}"
                                  onkeydown="return onKeyDownName(event);"
                                  onkeypress="return onKeyPressName(event);" maxlength="50"
                                  counterTemplate="{0} characters remaining." autoResize="false"/>
                 </td>
                 <td class="center">
-                    <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"  />
-                    <!--onkeydown="return onKeyDownTelNo(event);"-->
-                    <!--onkeypress="return onKeyPressTelNo(event);" />-->
+                    <p:inputText value="#{appraisalRequest.appraisalContactDetailView.contactNo3}"
+                                 readonly="#{appraisalRequest.isDisabled('contact.contactNo2')}" />
                 </td>
             </tr>
         </table>
@@ -263,7 +263,7 @@
         <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
     </td>
     <td>
-        <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" readonly="true" />
+        <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" readonly="#{appraisalRequest.isDisabled('zoneLocation')}" />
     </td>
 </tr>
 <tr>
@@ -271,24 +271,22 @@
         <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
     </td>
     <td>
-        <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="90" maxlength="500"
+        <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}" rows="3" cols="90" maxlength="500"
+                         disabled="#{appraisalRequest.isDisabled('bdmRemark')}"
                          counterTemplate="{0} characters remaining." autoResize="false"/>
     </td>
 </tr>
 <tr></tr>
 <tr>
     <td class="center" colspan="2">
-        <p:commandButton id="btnSaveAppraisalRequsest"
+        <p:commandButton id="btnSaveAppraisalRequsest" value="#{msg.get('app.button.save')}" styleClass="medium"
                          binding = "#{submitAppraisalRequsest}"
-                         value="#{msg.get('app.button.save')}"
-                         styleClass="medium"
+                         disabled="#{appraisalRequest.isDisabled('saveButton')}"
                          process="@form"
                          action="#{appraisalRequest.onSaveAppraisalRequest()}"
                          update=":frmMain, :msgBoxSystemMessagePanel"/>
-
-        <p:commandButton value="#{msg.get('app.button.cancel')}"
-                         id="btnCancel"
-                         styleClass="medium"
+        <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}" styleClass="medium"
+                         disabled="#{appraisalRequest.isDisabled('cancelButton')}"
                          process=":frmMain"
                          action="#{appraisalRequest.onCancelAppraisalRequest()}"
                          update=":frmMain"/>
@@ -302,6 +300,8 @@
 </div>
 <div class="clear"></div>
 <!-- Start Footer -->
+<h:inputHidden id="pagename" value="mnu_appraisal"/>
+<h:inputHidden id="subpagename" value="submnuappraisalrequest"/>
 <ui:include src="include/footer.xhtml" />
 <!-- End Footer -->
 </div>

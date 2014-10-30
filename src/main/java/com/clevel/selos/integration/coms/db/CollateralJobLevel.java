@@ -11,6 +11,7 @@ public class CollateralJobLevel implements Serializable {
     private Date curApprDate; //2. CUR_APPR_DATE
     private String isMATI; //3. IS_MATI
     private String decision; //4. DECISION
+    private String usages;
 
     public String getJobNo() {
         return jobNo;
@@ -44,6 +45,14 @@ public class CollateralJobLevel implements Serializable {
         this.decision = decision;
     }
 
+    public String getUsages() {
+        return usages;
+    }
+
+    public void setUsages(String usages) {
+        this.usages = usages;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -51,6 +60,7 @@ public class CollateralJobLevel implements Serializable {
                 .append("curApprDate", curApprDate)
                 .append("isMATI", isMATI)
                 .append("decision", decision)
+                .append("usages", usages)
                 .toString();
     }
 }

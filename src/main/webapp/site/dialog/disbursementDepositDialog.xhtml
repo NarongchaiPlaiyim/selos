@@ -5,10 +5,11 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
         >
+    <p:panel id="disbursementDepositDlgPanel" styleClass="panel-dialog">
     <h:form id="disbursementDepositForm">
         <table id="content_form">
             <tr>
-                <td ><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountNumber')}"/></td>
+                <td class="title"><p:outputLabel for="accountNumber" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountNumber')}"/></td>
                 <td>
                 	<p:selectOneMenu id="accountNumber" value="#{disbursementInfo.disbursementDepositDetailView.openAccountId}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="-1"/>
@@ -19,13 +20,13 @@
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel for="accountName" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountName')}"/></td>
+                <td class="title"><p:outputLabel for="accountName" value="#{msg.get('app.disbursement.detail.deposit.dialog.accountName')}"/></td>
                 <td>
                     <p:inputText id="accountName" readonly="true" value="#{disbursementInfo.disbursementDepositDetailView.accountName}"/>
                 </td>
             </tr>
             <tr>
-                <td><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.deposit.dialog.creditType')}"/></td>
+                <td class="title"><p:outputLabel for="creditType" value="#{msg.get('app.disbursement.detail.deposit.dialog.creditType')}"/></td>
                 <td>
                     <p:dataTable id="creditType" value="#{disbursementInfo.disbursementDepositDetailView.disbursementCreditTypeView}" rowIndexVar="rowIndex" var="item">
                         <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.productProgram')}">
@@ -43,7 +44,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="#{msg.get('app.disbursement.detail.deposit.dialog.tb.disburseAmount')}">
-                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" >
+                            <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementDepBtn.clientId]}">
                             <f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -55,11 +56,13 @@
             </tr>
             <tr>
                 <td colspan="100%" style="text-align: center">
-                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                    <p:commandButton id="btnSaveDep" value="#{msg.get('app.button.save')}"
+                                     binding="#{saveDisbursementDepBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementDeposit}"
                                      styleClass="smaller"
-                                     update=":frmMain ,:disbursementDepositForm"
-                                     oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args)"/>
+                                     update=":frmMain ,:disbursementDepositForm, :msgBoxSystemMessagePanel2"
+                                     onclick="PF('blockDisbursementDep').show()"
+                                     oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args); blockDisbursementDep.hide()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="depositDisbursementDialog.hide()"
                                      update=":frmMain"/>
@@ -67,4 +70,9 @@
             </tr>
         </table>
     </h:form>
+    </p:panel>
+    <p:blockUI widgetVar="blockDisbursementDep" block=":disbursementDepositDlgPanel">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

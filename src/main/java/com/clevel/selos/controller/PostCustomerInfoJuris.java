@@ -96,9 +96,11 @@ public class PostCustomerInfoJuris  implements Serializable {
 		return canUpdateInfo;
 	}
 	public String getAddressFlagLabel(int index) {
-		if (index >= addressTypes.size())
+        log.debug("getAddressFlagLabel (index : {})",index);
+		if (index >= addressTypes.size()-1)
 			return message.get("app.custInfoJuri.content.button.other");
 		SelectItem type = addressTypes.get(index);
+        log.debug("getAddressFlagLabel (type.getLabel() : {}, type.getValue() : {})",type.getLabel(),type.getValue());
 		return type.getLabel();
 	}
 	public List<SelectItem> getTitles() {

@@ -5,6 +5,7 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
         xmlns:clv="http://clevel.com/ui">
+    <p:panel id="disbursementMcDlgPanel" styleClass="panel-dialog">
     <h:form id="disbursementMcForm">
         <table id="content_form">
             <tr>
@@ -64,7 +65,7 @@
                            </h:outputText>
                        </p:column>
                        <p:column headerText="#{msg.get('app.disbursement.detail.mc.dialog.tb.disburseAmount')}">
-                           <p:inputText value="#{item.disburseAmount}" style="border-color:blank;">
+                           <p:inputText value="#{item.disburseAmount}" style="border-color:blank;" required="#{not empty param[saveDisbursementMCBtn.clientId]}">
                            		<f:convertNumber pattern="#,##0"
                                                  minFractionDigits="2"
                                                  maxFractionDigits="2"
@@ -76,11 +77,13 @@
             </tr>
             <tr>
                 <td colspan="100%" style="text-align: center">
-                    <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                    <p:commandButton id="btnSaveMC" value="#{msg.get('app.button.save')}"
+                                     binding="#{saveDisbursementMCBtn}"
                                      actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
                                      styleClass="smaller"
-                                     update=":frmMain ,:disbursementMcForm"
-                                     oncomplete="handleDisbursementMcDialogRequest(xhr, status, args)"/>
+                                     update=":frmMain ,:disbursementMcForm, :msgBoxSystemMessagePanel2"
+                                     onclick="PF('blockDisbursementMc').show()"
+                                     oncomplete="handleDisbursementMcDialogRequest(xhr, status, args); blockDisbursementMc.hide()"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
                                      type="button" onclick="mcDisbursementDialog.hide()"
                                      update=":frmMain"/>
@@ -88,4 +91,9 @@
             </tr>
         </table>
     </h:form>
+    </p:panel>
+    <p:blockUI widgetVar="blockDisbursementMc" block=":disbursementMcDlgPanel">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

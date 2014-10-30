@@ -147,6 +147,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementMcDetailView.setIssuedBy(disbursementMC.getIssuedBy().getId());
 			disbursementMcDetailView.setIssuedDate(disbursementMC.getIssuedDate());
 			disbursementMcDetailView.setPayeeName(disbursementMC.getPayeeName().getCode());
+            disbursementMcDetailView.setPayeeSubname(disbursementMC.getPayeeRemark());
 			disbursementMcDetailView.setCrossType(disbursementMC.getCrossType().getId());
 
 			disbursementMcDetailView
@@ -184,14 +185,16 @@ public class DisbursementControl extends BusinessControl {
 		for (DisbursementTR disbursementTR : disbursementTRList) {
 			DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
 			depositBaDetailView.setId(disbursementTR.getId());
-			depositBaDetailView.setOpenAccountId(disbursementTR.getOpenAccount().getId());
-			depositBaDetailView.setAccountNumber(disbursementTR.getOpenAccount().getAccountNumber());
-			List<OpenAccountName> openAccountNameList = disbursementTR.getOpenAccount().getOpenAccountNameList();
-			String accountName = "";
-			for (OpenAccountName openAccountName : openAccountNameList) {
-				accountName += openAccountName.getCustomer().getNameEn() + ", ";
-			}
-			depositBaDetailView.setAccountName(accountName.substring(0, accountName.length() - 2));
+            if(disbursementTR.getOpenAccount()!=null){
+                depositBaDetailView.setOpenAccountId(disbursementTR.getOpenAccount().getId());
+                depositBaDetailView.setAccountNumber(disbursementTR.getOpenAccount().getAccountNumber());
+                List<OpenAccountName> openAccountNameList = disbursementTR.getOpenAccount().getOpenAccountNameList();
+                String accountName = "";
+                for (OpenAccountName openAccountName : openAccountNameList) {
+                    accountName += openAccountName.getCustomer().getNameEn() + ", ";
+                }
+                depositBaDetailView.setAccountName(accountName.substring(0, accountName.length() - 2));
+            }
 			depositBaDetailView.setDisbursementCreditTypeView(this.getDisbursementCreditView(disbursementTR, depositBaDetailView));
 			disbursementDepositBaDetailViewList.add(depositBaDetailView);
 		}
@@ -212,6 +215,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementCreditView.setProductProgram(disbursementTRCredit.getCreditDetail().getProductProgram().getName());
 			disbursementCreditView.setCreditFacility(disbursementTRCredit.getCreditDetail().getCreditType().getName());
 			disbursementCreditView.setDisburseAmount(disbursementTRCredit.getDisburseAmount());
+            disbursementCreditView.setLimitAmount(disbursementTRCredit.getCreditDetail().getLimit());
 			totalDisbursementAmount = totalDisbursementAmount.add(disbursementTRCredit.getDisburseAmount());
 			disbursementCreditViewList.add(disbursementCreditView);
 		}
@@ -228,6 +232,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementBahtnetDetailView.setBankCode(disbursementBahtnet.getBank().getCode());
 			disbursementBahtnetDetailView.setAccountNumber(disbursementBahtnet.getAccountNumber());
 			disbursementBahtnetDetailView.setBenefitName(disbursementBahtnet.getBeneficiaryName());
+            disbursementBahtnetDetailView.setBranchName(disbursementBahtnet.getBranchName());
 			disbursementBahtnetDetailView.setDisbursementCreditTypeView(this.getDisbursementCreditView(disbursementBahtnet,
 					disbursementBahtnetDetailView));
 			disbursementBahtnetDetailViewList.add(disbursementBahtnetDetailView);
@@ -248,6 +253,7 @@ public class DisbursementControl extends BusinessControl {
 			disbursementCreditView.setNewCreditDetailId(disbursementBahtnetCredit.getCreditDetail().getId());
 			disbursementCreditView.setProductProgram(disbursementBahtnetCredit.getCreditDetail().getProductProgram().getName());
 			disbursementCreditView.setCreditFacility(disbursementBahtnetCredit.getCreditDetail().getCreditType().getName());
+            disbursementCreditView.setLimitAmount(disbursementBahtnetCredit.getCreditDetail().getLimit());
 			disbursementCreditView.setDisburseAmount(disbursementBahtnetCredit.getDisburseAmount());
 			totalDisbursementAmount = totalDisbursementAmount.add(disbursementBahtnetCredit.getDisburseAmount());
 			disbursementCreditViewList.add(disbursementCreditView);
@@ -328,7 +334,7 @@ public class DisbursementControl extends BusinessControl {
 				disbursementTR.setDisbursement(disbursement);
 
 			}
-			//disbursementTR.setOpenAccount(openAccountDAO.findByAccountNumber(depositBaDetailView.getAccountNumber()));
+			disbursementTR.setOpenAccount(openAccountDAO.findById(depositBaDetailView.getOpenAccountId()));
 			disbursementTRDAO.persist(disbursementTR);
 			// Disbursement TR credit
 			for (DisbursementCreditTypeView disbursementCreditTypeView : depositBaDetailView.getDisbursementCreditTypeView()) {
@@ -392,25 +398,27 @@ public class DisbursementControl extends BusinessControl {
 	public List<DisbursementDepositBaDetailView> getBADisbursementView(long workCaseId) {
 		List<DisbursementDepositBaDetailView> disbursementDepositBaDetailViewList = new ArrayList<DisbursementDepositBaDetailView>();
 		BAPAInfo bapaInfo = bapaInfoDAO.findByWorkCase(workCaseId);
-		List<BAPAInfoCredit> bapaInfoCreditList = bapaInfoCreditDAO.findByBAPAInfo(bapaInfo.getId());
-		for (BAPAInfoCredit bapaInfoCredit : bapaInfoCreditList) {
-            ProposeCreditInfo newCreditDetail = bapaInfoCredit.getCreditDetail();
-			DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
+        if(bapaInfo!=null && bapaInfo.getId()>0){
+            List<BAPAInfoCredit> bapaInfoCreditList = bapaInfoCreditDAO.findByBAPAInfo(bapaInfo.getId());
+            for (BAPAInfoCredit bapaInfoCredit : bapaInfoCreditList) {
+                ProposeCreditInfo newCreditDetail = bapaInfoCredit.getCreditDetail();
+                DisbursementDepositBaDetailView depositBaDetailView = new DisbursementDepositBaDetailView();
 //			depositBaDetailView.setAccountName(newCreditDetail.getAccountName());
 //			depositBaDetailView.setAccountNumber(newCreditDetail.getAccountNumber());
-			depositBaDetailView.setTotalAmount(bapaInfoCredit.getExpenseAmount());
+                depositBaDetailView.setTotalAmount(bapaInfoCredit.getExpenseAmount());
 
-			List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
-			DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
-			disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
-			disbursementCreditView.setCreditType(newCreditDetail.getCreditType().getName());
-			disbursementCreditView.setObjective("คุ้มครองวงเงิน " + newCreditDetail.getCreditType().getName());
-			disbursementCreditViewList.add(disbursementCreditView);
+                List<DisbursementCreditTypeView> disbursementCreditViewList = new ArrayList<DisbursementCreditTypeView>();
+                DisbursementCreditTypeView disbursementCreditView = new DisbursementCreditTypeView();
+                disbursementCreditView.setProductProgram(newCreditDetail.getProductProgram().getName());
+                disbursementCreditView.setCreditType(newCreditDetail.getCreditType().getName());
+                disbursementCreditView.setObjective("?????????????? " + newCreditDetail.getCreditType().getName());
+                disbursementCreditViewList.add(disbursementCreditView);
 
-			depositBaDetailView.setDisbursementCreditTypeView(disbursementCreditViewList);
+                depositBaDetailView.setDisbursementCreditTypeView(disbursementCreditViewList);
 
-			disbursementDepositBaDetailViewList.add(depositBaDetailView);
-		}
+                disbursementDepositBaDetailViewList.add(depositBaDetailView);
+            }
+        }
 		return disbursementDepositBaDetailViewList;
 	}
 
@@ -438,9 +446,13 @@ public class DisbursementControl extends BusinessControl {
 		for (OpenAccount model : models) {
 			SelectItem item = new SelectItem();
 			for (OpenAccountPurpose openAccountPurpose : model.getOpenAccountPurposeList()){
-				if (openAccountPurpose.getAccountPurpose().getName().equals("โอนสินเชื่อเข้าบัญชี")){
+				if (openAccountPurpose.getAccountPurpose().getId()==4){
+                    String accountNumber = "";
+                    if(model.getAccountNumber()!=null){
+                        accountNumber = model.getAccountNumber();
+                    }
 					item.setValue(model.getId());
-					item.setLabel(model.getAccountNumber());
+					item.setLabel(accountNumber);
 					StringBuilder accountName = new StringBuilder();
 					for ( OpenAccountName openAccountName : model.getOpenAccountNameList()){
 						accountName.append(openAccountName.getCustomer().getNameEn());
@@ -448,10 +460,10 @@ public class DisbursementControl extends BusinessControl {
 					}
 					accountName.setLength(accountName.length() - 1);
 					item.setDescription(accountName.toString());
+                    rtnDatas.add(item);
 					break;
 				}
 			}
-			rtnDatas.add(item);
 		}
 		return rtnDatas;
 	}

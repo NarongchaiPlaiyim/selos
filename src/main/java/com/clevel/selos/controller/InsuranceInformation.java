@@ -142,7 +142,9 @@ public class InsuranceInformation implements Serializable {
 	public void addition() {
 		total = BigDecimal.ZERO;
 		for (InsuranceInfoView view : insuranceInfoViewList) {
-			total = total.add(view.getPremium());
+            if(view.getPremium()!=null){
+                total = total.add(view.getPremium());
+            }
 		}
 		if ( BigDecimal.ZERO.equals(total)){
 			if (infoSummaryView.getTotalPremiumAmount() != null && infoSummaryView.getTotalPremiumAmount().intValue() > 0){

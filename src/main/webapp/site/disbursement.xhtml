@@ -629,6 +629,20 @@
 			<ui:include src="dialog/disbursementBahtnetDialog.xhtml" />
 		</p:dialog>
 
+        <!--<p:dialog widgetVar='p_result_dialog_disbursement' id='result_dialog' modal='true'
+                  resizable='false' draggable="false" closeOnEscape="true"
+                  onShow='hideWindowsScrollBar()' onHide='showWindowsScrollBar()'
+                  appendTo="@(body)" header='ผลลัพธ์การทำงาน'
+                >
+            <p:panel styleClass="panel-dialog right">
+                <p:messages />
+                <p:commandButton
+                        type='button' onclick="p_result_dialog_disbursement.hide()"
+                        widgetVar="p_result_dialog_disbursement_btn"
+                        value="OK"/>
+            </p:panel>
+        </p:dialog>-->
+
 		<ui:include src="dialog/confirmDeleteDlg.xhtml">
 			<ui:param name="id" value="confirmDeleteDisbursementMcDialog" />
 			<ui:param name="name" value="confirmDeleteDisbursementMcDlg" />
@@ -666,6 +680,17 @@
 	                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
 	    </p:confirmDialog>
 	    </p:panel>
+
+        <p:panel id="msgBoxSystemMessagePanel2" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog2" widgetVar="msgBoxSystemMessageDlg2"
+                             header="#{msg.get('app.messageHeader.info')}" message="#{disbursementInfo.messageBody}"
+                             closable="false" closeOnEscape="false">
+                <p:commandButton value="#{msg.get('app.button.ok')}"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg2.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
 		<ui:include src="include/footer_outside_frmmain.xhtml" />
 	</h:body>
 

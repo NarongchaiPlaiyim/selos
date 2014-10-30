@@ -102,7 +102,7 @@ public class FeeCalculation implements Serializable {
 			stepId = Util.parseLong(session.getAttribute("stepId"), -1);
 		}
 		_loadFieldControl();
-		_loadInitData(true);
+		_loadInitData(false);
 	}
 	
 	public void preRender() {
@@ -157,9 +157,7 @@ public class FeeCalculation implements Serializable {
 		
 		summary = feeCalculationControl.getFeeSummary(workCaseId);
 		if (!ignoreRecalculate) {
-			if ("true".equals(FacesUtil.getParameter("force")) || summary.getId() <= 0) {
-				summary = feeCalculationControl.calculateFeeCollection( workCaseId);
-			}
+            summary = feeCalculationControl.calculateFeeCollection( workCaseId);
 		}
 		accounts = feeCalculationControl.getFeeCollectionAccounts(workCaseId);
 		

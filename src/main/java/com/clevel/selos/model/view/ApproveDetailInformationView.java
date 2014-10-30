@@ -14,7 +14,7 @@ public class ApproveDetailInformationView implements Serializable{
 
 	private long id;
 	private List<ProposeCreditInfoDetailView> newCreditDetailViewList;
-	private ProposeLineView newCreditFacilityView;
+    private List<DecisionFollowConditionView> decisionFollowConditionViewList;
 	private List<OpenAccountFullView> openAccountFullViewList;
 	
 	private BigDecimal totalApprovedCredit;
@@ -71,14 +71,6 @@ public class ApproveDetailInformationView implements Serializable{
         this.newCreditDetailViewList = newCreditDetailViewList;
     }
 
-    public ProposeLineView getNewCreditFacilityView() {
-        return newCreditFacilityView;
-    }
-
-    public void setNewCreditFacilityView(ProposeLineView newCreditFacilityView) {
-        this.newCreditFacilityView = newCreditFacilityView;
-    }
-
     public List<OpenAccountFullView> getOpenAccountFullViewList() {
         return openAccountFullViewList;
     }
@@ -117,5 +109,13 @@ public class ApproveDetailInformationView implements Serializable{
 
     public void setPayDate(int payDate) {
         this.payDate = payDate;
+    }
+
+    public List<DecisionFollowConditionView> getDecisionFollowConditionViewList() {
+        return decisionFollowConditionViewList;
+    }
+
+    public void setDecisionFollowConditionViewList(List<DecisionFollowConditionView> decisionFollowConditionViewList) {
+        this.decisionFollowConditionViewList = decisionFollowConditionViewList;
     }
 }

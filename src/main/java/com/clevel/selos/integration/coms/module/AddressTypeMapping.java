@@ -32,7 +32,7 @@ public class AddressTypeMapping implements Serializable {
             }
         }
 
-        if(OnlType.getValue(onlType) == OnlType.LAND) {
+        if(OnlType.getValue(onlType) == OnlType.BUILDING) {
             if((colType.equalsIgnoreCase("286004") || colType.equalsIgnoreCase("286010"))  && !subColType.equalsIgnoreCase("10")){
                 return AddressType.TYPE5;
             }

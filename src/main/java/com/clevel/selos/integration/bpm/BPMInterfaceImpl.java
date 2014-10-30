@@ -16,6 +16,7 @@ import com.clevel.selos.integration.bpm.model.OrderType;
 import com.clevel.selos.integration.bpm.service.InboxService;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.CaseRequestTypes;
+import com.clevel.selos.model.RequestTypes;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.security.encryption.EncryptionService;
@@ -140,16 +141,27 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
-    public boolean createParallelCase(String appNumber, String borrowerName, String productGroup, int requestType, String bdmUserName){
+    public boolean createParallelCase(String appNumber, String refAppNumber, String borrowerName, String productGroup, int requestType, String bdmUserName){
         boolean success = true;
         Date now = new Date();
         log.debug("CE URI: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
 
+        String requestTypeStr = "New";
+
         HashMap<String, String> caseParameter = new HashMap<String, String>();
         caseParameter.put("AppNumber", appNumber);
+        if(!Util.isEmpty(refAppNumber)){
+            caseParameter.put("RefAppNumber", refAppNumber);
+        }
         caseParameter.put("BorrowerName", borrowerName);
         caseParameter.put("ProductGroup", productGroup);
         caseParameter.put("RequestType", Integer.toString(requestType));
+        if(requestType == 2){
+            requestTypeStr = "Appeal";
+        }else if(requestType == 3){
+            requestTypeStr = "Resubmit";
+        }
+        caseParameter.put("RequestTypeStr", requestTypeStr);
         caseParameter.put("BDMUserName", bdmUserName);
 
         String linkKey = Util.getLinkKey(bpmUsername);

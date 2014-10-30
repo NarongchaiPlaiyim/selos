@@ -27,6 +27,9 @@ public class BorrowerRetailDecisionReport extends ReportModel{
     private BigDecimal pceLimit;
     private BigDecimal outstanding;
     private String path;
+    private BigDecimal installment;
+    private BigDecimal intFeePercent;
+    private BigDecimal tenor;
 
     private String account;
     private String code;
@@ -211,6 +214,30 @@ public class BorrowerRetailDecisionReport extends ReportModel{
         this.existingCreditTierDetailReports = existingCreditTierDetailReports;
     }
 
+    public BigDecimal getInstallment() {
+        return installment;
+    }
+
+    public void setInstallment(BigDecimal installment) {
+        this.installment = installment;
+    }
+
+    public BigDecimal getIntFeePercent() {
+        return intFeePercent;
+    }
+
+    public void setIntFeePercent(BigDecimal intFeePercent) {
+        this.intFeePercent = intFeePercent;
+    }
+
+    public BigDecimal getTenor() {
+        return tenor;
+    }
+
+    public void setTenor(BigDecimal tenor) {
+        this.tenor = tenor;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -229,6 +256,9 @@ public class BorrowerRetailDecisionReport extends ReportModel{
                 .append("pceLimit", pceLimit)
                 .append("outstanding", outstanding)
                 .append("path", path)
+                .append("installment", installment)
+                .append("intFeePercent", intFeePercent)
+                .append("tenor", tenor)
                 .append("account", account)
                 .append("code", code)
                 .append("existingCreditTierDetailViewList", existingCreditTierDetailViewList)

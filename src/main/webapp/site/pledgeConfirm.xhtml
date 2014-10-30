@@ -90,7 +90,7 @@
                         				<p:column style="width:200px" styleClass="center"
                         					headerText="#{msg.get('app.pledgeConfirm.table.confirm')}"
                         					>
-                        					<p:selectOneRadio value="#{pledge.confirmed}" 
+                        					<p:selectOneRadio value="#{pledge.confirmed}" disabled="#{pledgeConfirm.isDisabled('pledge.confirm')}"
                         						style="margin:0 auto">
 	                        					<f:selectItems value="#{enumGeneralControl.yesNoEnum}" var="radio"
 			                                       	itemLabel="#{msg.get(radio.msgKey)}" 
