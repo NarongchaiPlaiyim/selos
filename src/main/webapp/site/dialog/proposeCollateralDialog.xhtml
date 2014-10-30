@@ -9,7 +9,7 @@
 
 <p:panel id="collateralDlgPanel" styleClass="panel-dialog">
     <h:form id="collateralDlgForm">
-        <table class="content_form content_table_form" border="1">
+        <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
@@ -138,7 +138,7 @@
                 </td>
                 <td class="left">
                     <p:inputTextarea value="#{proposeLine.proposeCollateralInfoView.mortgageConditionDetail}"
-                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px; font-size: 8px;"
+                                     autoResize="false" rows="3" scrollHeight="50" style="width: 210px; min-width: 210px; max-width: 210px;"
                                      readonly="#{proposeLine.isDisabled('collateral.mortgageConditionDetail')}"/>
                 </td>
             </tr>
