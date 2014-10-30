@@ -67,8 +67,6 @@ public class HeaderController extends BaseController {
     WorkCaseDAO workCaseDAO;
 
     @Inject
-    private CheckMandateDocControl checkMandateDocControl;
-    @Inject
     private BRMSControl brmsControl;
     @Inject
     private UWRuleResultControl uwRuleResultControl;
@@ -194,9 +192,6 @@ public class HeaderController extends BaseController {
     private boolean contactFlag3;*/
 
     private HashMap<String, Integer> stepStatusMap;
-
-    //CheckMandate
-    private CheckMandateDocView checkMandateDocView;
 
     //Session variable
     private long workCaseId;
@@ -1808,163 +1803,6 @@ public class HeaderController extends BaseController {
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", complete);
     }
 
-    //**************** FUNCTION FOR CHECK MANDATE DOC ****************//
-    //Maker
-    public void onCheckMandateForMaker(){
-        log.debug("onCheckMandateForMaker ::: start...");
-        HttpSession session = FacesUtil.getSession(false);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        checkMandateDocView = null;
-        try{
-            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByMaker(workCasePreScreenId);
-            if(!Util.isNull(checkMandateDocView)){
-                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
-            } else {
-                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
-                checkMandateDocView = new CheckMandateDocView();
-                log.debug("-- CheckMandateDocView[New] created");
-            }
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : {}", e.getMessage());
-        }
-
-        log.debug("onCheckMandateForMaker ::: stop...");
-    }
-    //Checker
-    public void onCheckMandateForChecker(){
-        log.debug("onCheckMandateForChecker ::: start...");
-        HttpSession session = FacesUtil.getSession(false);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
-        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
-        String result = null;
-        checkMandateDocView = null;
-        try{
-            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByChecker(workCasePreScreenId);
-            if(!Util.isNull(checkMandateDocView)){
-                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
-            } else {
-                log.debug("-- Find by work case pre screen id = {} CheckMandateDocView is {} ", workCasePreScreenId, checkMandateDocView);
-                checkMandateDocView = new CheckMandateDocView();
-                log.debug("-- CheckMandateDocView[New] created");
-            }
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-            result = e.getMessage();
-        }
-        log.debug("onCheckMandateForChecker ::: stop...");
-    }
-    //Full App
-    public void onCheckMandateForFullApp(){
-        log.debug("onCheckMandateForFullApp ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForFullApp ::: stop...");
-    }
-    //AAD Admin
-    public void onCheckMandateForAADAdmin(){
-        log.debug("onCheckMandateForAADAdmin ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForFullApp ::: stop...");
-    }
-    //AAD Committee
-    public void onCheckMandateForAADCommittee(){
-        log.debug("onCheckMandateForAADCommittee ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForFullApp ::: stop...");
-    }
-    //ABDM
-    public void onCheckMandateForABDM(){
-        log.debug("onCheckMandateForABDM ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForFullApp ::: stop...");
-    }
-    //AAD Committee
-    public void onCheckMandateForStepCheckDoc(){
-        log.debug("onCheckMandateForStepCheckDoc ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForStepCheckDoc ::: stop...");
-    }
-    // ZONE
-    public void onCheckMandateForZONE(){
-        log.debug("onCheckMandateForZONE ::: start...");
-        try{
-            callFullApp();
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-        }
-        log.debug("onCheckMandateForFullApp ::: stop...");
-    }
-
-    private void callFullApp() throws Exception{
-        HttpSession session = FacesUtil.getSession(false);
-        workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
-        String result = null;
-        checkMandateDocView = null;
-        try{
-            //checkMandateDocView = checkMandateDocControl.getMandateDocViewByFullApp(workCaseId);
-            if(!Util.isNull(checkMandateDocView)){
-                log.debug("-- MandateDoc.id[{}]", checkMandateDocView.getId());
-            } else {
-                log.debug("-- Find by work case id = {} CheckMandateDocView is {}   ", workCaseId, checkMandateDocView);
-                checkMandateDocView = new CheckMandateDocView();
-                log.debug("-- CheckMandateDocView[New] created");
-            }
-            log.debug("stop...");
-        } catch (Exception e) {
-            log.error("-- Exception : ", e);
-            throw e;
-        }
-    }
-
-    public void onSaveCheckMandateDoc(){
-        log.debug("-- onSaveCheckMandateDoc().");
-        try {
-            if(!Util.isZero(workCaseId)){
-                //checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, workCaseId, 0);
-            } else {
-                //checkMandateDocControl.onSaveMandateDoc(checkMandateDocView, 0, workCasePreScreenId);
-            }
-            messageHeader = "Information";
-            message = "Success";
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        } catch (Exception ex){
-            log.error("Exception : {}", ex);
-            messageHeader = "Exception";
-            message = "Failed" + Util.getMessageException(ex);
-            RequestContext.getCurrentInstance().execute("msgBoxBaseMessageDlg.show()");
-        }
-    }
-
-    //**************** END FUNCTION FOR CHECK MANDATE DOC ***************//
-
     //*************** FUNCTION FOR RETURN INFO ********************//
     public void onOpenReturnInfoDialog(){
         log.debug("onOpenReturnInfoDialog ::: starting...");
@@ -3138,14 +2976,6 @@ public class HeaderController extends BaseController {
 
     public void setStageId(int stageId) {
         this.stageId = stageId;
-    }
-
-    public CheckMandateDocView getCheckMandateDocView() {
-        return checkMandateDocView;
-    }
-
-    public void setCheckMandateDocView(CheckMandateDocView checkMandateDocView) {
-        this.checkMandateDocView = checkMandateDocView;
     }
 
     public boolean isSubmitToGHM() {
