@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.PrescreenDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -9,6 +10,7 @@ import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
@@ -29,6 +31,10 @@ public class PrescreenTransform extends Transform {
 
     @Inject
     PrescreenDAO prescreenDAO;
+
+    @Inject
+    @SELOS
+    Logger log;
 
 
     public Prescreen transformToModel(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen, User user) {
@@ -175,6 +181,8 @@ public class PrescreenTransform extends Transform {
         Prescreen prescreen = null;
         if (prescreenResultView.getId() != 0) {
             prescreen = prescreenDAO.findById(prescreenResultView.getId());
+            log.debug("preScreenResultView.getGroupExposure() : {}", prescreenResultView.getGroupExposure());
+            log.debug("preScreenResultView.getGroupIncome() : {}", prescreenResultView.getGroupIncome());
             prescreen.setGroupExposure(prescreenResultView.getGroupExposure());
             prescreen.setGroupIncome(prescreenResultView.getGroupIncome());
             prescreen.setModifyBy(user);

@@ -866,9 +866,11 @@ public class PrescreenMaker extends BaseController {
                     spouse.reset();
                     borrowerInfo.setSpouse(spouse);
                 } else {
-                    spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
-                    onChangeSpouseRelation();
-                    spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
+                    if(Util.isTrue(borrowerInfo.getMaritalStatus().getSpouseFlag())) {
+                        spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                        onChangeSpouseRelation();
+                        spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
+                    }
                 }
             }
         }
