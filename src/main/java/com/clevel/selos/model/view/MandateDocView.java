@@ -24,11 +24,11 @@ public class MandateDocView implements Serializable {
     private boolean display;
     private List<MandateDocFileNameView> mandateDocFileNameViewList;
     private RadioValue completedFlag;
-    private List<Integer> selectedReasonList;
+    private List<String> selectedReasonList;
     private String remark;
 
     public MandateDocView(){
-        selectedReasonList = new ArrayList<Integer>();
+        selectedReasonList = new ArrayList<String>();
         customerInfoSimpleViewList = new ArrayList<CustomerInfoSimpleView>();
         mandateDocFileNameViewList = new ArrayList<MandateDocFileNameView>();
         brmsDescList = new ArrayList<String>();
@@ -122,11 +122,11 @@ public class MandateDocView implements Serializable {
         this.completedFlag = completedFlag;
     }
 
-    public List<Integer> getSelectedReasonList() {
+    public List<String> getSelectedReasonList() {
         return selectedReasonList;
     }
 
-    public void setSelectedReasonList(List<Integer> selectedReasonList) {
+    public void setSelectedReasonList(List<String> selectedReasonList) {
         this.selectedReasonList = selectedReasonList;
     }
 

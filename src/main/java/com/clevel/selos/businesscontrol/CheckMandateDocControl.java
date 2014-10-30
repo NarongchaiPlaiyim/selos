@@ -191,7 +191,8 @@ public class CheckMandateDocControl extends BusinessControl {
                     return checkMandateDocView;
                 }
 
-
+                checkMandateDocView.setMandatoryDocumentsMap(_mapDBWithBRMS(checkMandateDocView.getMandatoryDocumentsMap(), mandateDocResponseView.getMandateDocViewMap()));
+                checkMandateDocView.setOptionalDocumentsMap(_mapDBWithBRMS(checkMandateDocView.getOptionalDocumentsMap(), mandateDocResponseView.getOptionalDocViewMap()));
 
                 ecmDocTypeIDList = mandateDocResponseView.getEcmDocTypeIDList();
             } else {
@@ -272,9 +273,32 @@ public class CheckMandateDocControl extends BusinessControl {
         return checkMandateDocView;
     }
 
-    private CheckMandateDocView _mapDBWithBRMS(CheckMandateDocView checkMandateDocView, MandateDocResponseView mandateDocResponseView){
-        if(checkMandateDocView.getMandatoryDocumentsMap() != null && )
+    private Map<String, MandateDocView> _mapDBWithBRMS(Map<String, MandateDocView> mandateDocViewMap, Map<String, MandateDocView> brmsMandateViewMap){
+        Map<String, MandateDocView> _finalMandateViewMap = new ConcurrentHashMap<String, MandateDocView>();
+        if(mandateDocViewMap != null && mandateDocViewMap.size() > 0){
 
+            for(MandateDocView mandateDocView : mandateDocViewMap.values()){
+                MandateDocView brmsMandateDocView = brmsMandateViewMap.get(mandateDocView.getEcmDocTypeId());
+                if(brmsMandateDocView == null){
+                    continue;
+                }
+                mandateDocView.setCustomerInfoSimpleViewList(brmsMandateDocView.getCustomerInfoSimpleViewList());
+                mandateDocView.setDisplay(brmsMandateDocView.isDisplay());
+                mandateDocView.setDocLevel(brmsMandateDocView.getDocLevel());
+                mandateDocView.setNumberOfDoc(brmsMandateDocView.getNumberOfDoc());
+                _finalMandateViewMap.put(mandateDocView.getEcmDocTypeId(), mandateDocView);
+            }
+
+            for(MandateDocView brmsMandateDocView : brmsMandateViewMap.values()){
+                if(_finalMandateViewMap.get(brmsMandateDocView.getEcmDocTypeId()) == null){
+                    _finalMandateViewMap.put(brmsMandateDocView.getEcmDocTypeId(), brmsMandateDocView);
+                }
+            }
+            return _finalMandateViewMap;
+
+        } else {
+            return brmsMandateViewMap;
+        }
     }
 
     private CheckMandateDocView _mapECMDocumentToMandateDoc(List<ECMDetail> ecmDetailList, CheckMandateDocView checkMandateDocView, Map<String, ECMTypeName> ecmTypeNameMap){
