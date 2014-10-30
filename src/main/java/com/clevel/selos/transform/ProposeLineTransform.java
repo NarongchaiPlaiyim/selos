@@ -1996,6 +1996,9 @@ public class ProposeLineTransform extends Transform {
             decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
             decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
 
+            List<FeeDetailView> appFeeDetailView = transformFeeDetailToViewList(proposeFeeDetailList);
+            decisionView.setApproveAppFeeDetailViewList(appFeeDetailView);
+
             Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
                 if(proposeCreditInfoDetailView.getUwDecision() == DecisionType.APPROVED) {
