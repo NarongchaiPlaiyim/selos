@@ -29,6 +29,8 @@ public class ProductProgram implements Serializable {
     private int isExisting;
     @Column(name = "is_propose", columnDefinition="int default 0")
     private int isPropose;
+    @Column(name = "is_basic_cond", columnDefinition="int default 0")
+    private int isBasicCond;
 
     public ProductProgram() {
     }
@@ -95,6 +97,14 @@ public class ProductProgram implements Serializable {
         isPropose = propose;
     }
 
+    public int getBasicCond() {
+        return isBasicCond;
+    }
+
+    public void setBasicCond(int basicCond) {
+        isBasicCond = basicCond;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -106,6 +116,7 @@ public class ProductProgram implements Serializable {
                 append("ba", ba).
                 append("isExisting", isExisting).
                 append("isPropose", isPropose).
+                append("isBasicCond", isBasicCond).
                 toString();
     }
 }
