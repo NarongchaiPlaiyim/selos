@@ -86,6 +86,9 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setCaNo(basicInfo.getCaNumber());
                 appHeaderView.setRefinance(basicInfo.getRefinanceInValue() != null ? basicInfo.getRefinanceInValue().getName() : "");
                 appHeaderView.setRefinanceOut(basicInfo.getRefinanceOutValue() != null ? basicInfo.getRefinanceOutValue().getName() : "");
+                appHeaderView.setSubmitDate(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getUwSubmitDate()));
+                appHeaderView.setLastDecisionDate(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLastDecisionDate()));
+                appHeaderView.setLimitSetupExpireDate(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLimitSetupExpiryDate()));
             }
             appHeaderView.setAppNo(workCase.getAppNumber());
             appHeaderView.setAppRefNo(workCase.getRefAppNumber());
@@ -106,6 +109,7 @@ public class HeaderControl extends BusinessControl {
                 if(prescreen != null){
                     appHeaderView.setRefinance(prescreen.getRefinanceInValue() != null ? prescreen.getRefinanceInValue().getName() : "");
                     appHeaderView.setRefinanceOut(prescreen.getRefinanceOutValue() != null ? prescreen.getRefinanceOutValue().getName() : "");
+                    appHeaderView.setLastDecisionDate(DateTimeUtil.convertToStringDDMMYYYY(prescreen.getLastDecisionDate()));
                 }
                 appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
                 appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
@@ -168,6 +172,7 @@ public class HeaderControl extends BusinessControl {
             if (uwUser != null) {
                 appHeaderView.setUwName(uwUser.getUserName());
                 appHeaderView.setUwPhoneNumber(uwUser.getPhoneNumber());
+                appHeaderView.setUwPhoneExtNumber(uwUser.getPhoneExt());
                 appHeaderView.setUwTeamName(uwUser.getTeam().getTeam_name());
             }
         }

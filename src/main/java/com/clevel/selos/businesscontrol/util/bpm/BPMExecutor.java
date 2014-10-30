@@ -259,6 +259,41 @@ public class BPMExecutor implements Serializable {
         }
     }
 
+    public void submitForBDMReducePrice(String queueName, String wobNumber, String zmUserId, String rgmUserId, String ghUserId, String cssoUserId, String remark, String reason, String resultCode, String deviationCode, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            fields.put("ZMUserName", zmUserId);
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+
+            log.debug("dispatch case for [Submit BDM Reduce Price]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        } else {
+            throw new Exception(exceptionMessage.get("exception.submit.workitem.notfound"));
+        }
+    }
+
     public void submitForZM(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String remark, String reason, String zmDecisionFlag, String zmPricingRequestFlag, BigDecimal totalCommercial, BigDecimal totalRetail, String resultCode, String deviationCode, int requestType, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         log.debug("submitForZM ::: action : {}", action);
@@ -292,6 +327,43 @@ public class BPMExecutor implements Serializable {
             fields.put("RequestType", String.valueOf(requestType));
 
             log.debug("dispatch case for [submitForZM]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
+
+            execute(queueName, wobNumber, fields);
+        }else{
+            throw new Exception("Exception while Submit Case, Action [" + actionCode + "] could not found.");
+        }
+    }
+
+    public void submitForZMReducePrice(String queueName, String wobNumber, String rgmUserId, String ghUserId, String cssoUserId, String remark, String reason, String zmDecisionFlag, String zmPricingRequestFlag, String resultCode, String deviationCode, long actionCode) throws Exception{
+        Action action = actionDAO.findById(actionCode);
+        log.debug("submitForZMReducePrice ::: action : {}", action);
+        if(action != null){
+            HashMap<String, String> fields = new HashMap<String, String>();
+            fields.put("Action_Code", Long.toString(action.getId()));
+            fields.put("Action_Name", action.getDescription());
+            if(!Util.isEmpty(rgmUserId)){
+                fields.put("RGMUserName", rgmUserId);
+            }
+            if(!Util.isEmpty(ghUserId)){
+                fields.put("GHUserName", ghUserId);
+            }
+            if(!Util.isEmpty(cssoUserId)){
+                fields.put("CSSOUserName", cssoUserId);
+            }
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+            fields.put("ZMDecisionFlag", zmDecisionFlag);
+            fields.put("ZMPricingRequestFlag", zmPricingRequestFlag);
+            fields.put("ResultCode", resultCode);
+            if(!Util.isEmpty(deviationCode)){
+                fields.put("DeviationCode", deviationCode);
+            }
+
+            log.debug("dispatch case for [submitForZMReducePrice]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
             execute(queueName, wobNumber, fields);
         }else{
@@ -694,12 +766,20 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void submitForAADAdmin(String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String queueName, long actionCode, String wobNumber) throws Exception{
+    public void submitForAADAdmin( String queueName, String wobNumber, String aadCommitteeUserId, String appointmentDate, long appraisalLocationCode, String remark, String reason, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         if(action != null){
             HashMap<String, String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
+
+            if(!Util.isEmpty(remark)){
+                fields.put("Remarks", remark);
+            }
+            if(!Util.isEmpty(reason)){
+                fields.put("Reason", reason);
+            }
+
             fields.put("AppointmentDate", appointmentDate.toString());
             fields.put("AppraisalLocationCode", Long.toString(appraisalLocationCode));
             fields.put("AADCommitteeUserName", aadCommitteeUserId);

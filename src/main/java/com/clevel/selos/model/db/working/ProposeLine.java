@@ -5,6 +5,8 @@ import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -88,7 +90,7 @@ public class ProposeLine implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "credit_request_type")
-    private  CreditRequestType loanRequestType;
+    private CreditRequestType loanRequestType;
 
     @OneToOne
     @JoinColumn(name = "country_id")
@@ -218,6 +220,7 @@ public class ProposeLine implements Serializable {
     private User modifyBy;
 
     @OneToMany(mappedBy = "proposeLine")
+    //@OrderColumn(name = "id")
     private List<ProposeCreditInfo> proposeCreditInfoList;
 
     @OneToMany(mappedBy = "proposeLine")

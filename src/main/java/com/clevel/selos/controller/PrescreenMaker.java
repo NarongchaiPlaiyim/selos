@@ -15,6 +15,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -311,12 +312,17 @@ public class PrescreenMaker extends BaseController {
             onClearObject();
             onCheckButton();
 
-            String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
-            if(stepId == StepValue.PRESCREEN_INITIAL.value()){
-                loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);
-            }else{
-                loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_MAKER, ownerCaseUserId);
-            }
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            log.debug("workCasePrescreen Request Type : {}", workCasePrescreen.getRequestType().getId());
+
+            //if(workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
+                String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
+                if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
+                    loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);
+                } else {
+                    loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_MAKER, ownerCaseUserId);
+                }
+            //}
         } else {
             //--- Redirect to Inbox ---//
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
@@ -924,7 +930,7 @@ public class PrescreenMaker extends BaseController {
         }
         log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         enableCustomerForm = true;
-        if (Util.isTrue(borrowerInfo.getSearchFromRM())) {
+        if (Util.isTrue(borrowerInfo.getSearchFromRM()) || borrowerInfo.getNcbFlag() == 2) {
             enableDocumentType = false;
             enableCitizenId = false;
             enableTMBCustomerId = false;
@@ -2513,11 +2519,11 @@ public class PrescreenMaker extends BaseController {
 
         try {
             //TODO set Business Location
-            prescreenView.setBusinessLocation(null);
-            prescreenView.setBorrowingType(null);
-            prescreenView.setReferredExperience(null);
-            prescreenView.setRefinanceInBank(null);
-            prescreenView.setRefinanceOutBank(null);
+            //prescreenView.setBusinessLocation(null);
+            //prescreenView.setBorrowingType(null);
+            //prescreenView.setReferredExperience(null);
+            //prescreenView.setRefinanceInBank(null);
+            //prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
             String productGroupName = "";
             if (prescreenView.getProductGroup() != null) {

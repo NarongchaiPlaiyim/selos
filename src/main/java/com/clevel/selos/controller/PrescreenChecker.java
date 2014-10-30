@@ -263,7 +263,7 @@ public class PrescreenChecker implements Serializable {
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
-            ncbOutputView = prescreenBusinessControl.getNCBFromNCB(customerInfoViewList, userId, workCasePreScreenId);
+            ncbOutputView = prescreenBusinessControl.getNCBFromNCB(customerInfoViewList, workCasePreScreenId);
             RequestContext.getCurrentInstance().execute("commandSaveNCB()");
             log.debug("onCheckNCB ::: success...");
         } catch(Exception ex){

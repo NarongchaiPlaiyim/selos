@@ -138,6 +138,7 @@
                                 <td class="title">Expected submission date :</td>
                                 <td>
                                     <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    readonlyInput="true"
                                                     disabled="#{prescreenMaker.isDisabled('prescreen.expectedSubmissionDate')}"
                                                     yearRange="1950:2100"
                                                     defaultdate="#{prescreenMaker.currentDateDDMMYY}"
@@ -447,6 +448,7 @@
                                 <td>
                                     <clv:BECalendar id="registerDate" showOn="button" showButtonPanel="true" navigator="true"
                                                     disabled="#{prescreenMaker.isDisabled('prescreen.dateOfRegister')}"
+                                                    readonlyInput="true"
                                                     yearRange="1950:2100"
                                                     defaultdate="#{prescreenMaker.currentDateDDMMYY}"
                                                     mindate="01/01/1950"
@@ -469,6 +471,7 @@
                                             <td style="width: 190px;">
                                                 <clv:BECalendar id="referredDate" showOn="button" showButtonPanel="true" navigator="true"
                                                                 disabled="#{prescreenMaker.isDisabled('prescreen.referCompanyDate')}"
+                                                                readonlyInput="true"
                                                                 yearRange="1950:2100"
                                                                 mindate="01/01/1950"
                                                                 maxdate="#{prescreenMaker.currentDateDDMMYY}"
