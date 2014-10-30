@@ -13,6 +13,7 @@ import com.clevel.selos.integration.filenet.ce.connection.CESessionToken;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.MandateDocDetail;
 import com.clevel.selos.model.db.working.MandateDocSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -496,6 +497,43 @@ public class CheckMandateDocControl extends BusinessControl {
                 }
             }
         }
+    }
+
+    public boolean isMandateDocCompleted(long workCaseId, long workCasePrescreenId, long stepId){
+        log.debug("-- begin isMandateDocCompleted --");
+
+        StepView stepView = stepControl.getStepView(stepId);
+        User user = getCurrentUser();
+        Role role = user.getRole();
+
+        MandateDocSummary mandateDocSummary = null;
+        if(workCasePrescreenId > 0)
+            mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, role.getId());
+        else
+            mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, user.getRole().getId());
+
+        MandateDocAccessView mandateDocAccessView = mandateDocAccessControl.getMandateDocAccessView(stepId, role.getId());
+        if(mandateDocSummary == null){
+            if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType()) || AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
+                return false;
+            }
+        }
+        if(mandateDocSummary != null && mandateDocSummary.getMandateDocDetailList() != null){
+
+            for(MandateDocDetail mandateDocDetail : mandateDocSummary.getMandateDocDetailList()){
+                if(RadioValue.NO.equals(mandateDocDetail.getCompletedFlag())){
+                    if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType())){
+                        if(DocMandateType.MANDATE.equals(mandateDocDetail.getMandateType())){
+                            return false;
+                        }
+                    } else if(AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     private void getToken() {

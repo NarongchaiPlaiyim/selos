@@ -26,7 +26,6 @@ import com.clevel.selos.transform.AppraisalDetailTransform;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.rits.cloning.Cloner;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,6 +83,8 @@ public class HeaderController extends BaseController {
     UserSysParameterControl userSysParameterControl;
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
+    @Inject
+    private CheckMandateDocControl checkMandateDocControl;
 
     @Inject
     ReturnInfoTransform returnInfoTransform;
@@ -460,9 +461,11 @@ public class HeaderController extends BaseController {
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         if(workCasePreScreenId != 0){
             try{
+                mandateFieldMessageViewList = null;
                 int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
                 if (modifyFlag == 0) {
                     mandateFieldMessageViewList = null;
+
                     prescreenBusinessControl.updateCSIData(workCasePreScreenId);
                     UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
                     log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
@@ -533,36 +536,42 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         String tmpRemark = "";
         try{
-            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
-            log.debug("modifyFlag : {}", modifyFlag);
-            if (modifyFlag == 1) {
-                messageHeader = "Exception";
-                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else if (modifyFlag == 2) {
-                messageHeader = "Exception";
-                message = "Could not get data for PreScreen.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                if (submitOverSLA == 1) {
-                    if (reasonId != 0 && !Integer.toString(reasonId).equals("")) {
-                        complete = true;
-                        tmpRemark = slaRemark;
-                    }
+            if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
+
+                int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
+                log.debug("modifyFlag : {}", modifyFlag);
+                if (modifyFlag == 1) {
+                    messageHeader = "Exception";
+                    message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                } else if (modifyFlag == 2) {
+                    messageHeader = "Exception";
+                    message = "Could not get data for PreScreen.";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 } else {
-                    tmpRemark = submitRemark;
-                    complete = true;
+                    if (submitOverSLA == 1) {
+                        if (reasonId != 0 && !Integer.toString(reasonId).equals("")) {
+                            complete = true;
+                            tmpRemark = slaRemark;
+                        }
+                    } else {
+                        tmpRemark = submitRemark;
+                        complete = true;
+                    }
+                    log.debug("complete : {}", complete);
+                    if (complete) {
+                        log.debug("complete true : starting duplicate data ");
+                        prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
+                        returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
+                        log.debug("Duplicate data complete and submit complete.");
+                        messageHeader = "Information.";
+                        message = "Close Sales Complete. Click 'OK' return Inbox.";
+                        showMessageRedirect();
+                    }
                 }
-                log.debug("complete : {}", complete);
-                if (complete) {
-                    log.debug("complete true : starting duplicate data ");
-                    prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
-                    returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
-                    log.debug("Duplicate data complete and submit complete.");
-                    messageHeader = "Information.";
-                    message = "Close Sales Complete. Click 'OK' return Inbox.";
-                    showMessageRedirect();
-                }
+            } else {
+                messageHeader = "Warning.";
+                message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
             }
         }catch (Exception ex){
             messageHeader = "Exception.";
@@ -575,11 +584,16 @@ public class HeaderController extends BaseController {
 
     public void onOpenAssignCheckerDialog() {
         try {
-            bdmCheckerList = userDAO.findBDMChecker(user);
-            bdmCheckerId = "";
-            assignRemark = "";
-            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
-            RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
+            if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
+                bdmCheckerList = userDAO.findBDMChecker(user);
+                bdmCheckerId = "";
+                assignRemark = "";
+                log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+                RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
+            } else {
+                messageHeader = "Warning.";
+                message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
+            }
         } catch (Exception ex) {
             messageHeader = "Exception.";
             message = "Exception while open Assign to Checker dialog. Please try again.";
@@ -646,102 +660,107 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
         try{
-            if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
-                //Check for Request Pricing
-                requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
-                log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
+            if(checkMandateDocControl.isMandateDocCompleted(workCasePreScreenId, workCaseId, stepId)){
+                if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
+                    //Check for Request Pricing
+                    requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
+                    log.debug("onOpenSubmitFullApplication ::: requestPricing : {}", requestPricing);
 
-                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-                if(submitOverSLA == 1){
-                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
-                }
+                    submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                    if(submitOverSLA == 1){
+                        slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                    }
 
-                if(!checkStepABDM()){
-                    if(requestPricing){
-                        //Check for Pricing DOA Level
-                        pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                        log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
-                        if(pricingDOALevel != 0) {
-                            zmEndorseUserId = "";
-                            zmUserId = "";
-                            rgmUserId = "";
-                            ghmUserId = "";
-                            cssoUserId = "";
+                    if(!checkStepABDM()){
+                        if(requestPricing){
+                            //Check for Pricing DOA Level
+                            pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                            log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                            if(pricingDOALevel != 0) {
+                                zmEndorseUserId = "";
+                                zmUserId = "";
+                                rgmUserId = "";
+                                ghmUserId = "";
+                                cssoUserId = "";
 
-                            zmEndorseRemark = "";
-                            submitRemark = "";
-                            slaRemark = "";
+                                zmEndorseRemark = "";
+                                submitRemark = "";
+                                slaRemark = "";
 
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                            isSubmitToGHM = false;
-                            isSubmitToCSSO = false;
-
-                            //TO Get all owner of case
-                            getUserOwnerBU();
-
-                            log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
-                            if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
-                            //if(stepId <= StepValue.FULLAPP_BDM.value()) {
-                                zmUserList = fullApplicationControl.getUserList(user);
-                                log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                            }
-
-                            //TO Disabled DDL DOA Lower than RGM
-                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                                isSubmitToZM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than GH
-                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
-                            //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than CSSO
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                                isSubmitToGHM = false;
-                            }
-                            //TO All ( End of Pricing DOA )
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                                 isSubmitToGHM = false;
                                 isSubmitToCSSO = false;
+
+                                //TO Get all owner of case
+                                getUserOwnerBU();
+
+                                log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
+                                if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
+                                //if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                                    zmUserList = fullApplicationControl.getUserList(user);
+                                    log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                                }
+
+                                //TO Disabled DDL DOA Lower than RGM
+                                if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    isSubmitToZM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than GH
+                                if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
+                                //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than CSSO
+                                if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                }
+                                //TO All ( End of Pricing DOA )
+                                if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                    isSubmitToCSSO = false;
+                                }
+                                RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                            } else {
+                                messageHeader = msg.get("app.messageHeader.exception");
+                                message = msg.get("app.message.dialog.doapricing.notfound");
+                                showMessageBox();
+                            }
+                        } else {
+                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                isSubmitToZM = false;
+                            }else {
+                                isSubmitToZM = true;
+                                zmUserList = fullApplicationControl.getUserList(user);
+                                log.debug("onOpenSubmitZM ::: No pricing request");
                             }
                             RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
-                        } else {
-                            messageHeader = msg.get("app.messageHeader.exception");
-                            message = msg.get("app.message.dialog.doapricing.notfound");
-                            showMessageBox();
                         }
-                    } else {
-                        if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            isSubmitToZM = false;
-                        }else {
-                            isSubmitToZM = true;
-                            zmUserList = fullApplicationControl.getUserList(user);
-                            log.debug("onOpenSubmitZM ::: No pricing request");
-                        }
+                    }else{
+                        isSubmitForBDM = true;
+                        isSubmitToZM = false;
+                        isSubmitToRGM = false;
+                        isSubmitToGHM = false;
+                        isSubmitToCSSO = false;
                         RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
                     }
-                }else{
-                    isSubmitForBDM = true;
-                    isSubmitToZM = false;
-                    isSubmitToRGM = false;
-                    isSubmitToGHM = false;
-                    isSubmitToCSSO = false;
-                    RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                } else {
+                    //----Case is updated please check criteria before submit----
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "CA information is updated, please Check Criteria before submit.";
+                    showMessageBox();
                 }
             } else {
-                //----Case is updated please check criteria before submit----
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "CA information is updated, please Check Criteria before submit.";
-                showMessageBox();
+                messageHeader = "Warning.";
+                message = "Cannot " + ActionCode.SUBMIT_CA.getActionName() + ". Some Mandate Document are incompleted.";
             }
         }catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
@@ -1138,42 +1157,46 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         try {
             boolean checkForCheckCriteria = false;
-
-            if(checkButton("Check Criteria")){
-                if(fullApplicationControl.checkCaseUpdate(workCaseId)){
-                    checkForCheckCriteria = true;
-                }
-            }
-
-            if (!checkForCheckCriteria) {
-                submitRemark = "";
-                slaReasonId = 0;
-                submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
-                if (submitOverSLA == 1) {
-                    slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
-                }
-
-                checkSubmitRole();
-                log.debug("isSubmitForUW : {}, isSubmitForUW2 : {}, isSubmitForBDM : {}", isSubmitForUW, isSubmitForUW2, isSubmitForBDM);
-
-                if(isSubmitForUW){
-                    //Get drop down DOA Level
-                    selectedUW2User = "";
-                    selectedDOALevel = 0;
-
-                    isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
-                    authorizationDOAList = new ArrayList<AuthorizationDOA>();
-                    if(!isUWRejected){
-                        authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+            if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
+                if(checkButton("Check Criteria")){
+                    if(fullApplicationControl.checkCaseUpdate(workCaseId)){
+                        checkForCheckCriteria = true;
                     }
-                    log.debug("authorizationDOAList : {}", authorizationDOAList.size());
                 }
-                RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
-            }else{
-                //----Case is updated please check criteria before submit----
-                messageHeader = msg.get("app.messageHeader.exception");
-                message = "CA information is updated, please Check Criteria before submit.";
-                showMessageBox();
+
+                if (!checkForCheckCriteria) {
+                    submitRemark = "";
+                    slaReasonId = 0;
+                    submitOverSLA = slaStatus.equalsIgnoreCase("R") ? 1 : 0;
+                    if (submitOverSLA == 1) {
+                        slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
+                    }
+
+                    checkSubmitRole();
+                    log.debug("isSubmitForUW : {}, isSubmitForUW2 : {}, isSubmitForBDM : {}", isSubmitForUW, isSubmitForUW2, isSubmitForBDM);
+
+                    if(isSubmitForUW){
+                        //Get drop down DOA Level
+                        selectedUW2User = "";
+                        selectedDOALevel = 0;
+
+                        isUWRejected = fullApplicationControl.checkUWDecision(workCaseId);
+                        authorizationDOAList = new ArrayList<AuthorizationDOA>();
+                        if(!isUWRejected){
+                            authorizationDOAList = fullApplicationControl.getAuthorizationDOALevelList(workCaseId);
+                        }
+                        log.debug("authorizationDOAList : {}", authorizationDOAList.size());
+                    }
+                    RequestContext.getCurrentInstance().execute("submitUWDlg.show()");
+                }else{
+                    //----Case is updated please check criteria before submit----
+                    messageHeader = msg.get("app.messageHeader.exception");
+                    message = "CA information is updated, please Check Criteria before submit.";
+                    showMessageBox();
+                }
+            } else {
+                messageHeader = "Warning.";
+                message = "Cannot " + ActionCode.SUBMIT_CA.getActionName() + ". Some Mandate Document are incompleted.";
             }
         }catch(Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
@@ -1587,7 +1610,7 @@ public class HeaderController extends BaseController {
             return  false;
         } else {
             //check if have return not accept
-            List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+            List<ReturnInfoView> returnInfoViewsNoAccept = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId, stepId);
             if(returnInfoViewsNoAccept!=null && returnInfoViewsNoAccept.size()>0){
                 return false;
             } else {
@@ -1809,7 +1832,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId,stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1825,7 +1848,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId,stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1841,7 +1864,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId,stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1857,7 +1880,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId, stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1873,7 +1896,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId, stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();
@@ -1889,7 +1912,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //get from not accept List and from CheckMandateDoc
-        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId);
+        returnInfoViewList = returnControl.getReturnInfoViewListFromMandateDocAndNoAccept(workCaseId,workCasePreScreenId,stepId);
 
         //set return code master
         //returnReason = returnControl.getReturnReasonList();

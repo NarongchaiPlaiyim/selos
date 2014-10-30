@@ -4,20 +4,15 @@ import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.StepDAO;
-import com.clevel.selos.dao.working.MandateDocDetailDAO;
-import com.clevel.selos.dao.working.ReturnInfoDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionCode;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.MandateDocDetail;
-import com.clevel.selos.model.db.working.ReturnInfo;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ReturnInfoView;
 import com.clevel.selos.transform.ReturnInfoTransform;
 import com.clevel.selos.transform.StepTransform;
@@ -54,7 +49,7 @@ public class ReturnControl extends BusinessControl {
     @Inject
     StepDAO stepDAO;
     @Inject
-    MandateDocDetailDAO mandateDocDetailDAO;
+    MandateDocSummaryDAO mandateDocSummaryDAO;
 
     @Inject
     BPMExecutor bpmExecutor;
@@ -115,25 +110,31 @@ public class ReturnControl extends BusinessControl {
         return returnInfoViews;
     }
 
-    public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId, long workCasePrescreenId){
+    public List<ReturnInfoView> getReturnInfoViewListFromMandateDocAndNoAccept(long workCaseId, long workCasePrescreenId, long stepId){
         List<ReturnInfoView> returnInfoViews = new ArrayList<ReturnInfoView>();
-        List<MandateDocDetail> mandateDocList;
         User user = getCurrentUser();
         Map<String, ReturnInfoView> returnInfoViewMap = new HashMap<String, ReturnInfoView>();
         if((workCaseId!=0 || workCasePrescreenId!=0) && user!=null){
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
+            MandateDocSummary mandateDocSummary = null;
             if(workCaseId!=0) {
-                mandateDocList = mandateDocDetailDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCaseIdForStepRole(workCaseId, stepId, user.getRole().getId());
+
+                //mandateDocList = mandateDocDetailDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             } else {
-                mandateDocList = mandateDocDetailDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
+                //mandateDocList = mandateDocDetailDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
+                mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreenId, stepId, user.getRole().getId());
+
                 returnInfoList = returnInfoDAO.findByNotAcceptListPreScreen(workCasePrescreenId);
             }
 
-            if(mandateDocList!=null && mandateDocList.size()>0){
-                for(MandateDocDetail mandateDoc: mandateDocList){
-                    ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
-                    returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
+            if(mandateDocSummary != null && mandateDocSummary.getMandateDocDetailList() != null){
+                for(MandateDocDetail mandateDoc: mandateDocSummary.getMandateDocDetailList()){
+                    if(RadioValue.NO.equals(mandateDoc.getCompletedFlag())){
+                        ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
+                        returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
+                    }
                 }
             }
 

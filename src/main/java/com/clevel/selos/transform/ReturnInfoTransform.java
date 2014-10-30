@@ -7,10 +7,7 @@ import com.clevel.selos.dao.working.ReturnInfoDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.MandateDocDetail;
-import com.clevel.selos.model.db.working.ReturnInfo;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.ReturnInfoView;
 import org.slf4j.Logger;
 
@@ -221,7 +218,19 @@ public class ReturnInfoTransform extends Transform {
 
         returnInfoView.setReturnCode(mandateDoc.getEcmDocType());
         returnInfoView.setDescription(mandateDoc.getEcmDocTypeDesc());
-        //returnInfoView.setReason(mandateDoc.getReason());
+
+        StringBuilder reasonBuilder = new StringBuilder();
+        if(mandateDoc.getMandateDocReasonList() != null){
+            int count = 0;
+            for(MandateDocReason mandateDocReason : mandateDoc.getMandateDocReasonList()){
+                reasonBuilder.append(mandateDocReason.getReason().getDescription());
+                count++;
+                if(count < mandateDoc.getMandateDocReasonList().size()){
+                    reasonBuilder.append(", ");
+                }
+            }
+        }
+        returnInfoView.setReason(reasonBuilder.toString());
         returnInfoView.setReasonDetail(mandateDoc.getRemark());
         returnInfoView.setCanEdit(false);
 

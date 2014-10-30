@@ -126,6 +126,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     WorkCaseOwnerDAO workCaseOwnerDAO;
     @Inject
     ReasonDAO reasonDAO;
+    @Inject
+    MandateDocSummaryDAO mandateDocSummaryDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -149,6 +151,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     private UWRuleResultControl uwRuleResultControl;
     @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private MandateFieldValidationControl mandateFieldValidationControl;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -1785,5 +1789,24 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         return timesOfPreScreenCheck;
+    }
+
+    public MandateFieldValidationResult validatePreSubmit(long workCasePrescreenId, long actionId){
+        log.debug("-- begin validateOnSubmit --");
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        mandateFieldValidationControl.loadMandateField(workCasePrescreen.getStep().getId(), actionId);
+        log.info("-- load Action Validation");
+        User user = getCurrentUser();
+
+        MandateDocSummary mandateDocSummary = mandateDocSummaryDAO.findByWorkCasePrescreenIdForStepRole(workCasePrescreen.getId(), workCasePrescreen.getStep().getId(), user.getRole().getId());
+        if(mandateDocSummary != null && mandateDocSummary.getMandateDocDetailList() != null){
+            for(MandateDocDetail mandateDocDetail : mandateDocSummary.getMandateDocDetailList()){
+                if(DocMandateType.MANDATE.equals(mandateDocDetail.getMandateType()))
+                    mandateFieldValidationControl.validate(mandateDocSummary, MandateDocSummary.class.getName());
+            }
+        }
+
+        MandateFieldValidationResult mandateFieldValidationResult = mandateFieldValidationControl.getMandateFieldValidationResult();
+        return mandateFieldValidationResult;
     }
 }

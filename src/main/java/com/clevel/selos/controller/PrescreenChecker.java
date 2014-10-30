@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.CheckMandateDocControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.ReasonDAO;
@@ -70,6 +71,8 @@ public class PrescreenChecker implements Serializable {
     PrescreenBusinessControl prescreenBusinessControl;
     @Inject
     ReturnControl returnControl;
+    @Inject
+    private CheckMandateDocControl checkMandateDocControl;
 
     private List<Reason> reasonList;
 
@@ -177,50 +180,59 @@ public class PrescreenChecker implements Serializable {
         log.debug("onCheckCustomer :::");
         RequestContext.getCurrentInstance().execute("blockUICheckCustomer.show()");
 
-        //save return history
-        try {
-            returnControl.saveReturnHistoryForRestart(0,workCasePreScreenId);
-        } catch (Exception ex){
-            log.error("exception while save return information to history! ",ex);
-        }
-
-        List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
-        tmpCustomerInfoViewList = customerInfoViewList;
-        customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
-        int failCount = 0;
-        for(CustomerInfoView customer : tmpCustomerInfoViewList){
-            log.debug("CustomerInfo : {}", customer);
-            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
-                    log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
-                    customer.setValidId(1);
-                    customer.setNcbReason("");
-                }else{
-                    log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
-                    customer.setValidId(0);
-                    customer.setNcbReason("");
-                    failCount = failCount + 1;
-                }
-            } else {
-                if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
-                    log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
-                    customer.setValidId(1);
-                    customer.setNcbReason("");
-                }else{
-                    log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
-                    customer.setValidId(0);
-                    customer.setNcbReason("");
-                    failCount = failCount + 1;
-                }
+        if(checkMandateDocControl.isMandateDocCompleted(0, workCasePreScreenId, stepId)){
+            //save return history
+            try {
+                returnControl.saveReturnHistoryForRestart(0,workCasePreScreenId);
+            } catch (Exception ex){
+                log.error("exception while save return information to history! ",ex);
             }
-            customerInfoViewList.add(customer);
-        }
 
 
-        if(failCount == 0){
-            //TODO Check ncb
+
+            List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+            tmpCustomerInfoViewList = customerInfoViewList;
+            customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
+            int failCount = 0;
+            for(CustomerInfoView customer : tmpCustomerInfoViewList){
+                log.debug("CustomerInfo : {}", customer);
+                if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
+                        log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
+                        customer.setValidId(1);
+                        customer.setNcbReason("");
+                    }else{
+                        log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
+                        customer.setValidId(0);
+                        customer.setNcbReason("");
+                        failCount = failCount + 1;
+                    }
+                } else {
+                    if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
+                        log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
+                        customer.setValidId(1);
+                        customer.setNcbReason("");
+                    }else{
+                        log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
+                        customer.setValidId(0);
+                        customer.setNcbReason("");
+                        failCount = failCount + 1;
+                    }
+                }
+                customerInfoViewList.add(customer);
+            }
+
+
+            if(failCount == 0){
+                //TODO Check ncb
+                RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
+                RequestContext.getCurrentInstance().execute("commandCheckNCB()");
+            }
+        } else {
+            messageHeader = "Warning.";
+            message = "Cannot " + ActionCode.CHECK_NCB.getActionName() + ". Some Mandate Document are incompleted.";
             RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
-            RequestContext.getCurrentInstance().execute("commandCheckNCB()");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
