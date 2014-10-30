@@ -525,7 +525,7 @@ public class Util implements Serializable {
     }
 
     public static String getStringWithLength(String string, int len){
-        if(string==null || (string!=null && string.trim().equalsIgnoreCase(""))){
+        if(string==null){
             return "";
         } else {
             if(string.length()>len){
