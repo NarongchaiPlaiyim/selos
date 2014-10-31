@@ -15,6 +15,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -425,7 +426,21 @@ public class CaseCreation implements WSCaseCreation, Serializable {
 
             //generate ref number
             String applicationNumber = stpExecutor.getApplicationNumber("04");
-            caseCreationHistory.setAppNumber(applicationNumber + "01");
+            if(requestType == CaseRequestTypes.NEW_CASE.getValue()) {
+                caseCreationHistory.setAppNumber(applicationNumber + "01");
+            }else{
+                String appendString = "01";
+                if(!Util.isEmpty(refAppNumber)) {
+                    appendString = refAppNumber.substring(refAppNumber.length()-2, refAppNumber.length());
+                    int appendInt = Util.parseInt(appendString, 0) + 1;
+                    if(appendInt > 9){
+                        appendString = Integer.toString(appendInt);
+                    }else{
+                        appendString = "0".concat(Integer.toString(appendInt));
+                    }
+                }
+                caseCreationHistory.setAppNumber(applicationNumber + appendString);
+            }
 
             //all validation passed including new case creation in BPM.
             if (bpmInterface.createCase(caseCreationHistory)) {

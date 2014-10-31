@@ -469,7 +469,7 @@ public class HeaderController extends BaseController {
                 if (modifyFlag == 0) {
                     mandateFieldMessageViewList = null;
                     prescreenBusinessControl.updateCSIData(workCasePreScreenId);
-                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, ActionCode.CHECK_PRESCREEN.getVal());
                     log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
                     if(uwRuleResponseView != null){
                         if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -478,6 +478,9 @@ public class HeaderController extends BaseController {
                                 uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                                 uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                                 uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+
+                                //----Update Times of Check Criteria----//
+                                prescreenBusinessControl.updateTimeOfCheckCriteria(workCaseId, stepId);
                             }catch (Exception ex){
                                 log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                                 messageHeader = "Exception.";

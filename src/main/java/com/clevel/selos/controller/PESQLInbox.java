@@ -460,6 +460,19 @@ public class PESQLInbox implements Serializable
             if(queueName != null && wobNumber != null && fieldsMap.size() !=0)
             {
 
+                try{
+                    //Try to Lock case
+                    log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName,wobNumber,fetchType);
+                    bpmInterfaceImpl.lockCase(queueName, wobNumber, fetchType);
+                /*session.setAttribute("isLocked","true");*/
+                } catch (Exception e) {
+                    log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, wobNumber, e);
+                    message = "Another User is Working on this case!! Please Retry Later.";
+                    RequestContext.getCurrentInstance().execute("msgBoxErrorDlg.show()");
+
+                    return;
+                }
+
                 bpmInterfaceImpl.dispatchCase(queueName,wobNumber,fieldsMap,fetchType);
 
                 log.info("restart successful.... ");

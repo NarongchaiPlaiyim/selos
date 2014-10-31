@@ -258,7 +258,7 @@ public class ObligationBizTransform extends BusinessTransform {
                 if(existingCreditDetailView.getExistAccountStatusView() != null){
                     BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getExistAccountStatusView());
                     log.debug("transform ExistingCreditTransform ::: bankAccountStatus : {}", bankAccountStatus);
-                    if(bankAccountStatus.getId() != 0){
+                    if(!Util.isNull(bankAccountStatus) && !Util.isZero(bankAccountStatus.getId())){
                         existingCreditDetail.setExistAccountStatus(bankAccountStatus);
                     }else{
                         existingCreditDetail.setExistAccountStatus(null);
@@ -509,6 +509,8 @@ public class ObligationBizTransform extends BusinessTransform {
                     int tempSBFScore = 0;
                     if(obligation.getScfScoreFinalRate().length() > 2){
                         tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate().substring(obligation.getScfScoreFinalRate().length()-2, obligation.getScfScoreFinalRate().length()));
+                    }else{
+                        tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate());
                     }
                     log.info("tempSBFScore int score : {}", tempSBFScore);
                     if (tempSBFScore > scfScore){

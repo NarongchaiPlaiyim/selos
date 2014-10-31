@@ -377,7 +377,7 @@ public class NCBInfoControl extends BusinessControl {
         return ncbInfoView;
     }
 
-    public NCB calculateLoanCredit(NCB ncb, List<NCBDetail> ncbDetailList){
+    public void calculateLoanCredit(NCB ncb, List<NCBDetail> ncbDetailList){
         // วงเงินสินเชื่อหมุนเวียนจากหน้า NCB
         BigDecimal loanCredit = BigDecimal.ZERO;
         // ภาระสินเชื่อประเภทอื่นๆ จากหน้า NCB ที่มี flag W/C = Yes
@@ -405,17 +405,19 @@ public class NCBInfoControl extends BusinessControl {
                 loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
             }*/
 
-            if(!Util.isNull(item.getAccountStatus()) && !Util.isZero(item.getAccountStatus().getDbrFlag()) && item.getAccountType() != null) {
-                if(item.getAccountType().getWcFlag() == 1){
-                    loanCredit = loanCredit.add(item.getLimit());
-                    if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
-                        loanCreditTMB = loanCreditTMB.add(item.getLimit());
-                    }
-                } else if(item.getAccountType().getWcFlag() == 0) {
-                    if(item.getWcFlag() == RadioValue.YES.value()) {
-                        loanCreditWC = loanCreditWC.add(item.getOutstanding());
+            if(item.getRefinanceFlag() == RadioValue.NO.value()) {
+                if(!Util.isNull(item.getAccountStatus()) && !Util.isZero(item.getAccountStatus().getDbrFlag()) && item.getAccountType() != null) {
+                    if(item.getAccountType().getWcFlag() == 1){
+                        loanCredit = loanCredit.add(item.getLimit());
                         if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
-                            loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+                            loanCreditTMB = loanCreditTMB.add(item.getLimit());
+                        }
+                    } else if(item.getAccountType().getWcFlag() == 0) {
+                        if(item.getWcFlag() == RadioValue.YES.value()) {
+                            loanCreditWC = loanCreditWC.add(item.getOutstanding());
+                            if(item.getAccountTMBFlag() == RadioValue.YES.value()) {
+                                loanCreditWCTMB = loanCreditWCTMB.add(item.getOutstanding());
+                            }
                         }
                     }
                 }
@@ -425,8 +427,6 @@ public class NCBInfoControl extends BusinessControl {
         ncb.setLoanCreditTMB(loanCreditTMB);
         ncb.setLoanCreditWC(loanCreditWC);
         ncb.setLoanCreditWCTMB(loanCreditWCTMB);
-
-        return ncb;
     }
 
 
