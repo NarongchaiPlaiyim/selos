@@ -12,10 +12,10 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
-import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
@@ -458,6 +458,7 @@ public class ObligationBizTransform extends BusinessTransform {
             BigDecimal unpaidFeeInsurance = new BigDecimal(0);
             BigDecimal pendingClaimLG = new BigDecimal(0);
             Date lastReviewDate = null;
+            Date lastContractDate = null;
             Date extendedReviewDate = null;
             Date nextReviewDate = null;
             int scfScore = -1;
@@ -481,6 +482,12 @@ public class ObligationBizTransform extends BusinessTransform {
                 if(obligation.getLastReviewDate() != null){
                     if(lastReviewDate == null || lastReviewDate.before(obligation.getLastReviewDate()))
                         lastReviewDate = obligation.getLastReviewDate();
+                }
+
+                //Latest Contract Date, get the one which latest than other account.
+                if(obligation.getLastContractDate() != null){
+                    if(lastContractDate == null || lastContractDate.before(obligation.getLastContractDate()))
+                        lastContractDate = obligation.getLastContractDate();
                 }
 
                 //Extended Review Date, get earliest Date than other account.
@@ -538,6 +545,7 @@ public class ObligationBizTransform extends BusinessTransform {
             }
 
             customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(Util.isEmpty(serviceSegment)? 0 : Integer.parseInt(serviceSegment)));
+            customerInfoView.setExistingSMECustomer(customerInfoView.getServiceSegmentView().isExistingSME() ? RadioValue.YES.value() : RadioValue.NO.value());
             customerInfoView.setPendingClaimLG(pendingClaimLG);
             customerInfoView.setUnpaidFeeInsurance(unpaidFeeInsurance);
             if(qualitativeClass != null)
@@ -548,6 +556,10 @@ public class ObligationBizTransform extends BusinessTransform {
                 customerInfoView.setReviewFlag(RadioValue.YES.value());
             } else {
                 customerInfoView.setReviewFlag(RadioValue.NO.value());
+            }
+
+            if(lastContractDate != null){
+                customerInfoView.setLastContractDate(lastContractDate);
             }
 
             if(extendedReviewDate != null){
