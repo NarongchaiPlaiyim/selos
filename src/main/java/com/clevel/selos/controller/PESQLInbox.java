@@ -463,7 +463,7 @@ public class PESQLInbox implements Serializable
                 try{
                     //Try to Lock case
                     log.info("locking case queue: {}, WobNum : {}, fetchtype: {}",queueName,wobNumber,fetchType);
-                    bpmInterfaceImpl.lockCase(queueName, wobNumber, inboxViewSelectItem.getFetchType());
+                    bpmInterfaceImpl.lockCase(queueName, wobNumber, fetchType);
                 /*session.setAttribute("isLocked","true");*/
                 } catch (Exception e) {
                     log.error("Error while Locking case in queue : {}, WobNum : {}",queueName, wobNumber, e);
