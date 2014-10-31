@@ -93,6 +93,8 @@ public class ProposeLineTransform extends Transform {
     private ApprovalHistoryTransform approvalHistoryTransform;
     @Inject
     private AADDecisionDAO aadDecisionDAO;
+    @Inject
+    private UsagesDAO usagesDAO;
 
     @Inject
     @NormalMessage
@@ -274,11 +276,38 @@ public class ProposeLineTransform extends Transform {
             proposeLineView.setTotalIndvGuaranteeAmount(proposeLine.getTotalIndvGuaranteeAmount());
             proposeLineView.setTotalJurisGuaranteeAmount(proposeLine.getTotalJurisGuaranteeAmount());
 
-            proposeLineView.setProposeCreditInfoDetailViewList(transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList(), proposeType));
+            //Sort Credit Detail by Id
+            List<ProposeCreditInfoDetailView> creditInfoDetailViewList = transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList(), proposeType);
+            Collections.sort(creditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeCreditInfoDetailViewList(creditInfoDetailViewList);
 
-            proposeLineView.setProposeConditionInfoViewList(transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList(), proposeType));
+            //Sort Condition Info by Id
+            List<ProposeConditionInfoView> conditionInfoViewList = transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList(), proposeType);
+            Collections.sort(conditionInfoViewList, new Comparator<ProposeConditionInfoView>() {
+                public int compare(ProposeConditionInfoView o1, ProposeConditionInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeConditionInfoViewList(conditionInfoViewList);
 
-            proposeLineView.setProposeGuarantorInfoViewList(transformProposeGuarantorToViewList(proposeLine.getProposeGuarantorInfoList(), proposeType));
+            //Sort Guarantor Info by Id
+            List<ProposeGuarantorInfoView> guarantorInfoViewList = transformProposeGuarantorToViewList(proposeLine.getProposeGuarantorInfoList(), proposeType);
+            Collections.sort(guarantorInfoViewList, new Comparator<ProposeGuarantorInfoView>() {
+                public int compare(ProposeGuarantorInfoView o1, ProposeGuarantorInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeGuarantorInfoViewList(guarantorInfoViewList);
 
             List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(proposeLine.getWorkCase().getId(), proposeType);
             List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList, proposeType);
@@ -294,10 +323,22 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            List<FeeDetailView> appFeeDetailView = transformFeeDetailToViewList(proposeFeeDetailList);
+            proposeLineView.setProposeAppFeeDetailViewList(appFeeDetailView);
+
             proposeLineView.setProposeFeeDetailViewList(proposeFeeDetailViewList);
             proposeLineView.setProposeFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
 
-            proposeLineView.setProposeCollateralInfoViewList(transformProposeCollateralToViewList(proposeLine.getProposeCollateralInfoList(), proposeType));
+            //Sort Collateral Info by Id
+            List<ProposeCollateralInfoView> collateralInfoViewList = transformProposeCollateralToViewList(proposeLine.getProposeCollateralInfoList(), proposeType);
+            Collections.sort(collateralInfoViewList, new Comparator<ProposeCollateralInfoView>() {
+                public int compare(ProposeCollateralInfoView o1, ProposeCollateralInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeCollateralInfoViewList(collateralInfoViewList);
         }
 
         return proposeLineView;
@@ -946,11 +987,10 @@ public class ProposeLineTransform extends Transform {
     }
 
     //-------------------------------------------------------- Propose Fee Info Detail --------------------------------------------------------//
-    public List<ProposeFeeDetail> transformProposeFeeToModel(ProposeLine proposeLine, ProposeFeeDetailView proposeFeeDetailView, ProposeType proposeType) { // add new only
+    public List<ProposeFeeDetail> transformProposeFeeToModel(WorkCase workCase, ProposeFeeDetailView proposeFeeDetailView, ProposeType proposeType) { // add new only
         List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
         ProposeCreditInfo proposeCreditInfo = new ProposeCreditInfo();
         proposeCreditInfo.setId(proposeFeeDetailView.getProposeCreditInfoDetailView().getId());
-        WorkCase workCase = proposeLine.getWorkCase();
 
         ProposeFeeDetail proposeFeeDetail;
 
@@ -1107,11 +1147,11 @@ public class ProposeLineTransform extends Transform {
         return proposeFeeDetailList;
     }
 
-    public List<ProposeFeeDetail> transformProposeFeeToModelList(ProposeLine proposeLine, List<ProposeFeeDetailView> proposeFeeDetailViewList, ProposeType proposeType) {
+    public List<ProposeFeeDetail> transformProposeFeeToModelList(WorkCase workCase, List<ProposeFeeDetailView> proposeFeeDetailViewList, ProposeType proposeType) {
         List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
         if (!Util.isNull(proposeFeeDetailViewList)) {
             for (ProposeFeeDetailView proFeeDetView : proposeFeeDetailViewList) {
-                List<ProposeFeeDetail> proposeFeeDetailListReturn = transformProposeFeeToModel(proposeLine, proFeeDetView, proposeType);
+                List<ProposeFeeDetail> proposeFeeDetailListReturn = transformProposeFeeToModel(workCase, proFeeDetView, proposeType);
                 if(!Util.isNull(proposeFeeDetailListReturn) && !Util.isZero(proposeFeeDetailListReturn.size())) {
                     for(ProposeFeeDetail proposeFeeDetail : proposeFeeDetailListReturn) {
                         proposeFeeDetailList.add(proposeFeeDetail);
@@ -1170,12 +1210,17 @@ public class ProposeLineTransform extends Transform {
         return proposeFeeDetailViewList;
     }
 
+    //-------------------------------------------------------- Propose App Fee Info Detail --------------------------------------------------------//
     public FeeDetailView transformFeeDetailToView(ProposeFeeDetail proposeFeeDetail){
         FeeDetailView feeDetailView = new FeeDetailView();
-        feeDetailView.setId(proposeFeeDetail.getId());
+//        feeDetailView.setId(proposeFeeDetail.getId());
         feeDetailView.setFeeYear(proposeFeeDetail.getFeeYear());
         feeDetailView.setPercentFee(proposeFeeDetail.getPercentFee());
-        feeDetailView.setCreditDetailViewId(proposeFeeDetail.getProposeCreditInfo().getId());
+        if(proposeFeeDetail.getProposeCreditInfo() != null) {
+            feeDetailView.setCreditDetailViewId(proposeFeeDetail.getProposeCreditInfo().getId());
+        } else {
+            feeDetailView.setCreditDetailViewId(0);
+        }
         feeDetailView.setDescription(proposeFeeDetail.getDescription());
         feeDetailView.setFeeLevel(proposeFeeDetail.getFeeLevel());
         feeDetailView.setFeePaymentMethodView(feeTransform.getFeePaymentMethodView(proposeFeeDetail.getPaymentMethod().getBrmsCode()));
@@ -1184,6 +1229,51 @@ public class ProposeLineTransform extends Transform {
         feeDetailView.setFeeAmount(proposeFeeDetail.getAmount());
 
         return feeDetailView;
+    }
+
+    public ProposeFeeDetail transformFeeDetailToModel(WorkCase workCase, FeeDetailView feeDetailView, ProposeType proposeType){
+        ProposeFeeDetail proposeFeeDetail = new ProposeFeeDetail();
+        proposeFeeDetail.setFeeYear(feeDetailView.getFeeYear());
+        proposeFeeDetail.setPercentFee(feeDetailView.getPercentFee());
+        proposeFeeDetail.setProposeCreditInfo(null);
+        proposeFeeDetail.setDescription(feeDetailView.getDescription());
+        proposeFeeDetail.setFeeLevel(feeDetailView.getFeeLevel());
+        proposeFeeDetail.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode(feeDetailView.getFeePaymentMethodView().getBrmsCode()));
+        proposeFeeDetail.setFeeType(feeTypeDAO.findByBRMSCode(feeDetailView.getFeeTypeView().getBrmsCode()));
+        proposeFeeDetail.setPercentFeeAfter(feeDetailView.getPercentFeeAfter());
+        proposeFeeDetail.setAmount(feeDetailView.getFeeAmount());
+        proposeFeeDetail.setProposeType(proposeType);
+        proposeFeeDetail.setWorkCase(workCase);
+
+        return proposeFeeDetail;
+    }
+
+    public List<FeeDetailView> transformFeeDetailToViewList(List<ProposeFeeDetail> proposeFeeDetailList) {
+        List<FeeDetailView> feeDetailViewList = new ArrayList<FeeDetailView>();
+        if (!Util.isNull(proposeFeeDetailList)) {
+            for (ProposeFeeDetail proposeFeeDetail : proposeFeeDetailList) {
+                if(proposeFeeDetail.getFeeLevel() == FeeLevel.APP_LEVEL) { // for only app lv
+                    FeeDetailView feeDetailView = transformFeeDetailToView(proposeFeeDetail);
+                    if(!Util.isNull(feeDetailView)) {
+                        feeDetailViewList.add(feeDetailView);
+                    }
+                }
+            }
+        }
+        return feeDetailViewList;
+    }
+
+    public List<ProposeFeeDetail> transformFeeDetailToModelList(WorkCase workCase, List<FeeDetailView> feeDetailViewList, ProposeType proposeType) {
+        List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
+        if (!Util.isNull(feeDetailViewList)) {
+            for (FeeDetailView feeDetailView : feeDetailViewList) {
+                ProposeFeeDetail proposeFeeDetail = transformFeeDetailToModel(workCase, feeDetailView, proposeType);
+                if(!Util.isNull(proposeFeeDetail)) {
+                    proposeFeeDetailList.add(proposeFeeDetail);
+                }
+            }
+        }
+        return proposeFeeDetailList;
     }
 
     //-------------------------------------------------------- Propose Collateral Info --------------------------------------------------------//
@@ -1222,7 +1312,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setAadDecisionReason(proposeCollateralInfoView.getAadDecisionReason());
             proposeCollateralInfo.setAadDecisionReasonDetail(proposeCollateralInfoView.getAadDecisionReasonDetail());
             proposeCollateralInfo.setUsage(proposeCollateralInfoView.getUsage());
-            proposeCollateralInfo.setTypeOfUsage(proposeCollateralInfoView.getTypeOfUsage());
             proposeCollateralInfo.setUwRemark(proposeCollateralInfoView.getUwRemark());
             proposeCollateralInfo.setMortgageCondition(proposeCollateralInfoView.getMortgageCondition());
             proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
@@ -1339,6 +1428,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
             proposeCollateralInfoSub.setSubId(proposeCollateralInfoSubView.getSubId());
             proposeCollateralInfoSub.setComs(proposeCollateralInfoSubView.getComs());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             proposeCollateralInfoSub.setProposeCollateralHead(proposeCollateralInfoHead);
 
@@ -1491,7 +1581,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
-            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            if(proposeCollateralInfo.getUsage()!=null && !proposeCollateralInfo.getUsage().trim().equalsIgnoreCase("")){
+                Usages aadDecision = usagesDAO.getByCode(proposeCollateralInfo.getUsage());
+                proposeCollateralInfoView.setUsageLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setUsageLabel("-");
+            }
             proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
             proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
             proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
@@ -1515,23 +1610,29 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            Collections.sort(proposeCreditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
-            log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
-            log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
-            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
+            //log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            //log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
 
-            /*if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
-                for(ProposeCollateralInfoHeadView proposeCollateralInfoHeadView : proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) {
-                    if(!Util.isNull(proposeCollateralInfoHeadView) && !Util.isNull(proposeCollateralInfoHeadView.getHeadCollType())) {
-                        if(proposeCollateralInfoHeadView.getHeadCollType().getAppraisalRequire() != 0) {
-                            proposeCollateralInfoView.setHeadCollAppraisal(true);
-                        } else {
-                            proposeCollateralInfoView.setHeadCollAppraisal(false);
-                        }
-                    }
+            //Sort Collateral Head by Id
+            List<ProposeCollateralInfoHeadView> collateralInfoHeadViewList = transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoHeadView>() {
+                public int compare(ProposeCollateralInfoHeadView o1, ProposeCollateralInfoHeadView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
                 }
-            }*/
+            });
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(collateralInfoHeadViewList);
         } else if (!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && ProposeType.BOTH == proposeType) {
             proposeCollateralInfoView = new ProposeCollateralInfoView();
 
@@ -1552,7 +1653,12 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoView.setAadDecisionReason(proposeCollateralInfo.getAadDecisionReason());
             proposeCollateralInfoView.setAadDecisionReasonDetail(proposeCollateralInfo.getAadDecisionReasonDetail());
             proposeCollateralInfoView.setUsage(proposeCollateralInfo.getUsage());
-            proposeCollateralInfoView.setTypeOfUsage(proposeCollateralInfo.getTypeOfUsage());
+            if(proposeCollateralInfo.getUsage()!=null && !proposeCollateralInfo.getUsage().trim().equalsIgnoreCase("")){
+                Usages aadDecision = usagesDAO.getByCode(proposeCollateralInfo.getUsage());
+                proposeCollateralInfoView.setUsageLabel(aadDecision.getDescription());
+            } else {
+                proposeCollateralInfoView.setUsageLabel("-");
+            }
             proposeCollateralInfoView.setUwRemark(proposeCollateralInfo.getUwRemark());
             proposeCollateralInfoView.setMortgageCondition(proposeCollateralInfo.getMortgageCondition());
             proposeCollateralInfoView.setMortgageConditionDetail(proposeCollateralInfo.getMortgageConditionDetail());
@@ -1576,9 +1682,25 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            Collections.sort(proposeCreditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
-            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
+            //Sort Collateral Head by Id
+            List<ProposeCollateralInfoHeadView> collateralInfoHeadViewList = transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoHeadView>() {
+                public int compare(ProposeCollateralInfoHeadView o1, ProposeCollateralInfoHeadView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(collateralInfoHeadViewList);
         }
 
         return proposeCollateralInfoView;
@@ -1627,7 +1749,16 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoHeadView.setExistingCredit(proposeCollateralInfoHead.getExistingCredit());
             proposeCollateralInfoHeadView.setInsuranceCompany(proposeCollateralInfoHead.getInsuranceCompany());
 
-            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList()));
+            //Sort Collateral Sub by Id
+            List<ProposeCollateralInfoSubView> collateralInfoHeadViewList = transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoSubView>() {
+                public int compare(ProposeCollateralInfoSubView o1, ProposeCollateralInfoSubView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(collateralInfoHeadViewList);
 
             if(!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
                 proposeCollateralInfoHeadView.setHaveSubColl(true);
@@ -1663,6 +1794,7 @@ public class ProposeLineTransform extends Transform {
 
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
@@ -1712,6 +1844,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSubView.setSubCollateralType(proposeCollateralInfoSub.getSubCollateralType());
             proposeCollateralInfoSubView.setTitleDeed(proposeCollateralInfoSub.getTitleDeed());
             proposeCollateralInfoSubView.setAddress(proposeCollateralInfoSub.getAddress());
+            proposeCollateralInfoSubView.setTypeOfUsage(proposeCollateralInfoSub.getTypeOfUsage());
             proposeCollateralInfoSubView.setLandOffice(proposeCollateralInfoSub.getLandOffice());
             proposeCollateralInfoSubView.setCollateralOwnerAAD(proposeCollateralInfoSub.getCollateralOwnerAAD());
             proposeCollateralInfoSubView.setAppraisalValue(proposeCollateralInfoSub.getAppraisalValue());
@@ -1863,6 +1996,9 @@ public class ProposeLineTransform extends Transform {
             decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
             decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
 
+            List<FeeDetailView> appFeeDetailView = transformFeeDetailToViewList(proposeFeeDetailList);
+            decisionView.setApproveAppFeeDetailViewList(appFeeDetailView);
+
             Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {
                 if(proposeCreditInfoDetailView.getUwDecision() == DecisionType.APPROVED) {
@@ -1966,7 +2102,6 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setAadDecisionReason(proposeCollateralInfoView.getAadDecisionReason());
             proposeCollateralInfo.setAadDecisionReasonDetail(proposeCollateralInfoView.getAadDecisionReasonDetail());
             proposeCollateralInfo.setUsage(proposeCollateralInfoView.getUsage());
-            proposeCollateralInfo.setTypeOfUsage(proposeCollateralInfoView.getTypeOfUsage());
             proposeCollateralInfo.setUwRemark(proposeCollateralInfoView.getUwRemark());
             proposeCollateralInfo.setMortgageCondition(proposeCollateralInfoView.getMortgageCondition());
             proposeCollateralInfo.setMortgageConditionDetail(proposeCollateralInfoView.getMortgageConditionDetail());
@@ -2082,6 +2217,7 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoSub.setCollateralOwnerAAD(proposeCollateralInfoSubView.getCollateralOwnerAAD());
             proposeCollateralInfoSub.setAppraisalValue(proposeCollateralInfoSubView.getAppraisalValue());
             proposeCollateralInfoSub.setMortgageValue(proposeCollateralInfoSubView.getMortgageValue());
+            proposeCollateralInfoSub.setTypeOfUsage(proposeCollateralInfoSubView.getTypeOfUsage());
 
             UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00e");
             proposeCollateralInfoSub.setSubId(uid.randomUUID().toString());

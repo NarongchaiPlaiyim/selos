@@ -2368,8 +2368,10 @@
                                     <ui:repeat value="#{decision.decisionView.proposeCollateralList}"
                                                var="proposeColl" varStatus="collIndex">
                                     <tr>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
-                                        <td class="left" colspan="3">#{proposeColl.jobID}</td>
+                                        <td class="title" style="width: 15%; min-width: 15%; max-width: 15%;">#{msg.get('app.decision.label.jobId')}</td>
+                                        <td class="left" style="width: 35%; min-width: 35%; max-width: 35%;">#{proposeColl.jobID}</td>
+                                        <td style="width: 16%; min-width: 16%; max-width: 16%;"></td>
+                                        <td style="width: 34%; min-width: 34%; max-width: 34%;"></td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
@@ -2380,26 +2382,48 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
-                                        <td class="left" colspan="3">#{proposeColl.aadDecisionLabel}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.aadDecisionLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReason}</td>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left" style="width: 35%">#{proposeColl.aadDecisionReasonDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.aadDecisionReason}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.aadDecisionReasonDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.usage')}</td>
-                                        <td class="left">#{proposeColl.usageLabel}</td>
-                                        <!--<td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
-                                        <td class="left">#{proposeColl.typeOfUsage}</td>-->
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.usageLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
-                                        <td class="left">#{proposeColl.mortgageCondition}</td>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
-                                        <td class="left">#{proposeColl.mortgageConditionDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.mortgageCondition}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.mortgageConditionDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.creditType')}</td>
@@ -2453,7 +2477,9 @@
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
-                                        <td class="left" colspan="3">#{proposeColl.bdmComments}</td>
+                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{proposeColl.bdmComments}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
@@ -2465,7 +2491,7 @@
                                     <ui:repeat value="#{proposeColl.proposeCollateralInfoHeadViewList}"
                                                var="collHead" varStatus="collHeadIndex">
                                         <tr>
-                                            <td class="title" style="width: 15%">#{msg.get('app.decision.label.potential')}</td>
+                                            <td class="title">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
                                                 <h:outputText value="#{collHead.potentialCollateral.description}" rendered="#{not empty collHead.potentialCollateral}"/>
                                             </td>
@@ -2545,6 +2571,8 @@
                                                         <h:outputText value="#{subColl.subCollateralType.description}" rendered="#{not empty subColl.subCollateralType}"/>
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
+                                                        <br/>
+                                                        #{msg.get('app.decision.tb.td.label.typeOfUsage')} #{subColl.typeOfUsage}
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
                                                     </p:column>
@@ -2634,8 +2662,8 @@
                                     <ui:repeat value="#{decision.decisionView.approveCollateralList}" var="approveCollView" varStatus="collIndex">
                                     <h:panelGroup rendered="#{approveCollView.appraisalRequest != 2}">
                                     <tr>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.jobId')}</td>
-                                        <td class="left" style="width: 35%">#{approveCollView.jobID}</td>
+                                        <td class="title">#{msg.get('app.decision.label.jobId')}</td>
+                                        <td class="left">#{approveCollView.jobID}</td>
                                         <td class="right" colspan="2">
                                             <!-- Approved Collateral (Edit/Delete) Button -->
                                             <p:commandButton id="btnEditApprovedCollateral" styleClass="small"
@@ -2660,31 +2688,51 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.appraisalDate')}</td>
-                                        <td class="left" colspan="3">
+                                        <td class="title" style="width: 15%; min-width: 15%; max-width: 15%;">
+                                            <h:outputText value="#{msg.get('app.decision.label.appraisalDate')}"/>
+                                        </td>
+                                        <td class="left" style="width: 35%; min-width: 35%; max-width: 35%;">
                                             <h:outputText value="#{approveCollView.appraisalDate}">
                                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </h:outputText>
                                         </td>
+                                        <td style="width: 16%; min-width: 16%; max-width: 16%;"></td>
+                                        <td style="width: 34%; min-width: 34%; max-width: 34%;"></td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecision')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.aadDecisionLabel}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.aadDecisionLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.AADDecisionReason')}</td>
-                                        <td class="left">#{approveCollView.aadDecisionReason}</td>
-                                        <td class="title" style="width: 15%">#{msg.get('app.decision.label.AADDecisionReasonDetail')}</td>
-                                        <td class="left" style="width: 35%">#{approveCollView.aadDecisionReasonDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.aadDecisionReason}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.aadDecisionReasonDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.usage')}</td>
-                                        <td class="left">#{approveCollView.usageLabel}</td>
-                                        <!--<td class="title">#{msg.get('app.decision.label.typeOfUsage')}</td>
-                                        <td class="left">#{approveCollView.typeOfUsage}</td>-->
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.usageLabel}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title left large">#{msg.get('app.decision.label.UWDecision')}</td>
+                                        <td class="title left large">
+                                            <h:outputText value="#{msg.get('app.decision.label.UWDecision')}"/>
+                                        </td>
                                         <td class="left" colspan="3">
                                             <table border="0">
                                                 <tr>
@@ -2699,14 +2747,26 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.UWRemark')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.uwRemark}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.UWRemark')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.uwRemark}"/>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageCondition')}</td>
-                                        <td class="left">#{approveCollView.mortgageCondition}</td>
-                                        <td class="title">#{msg.get('app.decision.label.mortgageConditionDetail')}</td>
-                                        <td class="left">#{approveCollView.mortgageConditionDetail}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.mortgageCondition}"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
+                                            <h:outputText value="#{approveCollView.mortgageConditionDetail}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="title">#{msg.get('app.decision.label.creditType')}</td>
@@ -2759,8 +2819,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="title">#{msg.get('app.decision.label.BDMComments')}</td>
-                                        <td class="left" colspan="3">#{approveCollView.bdmComments}</td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.BDMComments')}"/>
+                                        </td>
+                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all">
+                                            <h:outputText value="#{approveCollView.bdmComments}"/>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="4">
@@ -2772,7 +2836,7 @@
                                     <ui:repeat value="#{approveCollView.proposeCollateralInfoHeadViewList}"
                                                var="collHeader" varStatus="collHeadIndex">
                                         <tr>
-                                            <td class="title" style="width: 15%">#{msg.get('app.decision.label.potential')}</td>
+                                            <td class="title">#{msg.get('app.decision.label.potential')}</td>
                                             <td class="left" colspan="3">
                                                 <h:outputText value="#{collHeader.potentialCollateral.description}" rendered="#{not empty collHeader.potentialCollateral}"/>
                                             </td>
@@ -2848,6 +2912,8 @@
                                                         <h:outputText value="#{subColl.subCollateralType.description}" rendered="#{not empty subColl.subCollateralType}"/>
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.address')} #{subColl.address}
+                                                        <br/>
+                                                        #{msg.get('app.decision.tb.td.label.typeOfUsage')} #{subColl.typeOfUsage}
                                                         <br/>
                                                         #{msg.get('app.decision.tb.td.label.landOffice')} #{subColl.landOffice}
                                                     </p:column>
@@ -3599,7 +3665,7 @@
                                                                         #{msg.get('app.decision.tb.td.label.position')}
                                                                     </td>
                                                                     <td class="left" style="border-style: none !important;">
-                                                                        <h:outputText value="#{decision.approvalHistoryPricingView.userView.titleName}"
+                                                                        <h:outputText value="#{decision.approvalHistoryPricingView.userView.positionName}"
                                                                                       rendered="#{not empty decision.approvalHistoryPricingView.userView}"/>
                                                                     </td>
                                                                 </tr>

@@ -5,8 +5,10 @@ import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PEDBExecute;
 import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseAppraisalDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCaseOwnerDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
 import com.clevel.selos.integration.SELOS;
@@ -15,8 +17,10 @@ import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCaseAppraisal;
+import com.clevel.selos.model.db.working.WorkCaseOwner;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.PEInbox;
@@ -56,7 +60,11 @@ public class PESQLInbox implements Serializable
     @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
+    WorkCaseOwnerDAO workCaseOwnerDAO;
+    @Inject
     StepDAO stepDAO;
+    @Inject
+    UserDAO userDAO;
 
     @Inject
     PEDBExecute pedbExecute;
@@ -275,12 +283,13 @@ public class PESQLInbox implements Serializable
             }
 
             WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            WorkCasePrescreen workCasePrescreen = null;
             if(!Util.isNull(workCase)){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
                 parallelRequestAppraisal = workCase.getParallelAppraisalFlag();
             } else {
-                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
+                workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
                 parallelRequestAppraisal = workCasePrescreen.getParallelAppraisalFlag();
@@ -290,6 +299,8 @@ public class PESQLInbox implements Serializable
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
                 wrkCaseAppraisalId = workCaseAppraisal.getId();
             }
+
+            inboxControl.updateWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, stepId, caseOwner);
 
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);

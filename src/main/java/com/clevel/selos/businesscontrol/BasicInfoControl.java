@@ -200,10 +200,8 @@ public class BasicInfoControl extends BusinessControl {
 
         if(countExistingSME > 0){
             basicInfo.setRequestLoanWithSameName(RadioValue.YES.value());
-
         } else {
             basicInfo.setRequestLoanWithSameName(RadioValue.NO.value());
-
         }
 
         if(countExistingSME > 0 && countNonExistingSME == 0){

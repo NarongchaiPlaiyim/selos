@@ -236,7 +236,7 @@
                                                      style="width: 192px; max-width: 192px; min-width: 192px;" id="citiId"
                                                      onkeydown="return onKeyDownNumber(event);"
                                                      onkeypress="return onKeyPressNumber(event);"
-                                                     disabled="#{not custInfoSumIndi.enableCitizenId || not custInfoSumIndi.enableAllFieldCus}"
+                                                     disabled="#{not custInfoSumIndi.enableCitizenId || not custInfoSumIndi.enableAllFieldCus || custInfoSumIndi.editBorrower}"
                                                      required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndCitId}"/>
                                     </td>
                                 </tr>
@@ -346,14 +346,14 @@
                                                                  onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                                  style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndStNameTh}"
-                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCus || custInfoSumIndi.editBorrower}"/>
                                                 </td>
                                                 <td>
                                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.lastNameTh}" id="lastNameTh"
                                                                  onkeypress="return onKeyPressName(event);" onkeydown="return onKeyDownName(event);"
                                                                  style="width: 200px; max-width: 200px; min-width: 200px;"
                                                                  required="#{(not empty param[saveCustomer.clientId] or not empty param[saveCustomer2.clientId]) and custInfoSumIndi.reqIndLastNameTh}"
-                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCus}"/>
+                                                                 disabled="#{not custInfoSumIndi.enableAllFieldCus || custInfoSumIndi.editBorrower}"/>
                                                 </td>
                                             </tr>
                                         </table>

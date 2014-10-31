@@ -21,10 +21,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PDFOfferLetter implements Serializable {
 
@@ -60,11 +57,10 @@ public class PDFOfferLetter implements Serializable {
     private long customerId = -1;
     private long workCaseId;
     private final String SPACE = " ";
-    private WorkCase workCase;
     private String minus = "-";
-    private String add = "+";
     private char enter = '\n';
     private int firstIndex = 0;
+    private int noCalculation;
 
     @Inject
     @NormalMessage
@@ -92,9 +88,9 @@ public class PDFOfferLetter implements Serializable {
         if(!Util.isNull(workCaseId)){
             decisionView = decisionControl.findDecisionViewByWorkCaseId(workCaseId);
             feeCollectionDetails = feeCollectionDetailDAO.findAllByWorkCaseId(workCaseId);
-        } else {
-            log.debug("--workcaseId is Null. {}",workCaseId);
         }
+
+        noCalculation = 1;
     }
 
     //รายละเอียดผลการอนุมัติ 6,8-12
@@ -104,7 +100,7 @@ public class PDFOfferLetter implements Serializable {
         List<ProposeCreditInfoDetailView> newCreditDetailViews = decisionView.getApproveCreditList();
 
         if(Util.isSafetyList(newCreditDetailViews)){
-            log.debug("--ApproveCreditList. [{}],Size. {}",newCreditDetailViews,newCreditDetailViews.size());
+            log.debug("--ApproveCreditList Size. {}",newCreditDetailViews.size());
             for (ProposeCreditInfoDetailView view : newCreditDetailViews){
                 if (Util.isSafetyList(view.getProposeCreditInfoTierDetailViewList())){
                     log.debug("--tierDetailView Size. {}",view.getProposeCreditInfoTierDetailViewList().size());
@@ -295,7 +291,10 @@ public class PDFOfferLetter implements Serializable {
         } else {
             log.debug("--Approved Collateral Size is Empty. [{}],Approved Guarantor Size is Empty. [{}]",collateralViews.size(),guarantorDetailViews.size());
             ApprovedCollateralOfferLetterReport collateralAndGuarantorOfferLetterReport = new ApprovedCollateralOfferLetterReport();
+            ApprovedGuarantorOfferLetterReport approvedGuarantorOfferLetterReport = new ApprovedGuarantorOfferLetterReport();
             collateralAndGuarantorOfferLetterReport.setPath(path);
+            approvedGuarantorOfferLetterReports.add(approvedGuarantorOfferLetterReport);
+            collateralAndGuarantorOfferLetterReport.setApprovedGuarantorOfferLetterReport(approvedGuarantorOfferLetterReports);
             reports.add(collateralAndGuarantorOfferLetterReport);
         }
 
@@ -332,19 +331,17 @@ public class PDFOfferLetter implements Serializable {
         String PaymentMethod = "";
         String type;
         String feeDecrition;
-        int i = 1;
 
         log.debug("feeCollectionDetails Size. {}",feeCollectionDetails.size());
         if (Util.isSafetyList(feeCollectionDetails)){
             for (FeeCollectionDetail detail : feeCollectionDetails){
                 if (detail.getPaymentMethod().getId() == 1){
                     FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
-                    calculationOfferLetterReport.setId(i++);
+                    calculationOfferLetterReport.setId(noCalculation++);
 
-                    if (!Util.isNull(detail.getPaymentMethod()) && !PaymentMethod.equalsIgnoreCase(detail.getPaymentMethod().getDescription())){
-                        calculationOfferLetterReport.setPaymentMethod(msg.get("report.offerletter.paymentnonmethod"));
-                    } else {
-                        calculationOfferLetterReport.setPaymentMethod(minus);
+                    if (!Util.isNull(detail.getPaymentMethod()) && !PaymentMethod.equalsIgnoreCase(msg.get("report.offerletter.paymentmethod"))){
+                        PaymentMethod = msg.get("report.offerletter.paymentmethod");
+                        calculationOfferLetterReport.setPaymentMethod(msg.get("report.offerletter.paymentmethod"));
                     }
 
                     if (!Util.isNull(detail.getFeeType())){
@@ -392,8 +389,7 @@ public class PDFOfferLetter implements Serializable {
     //fillFeecalculationNonAgreement 15/2
     public List<FeeCalculationOfferLetterReport> fillFeecalculationNonAgreement(){
         List<FeeCalculationOfferLetterReport> detailsAgreement = new ArrayList<FeeCalculationOfferLetterReport>();
-        String PaymentMethod = "";
-        int i = 1;
+        String PaymentNoMethod = "";
         String type = "";
         String feeDecrition;
 
@@ -401,9 +397,12 @@ public class PDFOfferLetter implements Serializable {
             for (FeeCollectionDetail detail : feeCollectionDetails){
                 if (detail.getPaymentMethod().getId() == 3){
                     FeeCalculationOfferLetterReport calculationOfferLetterReport = new FeeCalculationOfferLetterReport();
-                    calculationOfferLetterReport.setId(i++);
-                    calculationOfferLetterReport.setPaymentMethod(!PaymentMethod.equals(detail.getPaymentMethod().getDescription()) ?
-                            msg.get("report.offerletter.paymentnonmethod") : SPACE);
+                    calculationOfferLetterReport.setId(noCalculation++);
+
+                    if (!Util.isNull(detail.getPaymentMethod()) && !PaymentNoMethod.equalsIgnoreCase(msg.get("report.offerletter.paymentnonmethod"))){
+                        PaymentNoMethod = msg.get("report.offerletter.paymentnonmethod");
+                        calculationOfferLetterReport.setPaymentMethod(msg.get("report.offerletter.paymentnonmethod"));
+                    }
 
                     if (!Util.isNull(detail.getFeeType())){
                         if (detail.getFeeType().getId() == 9){
@@ -474,7 +473,6 @@ public class PDFOfferLetter implements Serializable {
                                                 disbursementOfferLetterReport.setLoanPurPose(minus);
                                                 disbursementOfferLetterReport.setProductProgram(minus);
                                             }
-
 
                                             disbursementOfferLetterReport.setTotal(Util.convertNullToZERO(credit.getDisburseAmount())); //33
                                             disbursementOfferLetterReport.setName(msg.get("report.offerletter.mc"));  //34
@@ -653,7 +651,8 @@ public class PDFOfferLetter implements Serializable {
             }
         }
 
-        String[] spDate = Util.checkNullString(Util.createDateTh(baseRateList.get(1).getAddOfDate())).split("/");
+        String addOfDate = Util.createDateTh(baseRateList.get(1).getAddOfDate());
+        String[] spDate = addOfDate.split("/");
         int month = Integer.valueOf(spDate[1]);
 
         switch (month){
@@ -673,10 +672,9 @@ public class PDFOfferLetter implements Serializable {
 
         }
         dateValue = dateValue.append(spDate[firstIndex]).append(SPACE).append(setMonth).append(SPACE).append(spDate[2]);
-        log.debug("--DATE. {}",dateValue.toString());
         report.setDateValue(dateValue.toString());
 
-        //2,24,25
+        //23,24,25
         List<OfferLetter> offerLetter = offerLetterDAO.findAll();
         log.debug("--offerLetter. {}",offerLetter.size());
         if (Util.isSafetyList(offerLetter)){
@@ -685,8 +683,6 @@ public class PDFOfferLetter implements Serializable {
                 report.setTelPhone(Util.checkNullString(letter.getTelPhone()));
                 report.setTelFax(Util.checkNullString(letter.getTelFax()));
             }
-        } else {
-            log.debug("--offerLetter is Null",offerLetter);
         }
 
         if (Util.isZero(workCaseId)){
@@ -694,7 +690,6 @@ public class PDFOfferLetter implements Serializable {
             customerId = Util.parseLong(FacesUtil.getFlash().get("customerId"),-1L);
 
             if (!Util.isNull(agreementInfo)) {
-                log.debug("--agreementInfo. {}",agreementInfo);
                 if (!Util.isNull(agreementInfo.getLoanContractDate())) {
                     loanDate =  Util.checkNullString(Util.createDateTh(agreementInfo.getLoanContractDate()));
                     loanTime = Util.checkNullString(Util.createTime(agreementInfo.getLoanContractDate()));
@@ -716,7 +711,8 @@ public class PDFOfferLetter implements Serializable {
                         default : //DO NOTHING
                             break;
                     }
-                }             }
+                }
+            }
 
             //30.1
             List<Customer> list = customerDAO.findCustomerByCommitteeId(customerId);
@@ -728,8 +724,6 @@ public class PDFOfferLetter implements Serializable {
 
                 customerName = customerName.append(Util.checkNullString(list.get(firstIndex).getNameTh())).append(Util.checkNullString(list.get(firstIndex).getLastNameTh()));
                 report.setLoanCustomerName(Util.checkNullString(customerName.toString()));
-            } else {
-                log.debug("Customer findCustomerByCommitteeId. {}",list);
             }
 
             List<MortgageInfo> mortgageInfoList = mortgageInfoDAO.findAllByWorkCaseId(workCaseId);

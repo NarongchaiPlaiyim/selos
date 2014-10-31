@@ -171,19 +171,23 @@ public class DBExecute implements Serializable {
         log.debug("geCollateralDecisionDetail jobNo: {}",jobNo);
         CollateralDecisionDetail collateralDecisionDetail = null;
         String SQL_COLLATERAL_DECISIONDETAIL =  "SELECT " +
-                                                    "APPR_COND.COND_NO as condNo, " +
-                                                    "APPR_COND.COND_REMARK as remark, " +
-                                                    "APPR_COND.COND_TYPE as condType " +
-                                                "FROM APPR_COND " +
-                                                "WHERE (APPR_COND.COND_TYPE = 'REA' OR APPR_COND.COND_TYPE = 'CON') " +
-                                                "AND APPR_COND.JOB_NO = ?";
+                                                    "L.L_NAME as lName, " +
+                                                    "A.COND_NO as condNo, " +
+                                                    "A.COND_REMARK as remark, " +
+                                                    "A.COND_TYPE as condType " +
+                                                "FROM APPR_COND A " +
+                                                "LEFT JOIN LOOK_MST L ON A.COND_NO = L.L_ID AND (L.L_TYPE='DECISION' OR L.L_TYPE='MORT_COND') " +
+                                                "WHERE (A.COND_TYPE = 'REA' OR A.COND_TYPE = 'CON') " +
+                                                "AND A.JOB_NO = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_COLLATERAL_DECISIONDETAIL =     "SELECT " +
+                                                    "L.L_NAME as lName, " +
                                                     "A.COND_NO as condNo, " +
                                                     "A.COND_REMARK as remark, " +
                                                     "A.COND_TYPE as condType " +
                                                 "FROM "+schema+".APPR_COND A " +
+                                                "LEFT JOIN "+schema+".LOOK_MST L ON A.COND_NO = L.L_ID AND (L.L_TYPE='DECISION' OR L.L_TYPE='MORT_COND') " +
                                                 "WHERE (A.COND_TYPE = 'REA' OR A.COND_TYPE = 'CON') " +
                                                 "AND A.JOB_NO = ?";
         }
@@ -205,43 +209,44 @@ public class DBExecute implements Serializable {
             String condNoCond = null;
             String condRemark = null;
             while (rs.next()) {
-                String condNo = rs.getString(1);
-                String remark = rs.getString(2);
-                String condType = rs.getString(3);
+                String lName = Util.getStringNotNullOrEmpty(rs.getString(1));
+                String condNo = rs.getString(2);
+                String remark = Util.getStringNotNullOrEmpty(rs.getString(3));
+                String condType = rs.getString(4);
 
                 if("REA".equalsIgnoreCase(condType)){
                     if(reasonCondNo == null){
-                        reasonCondNo = condNo;
+                        reasonCondNo = lName;
                     } else {
-                        reasonCondNo = reasonCondNo.concat(",").concat(condNo);
+                        reasonCondNo = reasonCondNo.concat(", ").concat(lName);
                     }
 
                     if(reasonCondRemark == null){
                         reasonCondRemark = remark;
                     } else {
-                        reasonCondRemark = reasonCondRemark.concat(",").concat(remark);
+                        reasonCondRemark = reasonCondRemark.concat(", ").concat(remark);
                     }
                 } else {
                     if(condNoCond == null){
-                        condNoCond = condNo;
+                        condNoCond = lName;
                     } else {
-                        condNoCond = condNoCond.concat(",").concat(condNo);
+                        condNoCond = condNoCond.concat(", ").concat(lName);
                     }
 
                     if(condRemark == null){
                         condRemark = remark;
                     } else {
-                        condRemark = condRemark.concat(",").concat(remark);
+                        condRemark = condRemark.concat(", ").concat(remark);
                     }
                 }
             }
 
             if(reasonCondNo!=null || reasonCondRemark!=null || condNoCond!=null || condRemark!=null){
                 collateralDecisionDetail = new CollateralDecisionDetail();
-                collateralDecisionDetail.setReasonCondNo(reasonCondNo);
-                collateralDecisionDetail.setReasonCondRemark(reasonCondRemark);
-                collateralDecisionDetail.setCondNo(condNoCond);
-                collateralDecisionDetail.setCondRemark(condRemark);
+                collateralDecisionDetail.setReasonCondNo(Util.getStringWithLength(reasonCondNo,1000));
+                collateralDecisionDetail.setReasonCondRemark(Util.getStringWithLength(reasonCondRemark,1000));
+                collateralDecisionDetail.setCondNo(Util.getStringWithLength(condNoCond,1000));
+                collateralDecisionDetail.setCondRemark(Util.getStringWithLength(condRemark,1000));
             }
 
             log.debug("collateralDecisionDetail result : {}",collateralDecisionDetail);
@@ -743,11 +748,13 @@ public class DBExecute implements Serializable {
         return address;
     }
 
-    public String getAddressType5(String colId, String headColId){
+    public Map<String,String> getAddressType5(String colId, String headColId){
         log.debug("getAddressType5 colId: {}, headColId: {}",colId, headColId);
         String address = "";
+        String usagesType = "";
+        Map<String,String> addrMap = new HashMap<String, String>();
         String SQL_TYPE_5 = "SELECT " +
-                                /*"L.L_NAME as usageType, " +*/
+                                "L.L_NAME as usageType, " +
                                 "A.ADD_NO as addNo, " +
                                 "A.ADD_DISTRICT as addDistrict, " +
                                 "B.CITY_ID as cityId, " +
@@ -758,12 +765,12 @@ public class DBExecute implements Serializable {
                             "FROM APPR_BUILDING A " +
                             "LEFT JOIN CITY B ON A.ADD_CITY = B.CITY_ID " +
                             "LEFT JOIN PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
-                            /*"LEFT JOIN LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +*/
+                            "LEFT JOIN LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
                             "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
 
         if(schema!=null && !schema.trim().equalsIgnoreCase("")){
             SQL_TYPE_5 = "SELECT " +
-                            /*"L.L_NAME as usageType, " +*/
+                            "L.L_NAME as usageType, " +
                             "A.ADD_NO as addNo, " +
                             "A.ADD_DISTRICT as addDistrict, " +
                             "B.CITY_ID as cityId, " +
@@ -774,7 +781,7 @@ public class DBExecute implements Serializable {
                         "FROM "+schema+".APPR_BUILDING A " +
                         "LEFT JOIN "+schema+".CITY B ON A.ADD_CITY = B.CITY_ID " +
                         "LEFT JOIN "+schema+".PROVINCE C ON B.PROVINCE_ID = C.PROV_ID " +
-                        /*"LEFT JOIN "+schema+".LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +*/
+                        "LEFT JOIN "+schema+".LOOK_MST L ON A.USAGE_TYPE = L.L_ID AND L.L_TYPE='RISKCDE' " +
                         "WHERE A.COL_ID = ? AND A.HEAD_COL_ID = ?";
         }
 
@@ -791,7 +798,7 @@ public class DBExecute implements Serializable {
             statement.setString(2, headColId);
             rs = statement.executeQuery();
             while (rs.next()) {
-                /*String usageType = Util.getStringNotNull(rs.getString("usageType"));*/
+                String usageType = Util.getStringNotNull(rs.getString("usageType"));
                 String addNo = Util.getStringNotNull(rs.getString("addNo"));
                 String addDistrict = Util.getStringNotNull(rs.getString("addDistrict"));
                 String cityId = Util.getStringNotNull(rs.getString("cityId"));
@@ -803,11 +810,12 @@ public class DBExecute implements Serializable {
                 address = addNoLabel.concat(SPACE).concat(Util.getStringNotNullOrEmpty(addNo)).concat(SPACE)
                         .concat(subDistrictLabel).concat(Util.getStringNotNullOrEmpty(addDistrict)).concat(SPACE)
                         .concat(districtLabel).concat(Util.getStringNotNullOrEmpty(city)).concat(SPACE)
-                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName)).concat(SPACE)
-                       /* .concat("<br/>Type of Usage : ").concat(usageType);*/
-                        .concat("Type of Usage : ").concat("-");
+                        .concat(provinceLabel).concat(Util.getStringNotNullOrEmpty(provName));
+                usagesType = usageType;
             }
-            log.debug("address result : {}", address);
+            addrMap.put("address",address);
+            addrMap.put("usageType",usagesType);
+            log.debug("address result : (address: {},usageType: {})", address,usagesType);
             rs.close();
             conn.close();
             conn = null;
@@ -819,7 +827,7 @@ public class DBExecute implements Serializable {
             closeConnection();
         }
 
-        return address;
+        return addrMap;
     }
 
     public String getAddressType6(String colId, String headColId){

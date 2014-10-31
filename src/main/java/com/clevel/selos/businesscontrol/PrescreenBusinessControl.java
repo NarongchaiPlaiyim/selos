@@ -468,7 +468,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public NCBOutputView getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+    public NCBOutputView getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId) throws Exception{
         //List<NcbView> ncbViewList = new ArrayList<NcbView>();
         NCBOutputView ncbOutputView = new NCBOutputView();
 
@@ -478,7 +478,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         NCCRSInputModel nccrsInputModel = null;
         ArrayList<NCCRSModel> nccrsModelList = new ArrayList<NCCRSModel>();
 
-        User user = userDAO.findById(userId);
+        //User user = userDAO.findById(userId);
+        WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByStep(workCasePreScreenId, 0, RoleValue.BDM.id(), StepValue.PRESCREEN_INITIAL.value());
+        User requestedUser = workCaseOwner != null ? workCaseOwner.getUser() : getCurrentUser();
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         for(CustomerInfoView customerItem : customerInfoViewList){
@@ -574,13 +576,13 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
         }
 
-        log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
+        log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", requestedUser.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), requestedUser.getPhoneNumber());
         if(ncrsModelList.size() > 0){
-            ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
+            ncrsInputModel = new NCRSInputModel(requestedUser.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), requestedUser.getPhoneNumber(), ncrsModelList);
         }
 
         if(nccrsModelList.size() > 0){
-            nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
+            nccrsInputModel = new NCCRSInputModel(requestedUser.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), requestedUser.getPhoneNumber(), nccrsModelList);
         }
 
         //*** TRY TO CHECK NCB ***
@@ -1766,6 +1768,22 @@ public class PrescreenBusinessControl extends BusinessControl {
                     throw ex;
                 }
             }
+        }
+    }
+
+    public void updateTimeOfCheckCriteria(long workCasePreScreenId, long stepId){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
+            log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
+            if(!Util.isNull(workCaseOwner)) {
+                int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
+                timesOfCriteriaChecked = timesOfCriteriaChecked + 1;
+                workCaseOwner.setTimesOfCriteriaChecked(timesOfCriteriaChecked);
+                log.debug("Update time of criteria checked [timeOfCriteriaCheck] : {}", timesOfCriteriaChecked);
+                workCaseOwnerDAO.persist(workCaseOwner);
+            }
+        }catch(Exception ex){
+            log.error("Exception while update time of check criteria.", ex);
         }
     }
 

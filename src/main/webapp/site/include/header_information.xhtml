@@ -93,9 +93,9 @@
             <td class="title"><h:outputText value="#{msg.get('app.header.label.productGroup')}"/> :</td>
             <td colspan="3"><h:outputText value="#{headerController.appHeaderView.productGroup}"/></td>
             <td colspan="2" class="title right"><h:outputText value="#{msg.get('app.header.label.lastDecision')}"/> :</td>
-            <td colspan="2"></td>
+            <td colspan="2" class="left"><h:outputText value="#{headerController.appHeaderView.lastDecisionDate}"/></td>
             <td colspan="2" class="title right"><h:outputText value="#{msg.get('app.header.label.limitSetupExpiredDate')}"/> :</td>
-            <td colspan="2"></td>
+            <td colspan="2" class="left"><h:outputText style="color: red" value="#{headerController.appHeaderView.limitSetupExpireDate}"/></td>
         </tr>
     </table>
 
