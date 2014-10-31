@@ -136,10 +136,10 @@
                                             </p:column>
 
                                             <p:column headerText="" rendered="#{peInbox.inboxName == 'BDM/UW Return Box'}">
-                                                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" rendered="#{item.bdmFlag == 'Y'}" title="Restart" action="#{peInbox.onRestartCase}" onclick="blockInbox.show()" >
+                                                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel" rendered="#{item.bdmFlag == 'Y'}" title="Restart" action="#{peInbox.onRestartCase}" onclick="blockInbox.show()" >
                                                     <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                                 </p:commandButton>
-                                                <p:commandButton icon="ui-icon-pencil" rendered="#{item.bdmFlag == 'N'}" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show()" >
+                                                <p:commandButton icon="ui-icon-pencil" update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel" rendered="#{item.bdmFlag == 'N'}" title="View" action="#{peInbox.onSelectInbox}" onclick="blockInbox.show()" >
                                                     <f:setPropertyActionListener value="#{item}" target="#{peInbox.inboxViewSelectItem}"/>
                                                 </p:commandButton>
                                             </p:column>
@@ -149,7 +149,7 @@
 
                                         <tr>
                                             <td colspan="100%" style="color: red;">
-                                                <p:commandButton value="Assign to Me" disabled="#{peInbox.disableAssign}" rendered="#{peInbox.inboxName == 'Pool Box'}"
+                                                <p:commandButton update=":frmMain:resultInbox, :frmMain:msgBoxErrorPanel" value="Assign to Me"  disabled="#{peInbox.disableAssign}" rendered="#{peInbox.inboxName == 'Pool Box'}"
                                                                  id="reassignButtonId" action="#{peInbox.onAssignBulk()}" styleClass="medium" >
                                                 </p:commandButton>
                                                 <p:spacer width="20px;"/> </td>
