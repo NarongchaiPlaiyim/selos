@@ -6,13 +6,11 @@ import com.clevel.selos.businesscontrol.DecisionControl;
 import com.clevel.selos.businesscontrol.ExSummaryControl;
 import com.clevel.selos.dao.master.TitleDAO;
 import com.clevel.selos.dao.master.UsagesDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.ExSummaryDAO;
-import com.clevel.selos.dao.working.ProposeLineDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Usages;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.ExSummary;
 import com.clevel.selos.model.db.working.ProposeLine;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -55,8 +53,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
     @Inject private BizInfoSummaryView bizInfoSummaryView;
     @Inject private ProposeLineDAO proposeLineDAO;
     @Inject private ProposeLineTransform proposeLineTransform;
-    @Inject
-    private UsagesDAO usagesDAO;
+    @Inject private UsagesDAO usagesDAO;
+    @Inject BasicInfoDAO basicInfoDAO;
     @Inject
     @NormalMessage
     Message msg;
@@ -478,6 +476,8 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         workCase = workCaseDAO.findById(workCaseId);
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCase.getId());
+        log.debug("################################### {}",workCase.getId());
         //Detail 1
         if (!Util.isNull(appHeaderView)){
             report.setCaseStatus(Util.checkNullString(appHeaderView.getCaseStatus()));
@@ -522,6 +522,14 @@ public class PDFExecutiveSummaryAndOpSheet implements Serializable {
             }
 
             report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+
+            if (!Util.isNull(basicInfo)){
+                report.setLastDecisionDate(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLastDecisionDate()));
+                log.debug("------------------------ {}",basicInfo.getLimitSetupExpiryDate());
+                report.setLimitSetupExpireDate(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLimitSetupExpiryDate()));
+                log.debug("-------------------------------- {}",report.getLimitSetupExpireDate());
+            }
+
             report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCase.getCompleteDate()));
 
         } else {

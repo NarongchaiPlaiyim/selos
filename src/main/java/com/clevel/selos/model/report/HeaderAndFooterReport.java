@@ -44,6 +44,8 @@ public class HeaderAndFooterReport extends ReportModel{
 
     private String creditDecision;
     private Date approvedDate;
+    private String lastDecisionDate;
+    private String limitSetupExpireDate;
 
     //Footer
     private String genFooter;
@@ -306,6 +308,22 @@ public class HeaderAndFooterReport extends ReportModel{
 
     public void setGenFooter(String genFooter) {
         this.genFooter = genFooter;
+    }
+
+    public String getLastDecisionDate() {
+        return lastDecisionDate;
+    }
+
+    public void setLastDecisionDate(String lastDecisionDate) {
+        this.lastDecisionDate = lastDecisionDate;
+    }
+
+    public String getLimitSetupExpireDate() {
+        return limitSetupExpireDate;
+    }
+
+    public void setLimitSetupExpireDate(String limitSetupExpireDate) {
+        this.limitSetupExpireDate = limitSetupExpireDate;
     }
 
     @Override
