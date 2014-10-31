@@ -484,7 +484,7 @@ public class ObligationBizTransform extends BusinessTransform {
                         lastReviewDate = obligation.getLastReviewDate();
                 }
 
-                //Latest Review Date, get the one which latest than other account.
+                //Latest Contract Date, get the one which latest than other account.
                 if(obligation.getLastContractDate() != null){
                     if(lastContractDate == null || lastContractDate.before(obligation.getLastContractDate()))
                         lastContractDate = obligation.getLastContractDate();
