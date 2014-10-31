@@ -7,7 +7,7 @@
 
 <p:panel id="collateralDlgPanel" styleClass="panel-dialog">
     <h:form id="collateralDlgForm">
-        <table class="content_form content_table_form" border="1">
+        <table class="content_form content_table_form">
             <tr>
                 <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
                     <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
@@ -209,7 +209,8 @@
                     <h:outputText value=" :"/>
                 </td>
                 <td class="left" colspan="3">
-                    <p:inputTextarea value="#{decision.approveCollateralInfoView.bdmComments}" cols="100" rows="3"
+                    <p:inputTextarea value="#{decision.approveCollateralInfoView.bdmComments}"
+                                     rows="3" style="width: 680px; min-width: 680px; max-width: 680px;"
                                      readonly="#{decision.isDisabled('collateral.BDMComments')}">
                         <p:ajax event="blur" update="@this"/>
                     </p:inputTextarea>
