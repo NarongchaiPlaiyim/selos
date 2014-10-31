@@ -276,11 +276,38 @@ public class ProposeLineTransform extends Transform {
             proposeLineView.setTotalIndvGuaranteeAmount(proposeLine.getTotalIndvGuaranteeAmount());
             proposeLineView.setTotalJurisGuaranteeAmount(proposeLine.getTotalJurisGuaranteeAmount());
 
-            proposeLineView.setProposeCreditInfoDetailViewList(transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList(), proposeType));
+            //Sort Credit Detail by Id
+            List<ProposeCreditInfoDetailView> creditInfoDetailViewList = transformProposeCreditToViewList(proposeLine.getProposeCreditInfoList(), proposeType);
+            Collections.sort(creditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeCreditInfoDetailViewList(creditInfoDetailViewList);
 
-            proposeLineView.setProposeConditionInfoViewList(transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList(), proposeType));
+            //Sort Condition Info by Id
+            List<ProposeConditionInfoView> conditionInfoViewList = transformProposeConditionToViewList(proposeLine.getProposeConditionInfoList(), proposeType);
+            Collections.sort(conditionInfoViewList, new Comparator<ProposeConditionInfoView>() {
+                public int compare(ProposeConditionInfoView o1, ProposeConditionInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeConditionInfoViewList(conditionInfoViewList);
 
-            proposeLineView.setProposeGuarantorInfoViewList(transformProposeGuarantorToViewList(proposeLine.getProposeGuarantorInfoList(), proposeType));
+            //Sort Guarantor Info by Id
+            List<ProposeGuarantorInfoView> guarantorInfoViewList = transformProposeGuarantorToViewList(proposeLine.getProposeGuarantorInfoList(), proposeType);
+            Collections.sort(guarantorInfoViewList, new Comparator<ProposeGuarantorInfoView>() {
+                public int compare(ProposeGuarantorInfoView o1, ProposeGuarantorInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeGuarantorInfoViewList(guarantorInfoViewList);
 
             List<ProposeFeeDetail> proposeFeeDetailList = proposeFeeDetailDAO.findByWorkCaseId(proposeLine.getWorkCase().getId(), proposeType);
             List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList = transformProposeFeeToViewList(proposeFeeDetailList, proposeType);
@@ -299,7 +326,16 @@ public class ProposeLineTransform extends Transform {
             proposeLineView.setProposeFeeDetailViewList(proposeFeeDetailViewList);
             proposeLineView.setProposeFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
 
-            proposeLineView.setProposeCollateralInfoViewList(transformProposeCollateralToViewList(proposeLine.getProposeCollateralInfoList(), proposeType));
+            //Sort Collateral Info by Id
+            List<ProposeCollateralInfoView> collateralInfoViewList = transformProposeCollateralToViewList(proposeLine.getProposeCollateralInfoList(), proposeType);
+            Collections.sort(collateralInfoViewList, new Comparator<ProposeCollateralInfoView>() {
+                public int compare(ProposeCollateralInfoView o1, ProposeCollateralInfoView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeLineView.setProposeCollateralInfoViewList(collateralInfoViewList);
         }
 
         return proposeLineView;
@@ -1523,11 +1559,29 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            Collections.sort(proposeCreditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
-            log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
-            log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
-            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
+            //log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            //log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
+
+            //Sort Collateral Head by Id
+            List<ProposeCollateralInfoHeadView> collateralInfoHeadViewList = transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoHeadView>() {
+                public int compare(ProposeCollateralInfoHeadView o1, ProposeCollateralInfoHeadView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(collateralInfoHeadViewList);
         } else if (!Util.isNull(proposeCollateralInfo) && !Util.isZero(proposeCollateralInfo.getId()) && ProposeType.BOTH == proposeType) {
             proposeCollateralInfoView = new ProposeCollateralInfoView();
 
@@ -1578,9 +1632,25 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            Collections.sort(proposeCreditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
 
-            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList()));
+            //Sort Collateral Head by Id
+            List<ProposeCollateralInfoHeadView> collateralInfoHeadViewList = transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoHeadView>() {
+                public int compare(ProposeCollateralInfoHeadView o1, ProposeCollateralInfoHeadView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeCollateralInfoView.setProposeCollateralInfoHeadViewList(collateralInfoHeadViewList);
         }
 
         return proposeCollateralInfoView;
@@ -1629,7 +1699,16 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoHeadView.setExistingCredit(proposeCollateralInfoHead.getExistingCredit());
             proposeCollateralInfoHeadView.setInsuranceCompany(proposeCollateralInfoHead.getInsuranceCompany());
 
-            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList()));
+            //Sort Collateral Sub by Id
+            List<ProposeCollateralInfoSubView> collateralInfoHeadViewList = transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList());
+            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoSubView>() {
+                public int compare(ProposeCollateralInfoSubView o1, ProposeCollateralInfoSubView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(collateralInfoHeadViewList);
 
             if(!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
                 proposeCollateralInfoHeadView.setHaveSubColl(true);
