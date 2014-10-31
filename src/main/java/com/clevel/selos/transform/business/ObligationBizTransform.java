@@ -458,6 +458,7 @@ public class ObligationBizTransform extends BusinessTransform {
             BigDecimal unpaidFeeInsurance = new BigDecimal(0);
             BigDecimal pendingClaimLG = new BigDecimal(0);
             Date lastReviewDate = null;
+            Date lastContractDate = null;
             Date extendedReviewDate = null;
             Date nextReviewDate = null;
             int scfScore = -1;
@@ -481,6 +482,12 @@ public class ObligationBizTransform extends BusinessTransform {
                 if(obligation.getLastReviewDate() != null){
                     if(lastReviewDate == null || lastReviewDate.before(obligation.getLastReviewDate()))
                         lastReviewDate = obligation.getLastReviewDate();
+                }
+
+                //Latest Review Date, get the one which latest than other account.
+                if(obligation.getLastContractDate() != null){
+                    if(lastContractDate == null || lastContractDate.before(obligation.getLastContractDate()))
+                        lastContractDate = obligation.getLastContractDate();
                 }
 
                 //Extended Review Date, get earliest Date than other account.
@@ -549,6 +556,10 @@ public class ObligationBizTransform extends BusinessTransform {
                 customerInfoView.setReviewFlag(RadioValue.YES.value());
             } else {
                 customerInfoView.setReviewFlag(RadioValue.NO.value());
+            }
+
+            if(lastContractDate != null){
+                customerInfoView.setLastContractDate(lastContractDate);
             }
 
             if(extendedReviewDate != null){
