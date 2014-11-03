@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExSummary" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="588f70db-ffa6-4405-9490-2f476404a2a8">
 	<property name="ireport.zoom" value="1.024520183047623"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="700"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Frame" backcolor="#CCFFFF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -491,11 +491,12 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId5()]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="95b5b2d9-a4f2-42e6-9ab6-7304fa62b634" x="260" y="148" width="76" height="11"/>
-					<textElement verticalAlignment="Top">
+					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getLastDecisionDate()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="566ca153-f051-4729-93c5-27067ae583ef" mode="Opaque" x="171" y="148" width="88" height="11" forecolor="#0066FF"/>
@@ -511,11 +512,12 @@
 					</textElement>
 					<text><![CDATA[Limit Setup Expired Date :	]]></text>
 				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="33043da0-8727-4898-8234-027dba0abea2" x="440" y="148" width="76" height="11"/>
-					<textElement verticalAlignment="Top">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="33043da0-8727-4898-8234-027dba0abea2" x="440" y="148" width="76" height="11" forecolor="#FF0000" backcolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getLimitSetupExpireDate()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>

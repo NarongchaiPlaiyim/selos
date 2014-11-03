@@ -1246,7 +1246,7 @@
                                             <ui:repeat value="#{proposeLine.proposeLineView.proposeCollateralInfoViewList}"
                                                        var="proposeCollView" varStatus="collIndex">
                                                 <tr>
-                                                    <td class="title" style="width: 150px;">
+                                                    <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
                                                     </td>
                                                     <td class="left">
@@ -1276,21 +1276,23 @@
                                                 </tr>
 
                                                 <tr>
-                                                    <td class="title">
+                                                    <td class="title" style="width: 15%; min-width: 15%; max-width: 15%;">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
                                                     </td>
-                                                    <td class="left" colspan="3">
+                                                    <td class="left" style="width: 35%; min-width: 35%; max-width: 35%;">
                                                         <h:outputText value="#{proposeCollView.appraisalDate}">
                                                             <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                                         </h:outputText>
                                                     </td>
+                                                    <td style="width: 16%; min-width: 16%; max-width: 16%;"></td>
+                                                    <td style="width: 34%; min-width: 34%; max-width: 34%;"></td>
                                                 </tr>
 
                                                 <tr>
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
                                                     </td>
-                                                    <td class="left" colspan="3" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.aadDecisionLabel}"/>
                                                     </td>
                                                 </tr>
@@ -1299,14 +1301,14 @@
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
                                                     </td>
-                                                    <td class="left" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.aadDecisionReason}"/>
                                                     </td>
 
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
                                                     </td>
-                                                    <td class="left" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.aadDecisionReasonDetail}"/>
                                                     </td>
                                                 </tr>
@@ -1315,7 +1317,7 @@
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
                                                     </td>
-                                                    <td class="left" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.usageLabel}"/>
                                                     </td>
                                                 </tr>
@@ -1324,14 +1326,14 @@
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
                                                     </td>
-                                                    <td class="left" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.mortgageCondition}"/>
                                                     </td>
 
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
                                                     </td>
-                                                    <td class="left" style="max-width: 300px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.mortgageConditionDetail}"/>
                                                     </td>
                                                 </tr>
@@ -1401,7 +1403,7 @@
                                                     <td class="title">
                                                         <p:outputLabel value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
                                                     </td>
-                                                    <td class="left" colspan="3" style="max-width: 700px; word-wrap: break-word; word-break: break-all;">
+                                                    <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
                                                         <h:outputText value="#{proposeCollView.bdmComments}"/>
                                                     </td>
                                                 </tr>
@@ -1962,7 +1964,7 @@
               header="Propose Collateral Information"
               widgetVar="collateralInfoDlg"
               modal="true" resizable="false"
-              width="900" height="500"
+              width="1000" height="500"
               onShow="hideWindowsScrollBar()"
               onHide="showWindowsScrollBar()"
               closable="false"

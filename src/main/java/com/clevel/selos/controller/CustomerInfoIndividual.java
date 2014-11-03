@@ -1910,6 +1910,7 @@ public class CustomerInfoIndividual extends BaseController {
         try{
             customerId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             calculationControl.calForCustomerInfo(workCaseId);
+            calculationControl.calculateBasicInfo(workCaseId);
             isFromSummaryParam = true;
             messageHeader = "Information.";
             message = "Save individual data success.";

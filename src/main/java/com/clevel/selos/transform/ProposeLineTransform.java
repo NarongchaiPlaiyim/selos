@@ -323,6 +323,9 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            List<FeeDetailView> appFeeDetailView = transformFeeDetailToViewList(proposeFeeDetailList);
+            proposeLineView.setProposeAppFeeDetailViewList(appFeeDetailView);
+
             proposeLineView.setProposeFeeDetailViewList(proposeFeeDetailViewList);
             proposeLineView.setProposeFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
 
@@ -984,11 +987,10 @@ public class ProposeLineTransform extends Transform {
     }
 
     //-------------------------------------------------------- Propose Fee Info Detail --------------------------------------------------------//
-    public List<ProposeFeeDetail> transformProposeFeeToModel(ProposeLine proposeLine, ProposeFeeDetailView proposeFeeDetailView, ProposeType proposeType) { // add new only
+    public List<ProposeFeeDetail> transformProposeFeeToModel(WorkCase workCase, ProposeFeeDetailView proposeFeeDetailView, ProposeType proposeType) { // add new only
         List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
         ProposeCreditInfo proposeCreditInfo = new ProposeCreditInfo();
         proposeCreditInfo.setId(proposeFeeDetailView.getProposeCreditInfoDetailView().getId());
-        WorkCase workCase = proposeLine.getWorkCase();
 
         ProposeFeeDetail proposeFeeDetail;
 
@@ -1145,11 +1147,11 @@ public class ProposeLineTransform extends Transform {
         return proposeFeeDetailList;
     }
 
-    public List<ProposeFeeDetail> transformProposeFeeToModelList(ProposeLine proposeLine, List<ProposeFeeDetailView> proposeFeeDetailViewList, ProposeType proposeType) {
+    public List<ProposeFeeDetail> transformProposeFeeToModelList(WorkCase workCase, List<ProposeFeeDetailView> proposeFeeDetailViewList, ProposeType proposeType) {
         List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
         if (!Util.isNull(proposeFeeDetailViewList)) {
             for (ProposeFeeDetailView proFeeDetView : proposeFeeDetailViewList) {
-                List<ProposeFeeDetail> proposeFeeDetailListReturn = transformProposeFeeToModel(proposeLine, proFeeDetView, proposeType);
+                List<ProposeFeeDetail> proposeFeeDetailListReturn = transformProposeFeeToModel(workCase, proFeeDetView, proposeType);
                 if(!Util.isNull(proposeFeeDetailListReturn) && !Util.isZero(proposeFeeDetailListReturn.size())) {
                     for(ProposeFeeDetail proposeFeeDetail : proposeFeeDetailListReturn) {
                         proposeFeeDetailList.add(proposeFeeDetail);
@@ -1208,12 +1210,17 @@ public class ProposeLineTransform extends Transform {
         return proposeFeeDetailViewList;
     }
 
+    //-------------------------------------------------------- Propose App Fee Info Detail --------------------------------------------------------//
     public FeeDetailView transformFeeDetailToView(ProposeFeeDetail proposeFeeDetail){
         FeeDetailView feeDetailView = new FeeDetailView();
-        feeDetailView.setId(proposeFeeDetail.getId());
+//        feeDetailView.setId(proposeFeeDetail.getId());
         feeDetailView.setFeeYear(proposeFeeDetail.getFeeYear());
         feeDetailView.setPercentFee(proposeFeeDetail.getPercentFee());
-        feeDetailView.setCreditDetailViewId(proposeFeeDetail.getProposeCreditInfo().getId());
+        if(proposeFeeDetail.getProposeCreditInfo() != null) {
+            feeDetailView.setCreditDetailViewId(proposeFeeDetail.getProposeCreditInfo().getId());
+        } else {
+            feeDetailView.setCreditDetailViewId(0);
+        }
         feeDetailView.setDescription(proposeFeeDetail.getDescription());
         feeDetailView.setFeeLevel(proposeFeeDetail.getFeeLevel());
         feeDetailView.setFeePaymentMethodView(feeTransform.getFeePaymentMethodView(proposeFeeDetail.getPaymentMethod().getBrmsCode()));
@@ -1222,6 +1229,51 @@ public class ProposeLineTransform extends Transform {
         feeDetailView.setFeeAmount(proposeFeeDetail.getAmount());
 
         return feeDetailView;
+    }
+
+    public ProposeFeeDetail transformFeeDetailToModel(WorkCase workCase, FeeDetailView feeDetailView, ProposeType proposeType){
+        ProposeFeeDetail proposeFeeDetail = new ProposeFeeDetail();
+        proposeFeeDetail.setFeeYear(feeDetailView.getFeeYear());
+        proposeFeeDetail.setPercentFee(feeDetailView.getPercentFee());
+        proposeFeeDetail.setProposeCreditInfo(null);
+        proposeFeeDetail.setDescription(feeDetailView.getDescription());
+        proposeFeeDetail.setFeeLevel(feeDetailView.getFeeLevel());
+        proposeFeeDetail.setPaymentMethod(feePaymentMethodDAO.findByBRMSCode(feeDetailView.getFeePaymentMethodView().getBrmsCode()));
+        proposeFeeDetail.setFeeType(feeTypeDAO.findByBRMSCode(feeDetailView.getFeeTypeView().getBrmsCode()));
+        proposeFeeDetail.setPercentFeeAfter(feeDetailView.getPercentFeeAfter());
+        proposeFeeDetail.setAmount(feeDetailView.getFeeAmount());
+        proposeFeeDetail.setProposeType(proposeType);
+        proposeFeeDetail.setWorkCase(workCase);
+
+        return proposeFeeDetail;
+    }
+
+    public List<FeeDetailView> transformFeeDetailToViewList(List<ProposeFeeDetail> proposeFeeDetailList) {
+        List<FeeDetailView> feeDetailViewList = new ArrayList<FeeDetailView>();
+        if (!Util.isNull(proposeFeeDetailList)) {
+            for (ProposeFeeDetail proposeFeeDetail : proposeFeeDetailList) {
+                if(proposeFeeDetail.getFeeLevel() == FeeLevel.APP_LEVEL) { // for only app lv
+                    FeeDetailView feeDetailView = transformFeeDetailToView(proposeFeeDetail);
+                    if(!Util.isNull(feeDetailView)) {
+                        feeDetailViewList.add(feeDetailView);
+                    }
+                }
+            }
+        }
+        return feeDetailViewList;
+    }
+
+    public List<ProposeFeeDetail> transformFeeDetailToModelList(WorkCase workCase, List<FeeDetailView> feeDetailViewList, ProposeType proposeType) {
+        List<ProposeFeeDetail> proposeFeeDetailList = new ArrayList<ProposeFeeDetail>();
+        if (!Util.isNull(feeDetailViewList)) {
+            for (FeeDetailView feeDetailView : feeDetailViewList) {
+                ProposeFeeDetail proposeFeeDetail = transformFeeDetailToModel(workCase, feeDetailView, proposeType);
+                if(!Util.isNull(proposeFeeDetail)) {
+                    proposeFeeDetailList.add(proposeFeeDetail);
+                }
+            }
+        }
+        return proposeFeeDetailList;
     }
 
     //-------------------------------------------------------- Propose Collateral Info --------------------------------------------------------//
@@ -1945,6 +1997,9 @@ public class ProposeLineTransform extends Transform {
 
             decisionView.setApproveFeeDetailViewList(proposeFeeDetailViewList);
             decisionView.setApproveFeeDetailViewOriginalList(proposeFeeDetailViewOriginalList);
+
+            List<FeeDetailView> appFeeDetailView = transformFeeDetailToViewList(proposeFeeDetailList);
+            decisionView.setApproveAppFeeDetailViewList(appFeeDetailView);
 
             Map<String, ProposeCreditInfoDetailView> proProgramMap = new Hashtable<String, ProposeCreditInfoDetailView>();
             for (ProposeCreditInfoDetailView proposeCreditInfoDetailView : decisionView.getApproveCreditList()) {

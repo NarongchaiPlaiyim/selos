@@ -315,14 +315,14 @@ public class PrescreenMaker extends BaseController {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.debug("workCasePrescreen Request Type : {}", workCasePrescreen.getRequestType().getId());
 
-            //if(workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
+            if(workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
                 String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
                 if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
                     loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);
                 } else {
                     loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_MAKER, ownerCaseUserId);
                 }
-            //}
+            }
         } else {
             //--- Redirect to Inbox ---//
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
@@ -866,9 +866,11 @@ public class PrescreenMaker extends BaseController {
                     spouse.reset();
                     borrowerInfo.setSpouse(spouse);
                 } else {
-                    spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
-                    onChangeSpouseRelation();
-                    spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
+                    if(Util.isTrue(borrowerInfo.getMaritalStatus().getSpouseFlag())) {
+                        spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
+                        onChangeSpouseRelation();
+                        spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
+                    }
                 }
             }
         }
