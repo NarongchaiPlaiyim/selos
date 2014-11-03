@@ -277,7 +277,7 @@ public class BasicInfoControl extends BusinessControl {
 
         //update product group to
         try {
-            bpmExecutor.updateProductGroup(productGroup != null ? productGroup.getDescription() : "", queueName, wobNumber);
+            bpmExecutor.updateProductGroup(productGroup != null ? productGroup.getName() : "", queueName, wobNumber);
         }catch (Exception ex){
             log.error("Exception while update product group to BPM : ", ex);
         }
@@ -306,6 +306,5 @@ public class BasicInfoControl extends BusinessControl {
         //Update BOT Class
         //exSummaryControl.calculateBOTClass(workCaseId);
         //update product group to BPM
-        //bpmExecutor.updateProductGroup(basicInfo.get)
     }
 }
