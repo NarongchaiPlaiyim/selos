@@ -5,8 +5,6 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 <p:panel id="checkMandateDlgPanel" styleClass="panel-dialog">
-<h:form id="mandateDlgForm">
-
     <table class="content_table_form">
         <tr>
             <td colspan="100%"><p:outputLabel styleClass="require-field" value="#{checkMandateDoc.checkMandateDocView.message}"/></td>
@@ -233,7 +231,7 @@
                 <p:commandButton id="btnSaveMandateDoc"
                                  value="#{msg.get('app.button.save')}"
                                  styleClass="medium"
-                                 process=":frmMain:mandateDlgForm"
+                                 process="@form"
                                  action="#{checkMandateDoc.onSaveCheckMandateDoc()}"
                                  update=":frmMain:msgBoxMandateDocMessagePanel"/>
 
@@ -245,10 +243,9 @@
             </td>
         </tr>
     </table>
-</h:form>
 </p:panel>
 
-<p:blockUI widgetVar="blockReturnInfoDlg" block="checkMandateDlgPanel" trigger=":frmMain:mandateDlgForm:btnSaveMandateDoc">
+<p:blockUI widgetVar="blockReturnInfoDlg" block="checkMandateDlgPanel" trigger=":frmMain:btnSaveMandateDoc">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
