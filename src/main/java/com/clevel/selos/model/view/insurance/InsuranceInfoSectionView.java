@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view.insurance;
 
 import com.clevel.selos.model.view.ProposeCollateralInfoHeadView;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,4 +41,11 @@ public class InsuranceInfoSectionView implements Serializable {
 	public void setNewCollateralHeadView(ProposeCollateralInfoHeadView newCollateralHeadView) {
 		this.newCollateralHeadView = newCollateralHeadView;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("newCollateralHeadView", newCollateralHeadView)
+                .toString();
+    }
 }
