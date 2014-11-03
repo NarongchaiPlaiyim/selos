@@ -482,7 +482,7 @@ public class WelcomePage implements Serializable {
 
     public void testStoredProcedure() {
         log.debug("testStoredProcedure");
-        STPExecutor.getApplicationNumber("XX");
+        STPExecutor.getApplicationNumber("XX", "REFXX", 1);
     }
 
     public void testBPM() {

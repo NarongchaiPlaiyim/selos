@@ -39,11 +39,13 @@ public class STPExecutor implements Serializable {
     public STPExecutor() {
     }
 
-    public String getApplicationNumber(String segmentCode) {
+    public String getApplicationNumber(String segmentCode, String refAppNumber, int requestType) {
         String applicationNumber = "";
         try {
-            Query query = em.createNativeQuery("select SLOS.GETAPPLICATIONNUMBER(:param) from dual");
-            query.setParameter("param", segmentCode);
+            Query query = em.createNativeQuery("select SLOS.GETAPPLICATIONNUMBER(:param1, :param2, :param3) from dual");
+            query.setParameter("param1", segmentCode);
+            query.setParameter("param2", refAppNumber);
+            query.setParameter("param3", requestType);
             applicationNumber = (String) query.getSingleResult();
 
             log.debug("applicationNumber: {}", applicationNumber);
