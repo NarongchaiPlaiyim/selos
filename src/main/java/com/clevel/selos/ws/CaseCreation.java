@@ -1,5 +1,6 @@
 package com.clevel.selos.ws;
 
+import com.clevel.selos.businesscontrol.UserSysParameterControl;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
@@ -11,6 +12,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.UserSysParameterView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
@@ -48,6 +50,9 @@ public class CaseCreation implements WSCaseCreation, Serializable {
     UserDAO userDAO;
     @Inject
     ReasonDAO reasonDAO;
+
+    @Inject
+    UserSysParameterControl userSysParameterControl;
 
     @Inject
     @NormalMessage
@@ -384,6 +389,31 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                     return response;
                 }
 
+                int timeOfAppealReSubmit = caseCreationHistoryDAO.numberOfAppealReSubmitCase(refAppNumber, requestType);
+                UserSysParameterView userSysParameterView = null;
+
+                log.debug("timeOfAppealReSubmit : {}", timeOfAppealReSubmit);
+                if(requestType == CaseRequestTypes.APPEAL_CASE.getValue()){
+                    userSysParameterView = userSysParameterControl.getSysParameterValue("APPEAL_LIM");
+                    log.debug("userSysParameterView for Appeal Limit time : {}", userSysParameterView);
+                }else if(requestType == CaseRequestTypes.RESUBMIT_CASE.getValue()){
+                    userSysParameterView = userSysParameterControl.getSysParameterValue("RESUB_LIM");
+                    log.debug("userSysParameterView for Appeal Limit time : {}", userSysParameterView);
+                }
+
+                int limitTimeOfAppealReSubmit = 1;
+                if(!Util.isNull(userSysParameterView)){
+                    limitTimeOfAppealReSubmit = Util.parseInt(userSysParameterView.getValue(), 1);
+                }
+
+                if(timeOfAppealReSubmit >= limitTimeOfAppealReSubmit){
+                    //Validate fail
+                    wsDataPersist.addFailedCase(caseCreationHistory, "Number of ".concat(requestType == CaseRequestTypes.APPEAL_CASE.getValue() ? "Appeal" : "ReSubmit").concat(" (").concat(refAppNumber).concat(") ").concat(" case more than ").concat(Integer.toString(limitTimeOfAppealReSubmit)).concat(" times."));
+                    response.setValue(WSResponse.VALIDATION_FAILED, "Number of ".concat(requestType == CaseRequestTypes.APPEAL_CASE.getValue() ? "Appeal" : "ReSubmit").concat(" (").concat(refAppNumber).concat(") ").concat(" case more than ").concat(Integer.toString(limitTimeOfAppealReSubmit)).concat(" times."), "");
+                    log.debug("{}", response);
+                    return response;
+                }
+
                 //TODO: validate product program
                 /*if (ValidationUtil.isEmpty(ssoId) || ValidationUtil.isGreaterThan(10, ssoId)) { //Required
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(ssoId)"));
@@ -425,12 +455,18 @@ public class CaseCreation implements WSCaseCreation, Serializable {
             }*/
 
             //generate ref number
-            String applicationNumber = stpExecutor.getApplicationNumber("04");
-            if(requestType == CaseRequestTypes.NEW_CASE.getValue()) {
-                caseCreationHistory.setAppNumber(applicationNumber + "01");
-            }else{
+            String applicationNumber = stpExecutor.getApplicationNumber("04", refAppNumber, requestType);
+            caseCreationHistory.setAppNumber(applicationNumber);
+            log.debug("applicationNumber : {}, requestType : {}, refAppNumber : {}", applicationNumber, requestType, refAppNumber);
+            /*if(requestType == CaseRequestTypes.NEW_CASE.getValue()) {*/
+                //applicationNumber =
+                //caseCreationHistory.setAppNumber(applicationNumber + "01");
+            /*}else{
                 String appendString = "01";
+                //TODO get Last AppNumber from DB
+
                 if(!Util.isEmpty(refAppNumber)) {
+                    applicationNumber = refAppNumber.substring(0, refAppNumber.length()-2);
                     appendString = refAppNumber.substring(refAppNumber.length()-2, refAppNumber.length());
                     int appendInt = Util.parseInt(appendString, 0) + 1;
                     if(appendInt > 9){
@@ -440,7 +476,7 @@ public class CaseCreation implements WSCaseCreation, Serializable {
                     }
                 }
                 caseCreationHistory.setAppNumber(applicationNumber + appendString);
-            }
+            }*/
 
             //all validation passed including new case creation in BPM.
             if (bpmInterface.createCase(caseCreationHistory)) {
