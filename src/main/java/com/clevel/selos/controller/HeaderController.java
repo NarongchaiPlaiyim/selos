@@ -480,7 +480,7 @@ public class HeaderController extends BaseController {
                                 uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
 
                                 //----Update Times of Check Criteria----//
-                                prescreenBusinessControl.updateTimeOfCheckCriteria(workCaseId, stepId);
+                                prescreenBusinessControl.updateTimeOfCheckPreScreen(workCasePreScreenId, stepId);
                             }catch (Exception ex){
                                 log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                                 messageHeader = "Exception.";

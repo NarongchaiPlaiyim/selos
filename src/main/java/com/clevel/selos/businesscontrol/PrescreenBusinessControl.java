@@ -1771,9 +1771,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    public void updateTimeOfCheckCriteria(long workCasePreScreenId, long stepId){
+    public void updateTimeOfCheckPreScreen(long workCasePreScreenId, long stepId){
         try{
-            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByRole(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerPreScreen(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
             log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
             if(!Util.isNull(workCaseOwner)) {
                 int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();

@@ -767,9 +767,11 @@ public class FullApplicationControl extends BusinessControl {
         if(pass){
             List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findNewCollateralByTypeA(workCaseId);
             for(ProposeCollateralInfo collateralInfo : proposeCollateralInfoList){
-                if(collateralInfo.getUwDecision() == DecisionType.NO_DECISION){
-                    pass = false;
-                    break;
+                if(collateralInfo.getAppraisalRequest() != RequestAppraisalValue.REQUESTED.value()) {
+                    if (collateralInfo.getUwDecision() == DecisionType.NO_DECISION) {
+                        pass = false;
+                        break;
+                    }
                 }
             }
         }
