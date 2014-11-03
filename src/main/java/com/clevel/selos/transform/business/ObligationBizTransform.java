@@ -212,11 +212,17 @@ public class ObligationBizTransform extends BusinessTransform {
 
         existingCreditFacility.setTotalBorrowerAppInRLOSLimit(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
         existingCreditFacility.setTotalBorrowerComLimit(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerCom(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerComOBOD(existingCreditFacilityView.getTotalBorrowerComLimit());
         existingCreditFacility.setTotalBorrowerRetailLimit(existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
         existingCreditFacility.setTotalRelatedAppInRLOSLimit(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
         existingCreditFacility.setTotalRelatedComLimit(existingCreditFacilityView.getTotalRelatedComLimit());
         existingCreditFacility.setTotalRelatedRetailLimit(existingCreditFacilityView.getTotalRelatedRetailLimit());
+
+        //Summary for Total Group Exposure
+        BigDecimal totalGroupExposure = Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), existingCreditFacilityView.getTotalRelatedRetailLimit());
+        existingCreditFacility.setTotalGroupExposure(totalGroupExposure);
 
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user));
