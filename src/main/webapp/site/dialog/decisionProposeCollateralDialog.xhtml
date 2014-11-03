@@ -234,8 +234,8 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgPotentialColl"
-                                         value="#{collHeadDetail.potentialCollateral.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
+                                         value="#{collHeadDetail.potentialCollateral.id}"
                                          required="#{not empty param[saveCollateralButton.clientId]}"
                                          disabled="#{decision.isDisabled('collateral.headcoll.potential')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
@@ -257,11 +257,11 @@
                     </td>
                     <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgCollTypePercentLTV"
+                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          value="#{collHeadDetail.tcgCollateralType.id}"
                                          styleClass="largest"
                                          size="1"
                                          required="#{not empty param[btnSaveCollateral.clientId]}"
-                                         style="min-width: 400px; width: 400px; max-width: 400px;"
                                          disabled="#{decision.isDisabled('collateral.headcoll.collTypePercentLTV')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{collHeadDetail.potentialColToTCGColList}"
@@ -354,10 +354,10 @@
                         <h:outputText value="#{decision.mandate('collateral.headcoll.headCollType')}" styleClass="require-field"/>
                         <h:outputText value=" :"/>
                     </td>
-                    <td class="left">
+                    <td class="left" colspan="3">
                         <p:selectOneMenu id="dlgHeadCollType"
-                                         value="#{collHeadDetail.headCollType.id}"
                                          style="min-width: 400px; width: 400px; max-width: 400px;"
+                                         value="#{collHeadDetail.headCollType.id}"
                                          required="#{not empty param[saveCollateralButton.clientId]}"
                                          disabled="#{decision.approveCollateralInfoView.coms or collHeadDetail.haveSubColl or decision.isDisabled('collateral.headcoll.headCollType')}">
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
