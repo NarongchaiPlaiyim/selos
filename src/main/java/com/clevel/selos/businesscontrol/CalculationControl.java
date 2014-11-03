@@ -771,9 +771,9 @@ public class CalculationControl extends BusinessControl{
             BigDecimal sumTotalOBOD = BigDecimal.ZERO;         // OBOD of Propose
             BigDecimal sumTotalCommercial = BigDecimal.ZERO;   // Commercial of Propose
             BigDecimal sumTotalPropose = BigDecimal.ZERO;      // All Propose
-            BigDecimal sumTotalBorrowerCommercial = BigDecimal.ZERO;   // Without : OBOD  Propose and Existing
-            BigDecimal sumTotalBorrowerCommercialAndOBOD = BigDecimal.ZERO;  //All Propose and Existing
-            BigDecimal sumTotalGroupExposure = BigDecimal.ZERO;
+            BigDecimal sumTotalBorrowerCommercial;   // Without : OBOD  Propose and Existing
+            BigDecimal sumTotalBorrowerCommercialAndOBOD;  //All Propose and Existing
+            BigDecimal sumTotalGroupExposure;
             BigDecimal sumTotalLoanDbr = BigDecimal.ZERO;
             BigDecimal sumTotalApproveLoanDbr = BigDecimal.ZERO;
             BigDecimal sumTotalNonLoanDbr = BigDecimal.ZERO;
@@ -810,17 +810,16 @@ public class CalculationControl extends BusinessControl{
             if (!Util.isNull(proposeCreditInfoList) && !Util.isZero(proposeCreditInfoList.size())) {
                 log.debug("calculateTotalProposeAmount :: proposeCreditInfoList Size :: {}", proposeCreditInfoList.size());
                 DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
+                int marketTableFlag = RadioValue.NO.value();
+                if(!Util.isNull(dbr)) {
+                    log.debug("calculateTotalProposeAmount :: dbr ID :: {}", dbr.getId());
+                    log.debug("calculateTotalProposeAmount :: marketTableFlag :: {}", dbr.getMarketableFlag());
+                    marketTableFlag = dbr.getMarketableFlag();
+                }
                 for (ProposeCreditInfo creditInfo : proposeCreditInfoList) {
                     if (!Util.isNull(creditInfo) && !Util.isNull(creditInfo.getProductProgram()) && !Util.isZero(creditInfo.getProductProgram().getId()) && !Util.isNull(creditInfo.getCreditType()) && !Util.isZero(creditInfo.getCreditType().getId())) {
                         PrdProgramToCreditType prdProgramToCreditType = prdProgramToCreditTypeDAO.getPrdProgramToCreditType(creditInfo.getCreditType(), creditInfo.getProductProgram());
                         if(!Util.isNull(prdProgramToCreditType)) {
-                            int marketTableFlag = RadioValue.NO.value();
-                            if(!Util.isNull(dbr)) {
-                                log.debug("calculateTotalProposeAmount :: dbr ID :: {}", dbr.getId());
-                                log.debug("calculateTotalProposeAmount :: marketTableFlag :: {}", dbr.getMarketableFlag());
-                                marketTableFlag = dbr.getMarketableFlag();
-                            }
-
                             ProductFormula productFormula;
                             if(creditInfo.getCreditType().getCreditGroup() == CreditTypeGroup.OD.value()) {
                                 log.debug("calculateTotalProposeAmount :: Credit Group == OD");
