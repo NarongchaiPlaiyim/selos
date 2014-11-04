@@ -1425,11 +1425,16 @@ public class HeaderController extends BaseController {
     //*   Step 2001/1003
     public void onSubmitParallelRequestAppraisal(){
         try{
-            fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
-            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
-            messageHeader = "Information.";
-            message = "Request for Appraisal complete.";
-            showMessageRedirect();
+            if(fullApplicationControl.checkAppraisalInformation(workCasePreScreenId, workCaseId)) {
+                fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
+                fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
+                messageHeader = "Information.";
+                message = "Request for Appraisal complete.";
+                showMessageRedirect();
+            }else{
+                messageHeader = "Exception.";
+                message = "Please save Appraisal Request Screen before submit.";
+            }
         }catch(Exception ex){
             log.error("Exception while submit parallel request appraisal : ", ex);
             messageHeader = "Exception.";
