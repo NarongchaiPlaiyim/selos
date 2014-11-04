@@ -1399,32 +1399,37 @@ public class ProposeLineControl extends BusinessControl {
     public Map<String, Object> onSaveSubCollateralInfo(ProposeCollateralInfoView proposeCollateralInfoView, ProposeCollateralInfoSubView proposeCollateralInfoSubView, List<ProposeCollateralInfoSubView> relateWithList, List<SubCollateralType> subCollateralTypeList, int mode, int rowHeadCollIndex, int rowSubCollIndex) {  //mode 1 = add , 2 edit
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
-        for(SubCollateralType subCollateralType : subCollateralTypeList) {
-            if(subCollateralType.getId() == proposeCollateralInfoSubView.getSubCollateralType().getId()) {
-                proposeCollateralInfoSubView.setSubCollateralType(subCollateralType);
-                break;
-            }
-        }
-
-        if(!Util.isNull(proposeCollateralInfoView)){
-            if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
-                if(mode == 1) {
-                    if(Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().size())) {
-                        proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).setHaveSubColl(true);
-                    }
-                    UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-                    proposeCollateralInfoSubView.setSubId(uid.randomUUID().toString());
-                    proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().add(proposeCollateralInfoSubView);
-                } else {
-                    proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().set(rowSubCollIndex, proposeCollateralInfoSubView);
+        if(!Util.isNull(proposeCollateralInfoSubView.getMortgageList()) && !Util.isZero(proposeCollateralInfoSubView.getMortgageList().size())) {
+            for(SubCollateralType subCollateralType : subCollateralTypeList) {
+                if(subCollateralType.getId() == proposeCollateralInfoSubView.getSubCollateralType().getId()) {
+                    proposeCollateralInfoSubView.setSubCollateralType(subCollateralType);
+                    break;
                 }
             }
+
+            if(!Util.isNull(proposeCollateralInfoView)){
+                if(!Util.isNull(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList()) && !Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().size())) {
+                    if(mode == 1) {
+                        if(Util.isZero(proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().size())) {
+                            proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).setHaveSubColl(true);
+                        }
+                        UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+                        proposeCollateralInfoSubView.setSubId(uid.randomUUID().toString());
+                        proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().add(proposeCollateralInfoSubView);
+                    } else {
+                        proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getProposeCollateralInfoSubViewList().set(rowSubCollIndex, proposeCollateralInfoSubView);
+                    }
+                }
+            }
+
+            relateWithList.add(proposeCollateralInfoSubView);
+
+            returnMapVal.put("proposeCollateralInfoView", proposeCollateralInfoView);
+            returnMapVal.put("relateWithList", relateWithList);
+            returnMapVal.put("notHaveMortgage", false);
+        } else {
+            returnMapVal.put("notHaveMortgage", true);
         }
-
-        relateWithList.add(proposeCollateralInfoSubView);
-
-        returnMapVal.put("proposeCollateralInfoView", proposeCollateralInfoView);
-        returnMapVal.put("relateWithList", relateWithList);
 
         return returnMapVal;
     }
