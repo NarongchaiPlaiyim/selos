@@ -2,12 +2,15 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.CaseRequestTypes;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
@@ -51,6 +54,9 @@ public class PrescreenResult extends BaseController {
 
     @Inject
     private WorkCaseDAO workCaseDAO;
+
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
 
 
     @Inject
@@ -96,6 +102,7 @@ public class PrescreenResult extends BaseController {
     public void onCreation() {
         log.info("PrescreenResult ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
+        int requestType = 0;
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
         if(Util.isZero(workCasePreScreenId)){
             long workCaseId = getCurrentWorkCaseId(session);
@@ -116,10 +123,16 @@ public class PrescreenResult extends BaseController {
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
             user = (User) session.getAttribute("user");
 
+            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+            if(!Util.isNull(workCasePrescreen))
+                requestType = workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getId() : 0;
+
             prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
             prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);
             String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
-            loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_RESULT, ownerCaseUserId);
+
+            //if(requestType == CaseRequestTypes.NEW_CASE.value())
+                loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_RESULT, ownerCaseUserId);
         }
     }
 

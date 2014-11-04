@@ -284,9 +284,7 @@ public class PESQLInbox implements Serializable
 
             WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
-            if(stepId <= StepValue.PRESCREEN_MAKER.value()){
-                workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-            }else{
+            if(stepId > StepValue.PRESCREEN_MAKER.value()){
                 workCase = workCaseDAO.findByAppNumber(appNumber);
             }
 
@@ -295,6 +293,7 @@ public class PESQLInbox implements Serializable
                 requestAppraisalFlag = workCase.getRequestAppraisal();
                 parallelRequestAppraisal = workCase.getParallelAppraisalFlag();
             } else {
+                workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
                 parallelRequestAppraisal = workCasePrescreen.getParallelAppraisalFlag();
