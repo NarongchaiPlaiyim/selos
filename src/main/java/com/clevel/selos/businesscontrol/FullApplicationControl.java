@@ -767,9 +767,11 @@ public class FullApplicationControl extends BusinessControl {
         if(pass){
             List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findNewCollateralByTypeA(workCaseId);
             for(ProposeCollateralInfo collateralInfo : proposeCollateralInfoList){
-                if(collateralInfo.getUwDecision() == DecisionType.NO_DECISION){
-                    pass = false;
-                    break;
+                if(collateralInfo.getAppraisalRequest() != RequestAppraisalValue.REQUESTED.value()) {
+                    if (collateralInfo.getUwDecision() == DecisionType.NO_DECISION) {
+                        pass = false;
+                        break;
+                    }
                 }
             }
         }
@@ -1230,9 +1232,17 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     /** Appraisal [ Request Appraisal - BDM Check appraisal data ] **/
-    public boolean checkAppraisalInformation(long workCaseId){
+    public boolean checkAppraisalInformation(long workCasePreScreenId, long workCaseId){
         Appraisal appraisal = null;
         boolean checkAppraisal = false;
+        if(!Util.isNull(workCasePreScreenId) && !Util.isZero(workCasePreScreenId)){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);
+            if(!Util.isNull(appraisal)){
+                checkAppraisal = true;
+            }
+        }
+
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);

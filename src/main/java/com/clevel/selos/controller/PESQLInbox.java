@@ -282,8 +282,12 @@ public class PESQLInbox implements Serializable
                 stageId = step != null ? step.getStage().getId() : 0;
             }
 
-            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
+            WorkCase workCase = null;
             WorkCasePrescreen workCasePrescreen = null;
+            if(stepId > StepValue.PRESCREEN_MAKER.value()){
+                workCase = workCaseDAO.findByAppNumber(appNumber);
+            }
+
             if(!Util.isNull(workCase)){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();

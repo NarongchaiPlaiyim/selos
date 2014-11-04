@@ -480,7 +480,7 @@ public class HeaderController extends BaseController {
                                 uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
 
                                 //----Update Times of Check Criteria----//
-                                prescreenBusinessControl.updateTimeOfCheckCriteria(workCaseId, stepId);
+                                prescreenBusinessControl.updateTimeOfCheckPreScreen(workCasePreScreenId, stepId);
                             }catch (Exception ex){
                                 log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                                 messageHeader = "Exception.";
@@ -1401,11 +1401,16 @@ public class HeaderController extends BaseController {
     //*   Step 2001/1003
     public void onSubmitParallelRequestAppraisal(){
         try{
-            fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
-            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
-            messageHeader = "Information.";
-            message = "Request for Appraisal complete.";
-            showMessageRedirect();
+            if(fullApplicationControl.checkAppraisalInformation(workCasePreScreenId, workCaseId)) {
+                fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
+                fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
+                messageHeader = "Information.";
+                message = "Request for Appraisal complete.";
+                showMessageRedirect();
+            }else{
+                messageHeader = "Exception.";
+                message = "Please save Appraisal Request Screen before submit.";
+            }
         }catch(Exception ex){
             log.error("Exception while submit parallel request appraisal : ", ex);
             messageHeader = "Exception.";
@@ -1468,7 +1473,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
 
         //Check Appraisal data exist.
-        if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
+        if(fullApplicationControl.checkAppraisalInformation(workCasePreScreenId, workCaseId)) {
             RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
         } else {
             log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
