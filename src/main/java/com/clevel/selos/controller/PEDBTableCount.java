@@ -113,7 +113,7 @@ public class PEDBTableCount
         }
         catch(Exception e)
         {
-
+               log.error("Error while Fetching Count : {}",e);
         }
         finally
         {
@@ -344,7 +344,7 @@ public class PEDBTableCount
         }
         catch(Exception e)
         {
-
+            log.error("Error while Fetching Count : {}",e);
         }
         finally
         {
@@ -376,11 +376,11 @@ public class PEDBTableCount
             if(sqlquery != "" && sqlquery.length() > 0)
             {
 
-            rs = statement.executeQuery(sqlquery);
+                rs = statement.executeQuery(sqlquery);
 
-            log.info("resultset is : {}", rs);
+                log.info("resultset is : {}", rs);
 
-            log.info("result set row data type is : {}", rs.getMetaData().getColumnClassName(1));
+                log.info("result set row data type is : {}", rs.getMetaData().getColumnClassName(1));
             }
 
             try

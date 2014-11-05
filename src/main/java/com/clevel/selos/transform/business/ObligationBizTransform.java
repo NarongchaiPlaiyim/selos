@@ -12,10 +12,10 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
-import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
@@ -212,11 +212,17 @@ public class ObligationBizTransform extends BusinessTransform {
 
         existingCreditFacility.setTotalBorrowerAppInRLOSLimit(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
         existingCreditFacility.setTotalBorrowerComLimit(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerCom(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerComOBOD(existingCreditFacilityView.getTotalBorrowerComLimit());
         existingCreditFacility.setTotalBorrowerRetailLimit(existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
         existingCreditFacility.setTotalRelatedAppInRLOSLimit(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
         existingCreditFacility.setTotalRelatedComLimit(existingCreditFacilityView.getTotalRelatedComLimit());
         existingCreditFacility.setTotalRelatedRetailLimit(existingCreditFacilityView.getTotalRelatedRetailLimit());
+
+        //Summary for Total Group Exposure
+        BigDecimal totalGroupExposure = Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), existingCreditFacilityView.getTotalRelatedRetailLimit());
+        existingCreditFacility.setTotalGroupExposure(totalGroupExposure);
 
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user));
@@ -484,7 +490,7 @@ public class ObligationBizTransform extends BusinessTransform {
                         lastReviewDate = obligation.getLastReviewDate();
                 }
 
-                //Latest Review Date, get the one which latest than other account.
+                //Latest Contract Date, get the one which latest than other account.
                 if(obligation.getLastContractDate() != null){
                     if(lastContractDate == null || lastContractDate.before(obligation.getLastContractDate()))
                         lastContractDate = obligation.getLastContractDate();
@@ -545,6 +551,7 @@ public class ObligationBizTransform extends BusinessTransform {
             }
 
             customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(Util.isEmpty(serviceSegment)? 0 : Integer.parseInt(serviceSegment)));
+            customerInfoView.setExistingSMECustomer(customerInfoView.getServiceSegmentView().isExistingSME() ? RadioValue.YES.value() : RadioValue.NO.value());
             customerInfoView.setPendingClaimLG(pendingClaimLG);
             customerInfoView.setUnpaidFeeInsurance(unpaidFeeInsurance);
             if(qualitativeClass != null)

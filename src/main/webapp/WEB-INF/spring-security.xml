@@ -11,7 +11,7 @@
     <http auto-config="false">
         <intercept-url pattern="/admin/**" access="ROLE_SYSTEM,ROLE_ADMIN"/>
         <intercept-url pattern="/site/**"
-                       access="ROLE_SYSTEM,ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_GH,ROLE_CSSO,ROLE_UW,ROLE_SSO,ROLE_AAD,ROLE_AADC,ROLE_CC,ROLE_IC,ROLE_DC,ROLE_DEM,ROLE_DEC,ROLE_TCG,ROLE_LARBC,ROLE_CO1,ROLE_CO2,ROLE_LS,ROLE_LSM,ROLE_LD,ROLE_CDM,ROLE_VW,ROLE_TH_AAD"/>
+                       access="ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_GH,ROLE_CSSO,ROLE_UW,ROLE_AAD,ROLE_AADC,ROLE_SSO,ROLE_CC,ROLE_IC,ROLE_DC,ROLE_DEM,ROLE_DEC,ROLE_TCG,ROLE_CDM,ROLE_LARBC,ROLE_CO1,ROLE_CO2,ROLE_LS,ROLE_LSM,ROLE_LD,ROLE_TH_LAR,ROLE_TH_BC,ROLE_TH_AAD,ROLE_TH_CO,ROLE_GH_CLO,ROLE_TH_BO,ROLE_GH_BO,ROLE_TL_DE,ROLE_TL_CDM,ROLE_TL_BC,ROLE_CONTACT_1_TL,ROLE_CONTACT_2_TL,ROLE_INSURANCE_TL,ROLE_DOC_CHECK_TL,ROLE_TCG_TL,ROLE_LAR_TL,ROLE_TL_CO1,ROLE_TL_CO2,ROLE_TL_LD,ROLE_TL_LS,ROLE_VW"/>
         <intercept-url pattern="/isa/**" access="ROLE_ISA"/>
         <form-login login-page="/login.jsf"/>
         <logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.jsf"/>

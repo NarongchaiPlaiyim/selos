@@ -796,7 +796,7 @@ public class CalculationControl extends BusinessControl{
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                 log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", basicInfo.getId());
                 log.debug("calculateTotalProposeAmount :: tcg ID :: {}", tcg.getId());
-                int tcgFlag = tcg.getTcgFlag();
+                int tcgFlag = tcg != null ? tcg.getTcgFlag() : 0;
                 int specialProgramId = 0;
                 if(basicInfo.getApplySpecialProgram() == 1) {
                     if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
