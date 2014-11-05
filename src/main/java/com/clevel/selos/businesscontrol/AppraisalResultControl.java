@@ -12,7 +12,6 @@ import com.clevel.selos.integration.coms.model.SubCollateralData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ProposeType;
 import com.clevel.selos.model.RequestAppraisalValue;
-import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppraisalView;
@@ -128,8 +127,6 @@ public class AppraisalResultControl extends BusinessControl {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onSaveAppraisalResultModify(AppraisalView appraisalView, long workCaseId, long workCasePreScreenId) {
         log.debug("onSaveAppraisalResultModify ::: appraisalView ::: {} , workCaseId ::: {} , workCasePreScreenId ::: {}", appraisalView, workCaseId, workCasePreScreenId);
-        User currentUser = getCurrentUser();
-
         if (!Util.isNull(appraisalView)){
             if(workCaseId != 0) {
                 newCreditFacility = proposeLineDAO.findByWorkCaseId(workCaseId);
@@ -154,7 +151,6 @@ public class AppraisalResultControl extends BusinessControl {
                     proposeCollateralInfoDAO.persist(newCollateral);
                 }*/
 
-                newCollateralList.clear();
                 newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.R, null));
                 //log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
                 proposeCollateralInfoDAO.persist(newCollateralList);

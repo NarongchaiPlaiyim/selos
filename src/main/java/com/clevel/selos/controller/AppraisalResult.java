@@ -246,10 +246,11 @@ public class AppraisalResult extends BaseController {
     public void onCallRetrieveAppraisalReportInfo() {
         String jobID = newCollateralView.getJobID();
         log.info("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
-        boolean flag = true;
+        boolean flag;
         messageHeader = "Information";
         message = "Duplicate Job ID";
         if(!Util.isNull(jobID)){
+            flagReadOnly = true;
             try {
                 if(ModeForButton.ADD.equals(modeForButton)){
                     log.debug("-- ADD");
@@ -306,11 +307,13 @@ public class AppraisalResult extends BaseController {
                 } else {
                     message = e.getMessage();
                 }
+
                 if("See nested exception; nested exception is: COMSInterfaceException[code=053,message=Data Not Found!]".equalsIgnoreCase(e.getMessage())){
                     message = "Data Not Found!";
                 } else {
                     message = e.getMessage();
                 }
+                flagReadOnly = false;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
@@ -365,9 +368,10 @@ public class AppraisalResult extends BaseController {
             }
         }
 
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.addCallbackParam("functionComplete", complete);
+//        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+//        RequestContext context = RequestContext.getCurrentInstance();
+//        context.addCallbackParam("functionComplete", complete);
+        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
     }
 
     public void onEditCollateralDetailView(){
@@ -376,11 +380,11 @@ public class AppraisalResult extends BaseController {
         Cloner cloner = new Cloner();
         newCollateralView = cloner.deepClone(selectCollateralDetailView);
         log.debug("-- newCollateralView : {}", newCollateralView);
-        if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
-            flagReadOnly = false;
-        } else {
-            flagReadOnly = true;
-        }
+//        if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
+//            flagReadOnly = false;
+//        } else {
+        flagReadOnly = true;
+//        }
     }
 
     public void onDeleteCollateralDetailView(){

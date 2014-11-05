@@ -949,8 +949,8 @@ public class NCBBizTransform extends BusinessTransform {
                                             BigDecimal outstatndingAvg = BigDecimal.ZERO;
                                             BigDecimal outStandingCredit = BigDecimal.ZERO;
                                             int outStandingCreditMonth = 0;
-                                            if (!Util.isEmpty(subjectAccountModel.getAccounttype())
-                                                    && (subjectAccountModel.getAccounttype().equals("05") || subjectAccountModel.getAccounttype().equals("22"))) {
+                                            if (accountType!=null
+                                                    && (accountType.getCode().equalsIgnoreCase(AccountTypeCode.PERSONAL_LOAN_REVOLVING.value())|| accountType.getCode().equalsIgnoreCase(AccountTypeCode.CREDIT_CARD.value()))) {
                                                 if(subjectAccountModel.getAmountowed()!=null){
                                                     outStandingCredit = new BigDecimal(subjectAccountModel.getAmountowed());
                                                     outStandingCreditMonth = outStandingCreditMonth+1;
