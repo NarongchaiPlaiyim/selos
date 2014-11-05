@@ -364,32 +364,6 @@ public class BRMSControl extends BusinessControl {
         List<BRMSAccountRequested> accountRequestedList = new ArrayList<BRMSAccountRequested>();
 
         mandateFieldValidationControl.validate(prescreenFacilityList, PrescreenFacility.class.getName());
-        //Check PreScreen Product Program
-        /*boolean validateFacility = true;
-        if(prescreenFacilityList == null){
-            validateFacility = false;
-        }else{
-            if(prescreenFacilityList.size() == 0){
-                validateFacility = false;
-            }
-        }
-
-        if(!validateFacility){
-            //logger.debug("Juristic should have at least one guarantor. mainBorrower : {}, numberOfGuarantor : {}", mainBorrower, numberOfGuarantor);
-            MandateFieldMessageView mandateFieldMessageView = new MandateFieldMessageView();
-            mandateFieldMessageView.setFieldName("Product Program");
-            mandateFieldMessageView.setFieldDesc("Product facility detail.");
-            mandateFieldMessageView.setMessage("Product facility should have at least one.");
-            mandateFieldMessageView.setPageName("Prescreen.");
-            List<MandateFieldMessageView> mandateFieldMessageViewList = new ArrayList<MandateFieldMessageView>();
-            mandateFieldMessageViewList.add(mandateFieldMessageView);
-
-            uwRuleResponseView.setActionResult(ActionResult.FAILED);
-            uwRuleResponseView.setReason("Mandatory fields are missing!!");
-            uwRuleResponseView.setMandateFieldMessageViewList(mandateFieldMessageViewList);
-
-            return uwRuleResponseView;
-        }*/
 
         for(PrescreenFacility prescreenFacility : prescreenFacilityList){
             BRMSAccountRequested accountRequested = new BRMSAccountRequested();
@@ -1357,6 +1331,7 @@ public class BRMSControl extends BusinessControl {
             List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
             if(ncbDetailList == null || ncbDetailList.size() == 0){
                 customerInfo.setNcbFlag(Boolean.FALSE);
+                ncbAccountInfoList.add(getBRMSNCBAccountInfo(new NCBDetail(), customerInfo.isIndividual(), checkDate));
             } else {
                 customerInfo.setNcbFlag(Boolean.TRUE);
                 for(NCBDetail ncbDetail : ncbDetailList){
