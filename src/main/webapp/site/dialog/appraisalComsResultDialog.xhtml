@@ -21,7 +21,7 @@
                 </td>
                 <td style="width: 226px; min-width: 226px; max-width: 226px;">
                     <p:commandButton id="dlgSearchBrBtn" value="Retrieve Appraisal Report"
-                                     disabled="#{appraisalResult.isDisabled('collateral.retrieveAppraisalButton')}"
+                                     disabled="#{appraisalResult.isDisabled('collateral.retrieveAppraisalButton') or appraisalResult.flagReadOnly}"
                                      binding="#{searchButton}"
                                      process="@form"
                                      action="#{appraisalResult.onCallRetrieveAppraisalReportInfo()}"
@@ -39,19 +39,9 @@
             <table class="content_form" style="width: 100%">
                 <tr>
                     <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
-                        <h:outputText value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
-                    </td>
-                    <td class="left" style="width: 226px; min-width: 226px; max-width: 226px;">
-                        <h:outputText value="#{appraisalResult.newCollateralView.jobID}"/>
-                    </td>
-                    <td style="width: 226px; min-width: 226px; max-width: 226px;"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="title">
                         <h:outputText value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                     </td>
-                    <td class="left">
+                    <td class="left" style="width: 226px; min-width: 226px; max-width: 226px;">
                         <clv:BECalendar value="#{appraisalResult.newCollateralView.appraisalDate}"
                                         id="expectSumitDate"
                                         showOn="button"
@@ -66,6 +56,8 @@
                             <p:ajax event="change" update="@this"/>
                         </clv:BECalendar>
                     </td>
+                    <td style="width: 226px; min-width: 226px; max-width: 226px;"></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="title">
@@ -139,10 +131,11 @@
                         <td class="title" style="width: 226px; min-width: 226px; max-width: 226px;">
                             <h:outputText value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
                         </td>
-                        <td class="left">
+                        <td class="left" style="width: 500px; min-width: 500px; max-width: 500px;">
                             <h:inputText value="#{collateralHeadDetailView.titleDeed}"
-                                         readonly="true" style="width: 680px; min-width: 680px; max-width: 680px;"/>
+                                         readonly="true" style="width: 200px; min-width: 200px; max-width: 200px;"/>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td class="title">
@@ -150,8 +143,9 @@
                         </td>
                         <td class="left">
                             <h:inputText value="#{collateralHeadDetailView.collateralLocation}"
-                                         readonly="true" style="width: 680px; min-width: 680px; max-width: 680px;"/>
+                                         readonly="true" style="width: 450px; min-width: 450px; max-width: 450px;"/>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td class="title">
@@ -159,10 +153,11 @@
                         </td>
                         <td class="left">
                             <h:inputText value="#{collateralHeadDetailView.appraisalValue}"
-                                         readonly="true" styleClass="right" style="width: 680px; min-width: 680px; max-width: 680px;">
+                                         readonly="true" styleClass="right" style="width: 150px; min-width: 150px; max-width: 150px;">
                                 <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                             </h:inputText>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td class="title">
@@ -170,11 +165,12 @@
                         </td>
                         <td class="left">
                             <h:inputText value="#{collateralHeadDetailView.headCollType.description}"
-                                         readonly="true" style="width: 680px; min-width: 680px; max-width: 680px;"/>
+                                         readonly="true" style="width: 200px; min-width: 200px; max-width: 200px;"/>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <p:dataTable tableStyleClass="center"
                                          id="subCollateralDetailViewTable"
                                          var="subCollateralDetailView"
@@ -216,17 +212,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <p:spacer width="5px"/>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <div class="separate"></div>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <p:spacer width="5px"/>
                         </td>
                     </tr>
