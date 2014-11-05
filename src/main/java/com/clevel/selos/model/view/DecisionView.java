@@ -98,6 +98,7 @@ public class DecisionView implements Serializable {
 
     private List<ProposeFeeDetailView> approveFeeDetailViewList; // for only show in screen
     private List<ProposeFeeDetailView> approveFeeDetailViewOriginalList; // have all proposeFeeDetail
+    private List<FeeDetailView> approveAppFeeDetailViewList; // appFeeDetail
 
     private List<Long> deleteCreditIdList;
     private List<Long> deleteFollowConditionIdList;
@@ -115,6 +116,8 @@ public class DecisionView implements Serializable {
         this.deleteFollowConditionIdList = new ArrayList<Long>();
         this.deleteGuarantorIdList = new ArrayList<Long>();
         this.deleteCollateralIdList = new ArrayList<Long>();
+
+        this.approveAppFeeDetailViewList = new ArrayList<FeeDetailView>();
     }
 
     public long getId() {
@@ -715,6 +718,14 @@ public class DecisionView implements Serializable {
 
     public void setDeleteCollateralIdList(List<Long> deleteCollateralIdList) {
         this.deleteCollateralIdList = deleteCollateralIdList;
+    }
+
+    public List<FeeDetailView> getApproveAppFeeDetailViewList() {
+        return approveAppFeeDetailViewList;
+    }
+
+    public void setApproveAppFeeDetailViewList(List<FeeDetailView> approveAppFeeDetailViewList) {
+        this.approveAppFeeDetailViewList = approveAppFeeDetailViewList;
     }
 
     @Override

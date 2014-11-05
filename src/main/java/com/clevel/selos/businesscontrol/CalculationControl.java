@@ -68,6 +68,8 @@ public class CalculationControl extends BusinessControl{
     private WorkCaseDAO workCaseDAO;
     @Inject
     private PotentialColToTCGColDAO potentialColToTCGColDAO;
+    @Inject
+    private ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
     private CustomerTransform customerTransform;
@@ -794,7 +796,7 @@ public class CalculationControl extends BusinessControl{
             if(!Util.isNull(basicInfo) && !Util.isNull(tcg)) {
                 log.debug("calculateTotalProposeAmount :: basicInfo ID :: {}", basicInfo.getId());
                 log.debug("calculateTotalProposeAmount :: tcg ID :: {}", tcg.getId());
-                int tcgFlag = tcg.getTcgFlag();
+                int tcgFlag = tcg != null ? tcg.getTcgFlag() : 0;
                 int specialProgramId = 0;
                 if(basicInfo.getApplySpecialProgram() == 1) {
                     if(!Util.isNull(basicInfo.getSpecialProgram()) && !Util.isZero(basicInfo.getSpecialProgram().getId())) {
@@ -1219,5 +1221,125 @@ public class CalculationControl extends BusinessControl{
             }
         }
         return ltvPercentBig;
+    }
+
+    public void calculateBasicInfo(long workCaseId){
+        log.debug("calculateBasicInfo ::: Start...");
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        log.info("start calBasicInfo for basicInfo {} :: ", basicInfo);
+        BigDecimal totalUnpaidFeeInsurance = BigDecimal.ZERO;
+        BigDecimal totalPendingClaimLG = BigDecimal.ZERO;
+        Date lastReviewDate = null;
+        Date extendedReviewDate = null;
+        SBFScore sbfScore = new SBFScore();
+        int countNonExistingSME = 0;
+        int countExistingSME = 0;
+
+        if(!Util.isNull(basicInfo)){
+            List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+
+            for(Customer customer : customerList){
+                if(customer.getTmbCustomerId() != null && !"".equals(customer.getTmbCustomerId())){
+                    CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
+                    if(customerOblInfo != null){
+                        if(customer.getReference() != null && Util.isTrue(customer.getReference().getPendingClaimLG()))
+                            totalPendingClaimLG = totalPendingClaimLG.add(customerOblInfo.getPendingClaimLG());
+
+                        if(customer.getReference() != null && Util.isTrue(customer.getReference().getUnpaidInsurance()))
+                            totalUnpaidFeeInsurance = totalUnpaidFeeInsurance.add(customerOblInfo.getUnpaidFeeInsurance());
+
+                        if(customer.getRelation() != null && customer.getRelation().getId() == RelationValue.BORROWER.value()) {
+                            if(customerOblInfo.getLastReviewDate() != null){
+                                if(lastReviewDate == null || customerOblInfo.getLastReviewDate().after(lastReviewDate)){
+                                    lastReviewDate = customerOblInfo.getLastReviewDate();
+                                }
+                            }
+
+                            if(customerOblInfo.getExtendedReviewDate() != null){
+                                if(extendedReviewDate == null || customerOblInfo.getExtendedReviewDate().before(extendedReviewDate)){
+                                    extendedReviewDate = customerOblInfo.getExtendedReviewDate();
+                                }
+                            }
+
+                            //SCFScore, get worst score (Max is the worst) of final rate
+                            if(customerOblInfo.getRatingFinal() != null && customerOblInfo.getRatingFinal().getId() != 0){
+                                if(sbfScore.getScore() < customerOblInfo.getRatingFinal().getScore()){
+                                    sbfScore = customerOblInfo.getRatingFinal();
+                                }
+                            }
+
+                            if(customerOblInfo.getServiceSegment() != null && Util.isTrue(customerOblInfo.getServiceSegment().getExistingSME())){
+                                countExistingSME++;
+                                log.debug("plus countExistingSME", countExistingSME);
+                            }
+                        }
+
+                        if(customer.getReference() != null && Util.isTrue(customer.getReference().getSll())){
+                            if(customerOblInfo.getServiceSegment() != null && Util.isTrue(customerOblInfo.getServiceSegment().getNonExistingSME())){
+                                countNonExistingSME++;
+                                log.debug("plus countNonExistingSME", countNonExistingSME);
+                            }
+                        }
+                    }
+                }
+            }
+
+            log.info("value :: totalUnpaidFeeInsurance : {}, totalPendingClaimLG {}", totalUnpaidFeeInsurance, totalPendingClaimLG);
+
+            basicInfo.setNoUnpaidFeeInsurance(totalUnpaidFeeInsurance.compareTo(BigDecimal.ZERO) == 0? RadioValue.YES.value() : RadioValue.NO.value());
+            basicInfo.setNoPendingClaimLG(totalPendingClaimLG.compareTo(BigDecimal.ZERO) == 0? RadioValue.YES.value(): RadioValue.NO.value());
+            basicInfo.setLastReviewDate(lastReviewDate);
+
+            if(lastReviewDate == null)
+                basicInfo.setPassAnnualReview(RadioValue.NO.value());
+            else
+                basicInfo.setPassAnnualReview(RadioValue.YES.value());
+
+            if(sbfScore != null && sbfScore.getId() == 0){
+                sbfScore = null;
+            }
+            basicInfo.setSbfScore(sbfScore);
+
+            log.info("countExistingSME {}", countExistingSME);
+            log.info("countNonExistingSME {}", countNonExistingSME);
+
+            if(countExistingSME > 0){
+                basicInfo.setRequestLoanWithSameName(RadioValue.YES.value());
+            } else {
+                basicInfo.setRequestLoanWithSameName(RadioValue.NO.value());
+            }
+
+            if(countExistingSME > 0 && countNonExistingSME == 0){
+                basicInfo.setExistingSMECustomer(RadioValue.YES.value());
+            } else {
+                basicInfo.setExistingSMECustomer(RadioValue.NO.value());
+            }
+
+            basicInfo.setExtendedReviewDate(extendedReviewDate);
+
+            basicInfo.setRetrievedFlag(1);
+
+            //set existing loan in one year flag
+            basicInfo.setHaveLoanInOneYear(1);
+            ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(basicInfo.getWorkCase().getId());
+            if(existingCreditFacility!=null) {
+                List<ExistingCreditDetail> borrowerComExistingCreditList = existingCreditDetailDAO.findByExistingCreditFacilityByTypeAndCategory(existingCreditFacility,RelationValue.BORROWER.value(), CreditCategory.COMMERCIAL);
+                if(borrowerComExistingCreditList!=null && borrowerComExistingCreditList.size()>0){
+                    for(ExistingCreditDetail existingCreditDetail : borrowerComExistingCreditList){
+                        if(existingCreditDetail.getExistProductSegment()!=null){
+                            if(existingCreditDetail.getExistProductSegment().getId()==2 && existingCreditDetail.getExistProductSegment().getId()==6){
+                                basicInfo.setHaveLoanInOneYear(2);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            log.info("haveLoanInOneYear {}", Util.isRadioTrue(basicInfo.getHaveLoanInOneYear()));
+
+            log.info("calBasicInfo :: basicInfo {}", basicInfo);
+
+            basicInfoDAO.persist(basicInfo);
+        }
     }
 }

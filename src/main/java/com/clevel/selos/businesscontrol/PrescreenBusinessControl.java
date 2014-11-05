@@ -241,6 +241,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         List<ExistingCreditDetailView> borrowerRetailExistingCredit = existingCreditFacilityView.getBorrowerRetailExistingCredit();
         List<ExistingCreditDetailView> relatedComExistingCredit = existingCreditFacilityView.getRelatedComExistingCredit();
         List<ExistingCreditDetailView> relatedRetailExistingCredit = existingCreditFacilityView.getRelatedRetailExistingCredit();
+
         BigDecimal totalBorrowerComLimit = existingCreditFacilityView.getTotalBorrowerComLimit();
         BigDecimal totalBorrowerRetailLimit = existingCreditFacilityView.getTotalBorrowerRetailLimit();
         BigDecimal totalRelatedComLimit = existingCreditFacilityView.getTotalRelatedComLimit();
@@ -277,6 +278,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(totalBorrowerComLimit!=null && totalBorrowerComLimit.compareTo(BigDecimal.ZERO)>0){
             totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerComLimit);
         }
+
         if(totalBorrowerRetailLimit!=null && totalBorrowerRetailLimit.compareTo(BigDecimal.ZERO)>0){
             totalBorrowerLimitPreScreen = totalBorrowerLimitPreScreen.add(totalBorrowerRetailLimit);
         }
@@ -284,6 +286,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         if(totalRelatedComLimit!=null && totalRelatedComLimit.compareTo(BigDecimal.ZERO)>0){
             totalRelatedLimitPreScreen = totalRelatedLimitPreScreen.add(totalRelatedComLimit);
         }
+
         if(totalRelatedRetailLimit!=null && totalRelatedRetailLimit.compareTo(BigDecimal.ZERO)>0){
             totalRelatedLimitPreScreen = totalRelatedRetailLimit.add(totalRelatedRetailLimit);
         }
@@ -1772,6 +1775,22 @@ public class PrescreenBusinessControl extends BusinessControl {
                     throw ex;
                 }
             }
+        }
+    }
+
+    public void updateTimeOfCheckPreScreen(long workCasePreScreenId, long stepId){
+        try{
+            WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerPreScreen(workCasePreScreenId, getCurrentUser().getRole().getId(), getCurrentUserID(), stepId);
+            log.debug("Update time of criteria checked [workCaseOwner] : {}", workCaseOwner);
+            if(!Util.isNull(workCaseOwner)) {
+                int timesOfCriteriaChecked = workCaseOwner.getTimesOfCriteriaChecked();
+                timesOfCriteriaChecked = timesOfCriteriaChecked + 1;
+                workCaseOwner.setTimesOfCriteriaChecked(timesOfCriteriaChecked);
+                log.debug("Update time of criteria checked [timeOfCriteriaCheck] : {}", timesOfCriteriaChecked);
+                workCaseOwnerDAO.persist(workCaseOwner);
+            }
+        }catch(Exception ex){
+            log.error("Exception while update time of check criteria.", ex);
         }
     }
 

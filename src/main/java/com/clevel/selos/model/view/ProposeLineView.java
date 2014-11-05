@@ -83,6 +83,7 @@ public class ProposeLineView implements Serializable {
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
     private List<ProposeFeeDetailView> proposeFeeDetailViewList; // for only show in screen
     private List<ProposeFeeDetailView> proposeFeeDetailViewOriginalList; // have all proposeFeeDetail
+    private List<FeeDetailView> proposeAppFeeDetailViewList; // appFeeDetail
 
     private List<Long> deleteCreditIdList;
     private List<Long> deleteConditionIdList;
@@ -150,6 +151,7 @@ public class ProposeLineView implements Serializable {
 
         this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
         this.proposeFeeDetailViewOriginalList = new ArrayList<ProposeFeeDetailView>();
+        this.proposeAppFeeDetailViewList = new ArrayList<FeeDetailView>();
 
         this.deleteCreditIdList = new ArrayList<Long>();
         this.deleteConditionIdList = new ArrayList<Long>();
@@ -720,5 +722,13 @@ public class ProposeLineView implements Serializable {
 
     public void setTotalTCGGuaranteeAmount(BigDecimal totalTCGGuaranteeAmount) {
         this.totalTCGGuaranteeAmount = totalTCGGuaranteeAmount;
+    }
+
+    public List<FeeDetailView> getProposeAppFeeDetailViewList() {
+        return proposeAppFeeDetailViewList;
+    }
+
+    public void setProposeAppFeeDetailViewList(List<FeeDetailView> proposeAppFeeDetailViewList) {
+        this.proposeAppFeeDetailViewList = proposeAppFeeDetailViewList;
     }
 }

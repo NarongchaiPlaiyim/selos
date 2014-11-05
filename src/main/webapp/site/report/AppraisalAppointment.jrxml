@@ -381,11 +381,12 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$P{fillHeader}.getPersonalId5()]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="96cbb994-3267-48e3-b1ae-c3f56d705d69" x="260" y="148" width="76" height="11"/>
-					<textElement verticalAlignment="Top">
+					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getLastDecisionDate()]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="636396c0-d468-42ef-8c55-d7974cb79699" mode="Opaque" x="171" y="148" width="88" height="11" forecolor="#0066FF"/>
@@ -401,11 +402,12 @@
 					</textElement>
 					<text><![CDATA[Limit Setup Expired Date :	]]></text>
 				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="505c547a-68a3-4b04-be6d-b9cf1bce39a7" x="440" y="148" width="76" height="11"/>
-					<textElement verticalAlignment="Top">
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement uuid="505c547a-68a3-4b04-be6d-b9cf1bce39a7" x="440" y="148" width="76" height="11" forecolor="#FF0000"/>
+					<textElement verticalAlignment="Middle">
 						<font size="6" pdfFontName="fonts/TAHOMA.TTF" pdfEncoding="Identity-H"/>
 					</textElement>
+					<textFieldExpression><![CDATA[$P{fillHeader}.getLimitSetupExpireDate()]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>

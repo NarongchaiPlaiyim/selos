@@ -12,10 +12,10 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditFacility;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.transform.master.BankAccountStatusTransform;
 import com.clevel.selos.transform.ProductTransform;
-import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.transform.ServiceSegmentTransform;
+import com.clevel.selos.transform.master.BankAccountStatusTransform;
+import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
@@ -212,11 +212,17 @@ public class ObligationBizTransform extends BusinessTransform {
 
         existingCreditFacility.setTotalBorrowerAppInRLOSLimit(existingCreditFacilityView.getTotalBorrowerAppInRLOSLimit());
         existingCreditFacility.setTotalBorrowerComLimit(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerCom(existingCreditFacilityView.getTotalBorrowerComLimit());
+        existingCreditFacility.setTotalBorrowerComOBOD(existingCreditFacilityView.getTotalBorrowerComLimit());
         existingCreditFacility.setTotalBorrowerRetailLimit(existingCreditFacilityView.getTotalBorrowerRetailLimit());
 
         existingCreditFacility.setTotalRelatedAppInRLOSLimit(existingCreditFacilityView.getTotalRelatedAppInRLOSLimit());
         existingCreditFacility.setTotalRelatedComLimit(existingCreditFacilityView.getTotalRelatedComLimit());
         existingCreditFacility.setTotalRelatedRetailLimit(existingCreditFacilityView.getTotalRelatedRetailLimit());
+
+        //Summary for Total Group Exposure
+        BigDecimal totalGroupExposure = Util.add(existingCreditFacilityView.getTotalBorrowerComLimit(), existingCreditFacilityView.getTotalRelatedRetailLimit());
+        existingCreditFacility.setTotalGroupExposure(totalGroupExposure);
 
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
         existingCreditDetailList.addAll(getExistingCreditDetail(existingCreditFacilityView.getBorrowerComExistingCredit(), existingCreditFacility, user));
@@ -258,7 +264,7 @@ public class ObligationBizTransform extends BusinessTransform {
                 if(existingCreditDetailView.getExistAccountStatusView() != null){
                     BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getExistAccountStatusView());
                     log.debug("transform ExistingCreditTransform ::: bankAccountStatus : {}", bankAccountStatus);
-                    if(bankAccountStatus.getId() != 0){
+                    if(!Util.isNull(bankAccountStatus) && !Util.isZero(bankAccountStatus.getId())){
                         existingCreditDetail.setExistAccountStatus(bankAccountStatus);
                     }else{
                         existingCreditDetail.setExistAccountStatus(null);
@@ -458,6 +464,7 @@ public class ObligationBizTransform extends BusinessTransform {
             BigDecimal unpaidFeeInsurance = new BigDecimal(0);
             BigDecimal pendingClaimLG = new BigDecimal(0);
             Date lastReviewDate = null;
+            Date lastContractDate = null;
             Date extendedReviewDate = null;
             Date nextReviewDate = null;
             int scfScore = -1;
@@ -483,6 +490,12 @@ public class ObligationBizTransform extends BusinessTransform {
                         lastReviewDate = obligation.getLastReviewDate();
                 }
 
+                //Latest Contract Date, get the one which latest than other account.
+                if(obligation.getLastContractDate() != null){
+                    if(lastContractDate == null || lastContractDate.before(obligation.getLastContractDate()))
+                        lastContractDate = obligation.getLastContractDate();
+                }
+
                 //Extended Review Date, get earliest Date than other account.
                 if(obligation.getExtendedReviewDate() != null){
                     if(extendedReviewDate == null || extendedReviewDate.after(obligation.getExtendedReviewDate()))
@@ -502,6 +515,8 @@ public class ObligationBizTransform extends BusinessTransform {
                     int tempSBFScore = 0;
                     if(obligation.getScfScoreFinalRate().length() > 2){
                         tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate().substring(obligation.getScfScoreFinalRate().length()-2, obligation.getScfScoreFinalRate().length()));
+                    }else{
+                        tempSBFScore = Integer.parseInt(obligation.getScfScoreFinalRate());
                     }
                     log.info("tempSBFScore int score : {}", tempSBFScore);
                     if (tempSBFScore > scfScore){
@@ -536,6 +551,7 @@ public class ObligationBizTransform extends BusinessTransform {
             }
 
             customerInfoView.setServiceSegmentView(serviceSegmentTransform.transformToView(Util.isEmpty(serviceSegment)? 0 : Integer.parseInt(serviceSegment)));
+            customerInfoView.setExistingSMECustomer(customerInfoView.getServiceSegmentView().isExistingSME() ? RadioValue.YES.value() : RadioValue.NO.value());
             customerInfoView.setPendingClaimLG(pendingClaimLG);
             customerInfoView.setUnpaidFeeInsurance(unpaidFeeInsurance);
             if(qualitativeClass != null)
@@ -546,6 +562,10 @@ public class ObligationBizTransform extends BusinessTransform {
                 customerInfoView.setReviewFlag(RadioValue.YES.value());
             } else {
                 customerInfoView.setReviewFlag(RadioValue.NO.value());
+            }
+
+            if(lastContractDate != null){
+                customerInfoView.setLastContractDate(lastContractDate);
             }
 
             if(extendedReviewDate != null){

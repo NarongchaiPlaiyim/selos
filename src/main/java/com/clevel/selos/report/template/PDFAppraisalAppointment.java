@@ -3,9 +3,11 @@ package com.clevel.selos.report.template;
 
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.businesscontrol.AppraisalRequestControl;
+import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.report.*;
@@ -47,6 +49,7 @@ public class PDFAppraisalAppointment implements Serializable {
     @Inject private WorkCaseDAO workCaseDAO;
     @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject private AppraisalRequestControl appraisalRequestControl;
+    @Inject BasicInfoDAO basicInfoDAO;
 
     private AppraisalView appraisalView;
     private long workCaseId;
@@ -215,6 +218,11 @@ public class PDFAppraisalAppointment implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
 
+        BasicInfo basicInfo = null;
+
+        if (!Util.isNull(workCase)){
+            basicInfo = basicInfoDAO.findByWorkCaseId(workCase.getId());
+        }
 
         //Detail 1
         if (!Util.isNull(appHeaderView)){
@@ -263,6 +271,12 @@ public class PDFAppraisalAppointment implements Serializable {
             }
 
             report.setCreditDecision(Util.checkNullString(appHeaderView.getProductGroup()));
+
+            if (!Util.isNull(basicInfo)){
+                report.setLastDecisionDate(Util.checkNullString(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLastDecisionDate())));
+                log.debug("------------------------ {}",basicInfo.getLimitSetupExpiryDate());
+                report.setLimitSetupExpireDate(Util.checkNullString(DateTimeUtil.convertToStringDDMMYYYY(basicInfo.getLimitSetupExpiryDate())));
+            }
 
             if (!Util.isNull(workCase)){
                 report.setApprovedDate(DateTimeUtil.getCurrentDateTH(workCase.getCompleteDate()));

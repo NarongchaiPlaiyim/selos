@@ -446,9 +446,9 @@ public class FullApplicationControl extends BusinessControl {
                                     zmPricingRequestFlag = "NA";
                                 } else {
                                     if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
-                                        zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
+                                        zmPricingRequestFlag = approvalHistoryEndorsePricing.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
                                     } else {
-                                        zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+                                        zmPricingRequestFlag = approvalHistoryEndorsePricing.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
                                     }
                                 }
                                 approvalHistoryEndorsePricing.setSubmit(1);
@@ -534,42 +534,38 @@ public class FullApplicationControl extends BusinessControl {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if(workCase != null){
                 log.debug("submitForZM ::: stepId : {}", stepId);
-                String zmDecisionFlag = "";
+                String zmDecisionFlag = "NA";
                 String zmPricingRequestFlag = "";
                 String resultCode = "G";
                 String deviationCode = "";
                 int priceDOALevel;
-                ApprovalHistory approvalHistoryEndorseCA = null;
+                //ApprovalHistory approvalHistoryEndorseCA = null;
                 ApprovalHistory approvalHistoryEndorsePricing = null;
                 priceDOALevel = workCase.getPricingDoaLevel();
 
-                approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
+                //approvalHistoryEndorseCA = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.CA_APPROVAL.value());
                 approvalHistoryEndorsePricing = approvalHistoryDAO.findByWorkCaseAndUserAndApproveType(workCaseId, getCurrentUser(), ApprovalType.PRICING_APPROVAL.value());
                 //--Check for Decision from Zone --//
-                if(approvalHistoryEndorseCA != null){
-                    if(approvalHistoryEndorseCA.getApproveDecision() != DecisionType.NO_DECISION.value()){
-                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                        approvalHistoryEndorseCA.setSubmit(1);
-                        approvalHistoryEndorseCA.setSubmitDate(new Date());
-                    } else {
-                        log.debug("submitForZM :: no decision found. ( endorse )");
-                        throw new Exception("Please make decision ( Endorse CA ) before submit.");
-                    }
-                } else {
-                    log.debug("submitForZM :: no decision found. ( pricing and endorse )");
-                    throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
-                }
+//                if(approvalHistoryEndorseCA != null){
+//                    if(approvalHistoryEndorseCA.getApproveDecision() != DecisionType.NO_DECISION.value()){
+//                        zmDecisionFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
+//                        approvalHistoryEndorseCA.setSubmit(1);
+//                        approvalHistoryEndorseCA.setSubmitDate(new Date());
+//                    } else {
+//                        log.debug("submitForZM :: no decision found. ( endorse )");
+//                        throw new Exception("Please make decision ( Endorse CA ) before submit.");
+//                    }
+//                } else {
+//                    log.debug("submitForZM :: no decision found. ( pricing and endorse )");
+//                    throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
+//                }
                 //--Check for Decision (Pricing) from Zone--//
                 if(approvalHistoryEndorsePricing != null){
                     if(approvalHistoryEndorsePricing.getApproveDecision() != DecisionType.NO_DECISION.value()){
-                        if(approvalHistoryEndorseCA.getApproveDecision() == DecisionType.REJECTED.value()){
-                            zmPricingRequestFlag = "NA";
+                        if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
+                            zmPricingRequestFlag = approvalHistoryEndorsePricing.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
                         } else {
-                            if(priceDOALevel > PricingDOAValue.ZM_DOA.value()){
-                                zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"E":"R";
-                            } else {
-                                zmPricingRequestFlag = approvalHistoryEndorseCA.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
-                            }
+                            zmPricingRequestFlag = approvalHistoryEndorsePricing.getApproveDecision()==DecisionType.APPROVED.value()?"A":"R";
                         }
                         approvalHistoryEndorsePricing.setSubmit(1);
                         approvalHistoryEndorsePricing.setSubmitDate(new Date());
@@ -599,7 +595,7 @@ public class FullApplicationControl extends BusinessControl {
 
                 bpmExecutor.submitForZMReducePrice(queueName, wobNumber, rgmUserId, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), zmDecisionFlag, zmPricingRequestFlag, resultCode, deviationCode, ActionCode.SUBMIT_CA.getVal());
 
-                approvalHistoryDAO.persist(approvalHistoryEndorseCA);
+                //approvalHistoryDAO.persist(approvalHistoryEndorseCA);
                 approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
             }else{
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -771,9 +767,11 @@ public class FullApplicationControl extends BusinessControl {
         if(pass){
             List<ProposeCollateralInfo> proposeCollateralInfoList = proposeCollateralInfoDAO.findNewCollateralByTypeA(workCaseId);
             for(ProposeCollateralInfo collateralInfo : proposeCollateralInfoList){
-                if(collateralInfo.getUwDecision() == DecisionType.NO_DECISION){
-                    pass = false;
-                    break;
+                if(collateralInfo.getAppraisalRequest() != RequestAppraisalValue.REQUESTED.value()) {
+                    if (collateralInfo.getUwDecision() == DecisionType.NO_DECISION) {
+                        pass = false;
+                        break;
+                    }
                 }
             }
         }
@@ -1234,9 +1232,17 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     /** Appraisal [ Request Appraisal - BDM Check appraisal data ] **/
-    public boolean checkAppraisalInformation(long workCaseId){
+    public boolean checkAppraisalInformation(long workCasePreScreenId, long workCaseId){
         Appraisal appraisal = null;
         boolean checkAppraisal = false;
+        if(!Util.isNull(workCasePreScreenId) && !Util.isZero(workCasePreScreenId)){
+            appraisal = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+            log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);
+            if(!Util.isNull(appraisal)){
+                checkAppraisal = true;
+            }
+        }
+
         if(!Util.isNull(workCaseId) && workCaseId != 0){
             appraisal = appraisalDAO.findByWorkCaseId(workCaseId);
             log.debug("checkAppraisalInformation ::: find appraisal by workCase : {}", appraisal);

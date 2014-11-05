@@ -467,7 +467,7 @@ public class HeaderController extends BaseController {
                     mandateFieldMessageViewList = null;
 
                     prescreenBusinessControl.updateCSIData(workCasePreScreenId);
-                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, 1006);
+                    UWRuleResponseView uwRuleResponseView = brmsControl.getPrescreenResult(workCasePreScreenId, ActionCode.CHECK_PRESCREEN.getVal());
                     log.info("onCheckPreScreen uwRulesResponse : {}", uwRuleResponseView);
                     if(uwRuleResponseView != null){
                         if(uwRuleResponseView.getActionResult().equals(ActionResult.SUCCESS)){
@@ -476,6 +476,9 @@ public class HeaderController extends BaseController {
                                 uwRuleResultSummaryView = uwRuleResponseView.getUwRuleResultSummaryView();
                                 uwRuleResultSummaryView.setWorkCasePrescreenId(workCasePreScreenId);
                                 uwRuleResultControl.saveNewUWRuleResult(uwRuleResultSummaryView);
+
+                                //----Update Times of Check Criteria----//
+                                prescreenBusinessControl.updateTimeOfCheckPreScreen(workCasePreScreenId, stepId);
                             }catch (Exception ex){
                                 log.error("Cannot Save UWRuleResultSummary {}", uwRuleResultSummaryView);
                                 messageHeader = "Exception.";
@@ -1422,11 +1425,16 @@ public class HeaderController extends BaseController {
     //*   Step 2001/1003
     public void onSubmitParallelRequestAppraisal(){
         try{
-            fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
-            fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
-            messageHeader = "Information.";
-            message = "Request for Appraisal complete.";
-            showMessageRedirect();
+            if(fullApplicationControl.checkAppraisalInformation(workCasePreScreenId, workCaseId)) {
+                fullApplicationControl.requestAppraisalParallelBDM(workCasePreScreenId, workCaseId, stepId);
+                fullApplicationControl.duplicateCollateralForAppraisal(workCaseId, workCasePreScreenId);
+                messageHeader = "Information.";
+                message = "Request for Appraisal complete.";
+                showMessageRedirect();
+            }else{
+                messageHeader = "Exception.";
+                message = "Please save Appraisal Request Screen before submit.";
+            }
         }catch(Exception ex){
             log.error("Exception while submit parallel request appraisal : ", ex);
             messageHeader = "Exception.";
