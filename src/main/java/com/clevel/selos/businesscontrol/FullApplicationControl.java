@@ -1646,6 +1646,7 @@ public class FullApplicationControl extends BusinessControl {
     }
 
     public int calculateAppraisalRequest(ProposeLine newCreditFacility){
+        log.debug("calculateAppraisalRequest");
         int appraisalRequire = 0;
         int appraisalRequireCount = 0;
         if(!Util.isNull(newCreditFacility)){
@@ -1653,6 +1654,7 @@ public class FullApplicationControl extends BusinessControl {
                 for(ProposeCollateralInfo newCollateral : newCreditFacility.getProposeCollateralInfoList()){
                     if(!Util.isNull(newCollateral.getProposeCollateralInfoHeadList()) && newCollateral.getProposeCollateralInfoHeadList().size() > 0){
                         for(ProposeCollateralInfoHead newCollateralHead : newCollateral.getProposeCollateralInfoHeadList()){
+                            log.debug("calcuateAppraisalRequest : newCollateralHead : {}", newCollateralHead);
                             if(!Util.isNull(newCollateralHead.getHeadCollType()) && newCollateralHead.getHeadCollType().getId() != 0){
                                 if(newCollateralHead.getHeadCollType().getAppraisalRequire() == 1){
                                     if(!Util.isNull(newCollateral.getAppraisalDate())){
@@ -1664,6 +1666,7 @@ public class FullApplicationControl extends BusinessControl {
                                     }
                                 }
                             }
+                            log.debug("appraisalRequireCount : {}", appraisalRequireCount);
                         }
                     }
                 }
@@ -1673,6 +1676,7 @@ public class FullApplicationControl extends BusinessControl {
             appraisalRequire = 1;
         }
 
+        log.debug("appraisalRequire : {}", appraisalRequire);
         return appraisalRequire;
     }
 

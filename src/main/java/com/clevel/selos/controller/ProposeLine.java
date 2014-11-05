@@ -840,11 +840,7 @@ public class ProposeLine extends BaseController {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (ex.getCause() != null) {
-                message = msg.get("app.propose.response.save.failed") + " cause : " + ex.getCause().toString();
-            } else {
-                message = msg.get("app.propose.response.save.failed") + ex.getMessage();
-            }
+            message = msg.get("app.propose.response.save.failed") + " cause : " + Util.getMessageException(ex);;
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
