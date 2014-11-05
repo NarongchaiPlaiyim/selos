@@ -552,8 +552,10 @@ public class CheckMandateDocControl extends BusinessControl {
 
         MandateDocAccessView mandateDocAccessView = mandateDocAccessControl.getMandateDocAccessView(stepId, role.getId());
         if(mandateDocSummary == null){
-            if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType()) || AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
-                return false;
+            if(mandateDocAccessView!=null && mandateDocAccessView.getAccessType()!=null){
+                if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType()) || AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
+                    return false;
+                }
             }
         }
         if(mandateDocSummary != null && mandateDocSummary.getMandateDocDetailList() != null){
