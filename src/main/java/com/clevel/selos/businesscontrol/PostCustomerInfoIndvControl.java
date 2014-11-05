@@ -58,8 +58,10 @@ public class PostCustomerInfoIndvControl extends BusinessControl {
 		if (view.getId() <= 0)
 			return;
 		Customer model = customerDAO.findById(view.getId());
+        log.debug("saveCustomerInfoIndividual before update model (model: {})",model);
 		customerTransform.updateModelFromPostView(model, view,getCurrentUser());
-		
+        log.debug("saveCustomerInfoIndividual after update model (model: {})",model);
+
 		Individual indv = model.getIndividual();
 		if (indv != null) {
 			CustomerAttorney attorneyModel = indv.getCustomerAttorney();

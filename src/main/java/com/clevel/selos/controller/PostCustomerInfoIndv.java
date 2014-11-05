@@ -310,6 +310,7 @@ public class PostCustomerInfoIndv implements Serializable {
 	
 	
 	public void onSaveCustomerInfo() {
+        log.debug("onSaveCustomerInfo (customer: {}, attorneyView: {})",customer,attorneyView);
 		postCustomerInfoIndvControl.saveCustomerInfoIndividual(customer,attorneyView);
 		
 		_loadInitData();

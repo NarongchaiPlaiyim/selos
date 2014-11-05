@@ -1,6 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.RadioValue;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -234,4 +236,32 @@ public  abstract class CustomerInfoPostBaseView <T extends CustomerInfoPostBaseV
 			addAddress(toAdd);
 		}
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("relationId", relationId)
+                .append("collateralOwner", collateralOwner)
+                .append("displayDocumentType", displayDocumentType)
+                .append("personalId", personalId)
+                .append("tmbCustomerId", tmbCustomerId)
+                .append("age", age)
+                .append("titleId", titleId)
+                .append("nameTH", nameTH)
+                .append("mobile", mobile)
+                .append("fax", fax)
+                .append("email", email)
+                .append("mailingAddressTypeId", mailingAddressTypeId)
+                .append("businessTypeId", businessTypeId)
+                .append("displayRelation", displayRelation)
+                .append("displayTitle", displayTitle)
+                .append("displayMailingAddressType", displayMailingAddressType)
+                .append("displayBusinessType", displayBusinessType)
+                .append("workCaseId", workCaseId)
+                .append("modifyDate", modifyDate)
+                .append("modifyUser", modifyUser)
+                .append("addresses", addresses)
+                .toString();
+    }
 }

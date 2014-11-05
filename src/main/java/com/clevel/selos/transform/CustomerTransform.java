@@ -1311,7 +1311,9 @@ public class CustomerTransform extends Transform {
     }
     
     public void updateModelFromPostView(Customer model,CustomerInfoPostIndvView view,User user) {
+        log.debug("updateModelFromPostView before transform (model: {}, view: {})",model,view);
     	_updateModelFromBasePostView(model, view,user);
+        log.debug("updateModelFromPostView after transform (model: {}, view: {})",model,view);
     	//Read only list (No need to update)
     	//last name
     	
@@ -1346,6 +1348,7 @@ public class CustomerTransform extends Transform {
     	//regist date, contact person
     }
     private void _updateModelFromBasePostView(Customer model,CustomerInfoPostBaseView<?> view,User user) {
+        log.debug("_updateModelFromBasePostView (model : {}, view : {})",model,view);
     	//Read only list (No need to update)
     	// Relation, Collateral Owner, Document Type, Personal Id,
     	// NameTH , Mobile, Fax, Email, tmb customerId
@@ -1372,12 +1375,21 @@ public class CustomerTransform extends Transform {
     			model.getAddressesList().add(address);
     		}
     		int flag = addressView.getAddressFlag();
+            log.debug("addressView : {}",addressView);
+            log.debug("flag : {}",flag);
+            log.debug("index : {},", addressView.getIndex());
     		if (addressView.getIndex() != 0) {
-    			if (flag != 3 && flag >= addressView.getIndex())
-    				flag = 0;
+    			if (flag != 3 && flag >= addressView.getIndex()){
+                    log.debug("cond:1");
+                    flag = 0;
+                }
     			//save with data from flag
-    			if (flag != 3)
-    				addressView.duplicateData(view.getAddresses().get(flag));
+    			if (flag != 3) {
+                    log.debug("cond:2");
+                    addressView.duplicateData(view.getAddresses().get(flag));
+                    log.debug("addressView cond2 : {}",addressView);
+                }
+
     		}
     		address.setAddressTypeFlag(flag);
     		address.setAddressNo(addressView.getAddressNo());
@@ -1403,6 +1415,8 @@ public class CustomerTransform extends Transform {
     			address.setCountry(null);
     		address.setPhoneNumber(addressView.getPhoneNumber());
     		address.setExtension(addressView.getPhoneExt());
+
+            log.debug("address : {}",address);
     	}
     }
 
