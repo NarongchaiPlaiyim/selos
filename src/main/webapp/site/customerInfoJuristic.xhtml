@@ -444,9 +444,9 @@
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
-                                                       var="country"
-                                                       itemLabel="#{country.name}"
-                                                       itemValue="#{country.id}"/>
+                                                       var="countryIncome"
+                                                       itemLabel="#{countryIncome.label}"
+                                                       itemValue="#{countryIncome.value}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -752,8 +752,8 @@
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                                    var="country"
-                                                                   itemLabel="#{country.name}"
-                                                                   itemValue="#{country.id}"/>
+                                                                   itemLabel="#{country.label}"
+                                                                   itemValue="#{country.value}"/>
                                                 </p:selectOneMenu>
                                             </td>
                                         </tr>
@@ -932,8 +932,8 @@
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
                                                                        var="country"
-                                                                       itemLabel="#{country.name}"
-                                                                       itemValue="#{country.id}"/>
+                                                                       itemLabel="#{country.label}"
+                                                                       itemValue="#{country.value}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -1134,23 +1134,23 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.csi')}"/>
                                 </td>
                                 <td colspan="6">
-                                    <p:dataTable var="item" value="#{custInfoSumJuris.customerInfoView.customerCSIList}"
-                                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                    <p:dataTable var="itemCSI" value="#{custInfoSumJuris.customerInfoView.customerCSIList}"
+                                                 paginator="false" rowKey="#{itemCSI}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoJuri.content.csi.code')}" styleClass="center">
-                                            <h:outputText value="#{item.warningCode.code}"/>
+                                            <h:outputText value="#{itemCSI.warningCode.code}"/>
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoJuri.content.csi.year')}" styleClass="center">
-                                            <h:outputText value="#{item.warningDate}"/>
+                                            <h:outputText value="#{itemCSI.warningDate}"/>
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoJuri.content.csi.descrip')}" styleClass="center">
-                                            <h:outputText value="#{item.warningCode.definitionTh}"/>
+                                            <h:outputText value="#{itemCSI.warningCode.definitionTh}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
