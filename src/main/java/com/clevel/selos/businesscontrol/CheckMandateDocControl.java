@@ -262,8 +262,8 @@ public class CheckMandateDocControl extends BusinessControl {
                 checkMandateDocView.setAllowUpdateReason(false);
                 checkMandateDocView.setAllowUpdateRemark(false);
             } else if(mandateDocAccessView.getAccessType().equals(AccessType.MAKER)){
-                _updateCompletedFlag(checkMandateDocView);
                 if(checkMandateDocView.isPassECMList()){
+                    _updateCompletedFlag(checkMandateDocView);
                     checkMandateDocView.setAllowCheckComplete(false);
                     checkMandateDocView.setAllowUpdateReason(false);
                     checkMandateDocView.setAllowUpdateRemark(false);
