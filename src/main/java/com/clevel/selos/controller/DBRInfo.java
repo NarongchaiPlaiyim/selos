@@ -6,6 +6,7 @@ import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.ProposeLineControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.MessageDialogSeverity;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
@@ -196,7 +197,9 @@ public class DBRInfo extends BaseController {
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){
             for(NCBDetailView ncbDetailView : ncbDetails){
-                totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+                if(ncbDetailView.getRefinanceFlag() == RadioValue.NO.value()) {
+                    totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
+                }
             }
         }
         return totalMonthDebtBorrower;
