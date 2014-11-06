@@ -202,7 +202,7 @@ public class DBRControl extends BusinessControl {
             dbrDetail.setDebtForCalculate(debtForCalculate);
 
             if(dbrDetail.getLoanType() != null && dbrDetail.getLoanType().getWcFlag() == 1){
-                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getDebtForCalculate());
+                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getLimit());
             }
 
             totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());

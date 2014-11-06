@@ -3,9 +3,14 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.working.ProposeCollateralInfoDAO;
 import com.clevel.selos.dao.working.ProposeCollateralInfoHeadDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.*;
+import com.clevel.selos.model.DecisionType;
+import com.clevel.selos.model.ProposeType;
+import com.clevel.selos.model.RequestAppraisalValue;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.ProposeCollateralInfo;
+import com.clevel.selos.model.db.working.ProposeCollateralInfoHead;
+import com.clevel.selos.model.db.working.ProposeLine;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
 import com.clevel.selos.model.view.ProposeCollateralInfoView;
@@ -149,10 +154,6 @@ public class AppraisalDetailTransform extends Transform {
 
     public List<ProposeCollateralInfo> transformAppraisalResult(AppraisalView appraisalView, ProposeLine newCreditFacility, User currentUser, RequestAppraisalValue requestAppraisalValue, ProposeType proposeType, WorkCase workCase){
         List<ProposeCollateralInfo> proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
-        long newCollateralId = 0;
-        long newCollateralHeadId = 0;
-        boolean createNewCollateralFlag = true;
-
         if(newCreditFacility != null && newCreditFacility.getId() != 0){
             //Find all Collateral in Application
             newCollateralList = Util.safetyList(newCollateralDAO.findCollateralForAppraisal(newCreditFacility, proposeType));
