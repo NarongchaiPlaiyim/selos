@@ -18,8 +18,6 @@ import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -218,7 +216,7 @@ public class CreditFacExistingControl extends BusinessControl {
             if(borrowerComExistingCreditList!=null && borrowerComExistingCreditList.size()>0){
                 for(ExistingCreditDetail existingCreditDetail : borrowerComExistingCreditList){
                     if(existingCreditDetail.getExistProductSegment()!=null){
-                        if(existingCreditDetail.getExistProductSegment().getId()==2 || existingCreditDetail.getExistProductSegment().getId()==6){
+                        if(existingCreditDetail.getExistProductSegment().getId() == 2 || existingCreditDetail.getExistProductSegment().getId() == 6){
                             haveLoanInOneYear = 2;
                             break;
                         }
