@@ -173,7 +173,7 @@ public class DBRInfo extends BaseController {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
             dbrControl.saveDBRInfo(dbr);
-
+            dbrControl.updateValueOfDBR(workCaseId);
             calculationControl.calForDBR(workCaseId);
             calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calculateFinalDBR(workCaseId);
