@@ -166,8 +166,8 @@ public class DBRControl extends BusinessControl {
         //**NCB Borrower totalDebtForCalculate
         List<NCBDetailView> ncbDetailViews = getNCBForDBR(workCase.getId() , dbrView.getDbrMarketableFlag());
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-            totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
             if(ncbDetailView.getRefinanceFlag() == RadioValue.NO.value()){
+                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
                 totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
             }
         }
@@ -205,7 +205,6 @@ public class DBRControl extends BusinessControl {
             if(dbrDetail.getLoanType() != null && dbrDetail.getLoanType().getWcFlag() == 1){
                 totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getLimit());
             }
-
             totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail
