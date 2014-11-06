@@ -546,6 +546,29 @@ public class WelcomePage implements Serializable {
         }
     }
 
+    public void calculateAge(){
+        outputAge = Util.calYear(inputDate);
+    }
+
+    private Date inputDate;
+    private int outputAge;
+
+    public Date getInputDate() {
+        return inputDate;
+    }
+
+    public void setInputDate(Date inputDate) {
+        this.inputDate = inputDate;
+    }
+
+    public int getOutputAge() {
+        return outputAge;
+    }
+
+    public void setOutputAge(int outputAge) {
+        this.outputAge = outputAge;
+    }
+
     @Inject
     @SimpleReport
     ReportService reportService;
