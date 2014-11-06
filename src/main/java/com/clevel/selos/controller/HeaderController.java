@@ -1498,7 +1498,7 @@ public class HeaderController extends BaseController {
 
         if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
             //Check Appraisal data exist.
-            if(fullApplicationControl.checkAppraisalInformation(workCaseId)) {
+            if(fullApplicationControl.checkAppraisalInformation(workCasePreScreenId, workCaseId)) {
                 RequestContext.getCurrentInstance().execute("reqAppr_BDMDlg.show()");
             } else {
                 log.debug("onOpenRequestAppraisalCustomerAccepted : check appraisal information failed. do not open dialog.");
