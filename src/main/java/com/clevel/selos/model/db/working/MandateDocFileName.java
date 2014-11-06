@@ -6,22 +6,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "wrk_mandate_doc_fileName")
+//@Entity
+//@Table(name = "wrk_mandate_doc_fileName")
 public class MandateDocFileName implements Serializable {
-    @Id
-    @SequenceGenerator(name = "SEQ_WRK_MANDATE_FILE_ID", sequenceName = "SEQ_WRK_MANDATE_FILE_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MANDATE_FILE_ID")
+//    @Id
+//    @SequenceGenerator(name = "SEQ_WRK_MANDATE_FILE_ID", sequenceName = "SEQ_WRK_MANDATE_FILE_ID", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MANDATE_FILE_ID")
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "mandate_doc_id")
+//    @ManyToOne
+//    @JoinColumn(name = "mandate_doc_id")
     private MandateDoc mandateDoc;
 
-    @Column(name = "file_name")
+//    @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "url", length = 500)
+//    @Column(name = "url", length = 500)
     private String url;
 
     public long getId() {

@@ -123,19 +123,19 @@ public class ReturnControl extends BusinessControl {
         if((workCaseId!=0 || workCasePrescreenId!=0) && user!=null){
             List<ReturnInfo> returnInfoList = new ArrayList<ReturnInfo>();
             if(workCaseId!=0) {
-                mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
+                //mandateDocList = mandateDocDAO.findByWorkCaseIdAndRoleForReturn(workCaseId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptList(workCaseId);
             } else {
-                mandateDocList = mandateDocDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
+                //mandateDocList = mandateDocDAO.findByWorkCasePrescreenIdAndRoleForReturn(workCasePrescreenId, user.getRole().getId());
                 returnInfoList = returnInfoDAO.findByNotAcceptListPreScreen(workCasePrescreenId);
             }
 
-            if(mandateDocList!=null && mandateDocList.size()>0){
+            /*if(mandateDocList!=null && mandateDocList.size()>0){
                 for(MandateDoc mandateDoc: mandateDocList){
                     ReturnInfoView returnInfoView = returnInfoTransform.transformToNewView(mandateDoc);
                     returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
                 }
-            }
+            }*/
 
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView;
