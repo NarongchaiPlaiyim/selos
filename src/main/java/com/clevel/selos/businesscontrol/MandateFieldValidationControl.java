@@ -81,7 +81,7 @@ public class MandateFieldValidationControl extends BusinessControl{
     }
 
     public void validate(Object object, String className, ClassResult refClassResult){
-        logger.debug("-- begin validate: className{}, refClassResult: {}", className, refClassResult);
+        logger.debug("-- begin validate: className: {}, refClassResult: {}", className, refClassResult);
         if(mandateFieldClassStepActionViewMap.get(className) == null){
             logger.debug("The {} is not mandatory in this step", className);
             return;
@@ -104,11 +104,9 @@ public class MandateFieldValidationControl extends BusinessControl{
             return;
         }
 
-        String type = object.getClass().getName();
-        logger.debug("validate type: {}", type);
-        if(type.equals(ArrayList.class.getName())) {
+        if(isImplementList(object)) {
             logger.debug("object is Array, -- begin Validate list of class");
-            ArrayList objectList = (ArrayList)object;
+            List objectList = (List)object;
 
             if(mandateFieldClassStepActionView.isRequired()){
                 if(objectList.size() == 0){
@@ -133,6 +131,19 @@ public class MandateFieldValidationControl extends BusinessControl{
             logger.debug("Class Result: {}", classResult);
             addClassResult(classResult);
         }
+    }
+
+    private boolean isImplementList(Object object){
+        String type = object.getClass().getName();
+        logger.debug("validate type: {}", type);
+        if(type.equals(ArrayList.class.getName()) || type.equals(List.class.getName()))
+            return true;
+        for(Class c : object.getClass().getInterfaces()){
+            if(c.equals(List.class))
+                return true;
+
+        }
+        return false;
     }
 
     private ClassResult validateClass(Object classObj, ClassResult refClassResult){
@@ -178,8 +189,15 @@ public class MandateFieldValidationControl extends BusinessControl{
                             //_toCheckFieldDetailList.add(mandateFieldView);
                             validate(fieldObj, fieldType.getName(), classResult);
                         }
+                    } else if(fieldType.getName().equals(List.class.getName()) || fieldType.getName().equals(ArrayList.class.getName())){
+                        fieldResult = validateFieldValue(fieldObj, mandateFieldView);
+                        if(mandateFieldView.isCheckFieldDetail()){
+                            validate(fieldObj, mandateFieldView.getMandateFieldClassView().getClassName(), classResult);
+                        }
                     }
-                    classResult.addFieldResult(fieldResult);
+                    if(fieldResult != null) {
+                        classResult.addFieldResult(fieldResult);
+                    }
                     logger.debug("Field Result: {}", fieldResult);
 
                 } catch(Exception ex){
