@@ -5,7 +5,6 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:c="http://java.sun.com/jsp/jstl/core"
         >
 
 <h:head>
@@ -194,13 +193,13 @@
                                             <p:panel styleClass="panel">
                                                 <table style="width: 100%" border="0">
                                                     <tr>
-                                                        <td class="title" style="width: 240px;">
+                                                        <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
                                                         </td>
-                                                        <td style="width: 300px;">
+                                                        <td class="left">
                                                             <h:outputText value="#{collateralDetailView.jobID}"/>
                                                         </td>
-                                                        <td colspan="2">
+                                                        <td colspan="2" class="right" style="padding-right: 30px;">
                                                             <p:commandButton value="#{msg.get('app.button.edit')}"
                                                                              action="#{appraisalResult.onEditCollateralDetailView()}"
                                                                              update=":appraisalComsDlgForm"
@@ -218,21 +217,24 @@
                                                             </p:commandButton>
                                                         </td>
                                                     </tr>
+
                                                     <tr>
-                                                        <td class="title">
+                                                        <td class="title" style="width: 15%; min-width: 15%; max-width: 15%;">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                                                         </td>
-                                                        <td colspan="3">
+                                                        <td class="left" style="width: 35%; min-width: 35%; max-width: 35%;">
                                                             <h:outputText value="#{collateralDetailView.appraisalDate}">
                                                                 <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                                             </h:outputText>
                                                         </td>
+                                                        <td style="width: 16%; min-width: 16%; max-width: 16%;"></td>
+                                                        <td style="width: 34%; min-width: 34%; max-width: 34%;"></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                                                         </td>
-                                                        <td colspan="3">
+                                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.aadDecisionLabel}"/>
                                                         </td>
                                                     </tr>
@@ -240,13 +242,14 @@
                                                         <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.aadDecisionReason}"/>
                                                         </td>
-                                                        <td class="title" style="width: 240px;">
+
+                                                        <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.aadDecisionReasonDetail}"/>
                                                         </td>
                                                     </tr>
@@ -254,27 +257,21 @@
                                                         <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.usage')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td class="left" colspan="3" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.usageLabel}"/>
                                                         </td>
-                                                        <!--<td class="title">
-                                                            <h:outputText value="#{msg.get('app.appraisal.collateral.label.typeOfUsage')}"/>
-                                                        </td>
-                                                        <td>
-                                                            <h:outputText value="#{collateralDetailView.typeOfUsage}"/>
-                                                        </td>-->
                                                     </tr>
                                                     <tr>
                                                         <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.mortgageCondition}"/>
                                                         </td>
                                                         <td class="title">
                                                             <h:outputText value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
                                                         </td>
-                                                        <td>
+                                                        <td class="left" style="word-wrap: break-word; word-break: break-all;">
                                                             <h:outputText value="#{collateralDetailView.mortgageConditionDetail}"/>
                                                         </td>
                                                     </tr>
@@ -285,40 +282,38 @@
                                                     </tr>
                                                 </table>
                                                 <ui:repeat value="#{collateralDetailView.proposeCollateralInfoHeadViewList}" var="collateralHeadDetailView" varStatus="loopItem">
-                                                    <!--#{collateralHeadDetailView.createdByAAD}
-                                                    <h:panelGroup rendered="#{collateralHeadDetailView.createdByAAD == 1}">-->
                                                     <table style="width: 100%" border="0">
                                                         <tr>
-                                                            <td class="title" style="width: 240px;">
+                                                            <td class="title" style="width: 15%">
                                                                 <h:outputText value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
                                                             </td>
-                                                            <td>
+                                                            <td class="left">
                                                                 <h:outputText value="#{collateralHeadDetailView.titleDeed}"/>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
-                                                                <h:outputText styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
+                                                            <td class="title">
+                                                                <h:outputText value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
                                                             </td>
-                                                            <td>
+                                                            <td class="left">
                                                                 <h:outputText value="#{collateralHeadDetailView.collateralLocation}"/>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
-                                                                <h:outputText styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
+                                                            <td class="title">
+                                                                <h:outputText value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
                                                             </td>
-                                                            <td>
+                                                            <td class="left">
                                                                 <h:outputText value="#{collateralHeadDetailView.appraisalValue}">
                                                                     <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                                                 </h:outputText>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>
+                                                            <td class="title">
                                                                 <h:outputText styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.headCollType')}"/>
                                                             </td>
-                                                            <td>
+                                                            <td class="left">
                                                                 <h:outputText value="#{collateralHeadDetailView.headCollType.description}"/>
                                                             </td>
                                                         </tr>
@@ -423,8 +418,16 @@
             </p:blockUI>
         </h:form>
     </p:panel>
-    <p:dialog id="appraisalContactDetailDialog" header="Appraisal Coms Information" widgetVar="appraisalComsViewDlg" resizable="false"
-              modal="true" width="920" height="600" closable="false">
+    <!-- Propose Collateral Dialog -->
+    <p:dialog id="appraisalContactDetailDialog"
+              header="Appraisal Coms Information"
+              widgetVar="appraisalComsViewDlg"
+              modal="true" resizable="false"
+              width="1000" height="500"
+              onShow="hideWindowsScrollBar()"
+              onHide="showWindowsScrollBar()"
+              closable="false"
+              closeOnEscape="false">
         <ui:include src="dialog/appraisalComsResultDialog.xhtml"/>
     </p:dialog>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

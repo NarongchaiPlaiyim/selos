@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui"
+        >
+
+    <h:head>
+        <title>Welcome</title>
+        <h:outputStylesheet name="css/style.css" />
+        <h:outputScript library="js" name="custom.js" />
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
+    </h:head>
+
+    <h:body>
+        <h:form id="frmMain">
+            <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                            readonlyInput="true"
+                            yearRange="1950:2100"
+                            pattern="dd/MM/yyyy"
+                            value="#{welcomePage.inputDate}"
+                            locale="th_TH">
+            </clv:BECalendar>
+            <h:outputText value="Output Year : "/> : <h:outputText value="#{welcomePage.outputAge}"/>
+            <p:commandButton value="Submit Calendar" update=":frmMain" action="#{welcomePage.calculateAge()}"/>
+        </h:form>
+    </h:body>
+</f:view>
+</html>

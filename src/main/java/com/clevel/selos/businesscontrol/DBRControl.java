@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
@@ -165,8 +166,8 @@ public class DBRControl extends BusinessControl {
         //**NCB Borrower totalDebtForCalculate
         List<NCBDetailView> ncbDetailViews = getNCBForDBR(workCase.getId() , dbrView.getDbrMarketableFlag());
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-            totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-            if(ncbDetailView.getRefinanceFlag() == 1){
+            if(ncbDetailView.getRefinanceFlag() == RadioValue.NO.value()){
+                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
                 totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
             }
         }
@@ -202,9 +203,8 @@ public class DBRControl extends BusinessControl {
             dbrDetail.setDebtForCalculate(debtForCalculate);
 
             if(dbrDetail.getLoanType() != null && dbrDetail.getLoanType().getWcFlag() == 1){
-                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getDebtForCalculate());
+                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getLimit());
             }
-
             totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail

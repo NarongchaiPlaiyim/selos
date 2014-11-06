@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.RadioValue;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -48,7 +49,7 @@ public class DBRView implements Serializable {
         this.workCaseId = 0;
         this.isUpdateTotalDebtBorrower = false;
         this.totalMonthDebtRelatedWc = BigDecimal.ZERO;
-        this.dbrMarketableFlag = 0;
+        this.dbrMarketableFlag = RadioValue.NO.value();
     }
 
     public long getId() {

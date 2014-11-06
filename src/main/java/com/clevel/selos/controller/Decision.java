@@ -692,6 +692,16 @@ public class Decision extends BaseController {
         } else {
             resultMapVal = proposeLineControl.onSaveSubCollateralInfo(approveCollateralInfoView, approveCollateralInfoSubView, relateWithList, subCollateralTypeList, 2, rowHeadCollIndex, rowSubCollIndex);
         }
+
+        boolean notHaveMortgage = (Boolean) resultMapVal.get("notHaveMortgage");
+        if(notHaveMortgage) {
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.propose.desc.add.mort.data");
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
         approveCollateralInfoView = (ProposeCollateralInfoView) resultMapVal.get("proposeCollateralInfoView");
         relateWithList = (List<ProposeCollateralInfoSubView>) resultMapVal.get("relateWithList");
 
