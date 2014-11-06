@@ -8,60 +8,60 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Table(name = "wrk_mandate_doc")
+//@Entity
+//@Table(name = "wrk_mandate_doc")
 public class MandateDoc implements Serializable {
-    @Id
-    @SequenceGenerator(name = "SEQ_WRK_MANDATE_ID", sequenceName = "SEQ_WRK_MANDATE_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MANDATE_ID")
+//    @Id
+//    @SequenceGenerator(name = "SEQ_WRK_MANDATE_ID", sequenceName = "SEQ_WRK_MANDATE_ID", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MANDATE_ID")
     private long id;
 
-    @OneToOne
-    @JoinColumn(name="workcase_id")
+//    @OneToOne
+//    @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
-    @OneToOne
-    @JoinColumn(name="workCasePrescreen_id")
+//    @OneToOne
+//    @JoinColumn(name="workCasePrescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @OneToOne
-    @JoinColumn(name = "role_id")
+//    @OneToOne
+//    @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name = "ecm_doc_type")
+//    @Column(name = "ecm_doc_type")
     private String ecmDocType;
 
-    @Column(name = "ecm_doc_type_desc")
+//    @Column(name = "ecm_doc_type_desc")
     private String ecmDocTypeDesc;
 
-    @Column(name = "mandate_type", columnDefinition = "int default 0")
+//    @Column(name = "mandate_type", columnDefinition = "int default 0")
     private int mandateType;
 
-    @Column(name = "is_completed", columnDefinition = "int default 0")
+//    @Column(name = "is_completed", columnDefinition = "int default 0")
     private int isCompleted;
 
-    @Column(name = "remark")
+//    @Column(name = "remark")
     private String remark;
 
-    @Column(name = "reason_incomplete", columnDefinition = "int default 0")
+//    @Column(name = "reason_incomplete", columnDefinition = "int default 0")
     private int reasonIncomplete;
 
-    @Column(name = "reason_indistinct", columnDefinition = "int default 0")
+//    @Column(name = "reason_indistinct", columnDefinition = "int default 0")
     private int reasonIndistinct;
 
-    @Column(name = "reason_incorrect", columnDefinition = "int default 0")
+//    @Column(name = "reason_incorrect", columnDefinition = "int default 0")
     private int reasonIncorrect;
 
-    @Column(name = "reason_expire", columnDefinition = "int default 0")
+//    @Column(name = "reason_expire", columnDefinition = "int default 0")
     private int reasonExpire;
 
-    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocBRMS> mandateDocBRMSList;
 
-    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocCust> mandateDocCustList;
 
-    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "mandateDoc", cascade = CascadeType.ALL)
     private List<MandateDocFileName> mandateDocFileNameList;
 
 
