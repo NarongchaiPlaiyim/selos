@@ -42,7 +42,7 @@
 
     <bean:bean id="concurrentSessionControlStrategy" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
         <bean:constructor-arg ref="sessionRegistry"/>
-        <bean:property name="maximumSessions" value="1" />
+        <bean:property name="maximumSessions" value="1000" />
         <bean:property name="exceptionIfMaximumExceeded" value="false" />
     </bean:bean>
 
