@@ -481,7 +481,7 @@ public class CheckMandateDocControl extends BusinessControl {
                 deleteMandateDoc(stepId, caseId);
                 MandateDocSummary mandateDocSummary = checkMandateDocTransform.transformToModel(checkMandateDocView, user);
                 mandateDocSummaryDAO.persist(mandateDocSummary);
-                mandateDocDetailDAO.persist(mandateDocSummary.getMandateDocDetailList());
+                //mandateDocDetailDAO.persist(mandateDocSummary.getMandateDocDetailList());
             }
         }
     }
