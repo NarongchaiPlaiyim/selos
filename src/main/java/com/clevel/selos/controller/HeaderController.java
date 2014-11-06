@@ -573,8 +573,10 @@ public class HeaderController extends BaseController {
                     }
                 }
             } else {
+                log.debug("onCloseSales ::: MandateDoc not complete");
                 messageHeader = "Warning.";
                 message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
+                showMessageBox();
             }
         }catch (Exception ex){
             messageHeader = "Exception.";
@@ -588,14 +590,17 @@ public class HeaderController extends BaseController {
     public void onOpenAssignCheckerDialog() {
         try {
             if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
+                log.debug("onOpenAssignDialog ::: MandateDoc complete");
                 bdmCheckerList = userDAO.findBDMChecker(user);
                 bdmCheckerId = "";
                 assignRemark = "";
                 log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
                 RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
             } else {
+                log.debug("onOpenAssignDialog ::: MandateDoc not complete");
                 messageHeader = "Warning.";
                 message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
+                showMessageBox();
             }
         } catch (Exception ex) {
             messageHeader = "Exception.";
@@ -663,7 +668,7 @@ public class HeaderController extends BaseController {
         _loadSessionVariable();
         log.debug("onOpenSubmitFullApplication ::: Start... workCaseId : [{}], stepId : [{}], statusId : [{}]", workCaseId, stepId, statusId);
         try{
-            if(checkMandateDocControl.isMandateDocCompleted(workCasePreScreenId, workCaseId, stepId)){
+            if(checkMandateDocControl.isMandateDocCompleted(workCaseId, workCasePreScreenId, stepId)){
                 if(!fullApplicationControl.checkCaseUpdate(workCaseId)){
                     //Check for Request Pricing
                     requestPricing = fullApplicationControl.getRequestPricing(workCaseId);
@@ -764,6 +769,7 @@ public class HeaderController extends BaseController {
             } else {
                 messageHeader = "Warning.";
                 message = "Cannot " + ActionCode.SUBMIT_CA.getActionName() + ". Some Mandate Document are incompleted.";
+                showMessageBox();
             }
         }catch (Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
@@ -1200,6 +1206,7 @@ public class HeaderController extends BaseController {
             } else {
                 messageHeader = "Warning.";
                 message = "Cannot " + ActionCode.SUBMIT_CA.getActionName() + ". Some Mandate Document are incompleted.";
+                showMessageBox();
             }
         }catch(Exception ex){
             messageHeader = msg.get("app.messageHeader.exception");
@@ -1417,6 +1424,7 @@ public class HeaderController extends BaseController {
         } else {
             messageHeader = "Warning.";
             message = "Cannot " + ActionCode.REQUEST_APPRAISAL.getActionName() + ". Some Mandate Document are incompleted.";
+            showMessageBox();
         }
     }
 
@@ -1509,6 +1517,7 @@ public class HeaderController extends BaseController {
         } else {
             messageHeader = "Warning.";
             message = "Cannot " + ActionCode.REQUEST_APPRAISAL.getActionName() + ". Some Mandate Document are incompleted.";
+            showMessageBox();
         }
 
     }
@@ -1557,6 +1566,7 @@ public class HeaderController extends BaseController {
         } else {
             messageHeader = "Warning.";
             message = "Cannot " + ActionCode.ASSIGN_TO_CHECKER.getActionName() + ". Some Mandate Document are incompleted.";
+            showMessageBox();
         }
     }
 

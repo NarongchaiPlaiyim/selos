@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -480,4 +482,60 @@ public class CustomerAttorneyView implements Serializable {
 	public void setJuristic(boolean juristic) {
 		this.juristic = juristic;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customerId", customerId)
+                .append("documentTypeId", documentTypeId)
+                .append("personalId", personalId)
+                .append("age", age)
+                .append("titleId", titleId)
+                .append("nameTH", nameTH)
+                .append("lastNameTH", lastNameTH)
+                .append("birthDate", birthDate)
+                .append("gender", gender)
+                .append("raceId", raceId)
+                .append("nationalityId", nationalityId)
+                .append("addressNo", addressNo)
+                .append("moo", moo)
+                .append("building", building)
+                .append("road", road)
+                .append("provinceId", provinceId)
+                .append("districtId", districtId)
+                .append("subDistrictId", subDistrictId)
+                .append("postalCode", postalCode)
+                .append("countryId", countryId)
+                .append("phoneNumber", phoneNumber)
+                .append("phoneExt", phoneExt)
+                .append("maritalStatusId", maritalStatusId)
+                .append("spouseTitleId", spouseTitleId)
+                .append("spouseNameTH", spouseNameTH)
+                .append("spouseLastNameTH", spouseLastNameTH)
+                .append("fatherTitleId", fatherTitleId)
+                .append("fatherNameTH", fatherNameTH)
+                .append("fatherLastNameTH", fatherLastNameTH)
+                .append("motherTitleId", motherTitleId)
+                .append("motherNameTH", motherNameTH)
+                .append("motherLastNameTH", motherLastNameTH)
+                .append("homePhoneNumber", homePhoneNumber)
+                .append("homePhoneExt", homePhoneExt)
+                .append("mobile1", mobile1)
+                .append("mobile2", mobile2)
+                .append("displayDocumentType", displayDocumentType)
+                .append("displayTitle", displayTitle)
+                .append("displayRace", displayRace)
+                .append("displayNationality", displayNationality)
+                .append("displayMaritalStatus", displayMaritalStatus)
+                .append("displaySpouseTitle", displaySpouseTitle)
+                .append("displayFatherTitle", displayFatherTitle)
+                .append("displayMotherTitle", displayMotherTitle)
+                .append("displayProvince", displayProvince)
+                .append("displayDistrict", displayDistrict)
+                .append("displaySubDistrict", displaySubDistrict)
+                .append("displayCountry", displayCountry)
+                .append("juristic", juristic)
+                .toString();
+    }
 }

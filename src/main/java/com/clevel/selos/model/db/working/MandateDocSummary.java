@@ -41,7 +41,7 @@ public class MandateDocSummary implements Serializable{
     @JoinColumn(name="role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "mandateDocSummary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mandateDocSummary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MandateDocDetail> mandateDocDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)

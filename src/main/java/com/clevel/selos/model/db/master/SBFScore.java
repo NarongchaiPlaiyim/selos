@@ -19,6 +19,8 @@ public class SBFScore implements Serializable {
     private int score;
     @Column(name = "active")
     private int active;
+    @Column(name = "brms_code", length = 2)
+    private String brmsCode;
 
     public SBFScore() {
     }
@@ -47,12 +49,21 @@ public class SBFScore implements Serializable {
         this.active = active;
     }
 
+    public String getBrmsCode() {
+        return brmsCode;
+    }
+
+    public void setBrmsCode(String brmsCode) {
+        this.brmsCode = brmsCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("score", score).
                 append("active", active).
+                append("brmsCode", brmsCode).
                 toString();
     }
 }

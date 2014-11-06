@@ -4,6 +4,8 @@ import com.clevel.selos.model.AttorneyRelationType;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
 
@@ -295,4 +297,36 @@ public class CustomerInfoPostIndvView extends CustomerInfoPostBaseView<CustomerI
 	public int getDefaultCustomerEntityId() {
 		return 1;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("individualId", individualId)
+                .append("lastNameTH", lastNameTH)
+                .append("birthDate", birthDate)
+                .append("gender", gender)
+                .append("raceId", raceId)
+                .append("nationalityId", nationalityId)
+                .append("maritalStatusId", maritalStatusId)
+                .append("spouseTitleId", spouseTitleId)
+                .append("spouseNameTH", spouseNameTH)
+                .append("spouseLastNameTH", spouseLastNameTH)
+                .append("fatherTitleId", fatherTitleId)
+                .append("fatherNameTH", fatherNameTH)
+                .append("fatherLastNameTH", fatherLastNameTH)
+                .append("motherTitleId", motherTitleId)
+                .append("motherNameTH", motherNameTH)
+                .append("motherLastNameTH", motherLastNameTH)
+                .append("attorneyRelationType", attorneyRelationType)
+                .append("attorneyRequired", attorneyRequired)
+                .append("customerAttorneyId", customerAttorneyId)
+                .append("hasSpouseData", hasSpouseData)
+                .append("displayRace", displayRace)
+                .append("displayNationality", displayNationality)
+                .append("displayMaritalStatus", displayMaritalStatus)
+                .append("displaySpouseTitle", displaySpouseTitle)
+                .append("displayFatherTitle", displayFatherTitle)
+                .append("displayMotherTitle", displayMotherTitle)
+                .toString();
+    }
 }

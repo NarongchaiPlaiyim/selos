@@ -262,8 +262,8 @@ public class CheckMandateDocControl extends BusinessControl {
                 checkMandateDocView.setAllowUpdateReason(false);
                 checkMandateDocView.setAllowUpdateRemark(false);
             } else if(mandateDocAccessView.getAccessType().equals(AccessType.MAKER)){
-                _updateCompletedFlag(checkMandateDocView);
                 if(checkMandateDocView.isPassECMList()){
+                    _updateCompletedFlag(checkMandateDocView);
                     checkMandateDocView.setAllowCheckComplete(false);
                     checkMandateDocView.setAllowUpdateReason(false);
                     checkMandateDocView.setAllowUpdateRemark(false);
@@ -481,7 +481,7 @@ public class CheckMandateDocControl extends BusinessControl {
                 deleteMandateDoc(stepId, caseId);
                 MandateDocSummary mandateDocSummary = checkMandateDocTransform.transformToModel(checkMandateDocView, user);
                 mandateDocSummaryDAO.persist(mandateDocSummary);
-                mandateDocDetailDAO.persist(mandateDocSummary.getMandateDocDetailList());
+                //mandateDocDetailDAO.persist(mandateDocSummary.getMandateDocDetailList());
             }
         }
     }
@@ -552,8 +552,10 @@ public class CheckMandateDocControl extends BusinessControl {
 
         MandateDocAccessView mandateDocAccessView = mandateDocAccessControl.getMandateDocAccessView(stepId, role.getId());
         if(mandateDocSummary == null){
-            if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType()) || AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
-                return false;
+            if(mandateDocAccessView!=null && mandateDocAccessView.getAccessType()!=null){
+                if(AccessType.MAKER.equals(mandateDocAccessView.getAccessType()) || AccessType.CHECKER.equals(mandateDocAccessView.getAccessType())){
+                    return false;
+                }
             }
         }
         if(mandateDocSummary != null && mandateDocSummary.getMandateDocDetailList() != null){
