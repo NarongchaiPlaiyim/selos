@@ -1367,59 +1367,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    /*public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-
-        log.debug("savePreScreenMaker ::: save preScreen data...");
-        savePreScreenData(prescreenView, facilityViewList, bizInfoDetailViewList, prescreenCollateralViewList, workCasePrescreen);
-        log.debug("savePreScreenMaker ::: save preScreen data success...");
-
-        //Remove all Customer before add new
-        List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-        for(Customer customer : customerListDelete){
-            if(customer.getAddressesList() != null){
-                List<Address> addressList = customer.getAddressesList();
-                addressDAO.delete(addressList);
-            }
-            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
-            if(customerAccountList != null){
-                customerAccountDAO.delete(customerAccountList);
-            }
-
-            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
-            if(customerAccountNameList != null){
-                customerAccountNameDAO.delete(customerAccountNameList);
-            }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
-                Individual individual = customer.getIndividual();
-                individualDAO.delete(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2){
-                Juristic juristic = customer.getJuristic();
-                juristicDAO.delete(juristic);
-            }
-            customerDAO.delete(customer);
-        }
-
-        //Save all Customer after Remove
-        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
-        log.info("savePreScreenInitial ::: customerList : {}", customerList);
-        for(Customer customer : customerList){
-            customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
-                addressDAO.persist(customer.getAddressesList());
-            }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
-                //Individual
-                Individual individual = customer.getIndividual();
-                individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
-                //Juristic
-                Juristic juristic = customer.getJuristic();
-                juristicDAO.persist(juristic);
-            }
-        }
-    }*/
-
     public void duplicateData(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, int reasonId, String remark) throws Exception{
         stpExecutor.duplicateData(workCasePreScreenId);
         closeSale(queueName, wobNumber, actionCode, workCasePreScreenId, getReasonDescription(reasonId), remark);
@@ -1435,7 +1382,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     public void closeSale(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String reason, String remark) throws Exception {
-        bpmExecutor.closeSales(workCasePreScreenId, queueName, actionCode);
+        bpmExecutor.closeSales(workCasePreScreenId, queueName, wobNumber, actionCode);
     }
 
     public void returnBDM(long workCasePreScreenId, String queueName, long actionCode) throws Exception {
@@ -1463,23 +1410,6 @@ public class PrescreenBusinessControl extends BusinessControl {
         return reasonDescription;
     }
 
-    /*public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        Action action = actionDAO.findById(Long.parseLong(actionCode));
-
-        HashMap<String,String> fields = new HashMap<String, String>();
-        fields.put("Action_Code", Long.toString(action.getId()));
-        fields.put("Action_Name", action.getName());
-
-        log.info("nextStepPreScreen ::: workCasePreScreenid : {}", workCasePreScreenId);
-        log.info("nextStepPreScreen ::: wobNumber : {}", workCasePrescreen.getWobNumber());
-        log.info("nextStepPreScreen ::: queueName : {}", queueName);
-        log.info("nextStepPreScreen ::: Action_Code : {}", action.getId());
-        log.info("nextStepPreScreen ::: Action_Name : {}", action.getName());
-
-        bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
-    }*/
-
     //*** Function for PreScreen Checker ***//
     public String getBDMMakerName(long workCasePreScreenId){
         String bdmMakerName = "";
@@ -1498,11 +1428,8 @@ public class PrescreenBusinessControl extends BusinessControl {
         CustomerInfoView customerInfoView;
         CustomerInfoView spouseInfoView;
         for(Customer customer : customerList){
-            customerInfoView = new CustomerInfoView();
             customerInfoView = customerTransform.transformToView(customer);
-
             customerInfoView.setListIndex(customerInfoViewList.size());
-
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(Long.toString(customer.getSpouseId()) != null && customer.getSpouseId() != 0 ){
                     Customer spouse = new Customer();

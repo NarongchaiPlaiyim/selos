@@ -62,17 +62,9 @@
                      oncomplete="blockUI.hide()"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel">
     </p:commandButton>
-    <!-- Request Appraisal Prescreen -->
-    <!--<p:commandButton id="btnReqApprPreScreen" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
-                     actionListener="#{headerController.onOpenRequestAppraisal()}" process="@this"
-                     disabled="#{not headerController.canRequestAppraisal}"
-                     oncomplete="reqApprDlg.show()"
-                     update=":frmMain:reqApprDialogPanel">
-        <p:resetInput target=":frmMain:reqApprDialogPanel"/>
-    </p:commandButton>-->
+    <!-- Request Appraisal -->
     <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
-                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0}"
+                     rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0 and headerController.requestType == 1}"
                      disabled="#{not headerController.canRequestAppraisal}"
                      onclick="PF('confirmReqParallelAppraisal').show()">
     </p:commandButton>
