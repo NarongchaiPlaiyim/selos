@@ -237,10 +237,10 @@ public class GenPDF extends ReportService implements Serializable {
 
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
-            if (Util.isNull(workCase) || checkStepApproved() ){
+            if (Util.isNull(workCase) || checkStatusApproved() ){
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStepApproved()){
+            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
             }
@@ -251,10 +251,10 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
             readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
-            if (Util.isNull(workCase) || checkStepApproved()){
+            if (Util.isNull(workCase) || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStepApproved()){
+            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
             }
@@ -293,7 +293,7 @@ public class GenPDF extends ReportService implements Serializable {
         return false;
     }
 
-    private boolean checkStepApproved(){
+    private boolean checkStatusApproved(){
         log.debug("On checkStepApproved. {}",statusId);
         if (statusId == 90006L || statusId == 90005L)
             return false;
