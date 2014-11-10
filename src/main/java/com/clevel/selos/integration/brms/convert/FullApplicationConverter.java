@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.brms.convert;
 
 import com.clevel.selos.integration.BRMS;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.brms.model.BRMSFieldAttributes;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.ilog.rules.decisionservice.DecisionServiceRequest;
@@ -232,45 +233,8 @@ public class FullApplicationConverter extends Converter{
 
             //8. Convert NCB Account//
             List<NCBReportType> ncbReportList = borrowerType.getNcbReport();
-            NCBReportType ncbReportType = new NCBReportType();
-            List<AttributeType> ncbReportAttrList = ncbReportType.getAttribute();
-            ncbReportAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_FLAG, customerInfo.isNcbFlag()));
 
-            List<BRMSNCBAccountInfo> brmsNCBAccountInfoList = customerInfo.getNcbAccountInfoList();
-            List<NCBAccountType> ncbAccountList = ncbReportType.getNcbAccount();
-            for(BRMSNCBAccountInfo brmsNCBAccountInfo : brmsNCBAccountInfoList){
-                NCBAccountType ncbAccount = new NCBAccountType();
-                ncbAccount.setNcbAccountStatus(getValueForInterface(brmsNCBAccountInfo.getLoanAccountStatus()));
-                ncbAccount.setAccountType(getValueForInterface(brmsNCBAccountInfo.getLoanAccountType()));
-                ncbAccount.setTdrFlag(getValueForInterface(brmsNCBAccountInfo.isTdrFlag()));
-                ncbAccount.setOverdue31DTo60DCount(getValueForInterface(brmsNCBAccountInfo.getNumberOfOverDue()));
-                ncbAccount.setOverLimitLast6MthsCount(getValueForInterface(brmsNCBAccountInfo.getNumberOfOverLimit()));
-
-                List<AttributeType> ncbAccountAttrList = ncbAccount.getAttribute();
-                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.TMB_BANK_FLAG, brmsNCBAccountInfo.isTmbFlag()));
-                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_NPL_FLAG, brmsNCBAccountInfo.isNplFlag()));
-                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NCB_TDR_FLAG, brmsNCBAccountInfo.isTdrFlag()));
-                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CREDIT_AMOUNT_AT_FIRST_NPL_DATE, brmsNCBAccountInfo.getCreditAmtAtNPLDate()));
-                if(customerInfo.isIndividual()){
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_INDV, brmsNCBAccountInfo.getCurrentPaymentType()));
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_INDV, brmsNCBAccountInfo.getSixMonthPaymentType()));
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_INDV, brmsNCBAccountInfo.getTwelveMonthPaymentType()));
-                } else {
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.CURRENT_PAYMENT_PATTERN_JURIS, brmsNCBAccountInfo.getCurrentPaymentType()));
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.SIX_MONTHS_PAYMENT_PATTERN_JURIS, brmsNCBAccountInfo.getSixMonthPaymentType()));
-                    ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.TWELVE_MONTHS_PAYMENT_PATTERN_JURIS, brmsNCBAccountInfo.getTwelveMonthPaymentType()));
-                }
-                ncbAccountAttrList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_MONTH_ACCOUNT_CLOSE_DATE, brmsNCBAccountInfo.getAccountCloseDateMonths()));
-
-                ncbAccountList.add(ncbAccount);
-            }
-            //Set NCB Enquiry info//
-            List<NCBEnquiryType> enquiryTypeList = ncbReportType.getNcbEnquiry();
-            NCBEnquiryType ncbEnquiryType = new NCBEnquiryType();
-            ncbEnquiryType.setNumSearchesLast6Mths(getValueForInterface(customerInfo.getNumberOfNCBCheckIn6Months()));
-            List<AttributeType> ncbEnqAttrList = ncbEnquiryType.getAttribute();
-            ncbEnqAttrList.add(getAttributeType(BRMSFieldAttributes.NUM_OF_DAYS_NCB_CHECK, customerInfo.getNumberOfDayLastNCBCheck()));
-            enquiryTypeList.add(ncbEnquiryType);
+            NCBReportType ncbReportType = getNCBReportType(customerInfo);
             ncbReportList.add(ncbReportType);
 
             //Convert Warning Code into Customer.
