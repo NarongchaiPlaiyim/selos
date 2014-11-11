@@ -618,6 +618,16 @@ public class ProposeLine extends BaseController {
         } else {
             resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, subCollateralTypeList, 2, rowHeadCollIndex, rowSubCollIndex);
         }
+
+        boolean notHaveMortgage = (Boolean) resultMapVal.get("notHaveMortgage");
+        if(notHaveMortgage) {
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.propose.desc.add.mort.data");
+            severity = MessageDialogSeverity.ALERT.severity();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
         proposeCollateralInfoView = (ProposeCollateralInfoView) resultMapVal.get("proposeCollateralInfoView");
         relateWithList = (List<ProposeCollateralInfoSubView>) resultMapVal.get("relateWithList");
 
@@ -840,11 +850,7 @@ public class ProposeLine extends BaseController {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
-            if (ex.getCause() != null) {
-                message = msg.get("app.propose.response.save.failed") + " cause : " + ex.getCause().toString();
-            } else {
-                message = msg.get("app.propose.response.save.failed") + ex.getMessage();
-            }
+            message = msg.get("app.propose.response.save.failed") + " cause : " + Util.getMessageException(ex);;
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }

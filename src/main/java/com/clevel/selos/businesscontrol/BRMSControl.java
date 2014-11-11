@@ -1337,6 +1337,7 @@ public class BRMSControl extends BusinessControl {
             List<NCBDetail> ncbDetailList = ncb.getNcbDetailList();
             if(ncbDetailList == null || ncbDetailList.size() == 0){
                 customerInfo.setNcbFlag(Boolean.FALSE);
+                ncbAccountInfoList.add(getBRMSNCBAccountInfo(new NCBDetail(), customerInfo.isIndividual(), checkDate));
             } else {
                 customerInfo.setNcbFlag(Boolean.TRUE);
                 for(NCBDetail ncbDetail : ncbDetailList){

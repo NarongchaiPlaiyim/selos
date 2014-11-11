@@ -242,6 +242,25 @@ public class Util implements Serializable {
         }
     }
 
+    public static int calYear(Date date){
+        if(date != null){
+            int age = 0;
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date);
+            Calendar today = Calendar.getInstance();
+            if(dob.after(today))
+                return age;
+            age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+            if(age == 1){
+                if (dob.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))
+                    age++;
+            }
+            return age;
+        } else {
+            return 0;
+        }
+    }
+
     public static String[] splitSpace(String str) {
         if (str != null) {
             return str.split(" ");
@@ -593,7 +612,7 @@ public class Util implements Serializable {
         if(!isEmpty(str)){
             upperStr = str.toUpperCase();
         }
-
+        log.debug("upperCase : {}", upperStr);
         return upperStr;
     }
 }

@@ -222,7 +222,7 @@ public class BasicInfoControl extends BusinessControl {
             if(borrowerComExistingCreditList!=null && borrowerComExistingCreditList.size()>0){
                 for(ExistingCreditDetail existingCreditDetail : borrowerComExistingCreditList){
                     if(existingCreditDetail.getExistProductSegment()!=null){
-                        if(existingCreditDetail.getExistProductSegment().getId()==2 && existingCreditDetail.getExistProductSegment().getId()==6){
+                        if(existingCreditDetail.getExistProductSegment().getId() == 2 || existingCreditDetail.getExistProductSegment().getId() == 6){
                             basicInfo.setHaveLoanInOneYear(2);
                             break;
                         }

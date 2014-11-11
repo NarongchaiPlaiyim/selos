@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.RoleValue;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
@@ -111,6 +112,7 @@ public class DBRControl extends BusinessControl {
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+        DBRView dbrView = new DBRView();
 
         if(dbr != null && dbr.getId() != 0){
             if(bizInfoSummary != null){
@@ -124,6 +126,9 @@ public class DBRControl extends BusinessControl {
             if(dbr.getMonthlyIncomeAdjust() == null){
                 dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
             }
+
+            dbrView = dbrTransform.transformToView(dbr);
+
         } else {
             dbr = new DBR();
             if(bizInfoSummary != null){
@@ -137,10 +142,18 @@ public class DBRControl extends BusinessControl {
             dbr.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
+
+            dbrView = dbrTransform.transformToView(dbr);
+
+            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+            int dbrInterest = 0;
+            if(!Util.isNull(userSysParameterView)){
+                dbrInterest = Util.parseInt(userSysParameterView.getValue(), 0);
+            }
+
+            dbrView.setDbrMarketableFlag(1);
+            dbrView.setDbrInterest(Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInterest)));
         }
-
-        DBRView dbrView = dbrTransform.transformToView(dbr);
-
         return dbrView;
     }
 
@@ -165,8 +178,8 @@ public class DBRControl extends BusinessControl {
         //**NCB Borrower totalDebtForCalculate
         List<NCBDetailView> ncbDetailViews = getNCBForDBR(workCase.getId() , dbrView.getDbrMarketableFlag());
         for(NCBDetailView ncbDetailView : Util.safetyList(ncbDetailViews)){
-            totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
-            if(ncbDetailView.getRefinanceFlag() == 1){
+            if(ncbDetailView.getRefinanceFlag() == RadioValue.NO.value()){
+                totalMonthDebtBorrowerStart = Util.add(totalMonthDebtBorrowerStart, ncbDetailView.getDebtForCalculate());
                 totalMonthDebtBorrowerFinal = Util.add(totalMonthDebtBorrowerFinal, ncbDetailView.getDebtForCalculate());
             }
         }
@@ -202,9 +215,8 @@ public class DBRControl extends BusinessControl {
             dbrDetail.setDebtForCalculate(debtForCalculate);
 
             if(dbrDetail.getLoanType() != null && dbrDetail.getLoanType().getWcFlag() == 1){
-                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getDebtForCalculate());
+                totalMonthDebtRelatedWc = Util.add(totalMonthDebtRelatedWc, dbrDetail.getLimit());
             }
-
             totalMonthDebtRelated = Util.add(totalMonthDebtRelated, dbrDetail.getDebtForCalculate());
         }
         //** END DbrDetail
