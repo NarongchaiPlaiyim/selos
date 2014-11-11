@@ -557,9 +557,9 @@
 </p:panel>
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
-                     header="#{prescreenMaker.messageHeader}" closeable="false">
+                     header="#{prescreenResult.messageHeader}" closeable="false">
         <f:facet name="message">
-            <h:outputText value="#{prescreenMaker.message}" escape="false"/>
+            <h:outputText value="#{prescreenResult.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          process="@this"
@@ -569,9 +569,9 @@
 </p:panel>
 <p:panel id="msgBoxRedirectPanel" styleClass="panel">
     <p:confirmDialog id="msgBoxRedirectDialog" widgetVar="msgBoxRedirectDlg" styleClass="messageDialog"
-                     header="#{prescreenMaker.messageHeader}" closeable="false">
+                     header="#{prescreenResult.messageHeader}" closeable="false">
         <f:facet name="message">
-            <h:outputText value="#{prescreenMaker.message}" escape="false"/>
+            <h:outputText value="#{prescreenResult.message}" escape="false"/>
         </f:facet>
         <p:commandButton value="OK"
                          action="#{headerController.onGoToInbox}"

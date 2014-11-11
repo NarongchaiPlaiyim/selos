@@ -88,8 +88,7 @@ public class BPMExecutor implements Serializable {
         }
     }
 
-    public void closeSales(long workCasePreScreenId, String queueName, long actionCode) throws Exception{
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+    public void closeSales(long workCasePreScreenId, String queueName, String wobNumber, long actionCode) throws Exception{
         Action action = actionDAO.findById(actionCode);
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
 
@@ -101,11 +100,7 @@ public class BPMExecutor implements Serializable {
 
             log.debug("dispatch case for [Close Sales]..., Action_Code : {}, Action_Name : {}", action.getId(), action.getName());
 
-            if (workCasePrescreen != null) {
-                execute(queueName, workCasePrescreen.getWobNumber(), fields);
-            } else {
-                throw new Exception("An exception occurred, Can not find WorkCase PreScreen.");
-            }
+            execute(queueName, wobNumber, fields);
         } else {
             throw new Exception("An exception occurred, Can not find Action.");
         }

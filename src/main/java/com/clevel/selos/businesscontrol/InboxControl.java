@@ -147,7 +147,8 @@ public class InboxControl extends BusinessControl {
             WorkCaseOwner workCaseOwner = workCaseOwnerDAO.getWorkCaseOwnerByStep(workCasePreScreenId, workCaseId, stepId);
             WorkCasePrescreen workCasePrescreen = null;
             WorkCase workCase = null;
-            User currentUser = userDAO.findById(Util.upperCase(caseOwner));
+            //User currentUser = userDAO.findById(Util.upperCase(caseOwner));
+            User currentUser = getCurrentUser();
             Step step = stepDAO.findById(stepId);
 
             if(!Util.isZero(workCasePreScreenId))
