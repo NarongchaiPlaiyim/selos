@@ -151,7 +151,7 @@ public class DBRControl extends BusinessControl {
                 dbrInterest = Util.parseInt(userSysParameterView.getValue(), 0);
             }
 
-            dbrView.setDbrMarketableFlag(2);
+            dbrView.setDbrMarketableFlag(1);
             dbrView.setDbrInterest(Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInterest)));
         }
         return dbrView;
