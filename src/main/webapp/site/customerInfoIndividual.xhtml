@@ -1183,6 +1183,7 @@
                                                            var="kyc"
                                                            itemLabel="#{kyc.label}"
                                                            itemValue="#{kyc.value}"/>
+                                            <p:ajax event="change" process="@this" update=":frmMain:kycLv" listener="#{custInfoSumIndi.onChangeKYCMain()}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -2398,6 +2399,7 @@
                                                                                var="kyc"
                                                                                itemLabel="#{kyc.label}"
                                                                                itemValue="#{kyc.value}"/>
+                                                                <p:ajax event="change" process="@this" update=":frmMain:kycLvSpouse" listener="#{custInfoSumIndi.onChangeKYCSpouse()}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
