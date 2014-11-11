@@ -17,6 +17,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
@@ -875,20 +876,20 @@ public class FullApplicationControl extends BusinessControl {
                         insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                     }
 
-                    if (!decisionFlag.equals("R")) {
-                        try {
-                            mortgageSummaryControl.calculateMortgageSummary(workCaseId);
-                        } catch (Exception ex) {
-                            log.error("Exception while calculateMortgageSummary : ", ex);
-                        }
-                    }
-
                     bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
                     log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
                     ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setSubmit(1);
                     approvalHistory.setSubmitDate(new Date());
                     approvalHistoryDAO.persist(approvalHistory);
+
+                    if (!decisionFlag.equals("R")) {
+                        try {
+                            MortgageSummaryView mortgageSummaryView = mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                        } catch (Exception ex) {
+                            log.error("Exception while calculateMortgageSummary : ", ex);
+                        }
+                    }
                 }
             } else {
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));

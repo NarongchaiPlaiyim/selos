@@ -637,60 +637,64 @@ public class HeaderController extends BaseController {
 
                 if(!checkStepABDM()){
                     if(requestPricing){
-                        //Check for Pricing DOA Level
-                        pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                        log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
-                        if(pricingDOALevel != 0) {
-                            zmEndorseUserId = "";
-                            zmUserId = "";
-                            rgmUserId = "";
-                            ghmUserId = "";
-                            cssoUserId = "";
+                        if(stepId != StepValue.CREDIT_DECISION_BU_ZM.value()){
+                            //Check for Pricing DOA Level
+                            pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                            log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                            if(pricingDOALevel != 0) {
+                                zmEndorseUserId = "";
+                                zmUserId = "";
+                                rgmUserId = "";
+                                ghmUserId = "";
+                                cssoUserId = "";
 
-                            zmEndorseRemark = "";
-                            submitRemark = "";
-                            slaRemark = "";
+                                zmEndorseRemark = "";
+                                submitRemark = "";
+                                slaRemark = "";
 
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                            isSubmitToGHM = false;
-                            isSubmitToCSSO = false;
-
-                            //TO Get all owner of case
-                            getUserOwnerBU();
-
-                            log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
-                            if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
-                            //if(stepId <= StepValue.FULLAPP_BDM.value()) {
-                                zmUserList = fullApplicationControl.getUserList(user);
-                                log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                            }
-
-                            //TO Disabled DDL DOA Lower than RGM
-                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                                isSubmitToZM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than GH
-                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
-                            //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than CSSO
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                                isSubmitToGHM = false;
-                            }
-                            //TO All ( End of Pricing DOA )
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                                 isSubmitToGHM = false;
                                 isSubmitToCSSO = false;
+
+                                //TO Get all owner of case
+                                getUserOwnerBU();
+
+                                log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
+                                if (stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
+                                    //if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                                    zmUserList = fullApplicationControl.getUserList(user);
+                                    log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                                }
+
+                                //TO Disabled DDL DOA Lower than RGM
+                                if ((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    isSubmitToZM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than GH
+                                if ((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())) {    //Step After Zone Submit to Region
+                                    //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than CSSO
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()) {
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                }
+                                //TO All ( End of Pricing DOA )
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()) {
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                    isSubmitToCSSO = false;
+                                }
+                            }else{
+                                isSubmitToZM = false;
                             }
                             RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
                         } else {
@@ -1407,9 +1411,10 @@ public class HeaderController extends BaseController {
     //*   Step 2007
     public void onOpenCancelAppraisalRequest(){
         log.debug("onOpenCancelAppraisalRequest ::: starting...");
+        _loadSessionVariable();
         cancelRemark = "";
         reasonId = 0;
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_APPRAISAL.getVal());
         log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
     }
 
