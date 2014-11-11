@@ -1109,7 +1109,7 @@
                                                                  update=":frmMain:decisionTable"
                                                                  process="@form"
                                                                  rendered="#{itemDecision.canEdit}"
-                                                                 disabled="#{executiveSummary.isDisabled('result.actionLists')}">
+                                                                 disabled="#{executiveSummary.isDisabled('result.deleteButton')}">
                                                     <f:setPropertyActionListener value="#{itemDecision}"
                                                                                  target="#{executiveSummary.selectDeviateDecision}"/>
                                                 </p:commandButton>

@@ -96,6 +96,7 @@ public class GenPDF extends ReportService implements Serializable {
     private boolean readonlyIsAAD_ADMIN;
     private boolean readonlyIsAAD_COMMITTEE;
     private boolean readonlyIsSSO;
+    private long stepId;
 
     private boolean readonlyContec_Center;
     private boolean readonlyInsurance_Center;
@@ -191,12 +192,14 @@ public class GenPDF extends ReportService implements Serializable {
                 if(!Util.isNull(workCase)){
                     appNumber = workCase.getAppNumber();
                     statusId = workCase.getStatus().getId();
+                    stepId = workCase.getStep().getId();
                 }
             } else {
                 workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
                 if(!Util.isNull(workCasePrescreen)){
                     appNumber = workCasePrescreen.getAppNumber();
                     statusId = workCasePrescreen.getStatus().getId();
+                    stepId = workCase.getStep().getId();
                 }
             }
 
@@ -234,10 +237,10 @@ public class GenPDF extends ReportService implements Serializable {
 
         // ###### Role BU and Viewer Can not print AAD Report ######
         if (readonlyViewer ||  readonlyIsABDM || readonlyIsBDM || readonlyIsZM || readonlyIsRGM || readonlyIsGH || readonlyIsCSSO){
-            if (Util.isNull(workCase) || checkStepApproved()){
+            if (Util.isNull(workCase) || checkStatusApproved() ){
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
+            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
             }
@@ -248,10 +251,10 @@ public class GenPDF extends ReportService implements Serializable {
         // ###### Role UW and OPS Can not print AAD Report And Reject Letter Report ######
         if (readonlyIsUW || readonlyContec_Center || readonlyInsurance_Center || readonlyDoc_Check || readonlyCDM ||
             readonlyLAR_BC || readonlyCO1 || readonlyCO2 || readonlyLD){
-            if (Util.isNull(workCase) || checkStepApproved()){
+            if (Util.isNull(workCase) || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
-            } else if (!Util.isNull(workCase) && checkPricing() || checkStepApproved()){
+            } else if (!Util.isNull(workCase) && checkStepOnPricing() || checkStatusApproved()){
                 opshectType = true;
                 exsumType = true;
             }
@@ -290,12 +293,23 @@ public class GenPDF extends ReportService implements Serializable {
         return false;
     }
 
-    private boolean checkStepApproved(){
+    private boolean checkStatusApproved(){
         log.debug("On checkStepApproved. {}",statusId);
         if (statusId == 90006L || statusId == 90005L)
             return false;
         else
             return true;
+    }
+
+    private boolean checkStepOnPricing(){
+        log.debug("On checkStepOnPricing. {}",stepId);
+        if (stepId == 2018L || stepId == 2019L || stepId == 2020L || stepId == 2021L || stepId == 2022L){
+            return true;
+        } else if (stepId == 2002L && checkPricing()) {
+            return true;
+        }
+
+        return false;
     }
 
     private void disableButtomPrintReject(){

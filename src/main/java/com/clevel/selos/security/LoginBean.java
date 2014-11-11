@@ -253,7 +253,7 @@ public class LoginBean {
 
             ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
 
-            concurrentSessionControlStrategy.setMaximumSessions(1000);
+            concurrentSessionControlStrategy.setMaximumSessions(1);
             concurrentSessionControlStrategy.setExceptionIfMaximumExceeded(true);
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
 
