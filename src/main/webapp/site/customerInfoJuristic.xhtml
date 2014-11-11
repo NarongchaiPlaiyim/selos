@@ -1070,7 +1070,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.kyc')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;" id="kycLv"
                                                      value="#{custInfoSumJuris.customerInfoView.kycLevel.id}"
                                                      required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqKYCLev}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
@@ -1079,6 +1079,7 @@
                                                        var="kyc"
                                                        itemLabel="#{kyc.label}"
                                                        itemValue="#{kyc.value}"/>
+                                        <p:ajax event="change" process="@this" update=":frmMain:kycLv" listener="#{custInfoSumJuris.onChangeKYCLv()}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>

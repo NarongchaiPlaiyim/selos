@@ -14,6 +14,7 @@ import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.master.DistrictView;
+import com.clevel.selos.model.view.master.KYCLevelView;
 import com.clevel.selos.model.view.master.ProvinceView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -97,9 +98,6 @@ public class CustomerInfoJuristic extends BaseController {
     private List<SelectItem> provinceForm2List;
     private List<SelectItem> districtForm2List;
     private List<SelectItem> subDistrictForm2List;
-    private List<SelectItem> provinceForm3List;
-    private List<SelectItem> districtForm3List;
-    private List<SelectItem> subDistrictForm3List;
 
     private List<SelectItem> countryList;
     private List<SelectItem> addressTypeList;
@@ -891,6 +889,18 @@ public class CustomerInfoJuristic extends BaseController {
         }
     }
 
+    public void onChangeKYCLv() {
+        if(customerInfoView.getKycLevel() != null && customerInfoView.getKycLevel().getId() != 0){
+            KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId());
+            KYCLevel kycLevel = new KYCLevel();
+            kycLevel.setId(kycLevelView.getId());
+            kycLevel.setName(kycLevelView.getName());
+            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.setKycLevel(kycLevel);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1005,30 +1015,6 @@ public class CustomerInfoJuristic extends BaseController {
 
     public void setSubDistrictForm2List(List<SelectItem> subDistrictForm2List) {
         this.subDistrictForm2List = subDistrictForm2List;
-    }
-
-    public List<SelectItem> getProvinceForm3List() {
-        return provinceForm3List;
-    }
-
-    public void setProvinceForm3List(List<SelectItem> provinceForm3List) {
-        this.provinceForm3List = provinceForm3List;
-    }
-
-    public List<SelectItem> getDistrictForm3List() {
-        return districtForm3List;
-    }
-
-    public void setDistrictForm3List(List<SelectItem> districtForm3List) {
-        this.districtForm3List = districtForm3List;
-    }
-
-    public List<SelectItem> getSubDistrictForm3List() {
-        return subDistrictForm3List;
-    }
-
-    public void setSubDistrictForm3List(List<SelectItem> subDistrictForm3List) {
-        this.subDistrictForm3List = subDistrictForm3List;
     }
 
     public List<SelectItem> getCountryList() {
