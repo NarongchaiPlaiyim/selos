@@ -612,7 +612,7 @@ public class Util implements Serializable {
         if(!isEmpty(str)){
             upperStr = str.toUpperCase();
         }
-
+        log.debug("upperCase : {}", upperStr);
         return upperStr;
     }
 }

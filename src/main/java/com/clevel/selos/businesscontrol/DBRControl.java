@@ -112,6 +112,7 @@ public class DBRControl extends BusinessControl {
         DBR dbr = dbrDAO.findByWorkCaseId(workCaseId);
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
         BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.getByWorkCase(workCase);
+        DBRView dbrView = new DBRView();
 
         if(dbr != null && dbr.getId() != 0){
             if(bizInfoSummary != null){
@@ -125,6 +126,9 @@ public class DBRControl extends BusinessControl {
             if(dbr.getMonthlyIncomeAdjust() == null){
                 dbr.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
             }
+
+            dbrView = dbrTransform.transformToView(dbr);
+
         } else {
             dbr = new DBR();
             if(bizInfoSummary != null){
@@ -138,10 +142,18 @@ public class DBRControl extends BusinessControl {
             dbr.setMonthlyIncomeAdjust(getMonthlyIncome(bankStatementSummary));
             //MonthlyIncomePerMonth Default = 0
             dbr.setMonthlyIncomePerMonth(BigDecimal.ZERO);
+
+            dbrView = dbrTransform.transformToView(dbr);
+
+            UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("FIX_RATE");
+            int dbrInterest = 0;
+            if(!Util.isNull(userSysParameterView)){
+                dbrInterest = Util.parseInt(userSysParameterView.getValue(), 0);
+            }
+
+            dbrView.setDbrMarketableFlag(2);
+            dbrView.setDbrInterest(Util.add(baseRateControl.getMRRValue(),BigDecimal.valueOf(dbrInterest)));
         }
-
-        DBRView dbrView = dbrTransform.transformToView(dbr);
-
         return dbrView;
     }
 
