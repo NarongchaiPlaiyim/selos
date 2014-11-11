@@ -32,6 +32,14 @@ public class CountryControl extends BusinessControl {
     @Inject
     public CountryControl(){}
 
+    public CountryView getCountryViewById(int id){
+        logger.debug("-- getCountryViewById, id: {}", id);
+        Map<Integer, CountryView> _tmpMap = getInternalCacheMap();
+        CountryView countryView = _tmpMap.get(id);
+        logger.debug("getCountryViewById return countryView: {}", countryView);
+        return countryView;
+    }
+
     public List<SelectItem> getCountrySelectItemActiveList(){
         logger.debug("-- getCountrySelectItemActiveList --");
         Map<Integer, CountryView> _tmpMap = getInternalCacheMap();

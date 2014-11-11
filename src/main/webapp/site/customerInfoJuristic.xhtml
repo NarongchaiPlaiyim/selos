@@ -439,7 +439,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.countryOfSourceIncome')}"/>
                                 </td>
                                 <td>
-                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;" id="souInc"
                                                      value="#{custInfoSumJuris.customerInfoView.countryIncome.id}"
                                                      disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -447,6 +447,7 @@
                                                        var="countryIncome"
                                                        itemLabel="#{countryIncome.label}"
                                                        itemValue="#{countryIncome.value}"/>
+                                        <p:ajax event="change" process="@this" update=":frmMain:souInc" listener="#{custInfoSumJuris.onChangeCountryIncome()}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -745,15 +746,16 @@
                                                 <h:outputText value="#{msg.get('app.custInfoJuri.content.country')}"/>
                                             </td>
                                             <td colspan="5">
-                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;" id="regCou"
                                                                  value="#{custInfoSumJuris.customerInfoView.registerAddress.country.id}"
                                                                  required="#{not empty param[saveCustomer.clientId] and custInfoSumJuris.reqRegCou}"
                                                                  disabled="#{not custInfoSumJuris.enableAllFieldCus}">
                                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                     <f:selectItems value="#{custInfoSumJuris.countryList}"
-                                                                   var="country"
-                                                                   itemLabel="#{country.label}"
-                                                                   itemValue="#{country.value}"/>
+                                                                   var="countryReg"
+                                                                   itemLabel="#{countryReg.label}"
+                                                                   itemValue="#{countryReg.value}"/>
+                                                    <p:ajax event="change" process="@this" update=":frmMain:regCou" listener="#{custInfoSumJuris.onChangeRegisterAddress()}"/>
                                                 </p:selectOneMenu>
                                             </td>
                                         </tr>
@@ -923,7 +925,7 @@
                                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.country')}"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;"
+                                                    <p:selectOneMenu size="1" style="width: 200px; max-width: 200px; min-width: 200px;" id="worCou"
                                                                      value="#{custInfoSumJuris.customerInfoView.workAddress.country.id}"
                                                                      disabled="#{custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag != 3
                                                                                 || not custInfoSumJuris.enableAllFieldCus}"
@@ -931,9 +933,10 @@
                                                                      and custInfoSumJuris.customerInfoView.workAddress.addressTypeFlag == 3}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{custInfoSumJuris.countryList}"
-                                                                       var="country"
-                                                                       itemLabel="#{country.label}"
-                                                                       itemValue="#{country.value}"/>
+                                                                       var="countryWor"
+                                                                       itemLabel="#{countryWor.label}"
+                                                                       itemValue="#{countryWor.value}"/>
+                                                        <p:ajax event="change" process="@this" update=":frmMain:worCou" listener="#{custInfoSumJuris.onChangeWorkAddress()}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>

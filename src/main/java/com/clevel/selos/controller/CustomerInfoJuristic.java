@@ -10,6 +10,7 @@ import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AddressView;
+import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.master.DistrictView;
@@ -847,6 +848,49 @@ public class CustomerInfoJuristic extends BaseController {
 //        onCreation();
 //        onLoadComplete();
     }
+
+    public void onChangeCountryIncome() {
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCountryIncome().getId());
+            Country country = new Country();
+            country.setId(countryView.getId());
+            country.setName(countryView.getName());
+            country.setCode(countryView.getCode());
+            country.setCode2(countryView.getCode2());
+            country.setIsoCode(countryView.getIsoCode());
+            country.setActive(countryView.getActive());
+            customerInfoView.setCountryIncome(country);
+        }
+    }
+
+    public void onChangeRegisterAddress() {
+        if(customerInfoView.getWorkAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getRegisterAddress().getCountry().getId());
+            Country country = new Country();
+            country.setId(countryView.getId());
+            country.setName(countryView.getName());
+            country.setCode(countryView.getCode());
+            country.setCode2(countryView.getCode2());
+            country.setIsoCode(countryView.getIsoCode());
+            country.setActive(countryView.getActive());
+            customerInfoView.getRegisterAddress().setCountry(country);
+        }
+    }
+
+    public void onChangeWorkAddress() {
+        if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getCountry() != null && customerInfoView.getWorkAddress().getCountry().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getWorkAddress().getCountry().getId());
+            Country country = new Country();
+            country.setId(countryView.getId());
+            country.setName(countryView.getName());
+            country.setCode(countryView.getCode());
+            country.setCode2(countryView.getCode2());
+            country.setIsoCode(countryView.getIsoCode());
+            country.setActive(countryView.getActive());
+            customerInfoView.getWorkAddress().setCountry(country);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
