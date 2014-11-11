@@ -145,7 +145,7 @@ public class ReturnControl extends BusinessControl {
                         returnInfoViewMap.put(returnInfoView.getReturnCode(), returnInfoView);
                     }
                 }
-            }*/
+            }
 
             for(ReturnInfo returnInfo: returnInfoList){
                 ReturnInfoView returnInfoView;
