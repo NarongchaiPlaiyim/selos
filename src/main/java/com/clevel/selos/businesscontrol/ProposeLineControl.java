@@ -1397,6 +1397,7 @@ public class ProposeLineControl extends BusinessControl {
     }
 
     public Map<String, Object> onSaveSubCollateralInfo(ProposeCollateralInfoView proposeCollateralInfoView, ProposeCollateralInfoSubView proposeCollateralInfoSubView, List<ProposeCollateralInfoSubView> relateWithList, List<SubCollateralType> subCollateralTypeList, int mode, int rowHeadCollIndex, int rowSubCollIndex) {  //mode 1 = add , 2 edit
+        log.debug("onSaveSubCollateralInfo :: proposeCollateralInfoSubView :: {} , rowHeadCollIndex :: {} ,  rowSubCollIndex :: {}", proposeCollateralInfoSubView.getTitleDeed(), rowHeadCollIndex, rowSubCollIndex);
         Map<String, Object> returnMapVal =  new HashMap<String, Object>();
 
         if(!Util.isNull(proposeCollateralInfoSubView.getMortgageList()) && !Util.isZero(proposeCollateralInfoSubView.getMortgageList().size())) {
