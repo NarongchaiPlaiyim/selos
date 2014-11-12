@@ -233,15 +233,12 @@ public class UserDAO extends GenericDAO<User,String> {
     }
 
     public List<User> findBDMChecker(User user){
-        //log.debug("findBDMChecker. BDM Maker : {}", user);
-
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.ne("id", user.getId()));
         criteria.add(Restrictions.eq("role", user.getRole()));
         criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("id"));
         List<User> userList = criteria.list();
-        //log.debug("findBDMChecker. (result size: {})", userList.size());
 
         return userList;
     }

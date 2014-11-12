@@ -172,27 +172,6 @@ public class HeaderController extends BaseController {
     private int editAADUWRecordNo;
     private List<ReturnInfoView> returnInfoHistoryViewList;
 
-    //Request Appraisal
-    /*private enum ModeForButton{ ADD, EDIT }
-    private ModeForButton modeForButton;
-    private int rowIndex;
-
-    private AppraisalView appraisalView;
-
-    private AppraisalDetailView appraisalDetailView;
-    private AppraisalDetailView appraisalDetailViewSelected;
-    private List<AppraisalDetailView> appraisalDetailViewList;
-
-    private AppraisalContactDetailView appraisalContactDetailView;
-    private AppraisalContactDetailView selectAppraisalContactDetailView;
-
-    private boolean titleDeedFlag;
-    private boolean purposeFlag;
-    private boolean numberOfDocumentsFlag;
-    private boolean contactFlag;
-    private boolean contactFlag2;
-    private boolean contactFlag3;*/
-
     private HashMap<String, Integer> stepStatusMap;
 
     //CheckMandate
@@ -277,7 +256,10 @@ public class HeaderController extends BaseController {
     private int cancelPriceReduceReasonId;
     private String cancelPriceReduceRemark;
 
+    private int requestType;
+
     public HeaderController() {
+
     }
 
     @PostConstruct
@@ -295,11 +277,6 @@ public class HeaderController extends BaseController {
         stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId, currentUserId);
         log.debug("HeaderController ::: stepStatusMap : {}", stepStatusMap);
 
-        //FOR Appraisal Request Dialog
-        //appraisalView = new AppraisalView();
-        //appraisalDetailView = new AppraisalDetailView();
-        //appraisalContactDetailView = new AppraisalContactDetailView();
-
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.debug("HeaderController ::: appHeader : {}", appHeaderView);
@@ -308,48 +285,46 @@ public class HeaderController extends BaseController {
 
         canSubmitCA = false;
         canCheckCriteria = false;
+        requestType = 1;
         if(workCaseId != 0){
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             if(!Util.isNull(workCase)){
-                //if(Util.isZero(workCase.getNcbRejectFlag())){
-                    UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
-                    if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
-                        if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
-                            canSubmitCA = true;
-                            canRequestAppraisal = true;
-                        } else {
-                            if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
-                                if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
-                                    canSubmitCA = true;
-                                    canRequestAppraisal = true;
-                                }
+                requestType = workCase.getRequestType() != null ? workCase.getRequestType().getId() : 1;
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
+                if(uwRuleResultSummary!=null && uwRuleResultSummary.getId()>0){
+                    if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                        canSubmitCA = true;
+                        canRequestAppraisal = true;
+                    } else {
+                        if(uwRuleResultSummary.getUwDeviationFlag()!=null && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode()!=null && !uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("")){
+                            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD") || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
+                                canSubmitCA = true;
+                                canRequestAppraisal = true;
                             }
                         }
-                    } else {
-                        canRequestAppraisal = true;
                     }
-                    canCheckFullApp = true;
-                    timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
-                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
-                    int limitTimeOfCriteriaCheck = 100;
-                    if(!Util.isNull(userSysParameterView)){
-                        limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
-                    }
-                    if(timesOfCriteriaCheck < limitTimeOfCriteriaCheck){
-                        canCheckCriteria = true;
-                    }
+                } else {
+                    canRequestAppraisal = true;
+                }
+                canCheckFullApp = true;
+                timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
 
-                    requestAppraisalRequire = fullApplicationControl.getRequestAppraisalRequire(workCaseId);
-                //} else {
-                //    canCheckFullApp = false;
-                //}
+                int limitTimeOfCriteriaCheck = 100;
+
+                if(!Util.isNull(userSysParameterView))
+                    limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+
+                if(timesOfCriteriaCheck < limitTimeOfCriteriaCheck)
+                    canCheckCriteria = true;
+
+                requestAppraisalRequire = fullApplicationControl.getRequestAppraisalRequire(workCaseId);
             }
 
             BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-            if(basicInfo != null){
+            if(basicInfo != null)
                 qualitativeType = basicInfo.getQualitativeType();
-            }
-            log.debug("Qualitative type : {}", qualitativeType);
+
             log.debug("canSubmit : {}, canCheckCriteria : {}, canCheckFullApp : {}", canSubmitCA, canCheckCriteria, canCheckFullApp);
         }
 
@@ -357,35 +332,33 @@ public class HeaderController extends BaseController {
         if(workCasePreScreenId != 0){
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             if(!Util.isNull(workCasePrescreen)){
-                //if(Util.isZero(workCasePrescreen.getNcbRejectFlag())){
-                    UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
-                    if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
-                        if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                requestType = workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getId() : 1;
+                UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkcasePrescreenId(workCasePreScreenId);
+                if(uwRuleResultSummary != null && uwRuleResultSummary.getId() > 0){
+                    if(uwRuleResultSummary.getUwResultColor() == UWResultColor.GREEN || uwRuleResultSummary.getUwResultColor() == UWResultColor.YELLOW){
+                        canCloseSale = true;
+                        canRequestAppraisal = true;
+                    }else{
+                        if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
+                                || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
                             canCloseSale = true;
                             canRequestAppraisal = true;
-                        }else{
-                            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AD")
-                                    || uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("AI")){
-                                canCloseSale = true;
-                                canRequestAppraisal = true;
-                            }
                         }
-                    } else {
-                        canRequestAppraisal = false;
                     }
+                } else {
+                    canRequestAppraisal = false;
+                }
 
-                    timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
-                    UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
-                    int limitTimeOfPreScreenCheck = 100;
-                    if(!Util.isNull(userSysParameterView)){
-                        limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
-                    }
-                    if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck){
-                        canCheckPreScreen = true;
-                    }
-                //} else {
-                //    canCheckPreScreen = false;
-                //}
+                timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+                int limitTimeOfPreScreenCheck = 100;
+
+                if(!Util.isNull(userSysParameterView))
+                    limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+
+                if(timesOfPreScreenCheck < limitTimeOfPreScreenCheck)
+                    canCheckPreScreen = true;
+
             }
         }
 
@@ -416,9 +389,9 @@ public class HeaderController extends BaseController {
 
     public boolean checkButton(String buttonName){
         boolean check = false;
-        if(stepStatusMap != null && stepStatusMap.containsKey(buttonName)){
+        if(stepStatusMap != null && stepStatusMap.containsKey(buttonName))
             check = Util.isTrue(stepStatusMap.get(buttonName));
-        }
+
         return check;
     }
 
@@ -434,12 +407,10 @@ public class HeaderController extends BaseController {
 
     public void onAssignToABDM(){
         log.debug("onAssignToABDM ::: starting...");
+        _loadSessionVariable();
         boolean complete = false;
         if(abdmUserId != null && !abdmUserId.equals("")){
             try{
-                HttpSession session = FacesUtil.getSession(false);
-                String queueName = Util.parseString(session.getAttribute("queueName"), "");
-                String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
                 fullApplicationControl.assignToABDM(queueName, wobNumber, abdmUserId);
                 messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.dialog.assign.abdm.success");
@@ -459,10 +430,8 @@ public class HeaderController extends BaseController {
 
     //-------------- Check Pre_Screen ---------------//
     public void onCheckPreScreen(){
-        long workCasePreScreenId = 0;
         boolean success = false;
-        HttpSession session = FacesUtil.getSession(false);
-        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        _loadSessionVariable();
         if(workCasePreScreenId != 0){
             try{
                 int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
@@ -540,12 +509,12 @@ public class HeaderController extends BaseController {
         log.debug("onCloseSale ::: queueName : {}", queueName);
         boolean complete = false;
         String tmpRemark = "";
-        try{
+        try {
             int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
             log.debug("modifyFlag : {}", modifyFlag);
             if (modifyFlag == 1) {
                 messageHeader = "Exception";
-                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
+                message = "Some of data has been changed. Please Retreive Interface before Close Sale.";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else if (modifyFlag == 2) {
                 messageHeader = "Exception";
@@ -561,9 +530,10 @@ public class HeaderController extends BaseController {
                     tmpRemark = submitRemark;
                     complete = true;
                 }
+
                 log.debug("complete : {}", complete);
                 if (complete) {
-                    log.debug("complete true : starting duplicate data ");
+                    log.debug("Complete true : starting duplicate data ");
                     prescreenBusinessControl.duplicateData(queueName, wobNumber, ActionCode.CLOSE_SALES.getVal(), workCasePreScreenId, reasonId, tmpRemark);
                     returnControl.saveReturnHistoryForRestart(workCaseId,workCasePreScreenId);
                     log.debug("Duplicate data complete and submit complete.");
@@ -572,7 +542,7 @@ public class HeaderController extends BaseController {
                     showMessageRedirect();
                 }
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             log.error("onCloseSales error : ", ex);
@@ -582,11 +552,12 @@ public class HeaderController extends BaseController {
     }
 
     public void onOpenAssignCheckerDialog() {
+        log.debug("onOpenAssignCheckerDialog");
         try {
             bdmCheckerList = userDAO.findBDMChecker(user);
             bdmCheckerId = "";
             assignRemark = "";
-            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList.size());
+            log.debug("onOpenAssignDialog ::: bdmCheckerList size : {}", bdmCheckerList != null ? bdmCheckerList.size() : null);
             RequestContext.getCurrentInstance().execute("assignCheckerDlg.show()");
         } catch (Exception ex) {
             messageHeader = "Exception.";
@@ -599,10 +570,10 @@ public class HeaderController extends BaseController {
         log.debug("onAssignToChecker ::: starting...");
         boolean complete = false;
         try {
-            if(canSubmitWithoutReplyDetail(workCaseId,workCasePreScreenId)){
+            if(canSubmitWithoutReplyDetail(workCaseId, workCasePreScreenId)){
                 if (bdmCheckerId != null && !bdmCheckerId.equals("")) {
                     prescreenBusinessControl.assignChecker(queueName, wobNumber, ActionCode.ASSIGN_TO_CHECKER.getVal(), workCasePreScreenId, bdmCheckerId, assignRemark);
-                    returnControl.updateReplyDate(workCaseId,workCasePreScreenId);
+                    returnControl.updateReplyDate(workCaseId, workCasePreScreenId);
                     complete = true;
                     messageHeader = "Information.";
                     message = "Assign to checker complete.";
@@ -626,7 +597,6 @@ public class HeaderController extends BaseController {
             log.error("onAssignToChecker ::: exception : {}", ex);
         }
     }
-
     //************** END FUNCTION FOR PRE_SCREEN STAGE ***************//
 
     //************** FUNCTION FOR FULL APPLICATION STAGE ************//
@@ -640,6 +610,7 @@ public class HeaderController extends BaseController {
         }
         return isSubmitBU;
     }
+
     private boolean checkStepABDM(){
         boolean isStepABDM = false;
         if(stepId == StepValue.FULLAPP_ABDM.value() || stepId == StepValue.CREDIT_DECISION_BU_ABDM.value() ||
@@ -666,60 +637,64 @@ public class HeaderController extends BaseController {
 
                 if(!checkStepABDM()){
                     if(requestPricing){
-                        //Check for Pricing DOA Level
-                        pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
-                        log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
-                        if(pricingDOALevel != 0) {
-                            zmEndorseUserId = "";
-                            zmUserId = "";
-                            rgmUserId = "";
-                            ghmUserId = "";
-                            cssoUserId = "";
+                        if(stepId != StepValue.CREDIT_DECISION_BU_ZM.value()){
+                            //Check for Pricing DOA Level
+                            pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
+                            log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
+                            if(pricingDOALevel != 0) {
+                                zmEndorseUserId = "";
+                                zmUserId = "";
+                                rgmUserId = "";
+                                ghmUserId = "";
+                                cssoUserId = "";
 
-                            zmEndorseRemark = "";
-                            submitRemark = "";
-                            slaRemark = "";
+                                zmEndorseRemark = "";
+                                submitRemark = "";
+                                slaRemark = "";
 
-                            isSubmitToZM = false;
-                            isSubmitToRGM = false;
-                            isSubmitToGHM = false;
-                            isSubmitToCSSO = false;
-
-                            //TO Get all owner of case
-                            getUserOwnerBU();
-
-                            log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
-                            if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
-                            //if(stepId <= StepValue.FULLAPP_BDM.value()) {
-                                zmUserList = fullApplicationControl.getUserList(user);
-                                log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
-                            }
-
-                            //TO Disabled DDL DOA Lower than RGM
-                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                            //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                                isSubmitToZM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than GH
-                            if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
-                            //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                            }
-
-                            //TO Disabled DDL DOA Lower than CSSO
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
-                                isSubmitToZM = false;
-                                isSubmitToRGM = false;
-                                isSubmitToGHM = false;
-                            }
-                            //TO All ( End of Pricing DOA )
-                            if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
                                 isSubmitToZM = false;
                                 isSubmitToRGM = false;
                                 isSubmitToGHM = false;
                                 isSubmitToCSSO = false;
+
+                                //TO Get all owner of case
+                                getUserOwnerBU();
+
+                                log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
+                                if (stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
+                                    //if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                                    zmUserList = fullApplicationControl.getUserList(user);
+                                    log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
+                                }
+
+                                //TO Disabled DDL DOA Lower than RGM
+                                if ((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    isSubmitToZM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than GH
+                                if ((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())) {    //Step After Zone Submit to Region
+                                    //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                }
+
+                                //TO Disabled DDL DOA Lower than CSSO
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()) {
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                }
+                                //TO All ( End of Pricing DOA )
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()) {
+                                    isSubmitToZM = false;
+                                    isSubmitToRGM = false;
+                                    isSubmitToGHM = false;
+                                    isSubmitToCSSO = false;
+                                }
+                            }else{
+                                isSubmitToZM = false;
                             }
                             RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
                         } else {
@@ -1436,9 +1411,10 @@ public class HeaderController extends BaseController {
     //*   Step 2007
     public void onOpenCancelAppraisalRequest(){
         log.debug("onOpenCancelAppraisalRequest ::: starting...");
+        _loadSessionVariable();
         cancelRemark = "";
         reasonId = 0;
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_APPRAISAL.getVal());
         log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
     }
 
@@ -3654,5 +3630,13 @@ public class HeaderController extends BaseController {
 
     public void setUWRejected(boolean isUWRejected) {
         this.isUWRejected = isUWRejected;
+    }
+
+    public int getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(int requestType) {
+        this.requestType = requestType;
     }
 }

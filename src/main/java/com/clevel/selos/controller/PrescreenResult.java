@@ -131,7 +131,7 @@ public class PrescreenResult extends BaseController {
             prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);
             String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
 
-            //if(requestType == CaseRequestTypes.NEW_CASE.value())
+            if(requestType == CaseRequestTypes.NEW_CASE.value())
                 loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_RESULT, ownerCaseUserId);
         }
     }

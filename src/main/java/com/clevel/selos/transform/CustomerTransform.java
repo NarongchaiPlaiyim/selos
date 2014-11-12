@@ -549,7 +549,9 @@ public class CustomerTransform extends Transform {
             customer.setSourceIncome(null);
         }
         if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
+            log.debug("Customer Transform :: Country Income ID :: {}", customerInfoView.getCountryIncome().getId());
             customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+            log.debug("Customer Transform :: Country Income ID :: {}", customer.getCountryIncome().getId());
         } else {
             customer.setCountryIncome(null);
         }
@@ -670,8 +672,11 @@ public class CustomerTransform extends Transform {
             }
 
             if(registerAddress.getCountry() != null && registerAddress.getCountry().getId() != 0){
+                log.debug("Customer Transform :: Register Country ID :: {}", registerAddress.getCountry().getId());
                 Country country = countryDAO.findById(registerAddress.getCountry().getId());
+                log.debug("Customer Transform :: Register Country ID :: {}", country.getId());
                 address.setCountry(country);
+                log.debug("Customer Transform :: Register Country ID :: {}", address.getCountry().getId());
             } else {
                 address.setCountry(null);
             }
@@ -731,8 +736,11 @@ public class CustomerTransform extends Transform {
             }
 
             if(workAddress.getCountry() != null && workAddress.getCountry().getId() != 0){
+                log.debug("Customer Transform :: Work Country ID :: {}", workAddress.getCountry().getId());
                 Country country = countryDAO.findById(workAddress.getCountry().getId());
+                log.debug("Customer Transform :: Work Country ID :: {}", country.getId());
                 address.setCountry(country);
+                log.debug("Customer Transform :: Work Country ID :: {}", address.getCountry().getId());
             } else {
                 address.setCountry(null);
             }

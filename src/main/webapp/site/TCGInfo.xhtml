@@ -335,7 +335,7 @@
                                     </td>
                                     <td>
                                         <h:outputText styleClass="large right" id="requestTCGAmount"
-                                                      value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
+                                                      value="#{tcgInfo.TCGView.requestTCGAmount.compareTo(0) lt 0 ? 0 : tcgInfo.TCGView.requestTCGAmount}" disabled="true">
                                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </td>

@@ -87,6 +87,9 @@ public class LoginBean {
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
 
+    /*@ManagedProperty(value = "#{concurrentSessionControlStrategy}")
+    private ConcurrentSessionControlStrategy concurrentSessionControlStrategy;*/
+
     @Inject
     BPMInterfaceImpl bpmInterfaceImpl;
 
@@ -250,6 +253,8 @@ public class LoginBean {
 
             ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
 
+            concurrentSessionControlStrategy.setMaximumSessions(1000);
+            concurrentSessionControlStrategy.setExceptionIfMaximumExceeded(true);
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
 
             HttpSession httpSession = FacesUtil.getSession(false);
@@ -390,4 +395,12 @@ public class LoginBean {
     public void setLoginExceptionMessage(String loginExceptionMessage) {
         this.loginExceptionMessage = loginExceptionMessage;
     }
+
+    /*public ConcurrentSessionControlStrategy getConcurrentSessionControlStrategy() {
+        return concurrentSessionControlStrategy;
+    }
+
+    public void setConcurrentSessionControlStrategy(ConcurrentSessionControlStrategy concurrentSessionControlStrategy) {
+        this.concurrentSessionControlStrategy = concurrentSessionControlStrategy;
+    }*/
 }

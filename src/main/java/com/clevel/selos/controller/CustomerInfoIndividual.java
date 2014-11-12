@@ -8,17 +8,11 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Reference;
-import com.clevel.selos.model.db.master.Relation;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.master.DistrictView;
-import com.clevel.selos.model.view.master.MaritalStatusView;
-import com.clevel.selos.model.view.master.ProvinceView;
-import com.clevel.selos.model.view.master.ReferenceView;
+import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -2316,6 +2310,30 @@ public class CustomerInfoIndividual extends BaseController {
 //        onLoadComplete();
     }
 
+    public void onChangeKYCMain() {
+        if(customerInfoView.getKycLevel() != null && customerInfoView.getKycLevel().getId() != 0){
+            KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId());
+            KYCLevel kycLevel = new KYCLevel();
+            kycLevel.setId(kycLevelView.getId());
+            kycLevel.setName(kycLevelView.getName());
+            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.setKycLevel(kycLevel);
+        }
+    }
+
+    public void onChangeKYCSpouse() {
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getKycLevel() != null && customerInfoView.getSpouse().getKycLevel().getId() != 0){
+            KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getSpouse().getKycLevel().getId());
+            KYCLevel kycLevel = new KYCLevel();
+            kycLevel.setId(kycLevelView.getId());
+            kycLevel.setName(kycLevelView.getName());
+            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.getSpouse().setKycLevel(kycLevel);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2527,38 +2545,6 @@ public class CustomerInfoIndividual extends BaseController {
     public void setCountryList(List<SelectItem> countryList) {
         this.countryList = countryList;
     }
-
-    /*public int getAddressFlagForm2() {
-        return addressFlagForm2;
-    }
-
-    public void setAddressFlagForm2(int addressFlagForm2) {
-        this.addressFlagForm2 = addressFlagForm2;
-    }
-
-    public int getAddressFlagForm3() {
-        return addressFlagForm3;
-    }
-
-    public void setAddressFlagForm3(int addressFlagForm3) {
-        this.addressFlagForm3 = addressFlagForm3;
-    }
-
-    public int getAddressFlagForm5() {
-        return addressFlagForm5;
-    }
-
-    public void setAddressFlagForm5(int addressFlagForm5) {
-        this.addressFlagForm5 = addressFlagForm5;
-    }
-
-    public int getAddressFlagForm6() {
-        return addressFlagForm6;
-    }
-
-    public void setAddressFlagForm6(int addressFlagForm6) {
-        this.addressFlagForm6 = addressFlagForm6;
-    }*/
 
     public List<SelectItem> getAddressTypeList() {
         return addressTypeList;

@@ -17,6 +17,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
@@ -875,20 +876,20 @@ public class FullApplicationControl extends BusinessControl {
                         insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                     }
 
-                    if (!decisionFlag.equals("R")) {
-                        try {
-                            mortgageSummaryControl.calculateMortgageSummary(workCaseId);
-                        } catch (Exception ex) {
-                            log.error("Exception while calculateMortgageSummary : ", ex);
-                        }
-                    }
-
                     bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
                     log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
                     ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setSubmit(1);
                     approvalHistory.setSubmitDate(new Date());
                     approvalHistoryDAO.persist(approvalHistory);
+
+                    if (!decisionFlag.equals("R")) {
+                        try {
+                            MortgageSummaryView mortgageSummaryView = mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                        } catch (Exception ex) {
+                            log.error("Exception while calculateMortgageSummary : ", ex);
+                        }
+                    }
                 }
             } else {
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -1605,7 +1606,7 @@ public class FullApplicationControl extends BusinessControl {
             }*/
 
             //Check for Appraisal Require
-            int appraisalRequire = calculateAppraisalRequest(newCreditFacility);
+            int appraisalRequire = calculateAppraisalRequest(newCreditFacility, proposeType);
 
             log.debug("calculatePricingDOA ::: requestPricing : {}", requestPricing);
             //WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -1645,24 +1646,33 @@ public class FullApplicationControl extends BusinessControl {
         return insuranceRequire;
     }
 
-    public int calculateAppraisalRequest(ProposeLine newCreditFacility){
+    public int calculateAppraisalRequest(ProposeLine newCreditFacility, ProposeType proposeType){
+        log.debug("calculateAppraisalRequest");
         int appraisalRequire = 0;
         int appraisalRequireCount = 0;
         if(!Util.isNull(newCreditFacility)){
             if(!Util.isNull(newCreditFacility.getProposeCollateralInfoList()) && newCreditFacility.getProposeCollateralInfoList().size() > 0){
                 for(ProposeCollateralInfo newCollateral : newCreditFacility.getProposeCollateralInfoList()){
-                    if(!Util.isNull(newCollateral.getProposeCollateralInfoHeadList()) && newCollateral.getProposeCollateralInfoHeadList().size() > 0){
-                        for(ProposeCollateralInfoHead newCollateralHead : newCollateral.getProposeCollateralInfoHeadList()){
-                            if(!Util.isNull(newCollateralHead.getHeadCollType()) && newCollateralHead.getHeadCollType().getId() != 0){
-                                if(newCollateralHead.getHeadCollType().getAppraisalRequire() == 1){
-                                    if(!Util.isNull(newCollateral.getAppraisalDate())){
-                                        if(Util.calAge(newCollateral.getAppraisalDate()) > 1){
+                    if(newCollateral.getProposeType() == proposeType) {
+                        if(proposeType == ProposeType.A && (newCollateral.getUwDecision() == DecisionType.NO_DECISION || newCollateral.getUwDecision() == DecisionType.REJECTED))
+                            continue;
+                        if (!Util.isNull(newCollateral.getProposeCollateralInfoHeadList()) && newCollateral.getProposeCollateralInfoHeadList().size() > 0) {
+                            for (ProposeCollateralInfoHead newCollateralHead : newCollateral.getProposeCollateralInfoHeadList()) {
+                                log.debug("calcuateAppraisalRequest : newCollateralHead : {}", newCollateralHead);
+                                if (!Util.isNull(newCollateralHead.getHeadCollType()) && newCollateralHead.getHeadCollType().getId() != 0) {
+                                    if (newCollateralHead.getHeadCollType().getAppraisalRequire() == 1) {
+                                        if (!Util.isNull(newCollateral.getAppraisalDate())) {
+                                            log.debug("Util.calYear(newCollateral.getAppraisalDate()) : {}", Util.calYear(newCollateral.getAppraisalDate()));
+                                            log.debug("Util.calAge(newCollateral.getAppraisalDate()) : {}", Util.calAge(newCollateral.getAppraisalDate()));
+                                            if (Util.calYear(newCollateral.getAppraisalDate()) > 1) {
+                                                appraisalRequireCount = appraisalRequireCount + 1;
+                                            }
+                                        } else {
                                             appraisalRequireCount = appraisalRequireCount + 1;
                                         }
-                                    } else {
-                                        appraisalRequireCount = appraisalRequireCount + 1;
                                     }
                                 }
+                                log.debug("appraisalRequireCount : {}", appraisalRequireCount);
                             }
                         }
                     }
@@ -1673,6 +1683,7 @@ public class FullApplicationControl extends BusinessControl {
             appraisalRequire = 1;
         }
 
+        log.debug("appraisalRequire : {}", appraisalRequire);
         return appraisalRequire;
     }
 

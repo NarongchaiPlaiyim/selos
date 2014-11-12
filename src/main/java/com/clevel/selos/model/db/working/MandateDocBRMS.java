@@ -6,19 +6,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "wrk_mandate_doc_brms")
+//@Entity
+//@Table(name = "wrk_mandate_doc_brms")
 public class MandateDocBRMS implements Serializable {
     @Id
     @SequenceGenerator(name = "SEQ_WRK_MANDATE_BRMS_ID", sequenceName = "SEQ_WRK_MANDATE_BRMS_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_MANDATE_BRMS_ID")
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "mandate_doc_id")
+//    @ManyToOne
+//    @JoinColumn(name = "mandate_doc_id")
     private MandateDoc mandateDoc;
 
-    @Column(name = "brms_doc_type")
+//    @Column(name = "brms_doc_type")
     private String BRMSDocType;
 
     public long getId() {
