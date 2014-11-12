@@ -41,7 +41,7 @@ public class StepId implements Serializable
 
         stepnameidlist =  stepNameIdDAO.getStepNameids();
 
-        log.info("stepnameidlist is :::::::::::::::::: {}",stepnameidlist);
+        //log.info("stepnameidlist is :::::::::::::::::: {}",stepnameidlist);
     }
 
 

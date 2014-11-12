@@ -693,14 +693,16 @@ public class HeaderController extends BaseController {
                                     isSubmitToGHM = false;
                                     isSubmitToCSSO = false;
                                 }
-                            }else{
-                                isSubmitToZM = false;
+                                RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+                            } else {
+                                messageHeader = msg.get("app.messageHeader.exception");
+                                message = msg.get("app.message.dialog.doapricing.notfound");
+                                showMessageBox();
                             }
-                            RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
+
                         } else {
-                            messageHeader = msg.get("app.messageHeader.exception");
-                            message = msg.get("app.message.dialog.doapricing.notfound");
-                            showMessageBox();
+                            isSubmitToZM = false;
+                            RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
                         }
                     } else {
                         if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
