@@ -2294,12 +2294,11 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if (!Util.isEmpty(creditType) && creditType.equals(ACCOUNT_TYPE_OD_JUR)) {
                                                     if (isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), lastAsOfDate, TWELVE_MONTH)) {
                                                         for (CreditHistModel creditHistModel : creditHistModelList) {
-                                                            if(isOverLimit(creditHistModel.getDaypastdue())){
-                                                                numberOfOverLimit++;
-                                                            }
-
                                                             //get worstCode
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), lastAsOfDate, SIX_MONTH)) {
+                                                                if(isOverLimit(creditHistModel.getDaypastdue())){
+                                                                    numberOfOverLimit++;
+                                                                }
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
                                                                 log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
