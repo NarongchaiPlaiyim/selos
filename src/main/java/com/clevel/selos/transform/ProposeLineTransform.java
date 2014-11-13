@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.master.CountryTransform;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
@@ -931,6 +932,14 @@ public class ProposeLineTransform extends Transform {
                 }
             }
 
+            //Sort Propose Credit by Id
+            Collections.sort(proposeCreditInfoDetailViewList, new Comparator<ProposeCreditInfoDetailView>() {
+                public int compare(ProposeCreditInfoDetailView o1, ProposeCreditInfoDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
             proposeGuarantorInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
         }
 
@@ -1281,7 +1290,7 @@ public class ProposeLineTransform extends Transform {
         ProposeCollateralInfo proposeCollateralInfo = null;
         if(!Util.isNull(proposeCollateralInfoView)){
             proposeCollateralInfo = new ProposeCollateralInfo();
-            log.debug("## proposeCollateralInfoView.getId() [{}] ##",proposeCollateralInfoView.getId());
+            log.debug("ProposeCollateralInfoView ID :: {}",proposeCollateralInfoView.getId());
             if (!Util.isZero(proposeCollateralInfoView.getId())) {
                 proposeCollateralInfo = proposeCollateralInfoDAO.findById(proposeCollateralInfoView.getId());
             } else {
@@ -1318,21 +1327,19 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfo.setBdmComments(proposeCollateralInfoView.getBdmComments());
             proposeCollateralInfo.setUwDecision(proposeCollateralInfoView.getUwDecision());
 
-            final List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = transformProposeCollateralHeadToModelList(workCase, proposeCollateralInfo, proposeCollateralInfoView.getProposeCollateralInfoHeadViewList(), user, proposeType);
+            List<ProposeCollateralInfoHead> proposeCollateralInfoHeadList = transformProposeCollateralHeadToModelList(workCase, proposeCollateralInfo, proposeCollateralInfoView.getProposeCollateralInfoHeadViewList(), user, proposeType);
             if(Util.isSafetyList(proposeCollateralInfoHeadList)){
                 proposeCollateralInfo.setProposeCollateralInfoHeadList(proposeCollateralInfoHeadList);
             } else {
                 proposeCollateralInfo.setProposeCollateralInfoHeadList(null);
             }
 
-            final List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = null;
+            List<ProposeCollateralInfoRelation> proposeCollateralInfoRelationList = null;
             if(Util.isSafetyList(proposeCollateralInfoHeadList)){
                 proposeCollateralInfo.setProposeCollateralInfoRelationList(proposeCollateralInfoRelationList);
             } else {
                 proposeCollateralInfo.setProposeCollateralInfoRelationList(null);
             }
-
-
         }
 
         return proposeCollateralInfo;
@@ -1446,17 +1453,8 @@ public class ProposeLineTransform extends Transform {
                 proposeCollateralInfoSub.setProposeCollateralSubMortgageList(null);
             }
 
-//            //TODO
-//            final List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = transformProposeCollateralSubRelatedToModelList(workCase, proposeCollateralInfoSub, proposeCollateralInfoSubView.get, proposeType);
-//            if(Util.isSafetyList(proposeCollateralSubMortgageList)){
-//                proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
-//            } else {
-                proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
-//            }
-
-
-
-
+            //This Sub Related transform on Controller
+            proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
         }
 
         return proposeCollateralInfoSub;
@@ -1531,11 +1529,6 @@ public class ProposeLineTransform extends Transform {
             }
         }
         return proposeCollateralSubMortgageList;
-    }
-
-    public List<ProposeCollateralSubRelated> transformProposeCollateralSubRelatedToModelList(WorkCase workCase, ProposeCollateralInfoSub proposeCollateralInfoSub, ProposeCollateralInfoSub proposeCollateralInfoSubRelated, ProposeType proposeType) {
-        List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = new ArrayList<ProposeCollateralSubRelated>();
-        return proposeCollateralSubRelatedList;
     }
 
     public ProposeCollateralSubRelated transformProposeCollateralSubRelatedToModel(WorkCase workCase, ProposeCollateralInfoSub proposeCollateralInfoSub, ProposeCollateralInfoSub proposeCollateralInfoSubRelated, ProposeType proposeType) {
@@ -1619,9 +1612,6 @@ public class ProposeLineTransform extends Transform {
             });
 
             proposeCollateralInfoView.setProposeCreditInfoDetailViewList(proposeCreditInfoDetailViewList);
-
-            //log.debug("###################### HEAD : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList());
-            //log.debug("###################### HEAD Size : {}" , proposeCollateralInfo.getProposeCollateralInfoHeadList().size());
 
             //Sort Collateral Head by Id
             List<ProposeCollateralInfoHeadView> collateralInfoHeadViewList = transformProposeCollateralHeadToViewList(proposeCollateralInfo.getProposeCollateralInfoHeadList());
@@ -1942,16 +1932,8 @@ public class ProposeLineTransform extends Transform {
 
         //For Decision ----------------------------------------------------------------------
         // Approve data already been recorded
-//        List<ProposeCreditInfo> approveCreditList = proposeCreditInfoDAO.findNewCreditDetail(workCaseId, ProposeType.A);
-//        decisionView.setApproveCreditList(transformProposeCreditToViewList(approveCreditList, ProposeType.A));
         decisionView.setApproveCreditList(approveLineView.getProposeCreditInfoDetailViewList());
-
-//        List<ProposeCollateralInfo> approveCollateralList = proposeCollateralInfoDAO.findNewCollateral(workCaseId, ProposeType.A);
-//        decisionView.setApproveCollateralList(transformProposeCollateralToViewList(approveCollateralList, ProposeType.A));
         decisionView.setApproveCollateralList(approveLineView.getProposeCollateralInfoViewList());
-
-//        List<ProposeGuarantorInfo> approveGuarantorList = proposeGuarantorInfoDAO.findNewGuarantorByNewCreditFacId(proposeLineView.getId(), ProposeType.A);
-//        decisionView.setApproveGuarantorList(transformProposeGuarantorToViewList(approveGuarantorList, ProposeType.A));
         decisionView.setApproveGuarantorList(approveLineView.getProposeGuarantorInfoViewList());
 
         if(!Util.isNull(decision) && !Util.isZero(decision.getId())) {
@@ -2075,7 +2057,7 @@ public class ProposeLineTransform extends Transform {
         ProposeCollateralInfo proposeCollateralInfo = null;
         if(!Util.isNull(proposeCollateralInfoView)){
             proposeCollateralInfo = new ProposeCollateralInfo();
-            log.debug("## proposeCollateralInfoView.getId() [{}] ##",proposeCollateralInfoView.getId());
+            log.debug("ProposeCollateralInfoView - ID :: {}",proposeCollateralInfoView.getId());
             proposeCollateralInfo.setCreateDate(new Date());
             proposeCollateralInfo.setCreateBy(user);
             proposeCollateralInfo.setModifyDate(new Date());
@@ -2121,8 +2103,6 @@ public class ProposeLineTransform extends Transform {
             } else {
                 proposeCollateralInfo.setProposeCollateralInfoRelationList(null);
             }
-
-
         }
 
         return proposeCollateralInfo;
@@ -2238,17 +2218,8 @@ public class ProposeLineTransform extends Transform {
                 proposeCollateralInfoSub.setProposeCollateralSubMortgageList(null);
             }
 
-//            //TODO
-//            final List<ProposeCollateralSubRelated> proposeCollateralSubRelatedList = transformProposeCollateralSubRelatedToModelList(workCase, proposeCollateralInfoSub, proposeCollateralInfoSubView.get, proposeType);
-//            if(Util.isSafetyList(proposeCollateralSubMortgageList)){
-//                proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
-//            } else {
+            //This Sub Related transform on Controller
             proposeCollateralInfoSub.setProposeCollateralSubRelatedList(null);
-//            }
-
-
-
-
         }
 
         return proposeCollateralInfoSub;

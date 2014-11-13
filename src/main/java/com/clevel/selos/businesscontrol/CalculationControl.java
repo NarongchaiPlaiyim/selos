@@ -475,7 +475,6 @@ public class CalculationControl extends BusinessControl{
     }
 
     public void calReviewDate(long workCaseId){ // todo:submit button
-        //for submit button
 //        lastReviewDate = Current Date until click submit, display submit date.
 //        nextReviewDate = (1st day of approve month + 12 Months)
         ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
@@ -486,7 +485,7 @@ public class CalculationControl extends BusinessControl{
             exSummary.setWorkCase(workCase);
         }
 //        exSummary.setLastReviewDate();
-//        exSummary.setNextReviewDate();
+//        exSummary.setNextReviewDate(DateTimeUtil.getFirstDayOfMonthDatePlusOneYear(exSummary.getLastReviewDate()));
 
         exSummaryDAO.persist(exSummary);
     }

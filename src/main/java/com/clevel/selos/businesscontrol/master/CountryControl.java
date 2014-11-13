@@ -5,7 +5,7 @@ import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.view.CountryView;
-import com.clevel.selos.transform.CountryTransform;
+import com.clevel.selos.transform.master.CountryTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
