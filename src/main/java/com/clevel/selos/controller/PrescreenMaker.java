@@ -388,7 +388,6 @@ public class PrescreenMaker extends BaseController {
             facilityViewList = new ArrayList<FacilityView>();
         }
 
-        /*proposePrescreenCollateralViewList = prescreenBusinessControl.getProposeCollateral()*/
         if (proposePrescreenCollateralViewList == null) {
             proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
         }
@@ -399,38 +398,20 @@ public class PrescreenMaker extends BaseController {
                 if (bizInfoViewList == null) {
                     bizInfoViewList = new ArrayList<BizInfoDetailView>();
                 }
-
                 proposePrescreenCollateralViewList = prescreenBusinessControl.getPreScreenCollateral(prescreenView.getId());
                 if (proposePrescreenCollateralViewList == null) {
                     proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
                 }
-
             } else {
                 bizInfoViewList = new ArrayList<BizInfoDetailView>();
                 proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
             }
-
-
         }
 
         deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
 
         customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         generateCustomerInfoList(customerInfoViewList);
-
-
-        /*customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId); asdf
-        if(customerInfoViewList != null){
-            borrowerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViewList);
-            guarantorInfoViewList = prescreenBusinessControl.getGuarantorViewListByCustomerViewList(customerInfoViewList);
-            relatedInfoViewList = prescreenBusinessControl.getRelatedViewListByCustomerViewList(customerInfoViewList);
-        } else {
-            customerInfoViewList = new ArrayList<CustomerInfoView>();
-            borrowerInfoViewList = new ArrayList<CustomerInfoView>();
-            guarantorInfoViewList = new ArrayList<CustomerInfoView>();
-            relatedInfoViewList = new ArrayList<CustomerInfoView>();
-        }
-        deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();*/
     }
 
     public void generateCustomerInfoList(List<CustomerInfoView> customerInfoViews) {
@@ -2325,7 +2306,10 @@ public class PrescreenMaker extends BaseController {
             }
         }else{
             borrowerInfo.setMaritalStatus(maritalStatus);
-            borrowerInfo.setSpouse(new CustomerInfoView());
+            CustomerInfoView spouse = new CustomerInfoView();
+            spouse.reset();
+            spouse.setSpouse(null);
+            borrowerInfo.setSpouse(spouse);
         }
     }
 
