@@ -282,6 +282,7 @@
                                                            var="country"
                                                            itemLabel="#{country.label}"
                                                            itemValue="#{country.value}"/>
+                                            <p:ajax event="change" process="@this" update=":frmMain:citiCountry" listener="#{custInfoSumIndi.onChangeCitizenCountry()}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -547,6 +548,7 @@
                                                            var="country"
                                                            itemLabel="#{country.label}"
                                                            itemValue="#{country.value}"/>
+                                            <p:ajax event="change" process="@this" update=":frmMain:incomeCountry" listener="#{custInfoSumIndi.onChangeCountryIncome()}"/>
                                         </p:selectOneMenu>
                                     </td>
                                 </tr>
@@ -704,6 +706,7 @@
                                                                        var="country"
                                                                        itemLabel="#{country.label}"
                                                                        itemValue="#{country.value}"/>
+                                                        <p:ajax event="change" process="@this" update=":frmMain:curAddCountry" listener="#{custInfoSumIndi.onChangeCurrentAddress()}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -873,6 +876,7 @@
                                                                            var="country"
                                                                            itemLabel="#{country.label}"
                                                                            itemValue="#{country.value}"/>
+                                                            <p:ajax event="change" process="@this" update=":frmMain:regAddCountry" listener="#{custInfoSumIndi.onChangeRegisterAddress()}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -1043,6 +1047,7 @@
                                                                            var="country"
                                                                            itemLabel="#{country.label}"
                                                                            itemValue="#{country.value}"/>
+                                                            <p:ajax event="change" process="@this" update=":frmMain:workAddCountry" listener="#{custInfoSumIndi.onChangeWorkAddress()}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -1552,6 +1557,7 @@
                                                                                var="country"
                                                                                itemLabel="#{country.label}"
                                                                                itemValue="#{country.value}"/>
+                                                                <p:ajax event="change" process="@this" update=":frmMain:citiCountrySpouse" listener="#{custInfoSumIndi.onChangeCitizenCountrySpouse()}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1824,6 +1830,7 @@
                                                                                var="country"
                                                                                itemLabel="#{country.label}"
                                                                                itemValue="#{country.value}"/>
+                                                                <p:ajax event="change" process="@this" update=":frmMain:incomeCountrySpouse" listener="#{custInfoSumIndi.onChangeCountryIncomeSpouse()}"/>
                                                             </p:selectOneMenu>
                                                         </td>
                                                     </tr>
@@ -1961,6 +1968,7 @@
                                                                                            var="country"
                                                                                            itemLabel="#{country.label}"
                                                                                            itemValue="#{country.value}"/>
+                                                                            <p:ajax event="change" process="@this" update=":frmMain:curAddCountrySpouse" listener="#{custInfoSumIndi.onChangeCurrentAddressSpouse()}"/>
                                                                         </p:selectOneMenu>
                                                                     </td>
                                                                 </tr>
@@ -2130,6 +2138,7 @@
                                                                                                var="country"
                                                                                                itemLabel="#{country.label}"
                                                                                                itemValue="#{country.value}"/>
+                                                                                <p:ajax event="change" process="@this" update=":frmMain:regAddCountrySpouse" listener="#{custInfoSumIndi.onChangeRegisterAddressSpouse()}"/>
                                                                             </p:selectOneMenu>
                                                                         </td>
                                                                     </tr>
@@ -2300,6 +2309,7 @@
                                                                                                var="country"
                                                                                                itemLabel="#{country.label}"
                                                                                                itemValue="#{country.value}"/>
+                                                                                <p:ajax event="change" process="@this" update=":frmMain:workAddCountrySpouse" listener="#{custInfoSumIndi.onChangeWorkAddressSpouse()}"/>
                                                                             </p:selectOneMenu>
                                                                         </td>
                                                                     </tr>
