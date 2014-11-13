@@ -73,7 +73,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private long spouseId;
     private List<CustomerCSIView> customerCSIList;
     private IncomeSource sourceIncome;
-    private Country countryIncome;
+    private CountryView countryIncome;
     private long committeeId;
 
     //*** Var for Individual ***//
@@ -88,7 +88,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Nationality sndNationality;
     private Race origin;
     private Occupation occupation;
-    private Country citizenCountry;
+    private CountryView citizenCountry;
 
     //*** Var for Juristic ***//
     private BigDecimal capital;
@@ -98,7 +98,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String registrationId;
     private String signCondition;
     private BigDecimal totalShare;
-    private Country registrationCountry;
+    private CountryView registrationCountry;
     private List<CustomerInfoView> individualViewList;
     private List<CustomerInfoView> individualViewForShowList; // 24-09-14
     private Date documentIssueDate;
@@ -186,8 +186,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.maritalStatus = new MaritalStatus();
         this.numberOfChild = 0;
         //this.childrenList = new ArrayList<ChildrenView>();
-        this.citizenCountry = new Country();
-        this.registrationCountry = new Country();
+        this.citizenCountry = new CountryView();
+        this.registrationCountry = new CountryView();
         this.currentAddress = new AddressView();
         this.workAddress = new AddressView();
         this.registerAddress = new AddressView();
@@ -206,7 +206,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.documentAuthorizeDate = new Date();
         this.customerCSIList = new ArrayList<CustomerCSIView>();
         this.sourceIncome = new IncomeSource();
-        this.countryIncome = new Country();
+        this.countryIncome = new CountryView();
         this.individualViewList = new ArrayList<CustomerInfoView>();
         this.individualViewForShowList = new ArrayList<CustomerInfoView>();
 //        this.percentShareSummary = BigDecimal.ZERO;
@@ -648,19 +648,27 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public Country getCitizenCountry() {
+    public CountryView getCountryIncome() {
+        return countryIncome;
+    }
+
+    public void setCountryIncome(CountryView countryIncome) {
+        this.countryIncome = countryIncome;
+    }
+
+    public CountryView getCitizenCountry() {
         return citizenCountry;
     }
 
-    public void setCitizenCountry(Country citizenCountry) {
+    public void setCitizenCountry(CountryView citizenCountry) {
         this.citizenCountry = citizenCountry;
     }
 
-    public Country getRegistrationCountry() {
+    public CountryView getRegistrationCountry() {
         return registrationCountry;
     }
 
-    public void setRegistrationCountry(Country registrationCountry) {
+    public void setRegistrationCountry(CountryView registrationCountry) {
         this.registrationCountry = registrationCountry;
     }
 
@@ -813,14 +821,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setSourceIncome(IncomeSource sourceIncome) {
         this.sourceIncome = sourceIncome;
-    }
-
-    public Country getCountryIncome() {
-        return countryIncome;
-    }
-
-    public void setCountryIncome(Country countryIncome) {
-        this.countryIncome = countryIncome;
     }
 
     public List<CustomerInfoView> getIndividualViewList() {

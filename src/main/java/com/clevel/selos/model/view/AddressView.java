@@ -1,6 +1,9 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.AddressType;
+import com.clevel.selos.model.db.master.District;
+import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.SubDistrict;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,7 +20,7 @@ public class AddressView implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private String postalCode;
-    private Country country;
+    private CountryView country;
     private String phoneNumber;
     private String extension;
     private String contactName;
@@ -33,7 +36,7 @@ public class AddressView implements Serializable {
         this.province = new Province();
         this.district = new District();
         this.subDistrict = new SubDistrict();
-        this.country = new Country();
+        this.country = new CountryView();
         this.addressType = new AddressType();
     }
 
@@ -138,11 +141,11 @@ public class AddressView implements Serializable {
         this.postalCode = postalCode;
     }
 
-    public Country getCountry() {
+    public CountryView getCountry() {
         return country;
     }
 
-    public void setCountry(Country country) {
+    public void setCountry(CountryView country) {
         this.country = country;
     }
 
