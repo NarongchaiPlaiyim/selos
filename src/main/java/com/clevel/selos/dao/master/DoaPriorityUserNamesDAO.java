@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DoaPriorityUserNamesDAO   extends GenericDAO<DoaPriorityUserNames,String>
+public class DoaPriorityUserNamesDAO extends GenericDAO<DoaPriorityUserNames, String>
 {
     @Inject
     @SELOS
@@ -27,34 +27,16 @@ public class DoaPriorityUserNamesDAO   extends GenericDAO<DoaPriorityUserNames,S
 
     public List<DoaPriorityUserNames> getDoaPriorityUserNames()
     {
-        List<DoaPriorityUserNames> doaPriorityUserNames = new ArrayList<DoaPriorityUserNames>();
+        List<DoaPriorityUserNames> doaPriorityUserNames;
 
-        log.info("controller entered into DoaPriorityUserNamesDAO class");
-
-        Criteria criteria = getSession().createCriteria(DoaPriorityUserNames.class);
+        Criteria criteria = createCriteria();
 
         criteria.setProjection(Projections.projectionList().add(Projections.property("userid"),"userid"));
-
         criteria.setResultTransformer(Transformers.aliasToBean(DoaPriorityUserNames.class));
 
         doaPriorityUserNames = criteria.list();
 
-        log.info("doapriorityUserNames list size is : {}",doaPriorityUserNames.size());
-
-        Iterator iterator = doaPriorityUserNames.iterator();
-
-        String doaprriorityusername = null;
-
-        while(iterator.hasNext() == true)
-        {
-            DoaPriorityUserNames doaPriorityUserNames3 = new DoaPriorityUserNames();
-
-            doaPriorityUserNames3 = (DoaPriorityUserNames)iterator.next();
-
-            log.info("doapriorityusernames value is : {}",doaPriorityUserNames3.getUserid());
-
-        }
-
+        log.debug("doaPriorityUserNames list size is : {}", doaPriorityUserNames.size());
 
         return doaPriorityUserNames;
     }

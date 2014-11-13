@@ -318,7 +318,6 @@ public class ProposeCollateralInfoHead implements Serializable {
                 .append("appraisalValue", appraisalValue)
                 .append("headCollType", headCollType)
                 .append("insuranceCompany", insuranceCompany)
-                .append("proposeCollateral", proposeCollateral)
                 .append("proposeCollateralInfoSubList", proposeCollateralInfoSubList)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
