@@ -612,6 +612,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onSaveSubCollateral() {
+        log.debug("onSaveSubCollateral :: modeSubColl :: {}, rowHeadCollIndex :: {}, rowSubCollIndex :: {}, proposeCollateralInfoSubView :: {}",modeSubColl, rowHeadCollIndex, rowSubCollIndex, proposeCollateralInfoSubView);
         Map<String, Object> resultMapVal;
         if(modeSubColl == Mode.ADD) {
             resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, subCollateralTypeList, 1, rowHeadCollIndex, rowSubCollIndex);
