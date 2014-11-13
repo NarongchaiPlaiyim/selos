@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.master.KYCLevelView;
 import com.clevel.selos.model.view.master.SBFScoreView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -61,7 +62,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String mobileNumber;
     private String faxNumber;
     private String email;
-    private KYCLevel kycLevel;
+    private KYCLevelView kycLevel;
     private int covenantFlag;
     private int reviewFlag;
     private String reason;
@@ -196,7 +197,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.mobileNumber = "";
         this.faxNumber = "";
         this.email = "";
-        this.kycLevel = new KYCLevel();
+        this.kycLevel = new KYCLevelView();
         this.covenantFlag = -1;
         this.reviewFlag = -1;
         this.reason = "";
@@ -696,11 +697,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.email = email;
     }
 
-    public KYCLevel getKycLevel() {
+    public KYCLevelView getKycLevel() {
         return kycLevel;
     }
 
-    public void setKycLevel(KYCLevel kycLevel) {
+    public void setKycLevel(KYCLevelView kycLevel) {
         this.kycLevel = kycLevel;
     }
 

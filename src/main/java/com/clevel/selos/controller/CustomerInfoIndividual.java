@@ -8,7 +8,9 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.District;
+import com.clevel.selos.model.db.master.Reference;
+import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CountryView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
@@ -1168,18 +1170,18 @@ public class CustomerInfoIndividual extends BaseController {
                     if(customerInfoView.getCitizenCountry() != null){
                         customerInfoView.getCitizenCountry().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setCitizenCountry(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.setCitizenCountry(countryView);
                     }
 
                     //set default source of income country
                     if(customerInfoView.getCountryIncome() != null){
                         customerInfoView.getCountryIncome().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setCountryIncome(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.setCountryIncome(countryView);
                     }
 
                     if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
@@ -1245,18 +1247,18 @@ public class CustomerInfoIndividual extends BaseController {
                                     if(customerInfoView.getSpouse().getCitizenCountry() != null){
                                         customerInfoView.getSpouse().getCitizenCountry().setId(211);
                                     } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                        CountryView countryView = new CountryView();
+                                        countryView.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(countryView);
                                     }
 
                                     //set default source of income country
                                     if(customerInfoView.getSpouse().getCountryIncome() != null){
                                         customerInfoView.getSpouse().getCountryIncome().setId(211);
                                     } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setCountryIncome(country);
+                                        CountryView countryView = new CountryView();
+                                        countryView.setId(211);
+                                        customerInfoView.getSpouse().setCountryIncome(countryView);
                                     }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
@@ -1416,18 +1418,18 @@ public class CustomerInfoIndividual extends BaseController {
                         if(customerInfoView.getCitizenCountry() != null){
                             customerInfoView.getCitizenCountry().setId(211);
                         } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setCitizenCountry(country);
+                            CountryView countryView = new CountryView();
+                            countryView.setId(211);
+                            customerInfoView.setCitizenCountry(countryView);
                         }
 
                         //set default source of income country
                         if(customerInfoView.getCountryIncome() != null){
                             customerInfoView.getCountryIncome().setId(211);
                         } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setCountryIncome(country);
+                            CountryView countryView = new CountryView();
+                            countryView.setId(211);
+                            customerInfoView.setCountryIncome(countryView);
                         }
 
                         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getRegisterAddress() != null){
@@ -1486,18 +1488,18 @@ public class CustomerInfoIndividual extends BaseController {
                                     if(customerInfoView.getSpouse().getCitizenCountry() != null){
                                         customerInfoView.getSpouse().getCitizenCountry().setId(211);
                                     } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setCitizenCountry(country);
+                                        CountryView countryView = new CountryView();
+                                        countryView.setId(211);
+                                        customerInfoView.getSpouse().setCitizenCountry(countryView);
                                     }
 
                                     //set default source of income country
                                     if(customerInfoView.getSpouse().getCountryIncome() != null){
                                         customerInfoView.getSpouse().getCountryIncome().setId(211);
                                     } else {
-                                        Country country = new Country();
-                                        country.setId(211);
-                                        customerInfoView.getSpouse().setCountryIncome(country);
+                                        CountryView countryView = new CountryView();
+                                        countryView.setId(211);
+                                        customerInfoView.getSpouse().setCountryIncome(countryView);
                                     }
 
                                     if(customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getRegisterAddress() != null){
@@ -1675,18 +1677,18 @@ public class CustomerInfoIndividual extends BaseController {
                     if(customerInfoView.getSpouse().getCitizenCountry() != null){
                         customerInfoView.getSpouse().getCitizenCountry().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.getSpouse().setCitizenCountry(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.getSpouse().setCitizenCountry(countryView);
                     }
 
                     //set default source of income country
                     if(customerInfoView.getSpouse().getCountryIncome() != null){
                         customerInfoView.getSpouse().getCountryIncome().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.getSpouse().setCountryIncome(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.getSpouse().setCountryIncome(countryView);
                     }
 
                     if(customerInfoView.getSpouse().getDateOfBirth() != null){
@@ -2308,164 +2310,164 @@ public class CustomerInfoIndividual extends BaseController {
     public void onChangeCitizenCountry() {
         if(customerInfoView.getCitizenCountry() != null && customerInfoView.getCitizenCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCitizenCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.setCitizenCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.setCitizenCountry(countryView);
         }
     }
 
     public void onChangeCitizenCountrySpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getCitizenCountry() != null && customerInfoView.getSpouse().getCitizenCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getSpouse().getCitizenCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getSpouse().setCitizenCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getSpouse().setCitizenCountry(countryView);
         }
     }
 
     public void onChangeCountryIncome() {
         if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCountryIncome().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.setCountryIncome(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.setCountryIncome(countryView);
         }
     }
 
     public void onChangeCountryIncomeSpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getCountryIncome() != null && customerInfoView.getSpouse().getCountryIncome().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getSpouse().getCountryIncome().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getSpouse().setCountryIncome(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getSpouse().setCountryIncome(countryView);
         }
     }
 
     public void onChangeCurrentAddress() {
         if(customerInfoView.getCurrentAddress() != null && customerInfoView.getCurrentAddress().getCountry() != null && customerInfoView.getCurrentAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCurrentAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getCurrentAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getCurrentAddress().setCountry(countryView);
         }
     }
 
     public void onChangeRegisterAddress() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getRegisterAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getRegisterAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getRegisterAddress().setCountry(countryView);
         }
     }
 
     public void onChangeWorkAddress() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getCountry() != null && customerInfoView.getWorkAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getWorkAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getWorkAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getWorkAddress().setCountry(countryView);
         }
     }
 
     public void onChangeCurrentAddressSpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getCurrentAddress() != null && customerInfoView.getSpouse().getCurrentAddress().getCountry() != null && customerInfoView.getSpouse().getCurrentAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getSpouse().getCurrentAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getSpouse().getCurrentAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getSpouse().getCurrentAddress().setCountry(countryView);
         }
     }
 
     public void onChangeRegisterAddressSpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRegisterAddress() != null && customerInfoView.getSpouse().getRegisterAddress().getCountry() != null && customerInfoView.getSpouse().getRegisterAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getSpouse().getRegisterAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getSpouse().getRegisterAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getSpouse().getRegisterAddress().setCountry(countryView);
         }
     }
 
     public void onChangeWorkAddressSpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getWorkAddress() != null && customerInfoView.getSpouse().getWorkAddress().getCountry() != null && customerInfoView.getSpouse().getWorkAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getSpouse().getWorkAddress().getCountry().getId());
-            Country country = new Country();
-            country.setId(countryView.getId());
-            country.setName(countryView.getName());
-            country.setCode(countryView.getCode());
-            country.setCode2(countryView.getCode2());
-            country.setIsoCode(countryView.getIsoCode());
-            country.setActive(countryView.getActive());
-            customerInfoView.getSpouse().getWorkAddress().setCountry(country);
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getSpouse().getWorkAddress().setCountry(countryView);
         }
     }
 
     public void onChangeKYCMain() {
         if(customerInfoView.getKycLevel() != null && customerInfoView.getKycLevel().getId() != 0){
             KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId());
-            KYCLevel kycLevel = new KYCLevel();
-            kycLevel.setId(kycLevelView.getId());
-            kycLevel.setName(kycLevelView.getName());
-            kycLevel.setKycLevel(kycLevelView.getKycLevel());
-            kycLevel.setActive(kycLevelView.getActive());
-            customerInfoView.setKycLevel(kycLevel);
+//            KYCLevel kycLevel = new KYCLevel();
+//            kycLevel.setId(kycLevelView.getId());
+//            kycLevel.setName(kycLevelView.getName());
+//            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+//            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.setKycLevel(kycLevelView);
         }
     }
 
     public void onChangeKYCSpouse() {
         if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getKycLevel() != null && customerInfoView.getSpouse().getKycLevel().getId() != 0){
             KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getSpouse().getKycLevel().getId());
-            KYCLevel kycLevel = new KYCLevel();
-            kycLevel.setId(kycLevelView.getId());
-            kycLevel.setName(kycLevelView.getName());
-            kycLevel.setKycLevel(kycLevelView.getKycLevel());
-            kycLevel.setActive(kycLevelView.getActive());
-            customerInfoView.getSpouse().setKycLevel(kycLevel);
+//            KYCLevel kycLevel = new KYCLevel();
+//            kycLevel.setId(kycLevelView.getId());
+//            kycLevel.setName(kycLevelView.getName());
+//            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+//            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.getSpouse().setKycLevel(kycLevelView);
         }
     }
 

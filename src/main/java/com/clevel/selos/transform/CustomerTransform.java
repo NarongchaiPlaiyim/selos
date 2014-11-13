@@ -180,10 +180,8 @@ public class CustomerTransform extends Transform {
         customerInfoView.setReviewFlag(customer.getReviewFlag());
         customerInfoView.setReason(customer.getReason());
 
-        customerInfoView.setKycLevel(customer.getKycLevel());
-        if(customerInfoView.getKycLevel() == null){
-            customerInfoView.setKycLevel(new KYCLevel());
-        }
+        customerInfoView.setKycLevel(kycLevelTransform.transformToView(customer.getKycLevel()));
+
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setCsiFlag(customer.getCsiFlag());
         customerInfoView.setSearchFromRM(customer.getSearchFromRM());
