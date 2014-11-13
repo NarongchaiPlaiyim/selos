@@ -843,8 +843,6 @@ public class CustomerInfoJuristic extends BaseController {
             RequestContext.getCurrentInstance().execute("msgBoxCancelDlg.show()");
             return "";
         }
-//        onCreation();
-//        onLoadComplete();
     }
 
     public void onChangeCountryIncome() {
@@ -862,7 +860,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onChangeRegisterAddress() {
-        if(customerInfoView.getWorkAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
+        if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getRegisterAddress().getCountry().getId());
             Country country = new Country();
             country.setId(countryView.getId());
