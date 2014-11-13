@@ -47,6 +47,7 @@ public class ProposeCreditInfoDAO extends GenericDAO<ProposeCreditInfo, Long> {
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.eq("proposeType", proposeType));
         List<ProposeCreditInfo> newCreditDetailList = (List<ProposeCreditInfo>) criteria.list();
+        log.debug("findNewCreditDetail workCaseId : {}, proposeType : {}", workCaseId, proposeType);
         return newCreditDetailList;
     }
 

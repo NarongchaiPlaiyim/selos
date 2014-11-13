@@ -39,7 +39,7 @@ public class StepId implements Serializable
     {
         stepnameidlist = new ArrayList<StepNameId>();
 
-        stepnameidlist =  stepNameIdDAO.getStepNameids();
+        stepnameidlist =  stepNameIdDAO.getStepNameIds();
 
         //log.info("stepnameidlist is :::::::::::::::::: {}",stepnameidlist);
     }

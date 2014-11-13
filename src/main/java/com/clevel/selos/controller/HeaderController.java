@@ -279,7 +279,7 @@ public class HeaderController extends BaseController {
 
         HttpSession session = FacesUtil.getSession(false);
         appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        log.debug("HeaderController ::: appHeader : {}", appHeaderView);
+        //log.debug("HeaderController ::: appHeader : {}", appHeaderView);
 
         loadUserAccessMenu();
 

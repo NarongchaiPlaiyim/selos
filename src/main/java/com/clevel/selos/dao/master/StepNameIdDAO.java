@@ -31,18 +31,17 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
 
     }
 
-    public List<StepNameId> getStepNameids()
+    public List<StepNameId> getStepNameIds()
     {
-        List<StepNameId> stepNameidsList = new ArrayList<StepNameId>();
+        List<StepNameId> stepNameIdList;
 
-        log.info("controller comes to getStepNameids method of StepNameIdDAO class");
+        log.debug("controller comes to getStepNameIds method of StepNameIdDAO class");
 
         Criteria criteria = getSession().createCriteria(StepNameId.class);
 
         String[] numberStrs = stepNames.split(",");
         List<Integer> numbers = new ArrayList<Integer>();
-        for(int i = 0;i < numberStrs.length;i++)
-        {
+        for(int i = 0;i < numberStrs.length;i++){
             numbers.add(Integer.parseInt(numberStrs[i].trim()));
         }
 
@@ -51,45 +50,10 @@ public class StepNameIdDAO  extends GenericDAO<StepNameId,Integer>
         criteria.addOrder(Order.asc("id"));
         criteria.setResultTransformer(Transformers.aliasToBean(StepNameId.class));
 
-        //criteria.setProjection( Projections.projectionList().add(Projections.property("description"),"description"));
+        stepNameIdList = criteria.list();
 
-        //criteria.setResultTransformer(Transformers.aliasToBean(StepNameId.class));
+        log.info("stepNameIdsList size is ::::::::::: {}", stepNameIdList != null ? stepNameIdList.size() : null);
 
-        stepNameidsList = criteria.list();
-
-        log.info("stepNameIdsList size is ::::::::::: {}",stepNameidsList.size());
-
-       Iterator iterator = stepNameidsList.iterator();
-
-       log.info("iterator hasNext method return type : {}",iterator.hasNext());
-
-        //List<StepNameId> stepnameidlist = new ArrayList<StepNameId>();
-
-        while(iterator.hasNext() == true)
-        {
-            log.info("hasNext method is true that's y controller comes to while loop");
-
-            StepNameId stepNameid = new StepNameId();
-
-            stepNameid = (StepNameId)iterator.next();
-
-            log.info("step id names : {}",stepNameid.getId());
-
-             log.info("step desc : {}",stepNameid.getDescription());
-
-            /*if(stepNames.contains(stepNameid.getDescription()))
-            {
-                stepNameidsList.remove(stepNameid);
-
-                log.info("Step Name Removed");
-            }
-*/
-            //stepnameidlist.add(String.valueOf(stepNameid.getId()));
-
-        }
-
-        //log.info("stepnameidlit string values : {}",stepnameidlist.size());
-
-        return stepNameidsList;
+        return stepNameIdList;
     }
 }

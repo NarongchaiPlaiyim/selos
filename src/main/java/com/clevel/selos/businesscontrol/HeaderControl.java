@@ -98,6 +98,7 @@ public class HeaderControl extends BusinessControl {
             appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
 
             customerList = customerDAO.getBorrowerByWorkCaseId(workCase.getId(), 0);
+            //customerDAO.getCustomerForHeader(0, workCase.getId());
             log.debug("getHeaderInformation ::: get information from WorkCase : customer list size : {}", customerList.size());
         }else{
             log.debug("getHeaderInformation ::: get information from WorkCasePreScreen");
@@ -120,6 +121,7 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
 
                 customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePrescreen.getId());
+                //customerDAO.getCustomerForHeader(workCasePrescreen.getId(), 0);
                 log.debug("getHeaderInformation ::: get information from WorkCasePreScreen : customer list size : {}", customerList.size());
             }
         }

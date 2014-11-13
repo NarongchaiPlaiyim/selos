@@ -17,6 +17,7 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     public PrdProgramToCreditTypeDAO() {
     }
