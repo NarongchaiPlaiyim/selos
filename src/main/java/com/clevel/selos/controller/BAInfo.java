@@ -133,7 +133,7 @@ public class BAInfo implements Serializable {
     }
 
     public boolean canUpdateBAInfoTable() {
-        return RadioValue.YES.equals(bapaInfoView.getApplyBA()) && !isDisabled("ba.checked");
+        return RadioValue.YES.equals(bapaInfoView.getApplyBA());
     }
     public BAPAInfoCustomerView getBapaInfoCustomerView() {
         return bapaInfoCustomerView;
