@@ -509,10 +509,18 @@
 				value="#{msg.get('app.custInfoIndi.content.maritalStatus')}#{postCustomerInfoIndv.mandate('marriageStatus')}" />
 		</td>
 		<td colspan="3">
-			<p:inputText id="marital"
-				value="#{postCustomerInfoIndv.customer.displayMaritalStatus}"
-				readonly="true"
-				/>
+            <p:selectOneMenu id='marital'
+                             value="#{postCustomerInfoIndv.customer.maritalStatusId}"
+                             rendered="#{not postCustomerInfoIndv.isDisabled('marriageStatus')}"
+                    >
+                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                <f:selectItems value="#{postCustomerInfoIndv.maritalStatuses}"/>
+            </p:selectOneMenu>
+            <p:inputText
+                    value="#{postCustomerInfoIndv.customer.displayMaritalStatus}"
+                    rendered="#{postCustomerInfoIndv.isDisabled('marriageStatus')}"
+                    readonly="true"
+                    />
 		</td>
 	</tr>
 	<tr>
