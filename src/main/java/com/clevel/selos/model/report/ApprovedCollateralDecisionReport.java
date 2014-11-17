@@ -32,6 +32,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
     private List<ProposeCreditInfoDetailReport> proposeCreditInfoDetailReports;
 
     //Coll Head
+    private List<ProposeCollatealInfoHeadSubReport> proposeCollatealInfoHeadSubReports;
     private String collateralDescription;
     private String percentLTVDescription;
     private BigDecimal existingCredit;
@@ -287,6 +288,14 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
         this.uwRemark = uwRemark;
     }
 
+    public List<ProposeCollatealInfoHeadSubReport> getProposeCollatealInfoHeadSubReports() {
+        return proposeCollatealInfoHeadSubReports;
+    }
+
+    public void setProposeCollatealInfoHeadSubReports(List<ProposeCollatealInfoHeadSubReport> proposeCollatealInfoHeadSubReports) {
+        this.proposeCollatealInfoHeadSubReports = proposeCollatealInfoHeadSubReports;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -306,6 +315,7 @@ public class ApprovedCollateralDecisionReport extends ReportModel{
                 .append("uwRemark", uwRemark)
                 .append("proposeCreditDetailViewList", proposeCreditDetailViewList)
                 .append("proposeCreditInfoDetailReports", proposeCreditInfoDetailReports)
+                .append("proposeCollatealInfoHeadSubReports", proposeCollatealInfoHeadSubReports)
                 .append("collateralDescription", collateralDescription)
                 .append("percentLTVDescription", percentLTVDescription)
                 .append("existingCredit", existingCredit)
