@@ -717,12 +717,12 @@
                                     <td colspan="4" class="center">
                                         <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="small"
                                                          process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
-                                                         actionListener="#{basicInfo.onSave}" binding="#{saveBtn}"
+                                                         actionListener="#{basicInfo.onSave()}" binding="#{saveBtn}"
                                                          disabled="#{basicInfo.isDisabled('saveButton')}"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" id="cancelBtn"
                                                          styleClass="small" process="@form" update=":frmMain"
                                                          disabled="#{basicInfo.isDisabled('cancelButton')}"
-                                                         actionListener="#{basicInfo.onCreation}"/>
+                                                         actionListener="#{basicInfo.onCancel()}"/>
                                     </td>
                                 </tr>
                             </table>

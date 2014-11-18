@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.SLOSActivityDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionAudit;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.SLOSActivity;
 import org.slf4j.Logger;
@@ -23,12 +24,16 @@ public class SLOSAuditor implements SystemAuditor, Serializable{
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
-        slosActivityDAO.persist(new SLOSActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, resultDate, linkKey));
+        //slosActivityDAO.persist(new SLOSActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, resultDate, linkKey));
     }
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
-        slosActivityDAO.persist(new SLOSActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, new Date(), linkKey));
+        //slosActivityDAO.persist(new SLOSActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, new Date(), linkKey));
+    }
+
+    public void add(int screenId, String userId, ActionAudit actionAudit, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc) {
+        slosActivityDAO.persist(new SLOSActivity(screenId, userId, actionAudit, actionDesc, actionDate, actionResult, resultDesc, new Date()));
     }
 
 }

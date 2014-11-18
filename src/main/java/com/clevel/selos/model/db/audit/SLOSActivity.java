@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.audit;
 
+import com.clevel.selos.model.ActionAudit;
 import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -15,38 +16,46 @@ public class SLOSActivity implements Serializable {
     @SequenceGenerator(name = "SEQ_ADT_SLOS_ID", sequenceName = "SEQ_ADT_SLOS_ID", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADT_SLOS_ID")
     private long id;
+
+    @Column(name = "screen_id")
+    private int screenId;
+
     @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
-    @Column(name = "action", nullable = false)
-    private String action;
+
+    @Enumerated(EnumType.STRING)
+    private ActionAudit actionAudit;
+
     @Column(name = "action_desc", length = 600)
     private String actionDesc;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "action_date", nullable = false)
     private Date actionDate;
+
     @Column(name = "result", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionResult actionResult;
+
     @Column(name = "result_desc", length = 600)
     private String resultDesc;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "result_date", nullable = false)
     private Date resultDate;
-    @Column(name = "link_key")
-    private String linkKey;
 
     public SLOSActivity() {
     }
 
-    public SLOSActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
+    public SLOSActivity(int screenId, String userId, ActionAudit actionAudit, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate) {
+        this.screenId = screenId;
         this.userId = userId;
-        this.action = action;
+        this.actionAudit = actionAudit;
         this.actionDesc = actionDesc;
         this.actionDate = actionDate;
         this.actionResult = actionResult;
         this.resultDesc = resultDesc;
         this.resultDate = resultDate;
-        this.linkKey = linkKey;
     }
 
     public long getId() {
@@ -57,6 +66,14 @@ public class SLOSActivity implements Serializable {
         this.id = id;
     }
 
+    public int getScreenId() {
+        return screenId;
+    }
+
+    public void setScreenId(int screenId) {
+        this.screenId = screenId;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -65,12 +82,12 @@ public class SLOSActivity implements Serializable {
         this.userId = userId;
     }
 
-    public String getAction() {
-        return action;
+    public ActionAudit getActionAudit() {
+        return actionAudit;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setActionAudit(ActionAudit actionAudit) {
+        this.actionAudit = actionAudit;
     }
 
     public String getActionDesc() {
@@ -113,26 +130,17 @@ public class SLOSActivity implements Serializable {
         this.resultDate = resultDate;
     }
 
-    public String getLinkKey() {
-        return linkKey;
-    }
-
-    public void setLinkKey(String linkKey) {
-        this.linkKey = linkKey;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("userId", userId).
-                append("action", action).
+                append("actionAudit", actionAudit).
                 append("actionDesc", actionDesc).
                 append("actionDate", actionDate).
                 append("actionResult", actionResult).
                 append("resultDesc", resultDesc).
                 append("resultDate", resultDate).
-                append("linkKey", linkKey).
                 toString();
     }
 }

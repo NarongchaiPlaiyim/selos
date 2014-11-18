@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.UserAccessView;
@@ -231,5 +232,14 @@ public class BaseController implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("appHeaderInfo", appHeaderView);
         this.appHeaderView = appHeaderView;
+    }
+
+    protected User getCurrentUser() {
+        HttpSession session = FacesUtil.getSession(false);
+        User user = (User) session.getAttribute("user");
+        if(Util.isNull(user)) {
+            user = new User();
+        }
+        return user;
     }
 }
