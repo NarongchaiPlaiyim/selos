@@ -941,6 +941,7 @@ public class CalculationControl extends BusinessControl{
     }
 
     public void calculateMaximumSMELimit(long workCaseId) {
+        log.debug("calculateMaximumSMELimit :: workCaseId :: {}", workCaseId);
         BigDecimal maximumSMELimit = BigDecimal.ZERO;
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
@@ -1120,12 +1121,13 @@ public class CalculationControl extends BusinessControl{
             }
 
             proposeLine.setMaximumSMELimit(maximumSMELimit);
-
+            log.debug("calculateMaximumSMELimit :: maximumSMELimit :: {}", maximumSMELimit);
             proposeLineDAO.persist(proposeLine);
         }
     }
 
     public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
+        log.debug("calSum2ForCompareSum1 :: proposeLine :: {}, bankStatementSummary :: {}, basicInfo :: {}", proposeLine, bankStatementSummary, basicInfo);
         BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
         BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
         BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
@@ -1169,20 +1171,26 @@ public class CalculationControl extends BusinessControl{
             }
         }
 
+        log.debug("calSum2ForCompareSum1 :: sumBank :: {}", sumBank);
+        log.debug("calSum2ForCompareSum1 :: numBank :: {}", numBank);
+        log.debug("calSum2ForCompareSum1 :: flagForCoreAsset :: {}", flagForCoreAsset);
+        log.debug("calSum2ForCompareSum1 :: basicInfo :: {}", basicInfo);
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
-                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
-                    ((!Util.isNull(basicInfo.getHaveLoanInOneYear())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
-                    (sumBank.compareTo(numBank) >= 0) && (flagForCoreAsset)) {
+                ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
+                ((!Util.isNull(basicInfo.getHaveLoanInOneYear())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
+                (!Util.isNull(sumBank) && sumBank.compareTo(numBank) >= 0) && (flagForCoreAsset)) {
                 summary = Util.subtract(num2, proposeLine.getExistingSMELimit());   //35 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             } else {
                 summary = Util.subtract(num1, proposeLine.getExistingSMELimit());   //20 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             }
         }
+        log.debug("calSum2ForCompareSum1 :: summary :: {}", summary);
         return summary;
     }
 
     public BigDecimal findLTVPercent(ProposeCollateralInfoHead proposeCollateralInfoHead, BasicInfo basicInfo, WorkCase workCase) {
+        log.debug("findLTVPercent");
         BigDecimal ltvPercentBig = BigDecimal.ZERO;
         if(!Util.isNull(proposeCollateralInfoHead)){
             if(!Util.isNull(proposeCollateralInfoHead.getPotentialCollateral()) && !Util.isZero(proposeCollateralInfoHead.getPotentialCollateral().getId())
@@ -1221,6 +1229,7 @@ public class CalculationControl extends BusinessControl{
                 }
             }
         }
+        log.debug("findLTVPercent :: ltvPercentBig :: {}", ltvPercentBig);
         return ltvPercentBig;
     }
 
@@ -1238,7 +1247,6 @@ public class CalculationControl extends BusinessControl{
 
         if(!Util.isNull(basicInfo)){
             List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
-
             for(Customer customer : customerList){
                 if(customer.getTmbCustomerId() != null && !"".equals(customer.getTmbCustomerId())){
                     CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();

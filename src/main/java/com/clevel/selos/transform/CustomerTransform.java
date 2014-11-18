@@ -103,6 +103,11 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setId(customer.getId());
 
+        customerInfoView.setCreateDate(customer.getCreateDate());
+        customerInfoView.setCreateBy(customer.getCreateBy());
+        customerInfoView.setModifyDate(customer.getModifyDate());
+        customerInfoView.setModifyBy(customer.getModifyBy());
+
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
         if(customerInfoView.getCustomerEntity() == null){
             customerInfoView.setCustomerEntity(new CustomerEntity());
