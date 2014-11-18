@@ -2,17 +2,20 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerInfoResultView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.db.master.District;
+import com.clevel.selos.model.db.master.Reference;
+import com.clevel.selos.model.db.master.Relation;
+import com.clevel.selos.model.db.master.Title;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.DistrictView;
+import com.clevel.selos.model.view.master.KYCLevelView;
 import com.clevel.selos.model.view.master.ProvinceView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -81,6 +84,8 @@ public class CustomerInfoJuristic extends BaseController {
     private KYCLevelControl kycLevelControl;
     @Inject
     private IncomeSourceControl incomeSourceControl;
+    @Inject
+    private HeaderControl headerControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -96,9 +101,6 @@ public class CustomerInfoJuristic extends BaseController {
     private List<SelectItem> provinceForm2List;
     private List<SelectItem> districtForm2List;
     private List<SelectItem> subDistrictForm2List;
-    private List<SelectItem> provinceForm3List;
-    private List<SelectItem> districtForm3List;
-    private List<SelectItem> subDistrictForm3List;
 
     private List<SelectItem> countryList;
     private List<SelectItem> addressTypeList;
@@ -491,18 +493,18 @@ public class CustomerInfoJuristic extends BaseController {
                     if(customerInfoView.getCitizenCountry() != null){
                         customerInfoView.getCitizenCountry().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setCitizenCountry(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.setCitizenCountry(countryView);
                     }
 
                     //set default source of income country
                     if(customerInfoView.getCountryIncome() != null){
                         customerInfoView.getCountryIncome().setId(211);
                     } else {
-                        Country country = new Country();
-                        country.setId(211);
-                        customerInfoView.setCountryIncome(country);
+                        CountryView countryView = new CountryView();
+                        countryView.setId(211);
+                        customerInfoView.setCountryIncome(countryView);
                     }
 
                     if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
@@ -597,18 +599,18 @@ public class CustomerInfoJuristic extends BaseController {
                         if(customerInfoView.getCitizenCountry() != null){
                             customerInfoView.getCitizenCountry().setId(211);
                         } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setCitizenCountry(country);
+                            CountryView countryView = new CountryView();
+                            countryView.setId(211);
+                            customerInfoView.setCitizenCountry(countryView);
                         }
 
                         //set default source of income country
                         if(customerInfoView.getCountryIncome() != null){
                             customerInfoView.getCountryIncome().setId(211);
                         } else {
-                            Country country = new Country();
-                            country.setId(211);
-                            customerInfoView.setCountryIncome(country);
+                            CountryView countryView = new CountryView();
+                            countryView.setId(211);
+                            customerInfoView.setCountryIncome(countryView);
                         }
 
                         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getWorkAddress() != null){
@@ -719,6 +721,7 @@ public class CustomerInfoJuristic extends BaseController {
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
             severity = "info";
+            //updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: ", ex);
@@ -727,6 +730,12 @@ public class CustomerInfoJuristic extends BaseController {
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        headerControl.updateCustomerInfo(appHeaderView, 0, workCaseId);
+        setAppHeaderView(appHeaderView);
     }
 
     public void onChangeTitleTh(){
@@ -844,9 +853,62 @@ public class CustomerInfoJuristic extends BaseController {
             RequestContext.getCurrentInstance().execute("msgBoxCancelDlg.show()");
             return "";
         }
-//        onCreation();
-//        onLoadComplete();
     }
+
+    public void onChangeCountryIncome() {
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCountryIncome().getId());
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.setCountryIncome(countryView);
+        }
+    }
+
+    public void onChangeRegisterAddress() {
+        if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getRegisterAddress().getCountry().getId());
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getRegisterAddress().setCountry(countryView);
+        }
+    }
+
+    public void onChangeWorkAddress() {
+        if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getCountry() != null && customerInfoView.getWorkAddress().getCountry().getId() != 0){
+            CountryView countryView = countryControl.getCountryViewById(customerInfoView.getWorkAddress().getCountry().getId());
+//            Country country = new Country();
+//            country.setId(countryView.getId());
+//            country.setName(countryView.getName());
+//            country.setCode(countryView.getCode());
+//            country.setCode2(countryView.getCode2());
+//            country.setIsoCode(countryView.getIsoCode());
+//            country.setActive(countryView.getActive());
+            customerInfoView.getWorkAddress().setCountry(countryView);
+        }
+    }
+
+    public void onChangeKYCLv() {
+        if(customerInfoView.getKycLevel() != null && customerInfoView.getKycLevel().getId() != 0){
+            KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId());
+//            KYCLevel kycLevel = new KYCLevel();
+//            kycLevel.setId(kycLevelView.getId());
+//            kycLevel.setName(kycLevelView.getName());
+//            kycLevel.setKycLevel(kycLevelView.getKycLevel());
+//            kycLevel.setActive(kycLevelView.getActive());
+            customerInfoView.setKycLevel(kycLevelView);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////// Get Set ////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -961,30 +1023,6 @@ public class CustomerInfoJuristic extends BaseController {
 
     public void setSubDistrictForm2List(List<SelectItem> subDistrictForm2List) {
         this.subDistrictForm2List = subDistrictForm2List;
-    }
-
-    public List<SelectItem> getProvinceForm3List() {
-        return provinceForm3List;
-    }
-
-    public void setProvinceForm3List(List<SelectItem> provinceForm3List) {
-        this.provinceForm3List = provinceForm3List;
-    }
-
-    public List<SelectItem> getDistrictForm3List() {
-        return districtForm3List;
-    }
-
-    public void setDistrictForm3List(List<SelectItem> districtForm3List) {
-        this.districtForm3List = districtForm3List;
-    }
-
-    public List<SelectItem> getSubDistrictForm3List() {
-        return subDistrictForm3List;
-    }
-
-    public void setSubDistrictForm3List(List<SelectItem> subDistrictForm3List) {
-        this.subDistrictForm3List = subDistrictForm3List;
     }
 
     public List<SelectItem> getCountryList() {

@@ -5,7 +5,7 @@ import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.view.CountryView;
-import com.clevel.selos.transform.CountryTransform;
+import com.clevel.selos.transform.master.CountryTransform;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -31,6 +31,14 @@ public class CountryControl extends BusinessControl {
 
     @Inject
     public CountryControl(){}
+
+    public CountryView getCountryViewById(int id){
+        logger.debug("-- getCountryViewById, id: {}", id);
+        Map<Integer, CountryView> _tmpMap = getInternalCacheMap();
+        CountryView countryView = _tmpMap.get(id);
+        logger.debug("getCountryViewById return countryView: {}", countryView);
+        return countryView;
+    }
 
     public List<SelectItem> getCountrySelectItemActiveList(){
         logger.debug("-- getCountrySelectItemActiveList --");

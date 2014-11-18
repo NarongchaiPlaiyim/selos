@@ -417,6 +417,7 @@ public class ExSummaryControl extends BusinessControl {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Credit Risk Type
         ExSumCreditRiskInfoView exSumCreditRiskInfoView = new ExSumCreditRiskInfoView();
+
         if(basicInfo != null && basicInfo.getRiskCustomerType() != null && basicInfo.getRiskCustomerType().getId() != 0){
             RiskType riskType = riskTypeDAO.findById(basicInfo.getRiskCustomerType().getId());
             if(riskType != null){
@@ -428,16 +429,20 @@ public class ExSummaryControl extends BusinessControl {
             exSumCreditRiskInfoView.setRiskCusType("-");
         }
 
+        String botClass = "";
+        String botClassReason = "";
         if(basicInfo != null && basicInfo.getExistingSMECustomer() == RadioValue.NO.value()){ //new customer
             if(qualitativeView != null && qualitativeView.getId() != 0){
                 if(qualitativeView.getQualityLevel().getDescription() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
+                    botClassReason = qualitativeView.getQualityLevel().getDescription();
                 } else {
                     exSumCreditRiskInfoView.setReason("-");
                 }
 
                 if(qualitativeView.getQualityResult() != null && !qualitativeView.getQualityResult().trim().equalsIgnoreCase("")){
                     exSumCreditRiskInfoView.setBotClass(qualitativeView.getQualityResult());
+                    botClass = qualitativeView.getQualityResult();
                 } else {
                     exSumCreditRiskInfoView.setBotClass("-");
                 }
@@ -456,6 +461,7 @@ public class ExSummaryControl extends BusinessControl {
             if(qualitativeView != null && qualitativeView.getId() != 0){
                 if(qualitativeView.getQualityLevel().getDescription() != null){
                     exSumCreditRiskInfoView.setReason(qualitativeView.getQualityLevel().getDescription());
+                    botClassReason = qualitativeView.getQualityLevel().getDescription();
                 } else {
                     exSumCreditRiskInfoView.setReason("-");
                 }
@@ -468,6 +474,17 @@ public class ExSummaryControl extends BusinessControl {
                         exSumCreditRiskInfoView.setBotClass(worstCase);
                     }
                 }
+            }
+            botClass = worstCase;
+        }
+
+        if(Util.isEmpty(exSummary.getCreditRiskBOTClass())) {
+            if (!Util.isEmpty(botClass)){
+                log.debug("initial botClass for ExSum ( insert to db )");
+                ExSummary tempExSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+                tempExSummary.setCreditRiskBOTClass(botClass);
+                tempExSummary.setCreditRiskReason(botClassReason);
+                exSummaryDAO.persist(tempExSummary);
             }
         }
 

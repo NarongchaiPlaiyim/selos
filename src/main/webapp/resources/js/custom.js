@@ -994,6 +994,23 @@ function onKeyPressName(evt){
     return true;
 }
 
+function onKeyDownName(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
+    /** CHECK SPECIAL CHARACTER **/
+    /*
+     * SPECIAL CHARACTER (KEY CODE & CHAR CODE)
+     {  16=Ctrl  9=Tab  35=End 36=Home 37=Left Arrow 38=Up Arrow 39=Right Arrow 40=Down Arrow
+     *
+     */
+
+    if(keyCode == 16 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40){
+        return false;
+    }
+
+    return true;
+}
+
 function onKeyPressName2(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -1005,9 +1022,9 @@ function onKeyPressName2(evt){
      *  41=)       42=*    43=+        44=,
      *  58=:       59=;    60=<        61='='
      *  62=<       63=?    64=@        91=[
-     *  93=]       92=|    45=-
+     *  93=]       92=|
      *  94=^       95=_    123={       125=}
-     *  124=|      3647=฿
+     *  124=|      3647=?
      */
 
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
@@ -1020,7 +1037,7 @@ function onKeyPressName2(evt){
     return true;
 }
 
-function onKeyDownName(evt){
+function onKeyDownName2(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
     /** CHECK SPECIAL CHARACTER **/

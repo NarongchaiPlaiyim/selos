@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.businesscontrol.UserAccessControl;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.model.view.UserAccessView;
 import com.clevel.selos.util.FacesUtil;
@@ -29,6 +30,8 @@ public class BaseController implements Serializable {
     private final HashMap<String, FieldsControlView> dialogFieldMap = new HashMap<String, FieldsControlView>();
     private final HashMap<String, UserAccessView> userAccessMap = new HashMap<String, UserAccessView>();
     private final HashMap<String, UserAccessView> userAccessMenuMap = new HashMap<String, UserAccessView>();
+
+    private AppHeaderView appHeaderView;
 
     protected void loadFieldControl(long workCaseId, Screen screenId, String ownerCaseUserId) {
         log.debug("ownerCaseUserId : {}", ownerCaseUserId);
@@ -214,5 +217,19 @@ public class BaseController implements Serializable {
 
     public void sendCallBackParam(boolean value){
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
+    }
+
+    public AppHeaderView getAppHeaderView() {
+        HttpSession session = FacesUtil.getSession(false);
+        AppHeaderView appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
+        if(Util.isNull(appHeaderView))
+            appHeaderView = new AppHeaderView();
+        return appHeaderView;
+    }
+
+    public void setAppHeaderView(AppHeaderView appHeaderView) {
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("appHeaderInfo", appHeaderView);
+        this.appHeaderView = appHeaderView;
     }
 }

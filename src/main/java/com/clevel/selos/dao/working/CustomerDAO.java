@@ -4,20 +4,73 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.view.CustomerBasicView;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO extends GenericDAO<Customer, Long> {
     @Inject
     @SELOS
     Logger log;
+    //@PersistenceContext
+    //protected EntityManager em;
     @Inject
     public CustomerDAO() {
+    }
+
+    public List<CustomerBasicView> getCustomerForHeader(long workCasePreScreenId, long workCaseId){
+        log.info("getCustomerForHeader ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
+
+        String queryStr = "SELECT customer.id, customer.customerentity_id, title.title_th, customer.name_th, customer.lastname_th, customer.tmb_customer_id, individual.citizen_id, juristic.registration_id ";
+        queryStr = queryStr.concat("from wrk_customer customer ");
+        queryStr = queryStr.concat("left outer join mst_title title on customer.title_id = title.id ");
+        queryStr = queryStr.concat("left outer join wrk_individual individual on customer.id = individual.customer_id ");
+        queryStr = queryStr.concat("left outer join wrk_juristic juristic on customer.id = juristic.customer_id ");
+
+        if(workCaseId != 0) {
+            queryStr = queryStr.concat("where customer.workcase_id = :param1 ");
+        }else if (workCasePreScreenId != 0){
+            queryStr = queryStr.concat("where customer.workcase_prescreen_id = :param1 ");
+        }
+
+        queryStr = queryStr.concat("and customer.relation_id = 1");
+
+        Query query = em.createNativeQuery(queryStr);
+        if(workCaseId != 0) {
+            query.setParameter("param1", workCaseId);
+        }else if(workCasePreScreenId != 0){
+            query.setParameter("param1", workCasePreScreenId);
+        }
+
+        List<Object[]> tempObject = query.getResultList();
+
+        CustomerBasicView customerBasicView;
+        List<CustomerBasicView> customerBasicViewList = new ArrayList<CustomerBasicView>();
+        for(Object[] row : tempObject){
+            log.debug("row : {}", row);
+            customerBasicView = new CustomerBasicView();
+            customerBasicView.setId(Util.parseLong(row[0], 0));
+            customerBasicView.setCustomerEntityId(Util.parseInt(row[1], 0));
+            customerBasicView.setTitleTh(Util.parseString(row[2], ""));
+            customerBasicView.setFirstNameTh(Util.parseString(row[3], ""));
+            customerBasicView.setLastNameTh(Util.parseString(row[4], ""));
+            customerBasicView.setTmbCustomerId(Util.parseString(row[5], ""));
+            customerBasicView.setCitizenId(Util.parseString(row[6], ""));
+            customerBasicView.setRegistrationId(Util.parseString(row[7], ""));
+            log.debug("customerBasicView : {}", customerBasicView);
+            customerBasicViewList.add(customerBasicView);
+        }
+        log.debug("customerBasicViewList : {}", customerBasicViewList);
+
+        return customerBasicViewList;
     }
 
     public List<Customer> findBorrowerByWorkCasePreScreenId(long workCasePreScreenId) {
@@ -41,27 +94,6 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findBorrowerByWorkCaseId ::: size : {}", customerList.size());
         return customerList;
     }
-
-    //Function for AppHeader
-    /*public List<Customer> getBorrowerForHeaderByWorkCaseId(long workCaseId, long workCasePreScreenId){
-        Criteria criteria = getSession().createCriteria(Customer.class);
-        criteria.setProjection(Projections.property("nameTh"));
-        criteria.setProjection(Projections.property("lastNameTh"));
-//        criteria.setProjection(Projections.property("individual.citizenId"));
-//        criteria.setProjection(Projections.property("registrationId"));
-        if(workCaseId != 0){
-            criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        } else if (workCasePreScreenId != 0){
-            criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
-        }
-        criteria.add(Restrictions.eq("relation.id", RelationValue.BORROWER.value()));
-        criteria.addOrder(Order.asc("id"));
-
-        List<Customer> customerList = criteria.list();
-
-        log.info("getBorrowerForHeaderByWorkCaseId ::: size : {}", customerList.size());
-        return customerList;
-    }*/
 
     public List<Customer> getBorrowerByWorkCaseId(long workCaseId, long workCasePreScreenId){
         log.info("getBorrowerByWorkCaseId ::: workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
@@ -120,26 +152,6 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         return customer;
     }
 
-
-    public Customer findByCitizenlId(String citizenId, long workCasePreScreenId) {
-        log.info("findByCitizenlId : {}", citizenId);
-
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
-        criteria.add(Restrictions.eq("individual.citizenId", citizenId));
-        Customer customer = (Customer) criteria.uniqueResult();
-
-        return customer;
-    }
-
-    public Customer findByRegistrationId(String registrationId) {
-        log.info("findByRegistrationId : {}", registrationId);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("juristic.registrationId", registrationId));
-        Customer customer = (Customer) criteria.uniqueResult();
-        return customer;
-    }
-
     public List<Customer> findByWorkCaseId(long workCaseId) {
         log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
@@ -152,7 +164,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
 
     public Customer findMainCustomerBySpouseId(long spouseId) {
         log.debug("findMainCustomerBySpouseId ::: spouseId : {}", spouseId);
-        Customer customer = new Customer();
+        Customer customer;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("spouseId", spouseId));
         customer = (Customer) criteria.uniqueResult();
@@ -198,40 +210,6 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
         criteria.add(Restrictions.or(Restrictions.eq("relation.id", RelationValue.BORROWER.value()),Restrictions.eq("relation.id", RelationValue.GUARANTOR.value())));
         criteria.addOrder(Order.asc("id"));
-        /*criteria.setFetchMode("workCase", FetchMode.SELECT);
-        criteria.setFetchMode("workCasePrescreen", FetchMode.SELECT);
-        criteria.setFetchMode("documentType.customerEntity", FetchMode.SELECT);
-        criteria.setFetchMode("businessType", FetchMode.SELECT);
-        criteria.setFetchMode("relation", FetchMode.SELECT);
-        criteria.setFetchMode("reference.customerEntity", FetchMode.SELECT);
-        criteria.setFetchMode("reference.borrowerType", FetchMode.SELECT);
-        criteria.setFetchMode("kycLevel", FetchMode.SELECT);
-        criteria.setFetchMode("mailingAddressType", FetchMode.SELECT);
-        criteria.setFetchMode("sourceIncome", FetchMode.SELECT);
-        criteria.setFetchMode("countryIncome", FetchMode.SELECT);
-        criteria.setFetchMode("customerOblInfo", FetchMode.SELECT);
-        criteria.setFetchMode("createBy", FetchMode.SELECT);
-        criteria.setFetchMode("modifyBy", FetchMode.SELECT);
-        criteria.setFetchMode("individual.customer", FetchMode.SELECT);
-        criteria.setFetchMode("individual.customerAttorney", FetchMode.SELECT);
-        criteria.setFetchMode("individual.citizenCountry", FetchMode.SELECT);
-        criteria.setFetchMode("individual.nationality", FetchMode.SELECT);
-        criteria.setFetchMode("individual.sndNationality", FetchMode.SELECT);
-        criteria.setFetchMode("individual.race", FetchMode.SELECT);
-        criteria.setFetchMode("individual.occupation", FetchMode.SELECT);
-        criteria.setFetchMode("individual.education", FetchMode.SELECT);
-        criteria.setFetchMode("individual.maritalStatus", FetchMode.SELECT);
-        criteria.setFetchMode("individual.fatherTitle", FetchMode.SELECT);
-        criteria.setFetchMode("individual.motherTitle", FetchMode.SELECT);
-        criteria.setFetchMode("individual.modifyBy", FetchMode.SELECT);
-        criteria.setFetchMode("individual.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("juristic.customer", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.customer", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.tdrCondition", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.createBy", FetchMode.SELECT);
-        criteria.setFetchMode("ncb.modifyBy", FetchMode.SELECT);*/
-
-
         List<Customer> customerList = (List<Customer>)criteria.list();
         log.info("findCustomerBorrowerAndGuarantor ::: size : {}", customerList.size());
         return customerList;
@@ -257,20 +235,4 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
 		criteria.add(Restrictions.eq("r.canBeAttorney", true));
 		return criteria.list();
 	}
-
-    public List<Customer> findCustomerIdByWorkCaseId(Long workCaseId)
-    {
-
-        Criteria criteria = createCriteria();
-
-        criteria.add(Restrictions.eq("workCase.id",workCaseId.longValue()));
-
-        criteria.add(Restrictions.eq("relation.id",RelationValue.BORROWER.value()));
-
-        List<Customer> list = criteria.list();
-
-        log.info("in getcustomer id list size : {}",list.size());
-
-        return criteria.list();
-    }
 }

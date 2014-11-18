@@ -87,23 +87,26 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="center">
-                            <p:commandButton id="dlgSubmitCaseUWBtn"
+                            <p:commandButton id="dlgSubmitCaseUWBtn" widgetVar="submitCAUWBtn" styleClass="small"
                                              binding="#{btnSubmitCaseUW}"
                                              value="#{msg.get('app.button.submit')}"
-                                             styleClass="small"
+                                             onclick="PF('submitCAUWBtn').disable(); PF('cancelSubmitCAUWBtn').disable(); PF('blocksubmitCAUWDlgPanel').show();"
                                              actionListener="#{headerController.onSubmitUW()}"
                                              oncomplete="handleDialogRequest(xhr, status, args, 'submitUWDlg')"
+                                             onsuccess="submitCAUWBtn.enable(); cancelSubmitCAUWBtn.enable();"
                                              process="@form"
                                              update=":frmMain:submitCAUWDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
-                            <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                             styleClass="small" onclick="PF('blockUI').hide(); PF('submitUWDlg').hide()"/>
+                            <p:commandButton id="dlgCancelSubmitCaseUWBtn" widgetVar="cancelSubmitCAUWBtn" styleClass="small"
+                                             type="button"
+                                             value="#{msg.get('app.button.cancel')}"
+                                             process="@this"
+                                             onclick="PF('blockUI').hide(); PF('submitUWDlg').hide()"/>
                         </td>
                     </tr>
                 </table>
             </h:panelGroup>
         </p:panel>
-        <p:blockUI widgetVar="blocksubmitCAUWDlgPanel" block="submitCAUWDlgPanel"
-                   trigger=":frmMain:dlgSubmitCaseUWBtn">
+        <p:blockUI widgetVar="blocksubmitCAUWDlgPanel" block="submitCAUWDlgPanel">
             <h:outputText value="#{msg.get('app.message.loading')}"/><br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>

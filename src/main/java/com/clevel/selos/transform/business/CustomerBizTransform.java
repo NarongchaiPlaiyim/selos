@@ -16,6 +16,7 @@ import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerAccountView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.transform.master.CountryTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
@@ -55,6 +56,9 @@ public class CustomerBizTransform extends BusinessTransform {
     CustomerEntityDAO customerEntityDAO;
     @Inject
     RMTitleDAO rmTitleDAO;
+
+    @Inject
+    private CountryTransform countryTransform;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult) {
         log.debug("tranformIndividual - individualResult :: {}",individualResult);
@@ -295,10 +299,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     workAddress.setAddressType(addressTypeDAO.findById(3));
                     workAddress.setPostalCode(individualModel.getWorkAddress().getPostcode());
-                    workAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getWorkAddress().getCountryCode())));
-                    if (workAddress.getCountry() == null) {
-                        workAddress.setCountry(new Country());
-                    }
+                    workAddress.setCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getWorkAddress().getCountryCode()))));
                     workAddress.setPhoneNumber(workPhoneNumber);
                     workAddress.setExtension(workPhoneExtension);
                     customerInfoView.setWorkAddress(workAddress);
@@ -327,10 +328,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     currentAddress.setAddressType(addressTypeDAO.findById(1));
                     currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
-                    currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getCurrentAddress().getCountryCode())));
-                    if (currentAddress.getCountry() == null) {
-                        currentAddress.setCountry(new Country());
-                    }
+                    currentAddress.setCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getCurrentAddress().getCountryCode()))));
                     currentAddress.setPhoneNumber(currentPhoneNumber);
                     currentAddress.setExtension(currentPhoneExtension);
                     customerInfoView.setCurrentAddress(currentAddress);
@@ -359,10 +357,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     homeAddress.setAddressType(addressTypeDAO.findById(2));
                     homeAddress.setPostalCode(individualModel.getHomeAddress().getPostcode());
-                    homeAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getHomeAddress().getCountryCode())));
-                    if (homeAddress.getCountry() == null) {
-                        homeAddress.setCountry(new Country());
-                    }
+                    homeAddress.setCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getHomeAddress().getCountryCode()))));
                     homeAddress.setPhoneNumber(homePhoneNumber);
                     homeAddress.setExtension(homePhoneExtension);
                     customerInfoView.setRegisterAddress(homeAddress);
@@ -418,10 +413,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setDateOfRegister(null);
                     }
 
-                    customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getRegistrationCountry())));
-                    if (customerInfoView.getRegistrationCountry() == null) {
-                        customerInfoView.setRegistrationCountry(new Country());
-                    }
+                    customerInfoView.setRegistrationCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getRegistrationCountry()))));
 
                     //CurrentAddress
                     AddressView currentAddress = new AddressView();
@@ -446,10 +438,7 @@ public class CustomerBizTransform extends BusinessTransform {
                         }
                     }
                     currentAddress.setPostalCode(corporateModel.getPostcode());
-                    currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getCountryCode())));
-                    if (currentAddress.getCountry() == null) {
-                        currentAddress.setCountry(new Country());
-                    }
+                    currentAddress.setCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getCountryCode()))));
                     currentAddress.setAddressType(addressTypeDAO.findById(1));
                     customerInfoView.setCurrentAddress(currentAddress);
 
@@ -474,10 +463,7 @@ public class CustomerBizTransform extends BusinessTransform {
                             }
                         }
                     }
-                    registrationAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getRegistrationAddress().getCountryCode())));
-                    if (registrationAddress.getCountry() == null) {
-                        registrationAddress.setCountry(new Country());
-                    }
+                    registrationAddress.setCountry(countryTransform.transformToView(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getRegistrationAddress().getCountryCode()))));
                     registrationAddress.setPhoneNumber(corporateModel.getRegistrationAddress().getPhoneNo());
                     registrationAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
                     registrationAddress.setContactName(corporateModel.getRegistrationAddress().getContactName());

@@ -203,7 +203,7 @@ public class LoginBean {
 
         if (user.getActive() != 1)
         {
-            String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE, userName.trim());
+            String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED, userName.trim());
             log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
             loginExceptionMessage = message;

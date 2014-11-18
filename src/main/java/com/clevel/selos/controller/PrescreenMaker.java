@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
-import com.clevel.selos.businesscontrol.InboxControl;
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
@@ -235,9 +235,9 @@ public class PrescreenMaker extends BaseController {
     @Inject
     private PrescreenBusinessControl prescreenBusinessControl;
     @Inject
-    private InboxControl inboxControl;
-    @Inject
     private CustomerInfoControl customerInfoControl;
+    @Inject
+    private HeaderControl headerControl;
 
     public PrescreenMaker() {
     }
@@ -388,7 +388,6 @@ public class PrescreenMaker extends BaseController {
             facilityViewList = new ArrayList<FacilityView>();
         }
 
-        /*proposePrescreenCollateralViewList = prescreenBusinessControl.getProposeCollateral()*/
         if (proposePrescreenCollateralViewList == null) {
             proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
         }
@@ -399,38 +398,20 @@ public class PrescreenMaker extends BaseController {
                 if (bizInfoViewList == null) {
                     bizInfoViewList = new ArrayList<BizInfoDetailView>();
                 }
-
                 proposePrescreenCollateralViewList = prescreenBusinessControl.getPreScreenCollateral(prescreenView.getId());
                 if (proposePrescreenCollateralViewList == null) {
                     proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
                 }
-
             } else {
                 bizInfoViewList = new ArrayList<BizInfoDetailView>();
                 proposePrescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
             }
-
-
         }
 
         deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
 
         customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         generateCustomerInfoList(customerInfoViewList);
-
-
-        /*customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId); asdf
-        if(customerInfoViewList != null){
-            borrowerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViewList);
-            guarantorInfoViewList = prescreenBusinessControl.getGuarantorViewListByCustomerViewList(customerInfoViewList);
-            relatedInfoViewList = prescreenBusinessControl.getRelatedViewListByCustomerViewList(customerInfoViewList);
-        } else {
-            customerInfoViewList = new ArrayList<CustomerInfoView>();
-            borrowerInfoViewList = new ArrayList<CustomerInfoView>();
-            guarantorInfoViewList = new ArrayList<CustomerInfoView>();
-            relatedInfoViewList = new ArrayList<CustomerInfoView>();
-        }
-        deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();*/
     }
 
     public void generateCustomerInfoList(List<CustomerInfoView> customerInfoViews) {
@@ -2325,7 +2306,10 @@ public class PrescreenMaker extends BaseController {
             }
         }else{
             borrowerInfo.setMaritalStatus(maritalStatus);
-            borrowerInfo.setSpouse(new CustomerInfoView());
+            CustomerInfoView spouse = new CustomerInfoView();
+            spouse.reset();
+            spouse.setSpouse(null);
+            borrowerInfo.setSpouse(spouse);
         }
     }
 
@@ -2514,18 +2498,21 @@ public class PrescreenMaker extends BaseController {
 
     }
 
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        appHeaderView = headerControl.updateCustomerInfo(appHeaderView, workCasePreScreenId, 0);
+        appHeaderView.setProductGroup(prescreenView.getProductGroup() != null ? prescreenView.getProductGroup().getName() : "");
+        appHeaderView.setRefinance(prescreenView.getRefinanceInBank() != null ? prescreenView.getRefinanceInBank().getName() : "");
+        appHeaderView.setRefinanceOut(prescreenView.getRefinanceOutBank() != null ? prescreenView.getRefinanceOutBank().getName() : "");
+        setAppHeaderView(appHeaderView);
+    }
+
     // *** Function for Prescreen Initial *** //
     public void onSavePrescreenInitial() {
         log.debug("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
         log.debug("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
 
         try {
-            //TODO set Business Location
-            //prescreenView.setBusinessLocation(null);
-            //prescreenView.setBorrowingType(null);
-            //prescreenView.setReferredExperience(null);
-            //prescreenView.setRefinanceInBank(null);
-            //prescreenView.setRefinanceOutBank(null);
             prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
             String productGroupName = "";
             if (prescreenView.getProductGroup() != null) {
@@ -2534,15 +2521,10 @@ public class PrescreenMaker extends BaseController {
             }
             prescreenBusinessControl.updateBorrowerProductGroupForBPM(borrowerInfoViewList, productGroupName, queueName, workCasePreScreenId);
 
-            //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
-
-            /*HeaderController baseController = new HeaderController();
-            baseController.setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));*/
-            //setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));
-
             onCreation();
+            updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
             log.error("onSavePreScreenInitial ::: exception : {}", ex);
@@ -2589,25 +2571,18 @@ public class PrescreenMaker extends BaseController {
 
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
+
             if (modifyFlag) {
-//                PrescreenResult prescreenResult = new PrescreenResult();
-//                prescreenResult.onCreation();
-//                prescreenResult.onRetrieveInterfaceInfo();
-//                prescreenResult.onSave();
                 message = message + "<br/><br/>Prescreen data has been modified.<br/>Please refresh interface info.";
             }
 
             onCreation();
+            updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
             log.error("onSavePrescreen ::: exception : {}", ex);
-            //TODO show messageBox error
             messageHeader = "Save PreScreen Failed.";
-            if (ex.getCause() != null) {
-                message = "Save PreScreen data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save PreScreen data failed. Cause : " + ex.getMessage();
-            }
+            message = "Save PreScreen data failed. Cause : " + Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }

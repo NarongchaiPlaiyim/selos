@@ -92,7 +92,6 @@ public class HeaderController extends BaseController {
     AppraisalDetailTransform appraisalDetailTransform;
 
     private ManageButton manageButton;
-    private AppHeaderView appHeaderView;
 
     private int qualitativeType;
     private int pricingDOALevel;
@@ -106,7 +105,6 @@ public class HeaderController extends BaseController {
     private boolean requestPricing;
 
     private User user;
-    //private User abdm;
 
     private String aadCommitteeId;
 
@@ -273,10 +271,6 @@ public class HeaderController extends BaseController {
         stepStatusMap = stepStatusControl.getStepStatusByStepStatusRole(stepId, statusId, currentUserId);
         log.debug("HeaderController ::: stepStatusMap : {}", stepStatusMap);
 
-        HttpSession session = FacesUtil.getSession(false);
-        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
-        log.debug("HeaderController ::: appHeader : {}", appHeaderView);
-
         loadUserAccessMenu();
 
         canSubmitCA = false;
@@ -304,7 +298,9 @@ public class HeaderController extends BaseController {
                 }
                 canCheckFullApp = true;
                 timesOfCriteriaCheck = fullApplicationControl.getTimesOfCriteriaCheck(workCaseId, stepId);
-                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("CHK_CRI_LIM");
+
+                log.debug("userSysParameterView : {}", userSysParameterView);
 
                 int limitTimeOfCriteriaCheck = 100;
 
@@ -346,7 +342,7 @@ public class HeaderController extends BaseController {
                 }
 
                 timesOfPreScreenCheck = prescreenBusinessControl.getTimesOfPreScreenCheck(workCasePreScreenId, stepId);
-                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("LIM001");
+                UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("CHK_PRE_LIM");
                 int limitTimeOfPreScreenCheck = 100;
 
                 if(!Util.isNull(userSysParameterView))
@@ -356,14 +352,6 @@ public class HeaderController extends BaseController {
                     canCheckPreScreen = true;
 
             }
-        }
-
-        user = (User) session.getAttribute("user");
-        if (user == null) {
-            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            user = userDAO.findById(userDetail.getUserName());
-            session = FacesUtil.getSession(false);
-            session.setAttribute("user", user);
         }
     }
 
@@ -381,6 +369,12 @@ public class HeaderController extends BaseController {
         slaStatus = Util.parseString(session.getAttribute("slaStatus"), "");
         currentUserId = Util.parseString(session.getAttribute("caseOwner"), "");
         user = (User) session.getAttribute("user");
+        if (user == null) {
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = userDAO.findById(userDetail.getUserName());
+            session = FacesUtil.getSession(false);
+            session.setAttribute("user", user);
+        }
     }
 
     public boolean checkButton(String buttonName){
@@ -425,6 +419,24 @@ public class HeaderController extends BaseController {
     }
 
     //-------------- Check Pre_Screen ---------------//
+    public void onCheckTimeOfCheckPreScreen(){
+        _loadSessionVariable();
+        log.debug("onCheckTimeOfCheckPreScreen");
+        UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("CHK_PRE_LIM");
+        int limitTimeOfPreScreenCheck = 100;
+        int currentTimeOfCheckPreScreen = timesOfPreScreenCheck + 1;
+
+        if(!Util.isNull(userSysParameterView))
+            limitTimeOfPreScreenCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+
+        if(Util.compareInt(currentTimeOfCheckPreScreen, limitTimeOfPreScreenCheck) >= 0){
+            //To show message to confirm check criteria.
+            RequestContext.getCurrentInstance().execute("confirmCheckPreScreen.show()");
+        }else{
+            onCheckPreScreen();
+        }
+    }
+
     public void onCheckPreScreen(){
         boolean success = false;
         _loadSessionVariable();
@@ -649,8 +661,9 @@ public class HeaderController extends BaseController {
                         slaReasonList = reasonToStepDAO.getOverSLAReason(stepId);
                     }
 
-                    if(!checkStepABDM()){
-                        if(requestPricing){
+                if(!checkStepABDM()){
+                    if(requestPricing){
+                        if(stepId != StepValue.CREDIT_DECISION_BU_ZM.value()){
                             //Check for Pricing DOA Level
                             pricingDOALevel = fullApplicationControl.getPricingDOALevel(workCaseId);
                             log.debug("onOpenSubmitFullApplication ::: pricingDOALevel : {}", pricingDOALevel);
@@ -674,33 +687,33 @@ public class HeaderController extends BaseController {
                                 getUserOwnerBU();
 
                                 log.debug("onOpenSubmitFullApplication ::: stepId : {}", stepId);
-                                if(stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
-                                //if(stepId <= StepValue.FULLAPP_BDM.value()) {
+                                if (stepId <= StepValue.FULLAPP_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value()) {
+                                    //if(stepId <= StepValue.FULLAPP_BDM.value()) {
                                     zmUserList = fullApplicationControl.getUserList(user);
                                     log.debug("onOpenSubmitFullApplication ::: zmUserList : {}", zmUserList);
                                 }
 
                                 //TO Disabled DDL DOA Lower than RGM
-                                if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) ||  stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                                //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                if ((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
+                                    //if(stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
                                     isSubmitToZM = false;
                                 }
 
                                 //TO Disabled DDL DOA Lower than GH
-                                if((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())){    //Step After Zone Submit to Region
-                                //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
+                                if ((stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()) && !(stepId == StepValue.REVIEW_PRICING_REQUEST_BDM.value() || stepId == StepValue.REVIEW_PRICING_REQUEST_ZM.value())) {    //Step After Zone Submit to Region
+                                    //if(stepId > StepValue.FULLAPP_ZM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_RGM.value()){    //Step After Zone Submit to Region
                                     isSubmitToZM = false;
                                     isSubmitToRGM = false;
                                 }
 
                                 //TO Disabled DDL DOA Lower than CSSO
-                                if(stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()){
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_RGM.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_GH.value()) {
                                     isSubmitToZM = false;
                                     isSubmitToRGM = false;
                                     isSubmitToGHM = false;
                                 }
                                 //TO All ( End of Pricing DOA )
-                                if(stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()){
+                                if (stepId > StepValue.REVIEW_PRICING_REQUEST_GH.value() && stepId <= StepValue.REVIEW_PRICING_REQUEST_CSSO.value()) {
                                     isSubmitToZM = false;
                                     isSubmitToRGM = false;
                                     isSubmitToGHM = false;
@@ -712,14 +725,9 @@ public class HeaderController extends BaseController {
                                 message = msg.get("app.message.dialog.doapricing.notfound");
                                 showMessageBox();
                             }
+
                         } else {
-                            if((stepId > StepValue.FULLAPP_BDM.value() && stepId <= StepValue.FULLAPP_ZM.value()) || stepId == StepValue.CREDIT_DECISION_BU_ZM.value()) {         //Step After BDM Submit to ZM ( Current Step [2002] )
-                                isSubmitToZM = false;
-                            }else {
-                                isSubmitToZM = true;
-                                zmUserList = fullApplicationControl.getUserList(user);
-                                log.debug("onOpenSubmitZM ::: No pricing request");
-                            }
+                            isSubmitToZM = false;
                             RequestContext.getCurrentInstance().execute("submitBUDlg.show()");
                         }
                     }else{
@@ -918,6 +926,7 @@ public class HeaderController extends BaseController {
         boolean complete = false;
         try{
             fullApplicationControl.submitForZMFCash(queueName, wobNumber, submitRemark, slaRemark, slaReasonId, workCaseId);
+            fullApplicationControl.calculateApprovedResult(workCaseId, StepValue.CREDIT_DECISION_BU_ZM);
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.message.dialog.submit.success");
             showMessageRedirect();
@@ -1438,9 +1447,10 @@ public class HeaderController extends BaseController {
     //*   Step 2007
     public void onOpenCancelAppraisalRequest(){
         log.debug("onOpenCancelAppraisalRequest ::: starting...");
+        _loadSessionVariable();
         cancelRemark = "";
         reasonId = 0;
-        reasonList = fullApplicationControl.getReasonList(ReasonTypeValue.CANCEL_REASON);
+        reasonList = reasonToStepDAO.getCancelReason(stepId, ActionCode.CANCEL_APPRAISAL.getVal());
         log.debug("onOpenCancelAppraisalRequest ::: reasonList.size() : {}", reasonList.size());
     }
 
@@ -2547,6 +2557,26 @@ public class HeaderController extends BaseController {
         }
     }
 
+    public void onCheckTimeOfCheckCriteria(){
+        _loadSessionVariable();
+        log.debug("onCheckTimeOfCheckCriteria : workCaseId : {}", workCaseId);
+        UserSysParameterView userSysParameterView = userSysParameterControl.getSysParameterValue("CHK_CRI_LIM");
+        int limitTimeOfCriteriaCheck = 100;
+        int currentTimeOfCheckCriteria = timesOfCriteriaCheck + 1;
+
+        log.debug("userSysParameterView : {}", userSysParameterView);
+        if(!Util.isNull(userSysParameterView))
+            limitTimeOfCriteriaCheck = Util.parseInt(userSysParameterView.getValue(), 0);
+
+        log.debug("limitTimeOfCriteriaCheck : {}", limitTimeOfCriteriaCheck);
+        if(Util.compareInt(currentTimeOfCheckCriteria, limitTimeOfCriteriaCheck) >= 0){
+            //To show message to confirm check criteria.
+            RequestContext.getCurrentInstance().execute("confirmCheckCriteria.show()");
+        }else{
+            onCheckCriteria();
+        }
+    }
+
     public void onCheckCriteria(){
         boolean success = false;
         _loadSessionVariable();
@@ -2713,13 +2743,13 @@ public class HeaderController extends BaseController {
         this.manageButton = manageButton;
     }
 
-    public AppHeaderView getAppHeaderView() {
+    /*public AppHeaderView getAppHeaderView() {
         return appHeaderView;
     }
 
     public void setAppHeaderView(AppHeaderView appHeaderView) {
         this.appHeaderView = appHeaderView;
-    }
+    }*/
 
     public long getStepId() {
         return stepId;

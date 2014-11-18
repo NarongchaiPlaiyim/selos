@@ -17,6 +17,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.MortgageSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.CustomerTransform;
@@ -90,6 +91,8 @@ public class FullApplicationControl extends BusinessControl {
     private DecisionDAO decisionDAO;
     @Inject
     private BasicInfoDAO basicInfoDAO;
+    @Inject
+    private ExSummaryDAO exSummaryDAO;
     @Inject
     private StepDAO stepDAO;
     @Inject
@@ -821,17 +824,23 @@ public class FullApplicationControl extends BusinessControl {
 
                     bpmExecutor.submitForUW(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), uw2Name, authorizationDOA != null ? authorizationDOA.getDescription() : "", decisionFlag, haveRG001, appraisalRequired, ActionCode.SUBMIT_CA.getVal());
 
-                    Date submitDate = new Date();
+                    try {
+                        Date submitDate = new Date();
 
-                    ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
-                    approvalHistory.setSubmit(1);
-                    approvalHistory.setSubmitDate(submitDate);
-                    approvalHistoryDAO.persist(approvalHistory);
+                        ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
+                        approvalHistory.setSubmit(1);
+                        approvalHistory.setSubmitDate(submitDate);
+                        approvalHistoryDAO.persist(approvalHistory);
 
-                    //Set submit date for UW1
-                    BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                    basicInfo.setUwSubmitDate(submitDate);
-                    basicInfoDAO.persist(basicInfo);
+                        //Set submit date for UW1
+                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        if (!Util.isNull(basicInfo)) {
+                            basicInfo.setUwSubmitDate(submitDate);
+                            basicInfoDAO.persist(basicInfo);
+                        }
+                    }catch (Exception ex){
+                        log.error("Exception while submit for UW : ", ex);
+                    }
                 }
             }else{
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -875,20 +884,20 @@ public class FullApplicationControl extends BusinessControl {
                         insuranceRequired = basicInfo.getPremiumQuote() == 1 ? "Y" : "N";
                     }
 
-                    if (!decisionFlag.equals("R")) {
-                        try {
-                            mortgageSummaryControl.calculateMortgageSummary(workCaseId);
-                        } catch (Exception ex) {
-                            log.error("Exception while calculateMortgageSummary : ", ex);
-                        }
-                    }
-
                     bpmExecutor.submitForUW2(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), decisionFlag, haveRG001, insuranceRequired, approvalFlag, tcgRequired, ActionCode.SUBMIT_CA.getVal());
                     log.debug("Save approval history for SubmitUW2 :: approvalHistoryEndorseCA : {}", approvalHistoryEndorseCA);
                     ApprovalHistory approvalHistory = approvalHistoryDAO.findByWorkCaseAndUserForSubmit(workCaseId, getCurrentUserID(), ApprovalType.CA_APPROVAL.value());
                     approvalHistory.setSubmit(1);
                     approvalHistory.setSubmitDate(new Date());
                     approvalHistoryDAO.persist(approvalHistory);
+
+                    if (!decisionFlag.equals("R")) {
+                        try {
+                            MortgageSummaryView mortgageSummaryView = mortgageSummaryControl.calculateMortgageSummary(workCaseId);
+                        } catch (Exception ex) {
+                            log.error("Exception while calculateMortgageSummary : ", ex);
+                        }
+                    }
                 }
             } else {
                 throw new Exception(msg.get("exception.submit.workitem.notfound"));
@@ -1577,7 +1586,31 @@ public class FullApplicationControl extends BusinessControl {
 
             if(!exceptionalFlow){
                 //Checking for GenericDOA
-                if(priceReduceDOA != null && frontEndFeeReduceDOA != null){
+                if(priceReduceDOA != null && frontEndFeeReduceDOA != null) {
+                    if(priceReduceDOA.compareTo(new BigDecimal("0.25")) <= 0){
+                        if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
+                            //GH DOA Level
+                            pricingDOALevel = PricingDOAValue.GH_DOA;
+                            log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        } else if (frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) >= 0 ) {
+                            //RGM DOA Level
+                            pricingDOALevel = PricingDOAValue.RGM_DOA;
+                            log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        } else {
+                            pricingDOALevel = PricingDOAValue.ZM_DOA;
+                            log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        }
+                    } else if(priceReduceDOA.compareTo(new BigDecimal("0.25")) > 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
+                        //GH DOA Level
+                        pricingDOALevel = PricingDOAValue.GH_DOA;
+                        log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                    } else {
+                        //CSSO DOA Level
+                        pricingDOALevel = PricingDOAValue.CSSO_DOA;
+                        log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                    }
+                }
+                /*if(priceReduceDOA != null && frontEndFeeReduceDOA != null){
                     if(priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
                         if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
                             //GH DOA Level
@@ -1594,7 +1627,7 @@ public class FullApplicationControl extends BusinessControl {
                         pricingDOALevel = PricingDOAValue.CSSO_DOA;
                         log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
                     }
-                }
+                }*/
 
             } else {
                 pricingDOALevel = PricingDOAValue.CSSO_DOA;
@@ -2011,6 +2044,15 @@ public class FullApplicationControl extends BusinessControl {
             basicInfo.setPremiumQuote(premiumQuote);
 
             basicInfoDAO.persist(basicInfo);
+
+            //Update Last Review Date
+            if(stepValue != StepValue.CREDIT_DECISION_UW1) {
+                ExSummary exSummary = exSummaryDAO.findByWorkCaseId(workCaseId);
+                if (!Util.isNull(exSummary)) {
+                    exSummary.setLastReviewDate(new Date());
+                    exSummaryDAO.persist(exSummary);
+                }
+            }
         } catch (Exception ex){
             log.error("Exception while Calculate Approved Result : ", ex);
         }
@@ -2142,7 +2184,7 @@ public class FullApplicationControl extends BusinessControl {
 
         boolean rejectedNCB = false;
         if(!Util.isNull(uwRuleResultSummary)){
-            if(uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
+            if(!Util.isNull(uwRuleResultSummary.getUwDeviationFlag()) && uwRuleResultSummary.getUwDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
                 List<UWRuleResultDetail> uwRuleResultDetailList = uwRuleResultSummary.getUwRuleResultDetailList();
                 if(Util.isSafetyList(uwRuleResultDetailList)){
                     for(UWRuleResultDetail uwRuleResultDetail : uwRuleResultDetailList){

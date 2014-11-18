@@ -17,7 +17,11 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.CollateralTypeTransform;
+import com.clevel.selos.transform.CreditRequestTypeTransform;
+import com.clevel.selos.transform.MortgageTypeTransform;
+import com.clevel.selos.transform.PotentialCollateralTransform;
+import com.clevel.selos.transform.master.CountryTransform;
 import com.clevel.selos.transform.master.SpecialProgramTransform;
 import com.clevel.selos.transform.master.UsagesTransform;
 import com.clevel.selos.util.FacesUtil;
@@ -612,6 +616,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onSaveSubCollateral() {
+        log.debug("onSaveSubCollateral :: modeSubColl :: {}, rowHeadCollIndex :: {}, rowSubCollIndex :: {}, proposeCollateralInfoSubView :: {}",modeSubColl, rowHeadCollIndex, rowSubCollIndex, proposeCollateralInfoSubView);
         Map<String, Object> resultMapVal;
         if(modeSubColl == Mode.ADD) {
             resultMapVal = proposeLineControl.onSaveSubCollateralInfo(proposeCollateralInfoView, proposeCollateralInfoSubView, relateWithList, subCollateralTypeList, 1, rowHeadCollIndex, rowSubCollIndex);
@@ -652,6 +657,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onEditSubCollateral() {
+        log.debug("proposeCollateralInfoSubView :: {}", proposeCollateralInfoSubView);
         collOwnerId = 0L;
         mortgageTypeId = 0;
         relateWithSubId = "";

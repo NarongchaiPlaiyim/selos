@@ -14,8 +14,8 @@
                     <td class="title" style="width: 200px;">
                         <p:inputText value="#{appraisalRequest.appraisalDetailViewDialog.titleDeed}" style="#{appraisalRequest.titleDeedFlag ? 'border: 1px solid #cd0a0a; background : #fef1ec ': ''}"
                                      disabled="#{appraisalRequest.isDisabled('appraisal.titleDeed')}"
-                                     onkeydown="return onKeyPressName2(event);"
-                                     onkeypress="return onKeyPressName2(event);" maxlength="50"
+                                     onkeydown="return onKeyDownAddress(event);"
+                                     onkeypress="return onKeyPressAddress(event);" maxlength="50"
                                      counterTemplate="{0} characters remaining." autoResize="false"/>
                     </td>
                 </tr>

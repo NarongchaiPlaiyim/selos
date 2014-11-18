@@ -15,6 +15,8 @@ import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.transform.master.CountryTransform;
+import com.clevel.selos.transform.master.KYCLevelTransform;
 import com.clevel.selos.transform.master.SBFScoreTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -41,6 +43,10 @@ public class CustomerTransform extends Transform {
     private SBFScoreTransform sbfScoreTransform;
     @Inject
     private ServiceSegmentTransform serviceSegmentTransform;
+    @Inject
+    private CountryTransform countryTransform;
+    @Inject
+    private KYCLevelTransform kycLevelTransform;
 
     @Inject
     private CustomerDAO customerDAO;
@@ -174,10 +180,8 @@ public class CustomerTransform extends Transform {
         customerInfoView.setReviewFlag(customer.getReviewFlag());
         customerInfoView.setReason(customer.getReason());
 
-        customerInfoView.setKycLevel(customer.getKycLevel());
-        if(customerInfoView.getKycLevel() == null){
-            customerInfoView.setKycLevel(new KYCLevel());
-        }
+        customerInfoView.setKycLevel(kycLevelTransform.transformToView(customer.getKycLevel()));
+
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setCsiFlag(customer.getCsiFlag());
         customerInfoView.setSearchFromRM(customer.getSearchFromRM());
@@ -197,10 +201,7 @@ public class CustomerTransform extends Transform {
             customerInfoView.setSourceIncome(new IncomeSource());
         }
 
-        customerInfoView.setCountryIncome(customer.getCountryIncome());
-        if(customerInfoView.getCountryIncome() == null){
-            customerInfoView.setCountryIncome(new Country());
-        }
+        customerInfoView.setCountryIncome(countryTransform.transformToView(customer.getCountryIncome()));
 
         customerInfoView.setIsCommittee(customer.getIsCommittee());
         customerInfoView.setCommitteeId(customer.getJuristicId());
@@ -240,10 +241,8 @@ public class CustomerTransform extends Transform {
                 if(addressView.getSubDistrict() == null){
                     addressView.setSubDistrict(new SubDistrict());
                 }
-                addressView.setCountry(address.getCountry());
-                if(addressView.getCountry() == null){
-                    addressView.setCountry(new Country());
-                }
+                addressView.setCountry(countryTransform.transformToView(address.getCountry()));
+
                 addressView.setPostalCode(address.getPostalCode());
                 addressView.setPhoneNumber(address.getPhoneNumber());
                 addressView.setExtension(address.getExtension());
@@ -335,11 +334,7 @@ public class CustomerTransform extends Transform {
                     customerInfoView.setOccupation(new Occupation());
                 }
 
-                if(individual.getCitizenCountry() != null){
-                    customerInfoView.setCitizenCountry(individual.getCitizenCountry());
-                } else {
-                    customerInfoView.setCitizenCountry(new Country());
-                }
+                customerInfoView.setCitizenCountry(countryTransform.transformToView(individual.getCitizenCountry()));
 
                 if(individual.getRace() != null){
                     customerInfoView.setOrigin(individual.getRace());
@@ -352,7 +347,7 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setNationality(new Nationality());
                 customerInfoView.setSndNationality(new Nationality());
                 customerInfoView.setOccupation(new Occupation());
-                customerInfoView.setCitizenCountry(new Country());
+                customerInfoView.setCitizenCountry(new CountryView());
                 customerInfoView.setOrigin(new Race());
             }
         } else {
@@ -548,7 +543,8 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setSourceIncome(null);
         }
-        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
+
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0) {
             customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
         } else {
             customer.setCountryIncome(null);

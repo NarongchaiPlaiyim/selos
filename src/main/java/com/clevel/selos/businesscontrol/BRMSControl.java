@@ -582,6 +582,7 @@ public class BRMSControl extends BusinessControl {
         List<ProposeCreditInfo> newCreditDetailList = newCreditDetailDAO.findNewCreditDetail(workCaseId, _proposeType);
         mandateFieldValidationControl.validate(newCreditDetailList, ProposeCreditInfo.class.getName());
 
+        logger.debug("proposeType : {}, newCreditDetailList.size() : {}", _proposeType, newCreditDetailList != null ? newCreditDetailList.size() : null);
         List<BRMSAccountRequested> accountRequestedList = new ArrayList();
         for(ProposeCreditInfo newCreditDetail : newCreditDetailList){
             if(_proposeType.equals(ProposeType.P)) {
@@ -592,13 +593,12 @@ public class BRMSControl extends BusinessControl {
                         totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
                 }
             }else if(_proposeType.equals(ProposeType.A)){
+                logger.debug("newCreditDetail.getRequestType() : {}", newCreditDetail.getRequestType());
                 if (newCreditDetail.getRequestType() == RequestTypes.NEW.value()) {
-                    //if(newCreditDetail.getUwDecision() != null && newCreditDetail.getUwDecision().equals(DecisionType.APPROVED)) {
-                        accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
+                    accountRequestedList.add(getBRMSAccountRequested(newCreditDetail, discountFrontEndFeeRate));
 
-                        if (!newCreditDetail.getProductProgram().isBa())
-                            totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
-                    //}
+                    if (!newCreditDetail.getProductProgram().isBa())
+                        totalApprovedCredit = totalApprovedCredit.add(newCreditDetail.getLimit());
                 }
             }
         }

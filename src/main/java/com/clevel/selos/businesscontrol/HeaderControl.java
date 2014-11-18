@@ -8,16 +8,11 @@ import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.StepValue;
-import com.clevel.selos.model.UWResultColor;
 import com.clevel.selos.model.db.master.Status;
-import com.clevel.selos.model.db.master.UWDeviationFlag;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.UserTeam;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.AppBorrowerHeaderView;
-import com.clevel.selos.model.view.AppHeaderView;
-import com.clevel.selos.model.view.UWRuleResultDetailView;
-import com.clevel.selos.model.view.UWRuleResultSummaryView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -26,7 +21,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Stateless
 public class HeaderControl extends BusinessControl {
@@ -71,7 +65,8 @@ public class HeaderControl extends BusinessControl {
         String bdmUserId = "";
         String uwUserId = "";
 
-        List<Customer> customerList = new ArrayList<Customer>();
+        //List<Customer> customerList = new ArrayList<Customer>();
+        List<CustomerBasicView> customerBasicViewList = new ArrayList<CustomerBasicView>();
 
         WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
         Status status = statusDAO.findById(statusId);
@@ -97,8 +92,9 @@ public class HeaderControl extends BusinessControl {
             appHeaderView.setCaseStatus(status != null ? status.getName() : "");
             appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
 
-            customerList = customerDAO.getBorrowerByWorkCaseId(workCase.getId(), 0);
-            log.debug("getHeaderInformation ::: get information from WorkCase : customer list size : {}", customerList.size());
+            //customerList = customerDAO.getBorrowerByWorkCaseId(workCase.getId(), 0);
+            customerBasicViewList = customerDAO.getCustomerForHeader(0, workCase.getId());
+            log.debug("getHeaderInformation ::: get information from WorkCase : customer list size : {}", customerBasicViewList.size());
         }else{
             log.debug("getHeaderInformation ::: get information from WorkCasePreScreen");
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
@@ -119,12 +115,34 @@ public class HeaderControl extends BusinessControl {
                 appHeaderView.setCaseStatus(status != null ? status.getName() : "");
                 appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
 
-                customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePrescreen.getId());
-                log.debug("getHeaderInformation ::: get information from WorkCasePreScreen : customer list size : {}", customerList.size());
+                //customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePrescreen.getId());
+                customerBasicViewList = customerDAO.getCustomerForHeader(workCasePrescreen.getId(), 0);
+                log.debug("getHeaderInformation ::: get information from WorkCasePreScreen : customer list size : {}", customerBasicViewList.size());
             }
         }
 
-        if (customerList != null && customerList.size() > 0) {
+        if(customerBasicViewList != null && customerBasicViewList.size() > 0){
+            List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
+            for(CustomerBasicView item : customerBasicViewList){
+                AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
+                String borrowerName = "";
+                borrowerName = item.getTitleTh();
+                borrowerName = borrowerName.concat("").concat(item.getFirstNameTh());
+                borrowerName = borrowerName.concat(" ").concat(item.getLastNameTh());
+
+                appBorrowerHeaderView.setBorrowerName(borrowerName);
+
+                if (item.getCustomerEntityId() == BorrowerType.INDIVIDUAL.value()) {
+                    appBorrowerHeaderView.setPersonalId(item.getCitizenId());
+                }else if(item.getCustomerEntityId() == BorrowerType.JURISTIC.value()){
+                    appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
+                }
+                appBorrowerHeaderViewList.add(appBorrowerHeaderView);
+            }
+            appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
+        }
+
+        /*if (customerList != null && customerList.size() > 0) {
             List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
             for (Customer item : customerList) {
                 AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
@@ -143,7 +161,7 @@ public class HeaderControl extends BusinessControl {
                 appBorrowerHeaderViewList.add(appBorrowerHeaderView);
             }
             appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
-        }
+        }*/
 
         if (!Util.isEmpty(bdmUserId)) {
             User bdmUser = userDAO.findById(bdmUserId);
@@ -177,84 +195,38 @@ public class HeaderControl extends BusinessControl {
             }
         }
 
-        /*if(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_CHECKER.value() || stepId == StepValue.PRESCREEN_MAKER.value()) {
-            WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
-            log.info("getHeaderInformation ::: workCasePreScreen : {}", workCasePrescreen);
-            if(workCasePrescreen != null){
-                bdmUserId = workCasePrescreen.getCreateBy().getId();
+        return appHeaderView;
+    }
 
-                appHeaderView.setCaNo(workCasePrescreen.getCaNumber());
-                appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
-                appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
-                appHeaderView.setAppRefDate("");
-                appHeaderView.setCaseStatus(workCasePrescreen.getStatus() != null ?workCasePrescreen.getStatus().getDescription() : "");
-                appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
+    public AppHeaderView updateCustomerInfo(AppHeaderView appHeaderView, long workCasePreScreenId, long workCaseId){
+        List<CustomerBasicView> customerBasicViewList = new ArrayList<CustomerBasicView>();
 
-                customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePrescreen.getId());
-                log.debug("customerList size : {}", customerList.size());
+        if(!Util.isZero(workCasePreScreenId)){
+            customerBasicViewList = customerDAO.getCustomerForHeader(workCasePreScreenId, 0);
+        }else if(!Util.isZero(workCaseId)){
+            customerBasicViewList = customerDAO.getCustomerForHeader(0, workCaseId);
+        }
 
-                //Find product program from WorkCasePreScreenId
-                Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePrescreen.getId());
-                if (prescreen != null) {
-                    appHeaderView.setProductGroup(prescreen.getProductGroup() != null ? prescreen.getProductGroup().getName() : "");
+        if(customerBasicViewList != null && customerBasicViewList.size() > 0){
+            List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
+            for(CustomerBasicView item : customerBasicViewList){
+                AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
+                String borrowerName = "";
+                borrowerName = item.getTitleTh();
+                borrowerName = borrowerName.concat("").concat(item.getFirstNameTh());
+                borrowerName = borrowerName.concat(" ").concat(item.getLastNameTh());
+
+                appBorrowerHeaderView.setBorrowerName(borrowerName);
+
+                if (item.getCustomerEntityId() == BorrowerType.INDIVIDUAL.value()) {
+                    appBorrowerHeaderView.setPersonalId(item.getCitizenId());
+                }else if(item.getCustomerEntityId() == BorrowerType.JURISTIC.value()){
+                    appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
                 }
+                appBorrowerHeaderViewList.add(appBorrowerHeaderView);
             }
-        } else if(stepId == StepValue.REQUEST_APPRAISAL_POOL.value() || stepId == StepValue.REVIEW_APPRAISAL_REQUEST.value() || stepId == StepValue.REQUEST_APPRAISAL_RETURN.value()){
-            WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-            log.debug("getHeaderInformation ::: workCaseAppraisal : {}", workCaseAppraisal);
-
-            //Find workCase or workCasePreScreen
-            if(workCaseAppraisal != null){
-                WorkCase workCase = workCaseDAO.findByAppNumber(workCaseAppraisal.getAppNumber());
-                if(workCase != null){
-                    bdmUserId = workCase.getCreateBy() != null ? workCase.getCreateBy().getId() : "";
-
-                    appHeaderView.setAppNo(workCase.getAppNumber());
-                    appHeaderView.setAppRefNo(workCase.getRefAppNumber());
-                    appHeaderView.setAppRefDate("");
-                    appHeaderView.setCaseStatus(workCaseAppraisal.getStatus() != null ? workCaseAppraisal.getStatus().getDescription() : "");
-                    appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
-                    appHeaderView.setProductGroup(workCase.getProductGroup() != null ? workCase.getProductGroup().getName() : "");
-
-                    customerList = customerDAO.getBorrowerByWorkCaseId(workCase.getId(), 0);
-                    log.debug("customerList size : {}", customerList.size());
-                }else{
-                    WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(workCaseAppraisal.getAppNumber());
-                    if(workCasePrescreen != null){
-                        bdmUserId = workCasePrescreen.getCreateBy().getId();
-
-                        appHeaderView.setAppNo(workCasePrescreen.getAppNumber());
-                        appHeaderView.setAppRefNo(workCasePrescreen.getRefAppNumber());
-                        appHeaderView.setAppRefDate("");
-                        appHeaderView.setCaseStatus(workCaseAppraisal.getStatus() != null ? workCaseAppraisal.getStatus().getDescription() : "");
-                        appHeaderView.setRequestType(workCasePrescreen.getRequestType() != null ? workCasePrescreen.getRequestType().getName() : "");
-
-                        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreen(workCasePrescreen);
-                        if(prescreen != null){
-                            appHeaderView.setProductGroup(prescreen.getProductGroup() != null ? prescreen.getProductGroup().getName() : "");
-                        }
-
-                        customerList = customerDAO.getBorrowerByWorkCaseId(0, workCasePrescreen.getId());
-                        log.debug("customerList size : {}", customerList.size());
-                    }
-                }
-            }
-        } else {
-            WorkCase workCase = workCaseDAO.findByAppNumber(appNumber);
-
-            bdmUserId = workCase.getCreateBy().getId();
-
-            appHeaderView.setAppNo(workCase.getAppNumber());
-            appHeaderView.setAppRefNo(workCase.getRefAppNumber());
-            appHeaderView.setCaseStatus(workCase.getStatus() != null ? workCase.getStatus().getDescription() : "");
-            appHeaderView.setRequestType(workCase.getRequestType() != null ? workCase.getRequestType().getName() : "");
-            appHeaderView.setProductGroup(workCase.getProductGroup() != null ? workCase.getProductGroup().getName() : "");
-
-            customerList = customerDAO.findBorrowerByWorkCaseId(workCase.getId());
-            log.debug("customerList size : {}", customerList.size());
-
-        }*/
-
+            appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
+        }
 
         return appHeaderView;
     }
@@ -275,33 +247,6 @@ public class HeaderControl extends BusinessControl {
 
         return requestAppraisal;
     }
-
-    /*public boolean ncbResultValidation(UWRuleResultSummaryView uwRuleResultSummaryView, long workCasePreScreenId, long workCaseId, User user) throws Exception{
-        log.debug("ncbResultValidation()");
-        if(uwRuleResultSummaryView!=null){
-            if(uwRuleResultSummaryView.getUwDeviationFlagView().getBrmsCode().equalsIgnoreCase("ND")) {
-                Map<String, UWRuleResultDetailView> uwResultDetailMap = uwRuleResultSummaryView.getUwRuleResultDetailViewMap();
-                if (uwResultDetailMap != null) {
-                    for (Map.Entry<String, UWRuleResultDetailView> entry : uwResultDetailMap.entrySet()) {
-                        UWRuleResultDetailView uwRuleResultDetailView = entry.getValue();
-                        if (uwRuleResultDetailView.getUwRuleNameView() != null
-                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView() != null
-                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName() != null
-                                && uwRuleResultDetailView.getUwRuleNameView().getUwRuleGroupView().getName().equalsIgnoreCase("NCB")) {
-                            if(uwRuleResultDetailView.getDeviationFlag() != null && uwRuleResultDetailView.getDeviationFlag().getBrmsCode().equalsIgnoreCase("ND")) {
-                                if (uwRuleResultDetailView.getRuleColorResult() == UWResultColor.RED) {
-                                    log.debug("NCB Result is RED without Deviate, auto reject case!");
-                                    ncbInterface.generateRejectedLetter(user.getId(), workCasePreScreenId, workCaseId);
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }*/
 
     public void updateNCBRejectFlag(long workCasePreScreenId, boolean canCheckPreScreen){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);

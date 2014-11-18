@@ -44,76 +44,17 @@ public class ProposeCollateralInfoSubDAO extends GenericDAO<ProposeCollateralInf
         return newCollateralSubDetails;
     }
 
-    /*public List<NewCollateralSub> getAllNewSubCollateral(long workCaseId) {
-        log.info("findAllSubCollThisWorkCase :: start :: {}", workCaseId);
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        List<NewCollateralSub> newCollateralSubDetailList = null;
-        if (workCase != null) {
-            NewCreditFacility newCreditFacility = newCreditFacilityDAO.findByWorkCase(workCase);
-            if (newCreditFacility != null) {
-                if (newCreditFacility.getNewCollateralDetailList() != null) {
-                    log.info("newCreditFacility.getNewCollateralDetailList() :: {}", newCreditFacility.getNewCollateralDetailList().size());
-                    for (NewCollateral newCollateralDetail : newCreditFacility.getNewCollateralDetailList()) {
-                        log.info("newCollateralDetail :: id :: {}", newCollateralDetail.getId());
-                        if (newCollateralDetail.getNewCollateralHeadList() != null) {
-                            log.info("newCollateralDetail.getNewCollateralHeadList() :: {}", newCollateralDetail.getNewCollateralHeadList().size());
-                            for (NewCollateralHead newCollateralHead : newCollateralDetail.getNewCollateralHeadList()) {
-                                log.info("newCollateralHeadDetail .id:: {}", newCollateralHead.getId());
-                                newCollateralSubDetailList = getAllNewSubCollateral(newCollateralHead);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        log.info("newCollateralSubList end :::");
-        return newCollateralSubDetailList;
-    }
-
-
-    public List<NewCollateralSub> getAllNewSubCollateral(NewCollateralHead newCollateralHead) {
-        log.info("getAllNewSubCollateral. (newCollateralHead: {})", newCollateralHead);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateralHead", newCollateralHead));
-        criteria.addOrder(Order.asc("newCollateralHead.id"));
-        List<NewCollateralSub> newCollateralSubDetails = (List<NewCollateralSub>) criteria.list();
-        log.info("getList. (result size: {})", newCollateralSubDetails.size());
-
-        return newCollateralSubDetails;
-
-    }
-
-    public List<NewCollateralSub> findByNewCollateralHead(NewCollateralHead newCollateralHead) {
-        log.info("getAllNewSubCollateral. (newCollateralHead: {})", newCollateralHead);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("newCollateralHead", newCollateralHead));
-        criteria.addOrder(Order.asc("newCollateralHead.id"));
-        List<NewCollateralSub> newCollateralSubDetails = (List<NewCollateralSub>) criteria.list();
-        log.info("getList. (result size: {})", newCollateralSubDetails.size());
-
-        return newCollateralSubDetails;
-
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<NewCollateralSub> findForMortgageSummary(long workCaseId) {
-    	Criteria criteria = createCriteria();
-    	criteria.createAlias("newCollateralHead", "head");
-    	criteria.createAlias("head.newCollateral", "main");
-    	
-    	criteria.add(Restrictions.eq("main.workCase.id", workCaseId));
-    	criteria.add(Restrictions.eq("main.proposeType", ProposeType.A));
-    	criteria.add(Restrictions.eq("main.uwDecision", DecisionType.APPROVED));
-    	criteria.addOrder(Order.asc("id"));
-    	return criteria.list();
-    }*/
-
     public ProposeCollateralInfoSub findBySubId(String subId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("subId", subId));
-        ProposeCollateralInfoSub proposeCollateralInfoSub = (ProposeCollateralInfoSub) criteria.uniqueResult();
+        List<ProposeCollateralInfoSub> proposeCollateralInfoSubList = (List<ProposeCollateralInfoSub>) criteria.list();
 
-        return proposeCollateralInfoSub;
+        if(proposeCollateralInfoSubList != null && proposeCollateralInfoSubList.size() > 0){
+            log.debug("proposeCollateralInfoSubList.size() :: {}", proposeCollateralInfoSubList.size());
+            log.debug("Return ProposeCollateralInfoSub :: {}", proposeCollateralInfoSubList.get(0).getId());
+            return proposeCollateralInfoSubList.get(0);
+        }
+        log.debug("Return Null");
+        return null;
     }
 }

@@ -175,8 +175,8 @@ public class ExecutiveSummary extends BaseController {
                 if (exSummaryView.getDecision() == 2 || exSummaryView.getDecision() == 3) { //1 approve , 2 deviate , 3 reject
                     if (exSummaryView.getDeviateCode() == null || exSummaryView.getDeviateCode().size() < 1) {
                         messageHeader = msg.get("app.header.information");
-                        message = "Save Ex Summary Failed. " +
-                                "<br/><br/> Cause : Reason is null.";
+                        message = "Save Ex Summary failed. " +
+                                "<br/><br/> Please select at least one reason.";
                         severity = "info";
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         return;
@@ -196,11 +196,7 @@ public class ExecutiveSummary extends BaseController {
         } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.header.error");
-            if (ex.getCause() != null) {
-                message = "Save Ex Summary data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save Ex Summary data failed. Cause : " + ex.getMessage();
-            }
+            message = "Save Ex Summary data failed. Cause : " + Util.getMessageException(ex);
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
