@@ -178,10 +178,10 @@ public class PostCustomerInfoJuris  implements Serializable {
 		if (index == 0)
 			return;
 		CustomerInfoPostAddressView addressView = customer.getAddresses().get(index);
-		if (addressView.getAddressFlag() != 3) {
+		/*if (addressView.getAddressFlag() != 3) {
 			CustomerInfoPostAddressView toCopy = customer.getAddresses().get(addressView.getAddressFlag());
 			addressView.duplicateData(toCopy);
-		}
+		}*/
 		_calculateDropdown(addressView);
 	}
 	public void onSelectProvince(int index) {

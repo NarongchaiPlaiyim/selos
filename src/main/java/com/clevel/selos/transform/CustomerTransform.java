@@ -1379,14 +1379,14 @@ public class CustomerTransform extends Transform {
             log.debug("flag : {}",flag);
             log.debug("index : {},", addressView.getIndex());
     		if (addressView.getIndex() != 0) {
-    			if (flag != 3 && flag >= addressView.getIndex()){
+    			/*if (flag != 3 && flag > addressView.getIndex()){
                     log.debug("cond:1");
                     flag = 0;
-                }
+                }*/
     			//save with data from flag
-    			if (flag != 3) {
+    			if (flag != 3 && flag != 0 && addressView.getIndex()>0) {
                     log.debug("cond:2");
-                    addressView.duplicateData(view.getAddresses().get(flag));
+                    addressView.duplicateData(view.getAddresses().get(flag-1));
                     log.debug("addressView cond2 : {}",addressView);
                 }
 
