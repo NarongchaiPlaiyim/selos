@@ -1088,7 +1088,7 @@ public class CalculationControl extends BusinessControl{
                         summaryTwo = calSum2ForCompareSum1(proposeLine, bankStatementSummary, basicInfo);
 
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
-                        if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
+                        if (summaryOne.compareTo(summaryTwo) < 0) {
                             maximumSMELimit = summaryOne;
                         } else {
                             maximumSMELimit = summaryTwo;
