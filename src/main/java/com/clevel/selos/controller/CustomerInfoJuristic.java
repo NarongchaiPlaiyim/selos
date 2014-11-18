@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
@@ -12,10 +13,7 @@ import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.Title;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CountryView;
-import com.clevel.selos.model.view.CustomerInfoResultView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.DistrictView;
 import com.clevel.selos.model.view.master.KYCLevelView;
 import com.clevel.selos.model.view.master.ProvinceView;
@@ -86,6 +84,8 @@ public class CustomerInfoJuristic extends BaseController {
     private KYCLevelControl kycLevelControl;
     @Inject
     private IncomeSourceControl incomeSourceControl;
+    @Inject
+    private HeaderControl headerControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -721,6 +721,7 @@ public class CustomerInfoJuristic extends BaseController {
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
             severity = "info";
+            //updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
             log.error("Exception :: ", ex);
@@ -729,6 +730,12 @@ public class CustomerInfoJuristic extends BaseController {
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        headerControl.updateCustomerInfo(appHeaderView, 0, workCaseId);
+        setAppHeaderView(appHeaderView);
     }
 
     public void onChangeTitleTh(){

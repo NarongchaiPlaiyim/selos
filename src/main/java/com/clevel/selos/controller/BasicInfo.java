@@ -12,6 +12,7 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.OpenAccountView;
@@ -325,6 +326,7 @@ public class BasicInfo extends BaseController {
             calculationControl.calculateMaximumSMELimit(workCaseId);
 
             onCreation();
+            updateHeaderInfo();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save data in basic information success.";
@@ -340,6 +342,14 @@ public class BasicInfo extends BaseController {
             severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        appHeaderView.setProductGroup(basicInfoView.getProductGroup() != null ? basicInfoView.getProductGroup().getName() : "");
+        appHeaderView.setRefinance(basicInfoView.getRefinanceIn() != null ? basicInfoView.getRefinanceIn().getName() : "");
+        appHeaderView.setRefinanceOut(basicInfoView.getRefinanceOut() != null ? basicInfoView.getRefinanceOut().getName() : "");
+        setAppHeaderView(appHeaderView);
     }
 
     public void onChangeSpecialProgram(){

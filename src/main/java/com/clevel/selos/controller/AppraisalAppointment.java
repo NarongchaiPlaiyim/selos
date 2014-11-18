@@ -47,7 +47,6 @@ import java.util.Locale;
 @ViewScoped
 @ManagedBean(name = "appraisalAppointment")
 public class AppraisalAppointment extends BaseController implements Serializable {
-
     @Inject
     @SELOS
     Logger log;
@@ -63,13 +62,10 @@ public class AppraisalAppointment extends BaseController implements Serializable
     @ExceptionMessage
     Message exceptionMsg;
 
-
     @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
     @Inject
     private LocationPropertyDAO locationPropertyDAO;
-//    @Inject
-//    private ReasonDAO reasonDAO;
     @Inject
     private ReasonToStepDAO reasonToStepDAO;
 
@@ -81,8 +77,10 @@ public class AppraisalAppointment extends BaseController implements Serializable
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
 
-    @Inject private WorkCaseDAO workCaseDAO;
-    @Inject private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     private enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;

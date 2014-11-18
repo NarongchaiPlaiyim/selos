@@ -105,6 +105,12 @@ public class InboxControl extends BusinessControl {
                 }
             }
 
+            if(stepId==StepValue.CREDIT_DECISION_UW1.value() && status==20007){
+                if(user.getRole().getId()==RoleValue.UW.id()){
+                    return RETURN_REVIEW_PAGE;
+                }
+            }
+
             StepLandingPage stepLandingPage = stepLandingPageDAO.findByStepStatus(stepId,status);
             String landingPage = "";
             if(stepLandingPage != null){

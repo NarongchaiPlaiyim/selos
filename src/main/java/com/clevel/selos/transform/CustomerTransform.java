@@ -544,7 +544,11 @@ public class CustomerTransform extends Transform {
             customer.setSourceIncome(null);
         }
 
-        customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0) {
+            customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+        } else {
+            customer.setCountryIncome(null);
+        }
 
         customer.setSearchBy(customerInfoView.getSearchBy());
         customer.setSearchId(customerInfoView.getSearchId());
