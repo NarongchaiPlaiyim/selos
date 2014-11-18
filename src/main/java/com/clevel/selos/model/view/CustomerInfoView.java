@@ -146,6 +146,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     private BusinessDescription businessDescription;
 
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+
     public CustomerInfoView(){
         //reset();
     }
@@ -1051,6 +1056,38 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setIndividualViewForShowList(List<CustomerInfoView> individualViewForShowList) {
         this.individualViewForShowList = individualViewForShowList;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override
