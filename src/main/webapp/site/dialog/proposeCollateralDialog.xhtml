@@ -494,6 +494,7 @@
                                                  process="@this"
                                                  oncomplete="subCollateralInfoDlg.show();"
                                                  disabled="#{proposeLine.isDisabled('collateral.subcoll.editButton')}">
+                                    <f:setPropertyActionListener value="#{i.index}" target="#{proposeLine.rowHeadCollIndex}"/>
                                     <f:setPropertyActionListener value="#{rowSubIndex}" target="#{proposeLine.rowSubCollIndex}"/>
                                     <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{proposeLine.proposeCollateralInfoSubView}"/>
                                     <p:resetInput target=":subCollateralDlgForm"/>
