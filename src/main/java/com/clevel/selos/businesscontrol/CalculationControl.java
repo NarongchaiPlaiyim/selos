@@ -1001,7 +1001,7 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, bankStatementSummary, basicInfo);
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
                             maximumSMELimit = summaryOne;
@@ -1085,7 +1085,7 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, bankStatementSummary, basicInfo);
 
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
@@ -1125,13 +1125,13 @@ public class CalculationControl extends BusinessControl{
         }
     }
 
-    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
+    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
         BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
         BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
         BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
         BigDecimal sumBank = BigDecimal.ZERO;
         BigDecimal summary = BigDecimal.ZERO;
-        boolean flag_for_core_asset = false;
+        boolean flagForCoreAsset = false;
         /*
         1. Customer Type = Individual
         2. มี Core Asset ใน Proposed หรือ Approved Collateral
@@ -1154,7 +1154,7 @@ public class CalculationControl extends BusinessControl{
                                 PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
                                 if (potentialCollateral.getId() != 0) {
                                     if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                        flag_for_core_asset = true;
+                                        flagForCoreAsset = true;
                                         break;
                                     }
                                 }
@@ -1168,10 +1168,8 @@ public class CalculationControl extends BusinessControl{
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
                     ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
-                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
-                    (sumBank.doubleValue() >= numBank.doubleValue()) &&
-                    (flag_for_core_asset))
-            {
+                    ((!Util.isNull(basicInfo.getHaveLoanInOneYear())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
+                    (sumBank.compareTo(numBank) >= 0) && (flagForCoreAsset)) {
                 summary = Util.subtract(num2, proposeLine.getExistingSMELimit());   //35 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             } else {
                 summary = Util.subtract(num1, proposeLine.getExistingSMELimit());   //20 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
