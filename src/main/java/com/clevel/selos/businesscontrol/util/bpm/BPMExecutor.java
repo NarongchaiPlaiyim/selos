@@ -49,17 +49,15 @@ public class BPMExecutor implements Serializable {
     @Inject
     private CustomerDAO customerDAO;
 
-    public void assignChecker(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String checkerId, String remark) throws Exception{
+    public void assignChecker(String queueName, String wobNumber, long actionCode, String productGroup, String checkerId, String remark) throws Exception{
         Action action = actionDAO.findById(actionCode);
-        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-
-        log.debug("assignChecker : workCasePreScreenId : {}, queueName : {}, checkerId : {}, actionCode : {}", workCasePreScreenId, queueName, checkerId, actionCode);
-        if(action != null && prescreen != null){
+        log.debug("assignChecker : queueName : {}, checkerId : {}, actionCode : {}", queueName, checkerId, actionCode);
+        if(action != null){
             HashMap<String,String> fields = new HashMap<String, String>();
             fields.put("Action_Code", Long.toString(action.getId()));
             fields.put("Action_Name", action.getDescription());
             fields.put("BDMCheckerUserName", checkerId);
-            fields.put("ProductGroup", prescreen.getProductGroup().getName());
+            fields.put("ProductGroup", productGroup);
             if(!Util.isEmpty(remark))
                 fields.put("Remarks", remark);
 
