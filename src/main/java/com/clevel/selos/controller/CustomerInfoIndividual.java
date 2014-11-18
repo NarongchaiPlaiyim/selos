@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CalculationControl;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
+import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
@@ -11,10 +12,7 @@ import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.master.Relation;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CountryView;
-import com.clevel.selos.model.view.CustomerInfoResultView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -93,6 +91,8 @@ public class CustomerInfoIndividual extends BaseController {
     private AddressTypeControl addressTypeControl;
     @Inject
     private KYCLevelControl kycLevelControl;
+    @Inject
+    private HeaderControl headerControl;
 
     //*** Drop down List ***//
     private List<SelectItem> documentTypeList;
@@ -1912,6 +1912,7 @@ public class CustomerInfoIndividual extends BaseController {
             messageHeader = "Information.";
             message = "Save individual data success.";
             severity = "info";
+            //updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
@@ -1924,6 +1925,12 @@ public class CustomerInfoIndividual extends BaseController {
             severity = "alert";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        headerControl.updateCustomerInfo(appHeaderView, 0, workCaseId);
+        setAppHeaderView(appHeaderView);
     }
 
     public String onSaveFromJuristic(){

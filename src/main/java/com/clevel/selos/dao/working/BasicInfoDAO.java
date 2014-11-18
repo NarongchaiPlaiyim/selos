@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 
 public class BasicInfoDAO extends GenericDAO<BasicInfo, Long> {
     @Inject
@@ -17,6 +18,10 @@ public class BasicInfoDAO extends GenericDAO<BasicInfo, Long> {
     @Inject
     public BasicInfoDAO() {
     }
+    /*
+    public HashMap<String, String> getBasicInfoForHeader(long workCaseId){
+
+    }*/
 
     public BasicInfo findByWorkCaseId(long workCaseId) {
         log.info("-- findByWorkCaseId : {}", workCaseId);

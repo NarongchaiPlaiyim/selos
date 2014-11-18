@@ -163,7 +163,6 @@ public class AppraisalDetailTransform extends Transform {
 
         for(ProposeCollateralInfoView proposeCol : appraisalView.getNewCollateralViewList()){
             proposeCol.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
-
             ProposeCollateralInfo proposeCollateralInfo = proposeLineTransform.transformProposeCollateralToModel(workCase, newCreditFacility, proposeCol, currentUser, proposeType);
             proposeCollateralInfoList.add(proposeCollateralInfo);
         }
