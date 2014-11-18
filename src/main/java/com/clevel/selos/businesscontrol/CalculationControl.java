@@ -1143,19 +1143,23 @@ public class CalculationControl extends BusinessControl{
             sumBank = Util.multiply(Util.add(bankStatementSummary.getTMBTotalIncomeGross(), bankStatementSummary.getOthTotalIncomeGross()), BigDecimal.valueOf(12));
         }
 
-        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
-        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
-            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
-                if(collateral.getProposeType() == ProposeType.P) {
-                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
-                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
-                        for (ProposeCollateralInfoHead collHead : collHeadList) {
-                            if(collHead.getPotentialCollateral() != null){
-                                PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
-                                if (potentialCollateral.getId() != 0) {
-                                    if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                        flagForCoreAsset = true;
-                                        break;
+        if(!Util.isNull(proposeLine) && !Util.isNull(proposeLine.getProposeCollateralInfoList())) {
+            List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+            if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+                for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                    if(!Util.isNull(collateral) && collateral.getProposeType() == ProposeType.P) {
+                        if(!Util.isNull(collateral.getProposeCollateralInfoHeadList())) {
+                            List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                            if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                                for (ProposeCollateralInfoHead collHead : collHeadList) {
+                                    if(!Util.isNull(collHead) && collHead.getPotentialCollateral() != null){
+                                        PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
+                                        if (potentialCollateral.getId() != 0) {
+                                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                flagForCoreAsset = true;
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
