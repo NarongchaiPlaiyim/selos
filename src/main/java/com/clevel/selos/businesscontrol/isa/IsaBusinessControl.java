@@ -241,8 +241,11 @@ public class IsaBusinessControl extends BusinessControl {
             onLoadUserId();
             for(final CSVModel csv : csvModelList){
                 final String command = csv.getCommandType();
-                log.debug("--command. [{}]",command);
-                if(CommandType.CREATE.equals(command)){
+//                log.debug("--command. [{}]",command);
+                log.debug("csv : {}",csv.getUserId());
+
+                User userCSV = getUserByCSV(csv.getUserId());
+                if(CommandType.CREATE.equals(command) && Util.isNull(userCSV)){
                     resultModel = executeInsert(csv, CommandType.CREATE);
                 } else if(CommandType.UPDATE.equals(command)){
                     resultModel = executeUpdate(csv, CommandType.UPDATE);
@@ -473,5 +476,9 @@ public class IsaBusinessControl extends BusinessControl {
         }
 
         return viewReportList;
+    }
+
+    private User getUserByCSV(String userId){
+        return userDAO.findById(userId);
     }
 }
