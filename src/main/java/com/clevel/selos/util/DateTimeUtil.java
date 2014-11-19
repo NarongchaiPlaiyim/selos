@@ -64,7 +64,7 @@ public class DateTimeUtil implements Serializable {
     }
 
     public static String convertToStringDDMMYYYY(Date date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         if (Util.isNull(date)){
             return "";
         } else {

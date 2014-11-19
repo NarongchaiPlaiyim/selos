@@ -103,6 +103,7 @@ public class UserTransform extends Transform {
                 model = userDAO.findById(view.getId());
                 model.setModifyBy(user);
                 model.setModifyDate(DateTime.now().toDate());
+                model.setCreateDate(DateTime.now().toDate());
             } else {
                 model = new User();
                 model.setId(view.getId());

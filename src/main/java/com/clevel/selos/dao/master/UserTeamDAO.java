@@ -46,7 +46,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("roleId", roleId));
         criteria.add(Restrictions.eq("active", 1));
-        criteria.addOrder(Order.asc("id"));
+        criteria.addOrder(Order.asc("name"));
         userTeamList = Util.safetyList((List<UserTeam>)criteria.list());
         log.debug("-- UserTeamList.size()[{}]", userTeamList.size());
         return userTeamList;

@@ -62,30 +62,30 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.INSERTUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-                callStmt.setString(1, Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString(1, Util.parseString(csv.getUserId().trim(), EMPTY));
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
-                callStmt.setString(2, Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setString(2, Util.parseString(csv.getUserName().trim(), EMPTY));
                 log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
-                if ("ACTIVE".equalsIgnoreCase(csv.getActive())){
+                if ("ACTIVE".equalsIgnoreCase(csv.getActive().trim())){
                     callStmt.setInt(3,1);
                     log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
-                } else if ("INACTIVE".equalsIgnoreCase(csv.getActive())){
+                } else if ("INACTIVE".equalsIgnoreCase(csv.getActive().trim())){
                     callStmt.setInt(3,0);
                     log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
                 }
-                callStmt.setString(4, Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString(4, Util.parseString(csv.getRole().trim(), EMPTY));
                 log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
-                callStmt.setString(5, Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString(5, Util.parseString(csv.getTeam().trim(), EMPTY));
                 log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
                 callStmt.setString(6, "NORMAL");
                 log.debug("-- IN_TEAM_NAME :  {NORMAL}");
-                callStmt.setString(7, Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString(7, Util.parseString(csv.getDepartment().trim(), EMPTY));
                 log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString(8, Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString(8, Util.parseString(csv.getDivision().trim(), EMPTY));
                 log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString(9, Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString(9, Util.parseString(csv.getRegion().trim(), EMPTY));
                 log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString(10, Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString(10, Util.parseString(csv.getTitle().trim(), EMPTY));
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
                 callStmt.setString(11, user.getId());
                 log.debug("-- IN_CREATE_BY :  {}", user.getId());
@@ -105,9 +105,9 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.UPDATEUSERBYISA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-                callStmt.setString(1, Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString(1, Util.parseString(csv.getUserId().trim(), EMPTY));
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
-                callStmt.setString(2, Util.parseString(csv.getUserName(), EMPTY));
+                callStmt.setString(2, Util.parseString(csv.getUserName().trim(), EMPTY));
                 log.debug("-- IN_USER_NAME :  {}", Util.parseString(csv.getUserName(), EMPTY));
                 if ("ACTIVE".equalsIgnoreCase(csv.getActive())){
                     callStmt.setInt(3, 1);
@@ -116,19 +116,19 @@ public class STPExecutor implements Serializable {
                     callStmt.setInt(3, 0);
                     log.debug("-- IN_ACTIVE :  {}", Util.parseString(csv.getActive(), EMPTY));
                 }
-                callStmt.setString(4, Util.parseString(csv.getRole(), EMPTY));
+                callStmt.setString(4, Util.parseString(csv.getRole().trim(), EMPTY));
                 log.debug("-- IN_ROLE_NAME :  {}", Util.parseString(csv.getRole(), EMPTY));
-                callStmt.setString(5, Util.parseString(csv.getTeam(), EMPTY));
+                callStmt.setString(5, Util.parseString(csv.getTeam().trim(), EMPTY));
                 log.debug("-- IN_TEAM_NAME :  {}", Util.parseString(csv.getTeam(), EMPTY));
                 callStmt.setString(6, "NORMAL");
                 log.debug("-- IN_TEAM_NAME :  {NORMAL}");
-                callStmt.setString(7, Util.parseString(csv.getDepartment(), EMPTY));
+                callStmt.setString(7, Util.parseString(csv.getDepartment().trim(), EMPTY));
                 log.debug("-- IN_DEPARTMENT_NAME :  {}", Util.parseString(csv.getDepartment(), EMPTY));
-                callStmt.setString(8, Util.parseString(csv.getDivision(), EMPTY));
+                callStmt.setString(8, Util.parseString(csv.getDivision().trim(), EMPTY));
                 log.debug("-- IN_DIVISION_NAME :  {}", Util.parseString(csv.getDivision(), EMPTY));
-                callStmt.setString(9, Util.parseString(csv.getRegion(), EMPTY));
+                callStmt.setString(9, Util.parseString(csv.getRegion().trim(), EMPTY));
                 log.debug("-- IN_REGION_NAME :  {}", Util.parseString(csv.getRegion(), EMPTY));
-                callStmt.setString(10, Util.parseString(csv.getTitle(), EMPTY));
+                callStmt.setString(10, Util.parseString(csv.getTitle().trim(), EMPTY));
                 log.debug("-- IN_TITLE_NAME :  {}", Util.parseString(csv.getTitle(), EMPTY));
 //                callStmt.setString(10, Util.parseString(csv.getStatus(), EMPTY));
 //                log.debug("-- IN_STATUS :  {}", Util.parseString(csv.getStatus(), EMPTY));
@@ -150,7 +150,7 @@ public class STPExecutor implements Serializable {
             @Override
             public void execute(Connection connection) throws SQLException {
                 CallableStatement callStmt = connection.prepareCall("{call SLOS.DELETEUSERBYISA(?, ?, ?)}");
-                callStmt.setString(1, Util.parseString(csv.getUserId(), EMPTY));
+                callStmt.setString(1, Util.parseString(csv.getUserId().trim(), EMPTY));
                 log.debug("-- IN_USER_ID :  {}", Util.parseString(csv.getUserId(), EMPTY));
                 callStmt.setString(2, user.getId());
                 log.debug("-- IN_CREATE_BY :  {}", user.getId());
