@@ -669,7 +669,7 @@ public class Decision extends BaseController {
         mortgageTypeId = 0;
         relateWithSubId = "";
 
-        int headCollTypeId = approveCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowIndex).getHeadCollType().getId();
+        int headCollTypeId = approveCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getHeadCollType().getId();
         if(!Util.isZero(headCollTypeId)) {
             modeSubColl = Mode.ADD;
 
