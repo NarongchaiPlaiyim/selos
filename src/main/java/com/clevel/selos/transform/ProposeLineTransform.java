@@ -1740,15 +1740,15 @@ public class ProposeLineTransform extends Transform {
             proposeCollateralInfoHeadView.setInsuranceCompany(proposeCollateralInfoHead.getInsuranceCompany());
 
             //Sort Collateral Sub by Id
-            List<ProposeCollateralInfoSubView> collateralInfoHeadViewList = transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList());
-            Collections.sort(collateralInfoHeadViewList, new Comparator<ProposeCollateralInfoSubView>() {
+            List<ProposeCollateralInfoSubView> collateralInfoSubViewList = transformProposeCollateralSubToViewList(proposeCollateralInfoHead.getProposeCollateralInfoSubList());
+            Collections.sort(collateralInfoSubViewList, new Comparator<ProposeCollateralInfoSubView>() {
                 public int compare(ProposeCollateralInfoSubView o1, ProposeCollateralInfoSubView o2) {
                     if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
                         return 0;
                     return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
                 }
             });
-            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(collateralInfoHeadViewList);
+            proposeCollateralInfoHeadView.setProposeCollateralInfoSubViewList(collateralInfoSubViewList);
 
             if(!Util.isNull(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList()) && !Util.isZero(proposeCollateralInfoHeadView.getProposeCollateralInfoSubViewList().size())) {
                 proposeCollateralInfoHeadView.setHaveSubColl(true);

@@ -1374,7 +1374,16 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     // *** Function for BPM *** //
     public void assignChecker(String queueName, String wobNumber, long actionCode, long workCasePreScreenId, String checkerId, String remark) throws Exception {
-        bpmExecutor.assignChecker(queueName, wobNumber, actionCode, workCasePreScreenId, checkerId, remark);
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        if(!Util.isNull(prescreen)){
+            if(!Util.isNull(prescreen.getProductGroup())) {
+                bpmExecutor.assignChecker(queueName, wobNumber, actionCode, prescreen.getProductGroup().getName(), checkerId, remark);
+            }else{
+                throw new Exception("An exception occurred, Please save 'PreScreen screen' before assign to checker.");
+            }
+        }else{
+            throw new Exception("An exception occurred, Please save 'PreScreen screen' before assign to checker.");
+        }
     }
 
     public void cancelCase(String queueName, String wobNumber, long actionCode, String reason, String remark) throws Exception {

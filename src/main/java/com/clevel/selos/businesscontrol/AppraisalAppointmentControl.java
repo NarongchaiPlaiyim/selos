@@ -130,7 +130,6 @@ public class AppraisalAppointmentControl extends BusinessControl {
             log.debug("getAppraisalAppointment by workCaseId - CustomerAcceptance : {}", customerAcceptance != null ? customerAcceptance.getId() : null);
             contactRecordDetailList = contactRecordDetailDAO.findByWorkCaseId(workCaseId);
             log.debug("getAppraisalAppointment by workCaseId - ContactRecordDetailList.size() : [{}]", contactRecordDetailList != null ? contactRecordDetailList.size() : null);
-
         }else if(!Util.isZero(workCasePreScreenId)){
             appraisal  = appraisalDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             log.debug("getAppraisalAppointment by workCasePreScreenId : {}", appraisal);

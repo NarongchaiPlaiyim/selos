@@ -103,6 +103,11 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setId(customer.getId());
 
+        customerInfoView.setCreateDate(customer.getCreateDate());
+        customerInfoView.setCreateBy(customer.getCreateBy());
+        customerInfoView.setModifyDate(customer.getModifyDate());
+        customerInfoView.setModifyBy(customer.getModifyBy());
+
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
         if(customerInfoView.getCustomerEntity() == null){
             customerInfoView.setCustomerEntity(new CustomerEntity());
@@ -544,7 +549,11 @@ public class CustomerTransform extends Transform {
             customer.setSourceIncome(null);
         }
 
-        customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0) {
+            customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+        } else {
+            customer.setCountryIncome(null);
+        }
 
         customer.setSearchBy(customerInfoView.getSearchBy());
         customer.setSearchId(customerInfoView.getSearchId());

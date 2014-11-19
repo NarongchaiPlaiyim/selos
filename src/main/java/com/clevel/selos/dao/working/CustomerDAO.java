@@ -5,7 +5,6 @@ import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RelationValue;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerBasicView;
-import com.clevel.selos.model.view.CustomerInfoSimpleView;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -13,11 +12,8 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CustomerDAO extends GenericDAO<Customer, Long> {
@@ -30,7 +26,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
     public CustomerDAO() {
     }
 
-    /*public List<CustomerBasicView> getCustomerForHeader(long workCasePreScreenId, long workCaseId){
+    public List<CustomerBasicView> getCustomerForHeader(long workCasePreScreenId, long workCaseId){
         log.info("getCustomerForHeader ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
 
         String queryStr = "SELECT customer.id, customer.customerentity_id, title.title_th, customer.name_th, customer.lastname_th, customer.tmb_customer_id, individual.citizen_id, juristic.registration_id ";
@@ -65,7 +61,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
             customerBasicView.setCustomerEntityId(Util.parseInt(row[1], 0));
             customerBasicView.setTitleTh(Util.parseString(row[2], ""));
             customerBasicView.setFirstNameTh(Util.parseString(row[3], ""));
-            customerBasicView.setLastNameEm(Util.parseString(row[4], ""));
+            customerBasicView.setLastNameTh(Util.parseString(row[4], ""));
             customerBasicView.setTmbCustomerId(Util.parseString(row[5], ""));
             customerBasicView.setCitizenId(Util.parseString(row[6], ""));
             customerBasicView.setRegistrationId(Util.parseString(row[7], ""));
@@ -75,7 +71,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.debug("customerBasicViewList : {}", customerBasicViewList);
 
         return customerBasicViewList;
-    }*/
+    }
 
     public List<Customer> findBorrowerByWorkCasePreScreenId(long workCasePreScreenId) {
         log.info("findBorrowerByWorkCasePreScreenId ::: workCasePreScreenId : {}", workCasePreScreenId);

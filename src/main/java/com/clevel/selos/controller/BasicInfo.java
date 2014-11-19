@@ -6,18 +6,19 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.OpenAccountControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BAPaymentMethodValue;
-import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.OpenAccountView;
 import com.clevel.selos.model.view.master.BankAccountProductView;
 import com.clevel.selos.model.view.master.BankAccountPurposeView;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -52,6 +53,9 @@ public class BasicInfo extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     @ValidationMessage
@@ -183,6 +187,8 @@ public class BasicInfo extends BaseController {
 
     private boolean permissionCheck;
 
+    private User user;
+
     public BasicInfo(){
     }
 
@@ -206,6 +212,8 @@ public class BasicInfo extends BaseController {
 
         HttpSession session = FacesUtil.getSession(false);
 
+        user = getCurrentUser();
+
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
             String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
@@ -223,7 +231,6 @@ public class BasicInfo extends BaseController {
             bankList = bankControl.getBankRefinanceList();
 
             customerInfoViewList = openAccountControl.getCustomerList(workCaseId);
-
 
             bankAccountTypeList = bankAccountTypeControl.getOpenAccountTypeList();
             accountProductList = new ArrayList<BankAccountProductView>();
@@ -268,7 +275,14 @@ public class BasicInfo extends BaseController {
 
             loadUserAccessMatrix(Screen.BASIC_INFO);
             permissionCheck = canAccess(Screen.BASIC_INFO);
+
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CREATION, "", new Date(), ActionResult.SUCCESS, "");
         }
+    }
+
+    public void onCancel() {
+        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+        onCreation();
     }
 
     public void onInitAddAccount(){
@@ -325,6 +339,9 @@ public class BasicInfo extends BaseController {
             calculationControl.calculateMaximumSMELimit(workCaseId);
 
             onCreation();
+            updateHeaderInfo();
+
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.SUCCESS, "");
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save data in basic information success.";
@@ -333,13 +350,23 @@ public class BasicInfo extends BaseController {
         } catch(Exception ex){
             if(ex.getCause() != null){
                 message = "Save basic info data failed. Cause : " + ex.getCause().toString();
+                slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.FAILED, ex.getCause().toString());
             } else {
                 message = "Save basic info data failed. Cause : " + ex.getMessage();
+                slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.FAILED, ex.getMessage());
             }
             messageHeader = msg.get("app.messageHeader.error");
             severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    private void updateHeaderInfo(){
+        AppHeaderView appHeaderView = getAppHeaderView();
+        appHeaderView.setProductGroup(basicInfoView.getProductGroup() != null ? basicInfoView.getProductGroup().getName() : "");
+        appHeaderView.setRefinance(basicInfoView.getRefinanceIn() != null ? basicInfoView.getRefinanceIn().getName() : "");
+        appHeaderView.setRefinanceOut(basicInfoView.getRefinanceOut() != null ? basicInfoView.getRefinanceOut().getName() : "");
+        setAppHeaderView(appHeaderView);
     }
 
     public void onChangeSpecialProgram(){

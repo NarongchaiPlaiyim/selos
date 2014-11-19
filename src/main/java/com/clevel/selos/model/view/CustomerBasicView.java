@@ -11,7 +11,7 @@ public class CustomerBasicView implements Serializable {
     private int customerEntityId;
     private String titleTh;
     private String firstNameTh;
-    private String lastNameEm;
+    private String lastNameTh;
     private String tmbCustomerId;
     private String citizenId;
     private String registrationId;
@@ -52,12 +52,12 @@ public class CustomerBasicView implements Serializable {
         this.firstNameTh = firstNameTh;
     }
 
-    public String getLastNameEm() {
-        return lastNameEm;
+    public String getLastNameTh() {
+        return lastNameTh;
     }
 
-    public void setLastNameEm(String lastNameEm) {
-        this.lastNameEm = lastNameEm;
+    public void setLastNameTh(String lastNameTh) {
+        this.lastNameTh = lastNameTh;
     }
 
     public String getTmbCustomerId() {
@@ -91,7 +91,7 @@ public class CustomerBasicView implements Serializable {
                 .append("customerEntityId", customerEntityId)
                 .append("titleTh", titleTh)
                 .append("firstNameTh", firstNameTh)
-                .append("lastNameEm", lastNameEm)
+                .append("lastNameTh", lastNameTh)
                 .append("tmbCustomerId", tmbCustomerId)
                 .append("citizenId", citizenId)
                 .append("registrationId", registrationId)

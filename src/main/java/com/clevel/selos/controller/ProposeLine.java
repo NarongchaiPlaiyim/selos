@@ -657,6 +657,7 @@ public class ProposeLine extends BaseController {
     }
 
     public void onEditSubCollateral() {
+        log.debug("proposeCollateralInfoSubView :: {}", proposeCollateralInfoSubView);
         collOwnerId = 0L;
         mortgageTypeId = 0;
         relateWithSubId = "";

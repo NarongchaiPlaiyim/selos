@@ -137,22 +137,7 @@ public class AppraisalResultControl extends BusinessControl {
             log.debug("onSaveAppraisalResultModify ::: newCreditFacility : {}", newCreditFacility != null ? newCreditFacility.getId() : null);
             if (!Util.isNull(newCreditFacility)){
                 //Update All Collateral : Set appraisal flag = 0
-                /*newCollateralList = proposeCollateralInfoDAO.findCollateralForAppraisal(newCreditFacility, ProposeType.R);
-                //set flag 0 for all collateral
-                log.debug("onSaveAppraisalAppointment ::: newCollateralList from database : {}", newCollateralList != null ? newCollateralList.size() : null);
-                for(ProposeCollateralInfo newCollateral : newCollateralList){
-                    log.debug("onSaveAppraisalAppointment ::: newCollateral : {}", newCollateral);
-                    newCollateralHeadList = newCollateral.getProposeCollateralInfoHeadList();
-                    for(ProposeCollateralInfoHead newCollateralHead : newCollateralHeadList){
-                        log.debug("onSaveAppraisalAppointment ::: newCollateralHead : {}", newCollateralHead);
-                        newCollateralHead.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                    }
-                    newCollateral.setAppraisalRequest(RequestAppraisalValue.NOT_REQUEST.value());
-                    proposeCollateralInfoDAO.persist(newCollateral);
-                }*/
-
                 newCollateralList = Util.safetyList(appraisalDetailTransform.transformAppraisalResult(appraisalView, newCreditFacility, getCurrentUser(), RequestAppraisalValue.REQUESTED, ProposeType.R, null));
-                //log.debug("onSaveAppraisalResultModify :: after transform newCollateralList : {}", newCollateralList);
                 proposeCollateralInfoDAO.persist(newCollateralList);
 
                 //Delete Collateral which Delete by AAD

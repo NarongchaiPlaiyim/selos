@@ -58,10 +58,25 @@
                      onclick="PF('blockUI').show()"
                      disabled="#{not headerController.canCheckPreScreen}"
                      rendered="#{headerController.checkButton('Check Prescreen')}"
-                     actionListener="#{headerController.onCheckPreScreen}"
+                     actionListener="#{headerController.onCheckTimeOfCheckPreScreen()}"
                      oncomplete="blockUI.hide()"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel">
     </p:commandButton>
+    <p:confirmDialog header="Confirmation" message="This is the last time for 'Check PreScreen'. Do you want to 'Check PreScreen'?" styleClass="left"
+                     icon="ui-icon-alert"
+                     closeOnEscape="false" closable="false"
+                     widgetVar="confirmCheckPreScreen" global="false" showEffect="fade"
+                     rendered="#{headerController.checkButton('Check Prescreen')}">
+        <p:commandButton widgetVar="preScreenOkBtn" value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxMandateMessagePanel, :frmMain:msgBoxBaseRefreshPanel"
+                         actionListener="#{headerController.onCheckPreScreen()}"
+                         process="@this"
+                         oncomplete="confirmCheckPreScreen.hide(); preScreenOkBtn.enable(); preScreenCancelBtn.enable()"
+                         onclick="PF('preScreenOkBtn').disable(); PF('preScreenCancelBtn').disable()"/>
+        <p:commandButton widgetVar="preScreenCancelBtn" value="#{msg.get('app.button.cancel')}" type="button" styleClass="ui-confirmdialog-no"
+                         process="@this"
+                         onclick="PF('confirmCheckPreScreen').hide()"/>
+    </p:confirmDialog>
     <!-- Request Appraisal -->
     <p:commandButton id="btnReqApprPreScreenRedirect" value="#{msg.get('app.header.button.requestAppraisal')}" title="#{msg.get('app.header.button.requestAppraisal')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Request Appraisal') and headerController.requestAppraisal == 0 and headerController.requestType == 1}"
@@ -132,10 +147,25 @@
     <p:commandButton id="btnChkCriteria" value="#{msg.get('app.header.button.checkCriteria')} [ #{headerController.timesOfCriteriaCheck} ]" title="#{msg.get('app.header.button.checkCriteria')}" styleClass="blueButton"
                      onclick="PF('blockUI').show()"
                      rendered="#{headerController.checkButton('Check Criteria')}" process="@this"
-                     actionListener="#{headerController.onCheckCriteria}"
+                     actionListener="#{headerController.onCheckTimeOfCheckCriteria}"
                      oncomplete="blockUI.hide()"
                      update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel">
     </p:commandButton>
+    <p:confirmDialog header="Confirmation" message="This is the last time for 'Check Criteria'. Do you want to 'Check Criteria'?" styleClass="left"
+                     icon="ui-icon-alert"
+                     closeOnEscape="false" closable="false"
+                     widgetVar="confirmCheckCriteria" global="false" showEffect="fade"
+                     rendered="#{headerController.checkButton('Check Criteria')}">
+        <p:commandButton widgetVar="criteriaOkBtn" value="#{msg.get('app.button.ok')}" styleClass="ui-confirmdialog-yes"
+                         update=":frmMain:msgBoxBaseMessagePanel, :frmMain:msgBoxBaseRefreshPanel, :frmMain:msgBoxMandateMessagePanel"
+                         actionListener="#{headerController.onCheckCriteria()}"
+                         process="@this"
+                         oncomplete="confirmCheckCriteria.hide(); criteriaOkBtn.enable(); criteriaCancelBtn.enable()"
+                         onclick="PF('criteriaOkBtn').disable(); PF('criteriaCancelBtn').disable()"/>
+        <p:commandButton widgetVar="criteriaCancelBtn" value="#{msg.get('app.button.cancel')}" type="button" styleClass="ui-confirmdialog-no"
+                         process="@this"
+                         onclick="PF('confirmCheckCriteria').hide()"/>
+    </p:confirmDialog>
     <!--Assign to ABDM-->
     <p:commandButton id="btnAssignABDM" value="#{msg.get('app.header.button.assignABDM')}" title="#{msg.get('app.header.button.assignABDM')}" styleClass="blueButton"
                      rendered="#{headerController.checkButton('Assign to ABDM')}"

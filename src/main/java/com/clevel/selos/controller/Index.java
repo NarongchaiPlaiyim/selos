@@ -1,7 +1,9 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
@@ -12,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 
 @ViewScoped
@@ -21,7 +24,11 @@ public class Index implements Serializable {
     @SELOS
     private Logger log;
 
+    @Inject
+    UserDAO userDAO;
+
     private boolean checkInboxVisible;
+    private User user;
 
     public Index(){
 
@@ -44,11 +51,19 @@ public class Index implements Serializable {
 
     @PostConstruct
     public void onCreation(){
+        HttpSession session = FacesUtil.getSession(false);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int roleId = userDetail.getRoleId();
         String page = Util.getCurrentPage();
 
         checkInboxVisible = showInbox(roleId);
+
+        user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = userDAO.findById(userDetail.getUserName());
+            session = FacesUtil.getSession(false);
+            session.setAttribute("user", user);
+        }
     }
 
     private boolean showInbox(int roleId){
@@ -66,5 +81,13 @@ public class Index implements Serializable {
 
     public void setCheckInboxVisible(boolean checkInboxVisible) {
         this.checkInboxVisible = checkInboxVisible;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -941,6 +941,7 @@ public class CalculationControl extends BusinessControl{
     }
 
     public void calculateMaximumSMELimit(long workCaseId) {
+        log.debug("calculateMaximumSMELimit :: workCaseId :: {}", workCaseId);
         BigDecimal maximumSMELimit = BigDecimal.ZERO;
         ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
         TCG tcg = tcgDAO.findByWorkCaseId(workCaseId);
@@ -1001,7 +1002,7 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, bankStatementSummary, basicInfo);
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
                         if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
                             maximumSMELimit = summaryOne;
@@ -1085,10 +1086,10 @@ public class CalculationControl extends BusinessControl{
                             }
                         }
 
-                        summaryTwo = calSum2ForCompareSum1(proposeLine, workCaseId, bankStatementSummary, basicInfo);
+                        summaryTwo = calSum2ForCompareSum1(proposeLine, bankStatementSummary, basicInfo);
 
                         //เอาผลลัพธ์ที่น้อยกว่าเสมอ
-                        if (summaryOne.doubleValue() < summaryTwo.doubleValue()) {
+                        if (summaryOne.compareTo(summaryTwo) < 0) {
                             maximumSMELimit = summaryOne;
                         } else {
                             maximumSMELimit = summaryTwo;
@@ -1120,18 +1121,19 @@ public class CalculationControl extends BusinessControl{
             }
 
             proposeLine.setMaximumSMELimit(maximumSMELimit);
-
+            log.debug("calculateMaximumSMELimit :: maximumSMELimit :: {}", maximumSMELimit);
             proposeLineDAO.persist(proposeLine);
         }
     }
 
-    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, long workCaseId, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
+    public BigDecimal calSum2ForCompareSum1(ProposeLine proposeLine, BankStatementSummary bankStatementSummary, BasicInfo basicInfo) {
+        log.debug("calSum2ForCompareSum1 :: proposeLine :: {}, bankStatementSummary :: {}, basicInfo :: {}", proposeLine, bankStatementSummary, basicInfo);
         BigDecimal num1 = BigDecimal.valueOf(20000000);      //20,000,000
         BigDecimal num2 = BigDecimal.valueOf(35000000);      //35,000,000
         BigDecimal numBank = BigDecimal.valueOf(100000000);  //100,000,000
         BigDecimal sumBank = BigDecimal.ZERO;
         BigDecimal summary = BigDecimal.ZERO;
-        boolean flag_for_core_asset = false;
+        boolean flagForCoreAsset = false;
         /*
         1. Customer Type = Individual
         2. มี Core Asset ใน Proposed หรือ Approved Collateral
@@ -1143,19 +1145,23 @@ public class CalculationControl extends BusinessControl{
             sumBank = Util.multiply(Util.add(bankStatementSummary.getTMBTotalIncomeGross(), bankStatementSummary.getOthTotalIncomeGross()), BigDecimal.valueOf(12));
         }
 
-        List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
-        if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
-            for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
-                if(collateral.getProposeType() == ProposeType.P) {
-                    List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
-                    if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
-                        for (ProposeCollateralInfoHead collHead : collHeadList) {
-                            if(collHead.getPotentialCollateral() != null){
-                                PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
-                                if (potentialCollateral.getId() != 0) {
-                                    if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
-                                        flag_for_core_asset = true;
-                                        break;
+        if(!Util.isNull(proposeLine) && !Util.isNull(proposeLine.getProposeCollateralInfoList())) {
+            List<ProposeCollateralInfo> proposeCollateralInfoList = proposeLine.getProposeCollateralInfoList();
+            if (!Util.isNull(proposeCollateralInfoList) && !Util.isZero(proposeCollateralInfoList.size())) {
+                for (ProposeCollateralInfo collateral : proposeCollateralInfoList) {
+                    if(!Util.isNull(collateral) && collateral.getProposeType() == ProposeType.P) {
+                        if(!Util.isNull(collateral.getProposeCollateralInfoHeadList())) {
+                            List<ProposeCollateralInfoHead> collHeadList = collateral.getProposeCollateralInfoHeadList();
+                            if (!Util.isNull(collHeadList) && !Util.isZero(collHeadList.size())) {
+                                for (ProposeCollateralInfoHead collHead : collHeadList) {
+                                    if(!Util.isNull(collHead) && collHead.getPotentialCollateral() != null){
+                                        PotentialCollateral potentialCollateral = collHead.getPotentialCollateral();
+                                        if (potentialCollateral.getId() != 0) {
+                                            if (PotentialCollateralValue.CORE_ASSET.id() == potentialCollateral.getId()) {
+                                                flagForCoreAsset = true;
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1165,22 +1171,26 @@ public class CalculationControl extends BusinessControl{
             }
         }
 
+        log.debug("calSum2ForCompareSum1 :: sumBank :: {}", sumBank);
+        log.debug("calSum2ForCompareSum1 :: numBank :: {}", numBank);
+        log.debug("calSum2ForCompareSum1 :: flagForCoreAsset :: {}", flagForCoreAsset);
+        log.debug("calSum2ForCompareSum1 :: basicInfo :: {}", basicInfo);
         if (!Util.isNull(basicInfo)) {
             if (((!Util.isNull(basicInfo.getBorrowerType())) && (basicInfo.getBorrowerType().getId() == BorrowerType.INDIVIDUAL.value())) &&
-                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
-                    ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
-                    (sumBank.doubleValue() >= numBank.doubleValue()) &&
-                    (flag_for_core_asset))
-            {
+                ((!Util.isNull(basicInfo.getSbfScore())) && (basicInfo.getSbfScore().getScore() <= 13)) &&
+                ((!Util.isNull(basicInfo.getHaveLoanInOneYear())) && (basicInfo.getHaveLoanInOneYear() == RadioValue.YES.value())) &&
+                (!Util.isNull(sumBank) && sumBank.compareTo(numBank) >= 0) && (flagForCoreAsset)) {
                 summary = Util.subtract(num2, proposeLine.getExistingSMELimit());   //35 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             } else {
                 summary = Util.subtract(num1, proposeLine.getExistingSMELimit());   //20 ล้าน - วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่มกิจการในเครื่อ)
             }
         }
+        log.debug("calSum2ForCompareSum1 :: summary :: {}", summary);
         return summary;
     }
 
     public BigDecimal findLTVPercent(ProposeCollateralInfoHead proposeCollateralInfoHead, BasicInfo basicInfo, WorkCase workCase) {
+        log.debug("findLTVPercent");
         BigDecimal ltvPercentBig = BigDecimal.ZERO;
         if(!Util.isNull(proposeCollateralInfoHead)){
             if(!Util.isNull(proposeCollateralInfoHead.getPotentialCollateral()) && !Util.isZero(proposeCollateralInfoHead.getPotentialCollateral().getId())
@@ -1219,6 +1229,7 @@ public class CalculationControl extends BusinessControl{
                 }
             }
         }
+        log.debug("findLTVPercent :: ltvPercentBig :: {}", ltvPercentBig);
         return ltvPercentBig;
     }
 
@@ -1236,7 +1247,6 @@ public class CalculationControl extends BusinessControl{
 
         if(!Util.isNull(basicInfo)){
             List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
-
             for(Customer customer : customerList){
                 if(customer.getTmbCustomerId() != null && !"".equals(customer.getTmbCustomerId())){
                     CustomerOblInfo customerOblInfo = customer.getCustomerOblInfo();
