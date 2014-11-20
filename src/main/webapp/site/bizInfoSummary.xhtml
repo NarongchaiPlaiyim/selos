@@ -33,7 +33,10 @@
                 <div id="content">
                     <div id="content_info">
                         <div id="content_trackchange">[ View Track Change ]</div>
-                        <div id="content_lastupdate">Last update by <h:outputText value="#{bizInfoSummary.bizInfoSummaryView.modifyBy.userName}"/>, <h:outputText value="#{bizInfoSummary.bizInfoSummaryView.modifyDate}"/></div>
+                        <div id="content_lastupdate">Last update by
+                            <h:outputText id="lastupdateName" value=" #{bizInfoSummary.bizInfoSummaryView.modifyBy != null ? bizInfoSummary.bizInfoSummaryView.modifyBy.userName : ''}"/>,
+                            <h:outputText value=" #{bizInfoSummary.bizInfoSummaryView.modifyDate}"/>
+                        </div>
                     </div>
                     <div id="content_form">
                         <table class="content_table_form">

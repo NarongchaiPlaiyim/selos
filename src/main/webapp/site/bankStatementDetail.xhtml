@@ -10,7 +10,6 @@
 <h:head>
     <title>SE-LOS : Bank Statement Detail</title>
     <h:outputStylesheet name="css/style.css" />
-    <!--<script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>-->
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     <style type="text/css">
@@ -24,12 +23,6 @@
             background: #ffffff !important;
             border: 1px solid #868686 !important;
         }
-        /*.ui-chkbox-box {*/
-            /*margin-bottom: -10px;*/
-        /*}*/
-        /*.ui-chkbox-box.ui-widget.ui-corner-all.ui-state-default.ui-state-active {*/
-            /*margin-top: -18px;*/
-        /*}*/
     </style>
 </h:head>
 
@@ -52,8 +45,10 @@
                 <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                    <div id="content_lastupdate">Last update by
+                        <h:outputText id="lastupdateName" value=" #{bankStatementDetail.bankStmtView.modifyBy != null ? bankStatementDetail.bankStmtView.modifyBy.userName : ''}"/>,
+                        <h:outputText value=" #{bankStatementDetail.bankStmtView.modifyDate}"/>
+                    </div>
                 </div>
                 <div id="content_form">
                 <!-- start content -->

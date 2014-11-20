@@ -124,6 +124,10 @@ public class BankStmtTransform extends Transform {
             return bankStmtSummaryView;
         }
         bankStmtSummaryView.setId(bankStatementSummary.getId());
+
+        bankStmtSummaryView.setModifyBy(bankStatementSummary.getModifyBy());
+        bankStmtSummaryView.setModifyDate(bankStatementSummary.getModifyDate());
+
         bankStmtSummaryView.setSeasonal(bankStatementSummary.getSeasonal());
         bankStmtSummaryView.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
         bankStmtSummaryView.setCountRefresh(bankStatementSummary.getCountRefresh());
@@ -180,6 +184,10 @@ public class BankStmtTransform extends Transform {
             return bankStmtView;
         }
         bankStmtView.setId(bankStatement.getId());
+
+        bankStmtView.setModifyBy(bankStatement.getModifyBy());
+        bankStmtView.setModifyDate(bankStatement.getModifyDate());
+
         bankStmtView.setNotCountIncome(bankStatement.getNotCountIncome());
         bankStmtView.setBankView(bankTransform.transformToView(bankStatement.getBank()));
         bankStmtView.setBranchName(bankStatement.getBranch());
