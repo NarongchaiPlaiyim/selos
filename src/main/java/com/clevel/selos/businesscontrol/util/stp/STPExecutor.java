@@ -211,14 +211,15 @@ public class STPExecutor implements Serializable {
         });
     }
 
-    public void duplicateCollateralData(final long workCaseId, final long workCasePreScreenId) throws Exception{
+    public void duplicateCollateralData(final long workCaseId, final long workCasePreScreenId, final String method) throws Exception{
         ((Session) em.getDelegate()).doWork(new Work() {
             @Override
             public void execute(Connection connection) throws SQLException {
 
-                CallableStatement callStmt=connection.prepareCall("call SLOS.duplicateCollateralData ( ?, ? )");
+                CallableStatement callStmt=connection.prepareCall("call SLOS.duplicateCollateralData ( ?, ?, ? )");
                 callStmt.setLong(1, workCaseId);
                 callStmt.setLong(2, workCasePreScreenId);
+                callStmt.setString(3, method);
                 callStmt.executeUpdate();
 
             }
