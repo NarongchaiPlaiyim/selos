@@ -23,7 +23,7 @@ public class SLOSActivity implements Serializable {
     @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
 
-    @Column(name = "result", nullable = false)
+    @Column(name = "action_audit", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
 
@@ -34,7 +34,7 @@ public class SLOSActivity implements Serializable {
     @Column(name = "action_date", nullable = false)
     private Date actionDate;
 
-    @Column(name = "result", nullable = false)
+    @Column(name = "action_result", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionResult actionResult;
 
