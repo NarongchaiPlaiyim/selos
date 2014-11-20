@@ -27,7 +27,7 @@ public class SLOSActivity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
 
-    @Column(name = "action_desc", length = 600)
+    @Column(name = "action_desc", length = 1000)
     private String actionDesc;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,7 +38,7 @@ public class SLOSActivity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ActionResult actionResult;
 
-    @Column(name = "result_desc", length = 600)
+    @Column(name = "result_desc", length = 3000)
     private String resultDesc;
 
     @Temporal(TemporalType.TIMESTAMP)
