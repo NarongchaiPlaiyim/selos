@@ -751,6 +751,9 @@ public class BasicInfo extends BaseController {
 
     public void onCancelAccount() {
         slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CANCEL, "On Cancel Open Account", new Date(), ActionResult.SUCCESS, "");
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", true);
     }
 
     public void onDeleteAccount() {
