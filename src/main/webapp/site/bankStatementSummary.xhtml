@@ -800,6 +800,7 @@
                                 </p:commandButton>
                                 <p:commandButton id="btnCancel" styleClass="small"  value="#{msg.get('app.button.cancel')}"
                                                  process="@this" update=":frmMain"
+                                                 disabled="#{bankStatementSummary.isDisabled('cancelButton')}"
                                                  actionListener="#{bankStatementSummary.onCreation()}"/>
                             </td>
                         </tr>
