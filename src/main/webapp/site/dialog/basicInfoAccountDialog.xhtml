@@ -137,7 +137,7 @@
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":basicInfoAccountDlgForm"
                                      actionListener="#{basicInfo.onCancelAccount()}"
-                                     oncomplete="basicInfoAccountDlg.hide()"/>
+                                     oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
                 </td>
             </tr>
         </table>
