@@ -34,8 +34,8 @@
                         <div id="content_info">
                             <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
                             <div id="content_lastupdate">Last update by
-                                <h:outputText id="lastupdateName" value="#{custInfoSumIndi.customerInfoView.modifyBy != null ? custInfoSumIndi.customerInfoView.modifyBy.userName : ''}"/> ,
-                                <h:outputText value="#{custInfoSumIndi.customerInfoView.modifyDate}"/>
+                                <h:outputText id="lastupdateName" value="#{custInfoSumIndi.customerInfoView.modifyBy != null ? custInfoSumIndi.customerInfoView.modifyBy.userName : ''}"/>,
+                                <h:outputText value=" #{custInfoSumIndi.customerInfoView.modifyDate}"/>
                             </div>
                         </div>
                         <div id="content_form">
@@ -2584,7 +2584,7 @@
 
             <p:remoteCommand name="rmtCmd02" process="@this"
                              action="#{custInfoSumIndi.updateRmtCmd03()}"
-                             update=":frmMain:collateral,:frmMain:shareCust,
+                             update=":frmMain:content_lastupdate,:frmMain:collateral,:frmMain:shareCust,
                                      :frmMain:citiId,:frmMain:docAutBy,:frmMain:dob,
                                      :frmMain:docAutDate,:frmMain:docExpDate,
                                      :frmMain:firstNameTh,:frmMain:lastNameTh,
