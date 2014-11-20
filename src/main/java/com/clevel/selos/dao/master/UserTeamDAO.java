@@ -829,7 +829,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
     }
 
-    public List<String> getPopUsers(int teamnameid)
+    public List<String> getPopUsers(int teamnameid, int roleId)
     {
         popUpMatchUserNames = new ArrayList<String>();
 
@@ -839,7 +839,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
             criteria1.setProjection(Projections.projectionList().add(Projections.property("id"), "id"));
 
-            criteria1.add(Restrictions.eq("team.id", teamnameid)).setResultTransformer(Transformers.aliasToBean(User.class));
+            criteria1.add(Restrictions.eq("team.id", teamnameid)).add(Restrictions.eq("role.id", roleId)).setResultTransformer(Transformers.aliasToBean(User.class));
 
             List usernamebasedteamid = criteria1.list();
 
@@ -878,7 +878,7 @@ public class UserTeamDAO extends GenericDAO<UserTeam, Integer>
 
                 criteria3.setProjection(Projections.projectionList().add(Projections.property("id"),"id")) ;
 
-                criteria3.add(Restrictions.eq("team.id",teamleadid)).setResultTransformer(Transformers.aliasToBean(User.class));
+                criteria3.add(Restrictions.eq("team.id",teamleadid)).add(Restrictions.eq("role.id", roleId)).setResultTransformer(Transformers.aliasToBean(User.class));
 
                 List teamleadusernameslist = criteria3.list();
 
