@@ -598,7 +598,7 @@ public class ProposeLine extends BaseController {
         mortgageTypeId = 0;
         relateWithSubId = "";
 
-        int headCollTypeId = proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowIndex).getHeadCollType().getId();
+        int headCollTypeId = proposeCollateralInfoView.getProposeCollateralInfoHeadViewList().get(rowHeadCollIndex).getHeadCollType().getId();
         if(!Util.isZero(headCollTypeId)) {
             modeSubColl = Mode.ADD;
 

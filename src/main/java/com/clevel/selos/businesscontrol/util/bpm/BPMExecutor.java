@@ -903,8 +903,8 @@ public class BPMExecutor implements Serializable {
             fields.put("Reason", reason);
             fields.put("Remarks", remark);
 
-            fields.put("PriceReductionFlag", "NA");
-            fields.put("DecisionFlag", "NA");
+            //fields.put("PriceReductionFlag", "NA");
+            //fields.put("DecisionFlag", "NA");
 
             log.debug("dispatch case for [Return Case]...,");
 
