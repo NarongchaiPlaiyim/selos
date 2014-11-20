@@ -736,9 +736,15 @@ public class ReassignTeamNames implements Serializable
 
         int selectTeamNameid = Integer.parseInt(selectTeamName);
 
-        log.info("selected team name in changeUserNameBasedOnTeamName method of ReassignTeamNames class is : {}",selectTeamNameid);
+        log.info("Selected User for Search : "+selectedUserName);
 
-        poupreasignUsernames = userTeamDAO.getPopUsers(selectTeamNameid);
+        User selectedUserForSearch = userDAO.findUserByID(selectedUserName);
+
+        int selectedUserForSearchRole = selectedUserForSearch.getRole().getId();
+
+        log.info("selected team name in changeUserNameBasedOnTeamName method of ReassignTeamNames class is : {} , Role of Selected Search User : {}",selectTeamNameid, selectedUserForSearchRole);
+
+        poupreasignUsernames = userTeamDAO.getPopUsers(selectTeamNameid, selectedUserForSearchRole);
 
         Iterator<String> it = poupreasignUsernames.iterator();
         usersIdNameList1 = new ArrayList<User>();
