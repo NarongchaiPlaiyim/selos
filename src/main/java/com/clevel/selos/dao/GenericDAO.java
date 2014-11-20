@@ -111,7 +111,7 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
     public List<T> findActiveAll() {
          Criteria criteria = createCriteria();
          criteria.add(Restrictions.eq("active", 1));
-         criteria.addOrder(Order.asc("name"));
+         criteria.addOrder(Order.asc("id"));
          List<T> list = criteria.list();
          return list;
      }

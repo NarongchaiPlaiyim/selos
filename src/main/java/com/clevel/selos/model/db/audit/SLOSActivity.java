@@ -23,6 +23,7 @@ public class SLOSActivity implements Serializable {
     @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
 
+    @Column(name = "result", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
 

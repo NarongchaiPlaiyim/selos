@@ -295,6 +295,8 @@ public class BasicInfo extends BaseController {
 
         customerId = 0;
         bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
+
+        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ADD, "On Add Open Account", new Date(), ActionResult.SUCCESS, "");
     }
 
     public void onSelectEditAccount(){
@@ -318,8 +320,10 @@ public class BasicInfo extends BaseController {
                     }
                 }
             }
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_EDIT, "On Edit Open Account", new Date(), ActionResult.SUCCESS, "");
         } catch (Exception e) {
             log.error("onSelectEditAccount Exception : {}",e);
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_EDIT, "On Edit Open Account", new Date(), ActionResult.FAILED, e.toString());
         }
     }
 
@@ -584,13 +588,15 @@ public class BasicInfo extends BaseController {
     }
 
     public void onDuplicateApplication(){
-        try{
+        try {
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ACTION, "Duplicate Application", new Date(), ActionResult.SUCCESS, "");
             messageHeader = msg.get("app.messageHeader.info");
             message = "Waiting for this function.";
             severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.debug("duplicateApplication Exception : {}", ex);
+            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ACTION, "Duplicate Application", new Date(), ActionResult.FAILED, ex.toString());
             messageHeader = msg.get("app.messageHeader.error");
             message = ex.getMessage();
             severity = MessageDialogSeverity.ALERT.severity();
@@ -659,7 +665,7 @@ public class BasicInfo extends BaseController {
         accountNameList.remove(selectAccountName);
     }
 
-    public void onAddAccount(){
+    public void onAddAccount() {
         if(accountNameList.size() == 0){
             messageHeader = "Information.";
             message = "Please Add Account Name !!";
@@ -693,14 +699,6 @@ public class BasicInfo extends BaseController {
         if(openAccountView.getBankAccountTypeView().getId() == 0){
             openAccountView.getBankAccountTypeView().setName("-");
         }
-        /*if(openAccountView.getBankAccountTypeView().getId() != 0){
-            openAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(openAccountView.getBankAccountTypeView().getId())));
-        }else{
-            openAccountView.getBankAccountTypeView().setName("-");
-        }
-        if(openAccountView.getBankAccountProductView().getId() == 0){
-            openAccountView.getBankAccountProductView().setName("-");
-        }*/
 
         if(openAccountView.getBankAccountProductView().getId() != 0){
             for(BankAccountProductView bankAccountProductView : accountProductList){
@@ -716,12 +714,6 @@ public class BasicInfo extends BaseController {
         if(openAccountView.getBankAccountProductView().getId() == 0){
             openAccountView.getBankAccountProductView().setName("-");
         }
-
-        /*if(openAccountView.getBankAccountProductView().getId() != 0){
-            openAccountView.setBankAccountProductView(openAccountView.getBankAccountProductView());
-        }else{
-            openAccountView.getBankAccountProductView().setName("-");
-        }*/
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -753,11 +745,18 @@ public class BasicInfo extends BaseController {
         boolean complete = true;        //Change only failed to save
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
+
+        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "On Save Open Account", new Date(), ActionResult.SUCCESS, "");
+    }
+
+    public void onCancelAccount() {
+        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CANCEL, "On Cancel Open Account", new Date(), ActionResult.SUCCESS, "");
     }
 
     public void onDeleteAccount() {
         basicInfoView.getDeleteTmpList().add(selectAccount.getId());
         basicInfoView.getOpenAccountViews().remove(selectAccount);
+        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_DELETE, "On Delete Open Account :: Open Account ID :: " + selectAccount.getId(), new Date(), ActionResult.SUCCESS, "");
     }
 
     // Get Set
