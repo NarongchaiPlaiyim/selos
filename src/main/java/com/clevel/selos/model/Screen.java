@@ -67,9 +67,9 @@ public enum Screen {
     ConfirmLimitSetUp(10200) ,          //3220
 
     //Appraisal
-    AppraisalRequest(21000),            //4010
-    AppraisalAppointment(22000),        //4020
-    AppraisalResult(23000),             //4030
+    AppraisalRequest(8100),            //4010
+    AppraisalAppointment(8200),        //4020
+    AppraisalResult(8300),             //4030
 
     //Return Screen
     ReturnInfoReply(20100) ,            //9010
