@@ -187,7 +187,7 @@ public class BasicInfo extends BaseController {
 
     private boolean permissionCheck;
 
-    private User user;
+    private String userId;
 
     public BasicInfo(){
     }
@@ -210,9 +210,16 @@ public class BasicInfo extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
 
-        user = getCurrentUser();
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -276,16 +283,20 @@ public class BasicInfo extends BaseController {
             loadUserAccessMatrix(Screen.BASIC_INFO);
             permissionCheck = canAccess(Screen.BASIC_INFO);
 
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CREATION, "", new Date(), ActionResult.SUCCESS, "");
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
         }
     }
 
     public void onCancel() {
-        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
         onCreation();
     }
 
     public void onInitAddAccount(){
+        Date date = new Date();
+
         modeForButton = ModeForButton.ADD;
 
         openAccountView = new OpenAccountView();
@@ -296,10 +307,12 @@ public class BasicInfo extends BaseController {
         customerId = 0;
         bankAccountPurposeViewList = bankAccountPurposeControl.getBankAccountPurposeViewActiveList();
 
-        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ADD, "On Add Open Account", new Date(), ActionResult.SUCCESS, "");
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_ADD, "On Add Open Account", date, ActionResult.SUCCESS, "");
     }
 
     public void onSelectEditAccount(){
+        Date date = new Date();
+
         try {
             modeForButton = ModeForButton.EDIT;
 
@@ -320,10 +333,10 @@ public class BasicInfo extends BaseController {
                     }
                 }
             }
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_EDIT, "On Edit Open Account", new Date(), ActionResult.SUCCESS, "");
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Open Account", date, ActionResult.SUCCESS, "");
         } catch (Exception e) {
-            log.error("onSelectEditAccount Exception : {}",e);
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_EDIT, "On Edit Open Account", new Date(), ActionResult.FAILED, e.toString());
+            log.error("onSelectEditAccount Exception : {}", Util.getMessageException(e));
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Open Account", date, ActionResult.FAILED, Util.getMessageException(e));
         }
     }
 
@@ -332,7 +345,10 @@ public class BasicInfo extends BaseController {
     }
 
     public void onSave(){
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
         try{
             String queueName = Util.parseString(session.getAttribute("queueName"), "");
             String wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
@@ -342,27 +358,23 @@ public class BasicInfo extends BaseController {
             calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calculateMaximumSMELimit(workCaseId);
 
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
+
             onCreation();
             updateHeaderInfo();
-
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.SUCCESS, "");
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Save data in basic information success.";
             severity = MessageDialogSeverity.INFO.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
-            if(ex.getCause() != null){
-                message = "Save basic info data failed. Cause : " + ex.getCause().toString();
-                slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.FAILED, ex.getCause().toString());
-            } else {
-                message = "Save basic info data failed. Cause : " + ex.getMessage();
-                slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "", new Date(), ActionResult.FAILED, ex.getMessage());
-            }
+        } catch(Exception ex) {
+            log.error("Basic Info :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
+
             messageHeader = msg.get("app.messageHeader.error");
+            message = "Save basic info data failed. Cause : " + Util.getMessageException(ex);
             severity = MessageDialogSeverity.ALERT.severity();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     private void updateHeaderInfo(){
@@ -588,17 +600,18 @@ public class BasicInfo extends BaseController {
     }
 
     public void onDuplicateApplication(){
+        Date date = new Date();
         try {
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ACTION, "Duplicate Application", new Date(), ActionResult.SUCCESS, "");
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_ACTION, "Duplicate Application", date, ActionResult.SUCCESS, "");
             messageHeader = msg.get("app.messageHeader.info");
             message = "Waiting for this function.";
             severity = MessageDialogSeverity.INFO.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
-            log.debug("duplicateApplication Exception : {}", ex);
-            slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_ACTION, "Duplicate Application", new Date(), ActionResult.FAILED, ex.toString());
+            log.debug("duplicateApplication Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_ACTION, "Duplicate Application", date, ActionResult.FAILED, Util.getMessageException(ex));
             messageHeader = msg.get("app.messageHeader.error");
-            message = ex.getMessage();
+            message = Util.getMessageException(ex);
             severity = MessageDialogSeverity.ALERT.severity();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
@@ -666,6 +679,8 @@ public class BasicInfo extends BaseController {
     }
 
     public void onAddAccount() {
+        Date date = new Date();
+
         if(accountNameList.size() == 0){
             messageHeader = "Information.";
             message = "Please Add Account Name !!";
@@ -746,11 +761,11 @@ public class BasicInfo extends BaseController {
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
 
-        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_SAVE, "On Save Open Account", new Date(), ActionResult.SUCCESS, "");
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_SAVE, "On Save Open Account", date, ActionResult.SUCCESS, "");
     }
 
     public void onCancelAccount() {
-        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_CANCEL, "On Cancel Open Account", new Date(), ActionResult.SUCCESS, "");
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_CANCEL, "On Cancel Open Account", new Date(), ActionResult.SUCCESS, "");
 
         RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", true);
@@ -759,7 +774,8 @@ public class BasicInfo extends BaseController {
     public void onDeleteAccount() {
         basicInfoView.getDeleteTmpList().add(selectAccount.getId());
         basicInfoView.getOpenAccountViews().remove(selectAccount);
-        slosAuditor.add(Screen.BASIC_INFO.value(), user.getId(), ActionAudit.ON_DELETE, "On Delete Open Account :: Open Account ID :: " + selectAccount.getId(), new Date(), ActionResult.SUCCESS, "");
+
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete Open Account :: Open Account ID :: " + selectAccount.getId(), new Date(), ActionResult.SUCCESS, "");
     }
 
     // Get Set

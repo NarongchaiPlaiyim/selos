@@ -6,13 +6,17 @@ import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionAudit;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
@@ -28,6 +32,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -41,6 +46,21 @@ public class TCGInfo extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
+
+    @Inject
+    private PotentialCollateralDAO potentialCollateralDAO;
+    @Inject
+    private PotentialColToTCGColDAO potentialColToTCGColDAO;
+    @Inject
+    private TCGCollateralTypeDAO tcgCollateralTypeDAO;
+
+    @Inject
+    private TCGInfoControl tcgInfoControl;
+    @Inject
+    private CalculationControl calculationControl;
 
     private List<TCGDetailView> TCGDetailViewList;
     private TCGDetailView tcgDetailView;
@@ -59,22 +79,11 @@ public class TCGInfo extends BaseController {
     private String messageHeader;
     private String message;
     private String messageSeverity;
-    private boolean messageErr;
 
     private List<PotentialCollateral> potentialCollateralList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
 
-    @Inject
-    private PotentialCollateralDAO potentialCollateralDAO;
-    @Inject
-    private PotentialColToTCGColDAO potentialColToTCGColDAO;
-    @Inject
-    private TCGCollateralTypeDAO tcgCollateralTypeDAO;
-
-    @Inject
-    private TCGInfoControl tcgInfoControl;
-    @Inject
-    private CalculationControl calculationControl;
+    String userId;
 
     public TCGInfo() {
     }
@@ -95,7 +104,17 @@ public class TCGInfo extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
+
         if(checkSession(session)){
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             TCGView = tcgInfoControl.getTCGView(workCaseId);
@@ -117,6 +136,10 @@ public class TCGInfo extends BaseController {
                 TCGDetailViewList = new ArrayList<TCGDetailView>();
 
             potentialCollateralList = potentialCollateralDAO.findAll();
+
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
         }
     }
 
@@ -130,29 +153,44 @@ public class TCGInfo extends BaseController {
     }
 
     public void onAddCollateralDetail() {
+        Date date = new Date();
+
         modeForButton = ModeForButton.ADD;
         tcgDetailView = new TCGDetailView();
         tcgDetailView.reset();
+
+        slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_ADD, "On Add Collateral Information", date, ActionResult.SUCCESS, "");
     }
 
     public void onEditCollateralDetail() {
         log.info("onEditCollateralDetail ::: rowIndex ::: {} ", rowIndex);
-        modeForButton = ModeForButton.EDIT;
-        Cloner cloner = new Cloner();
-        tcgDetailView = new TCGDetailView();
-        tcgDetailView = cloner.deepClone(selectCollateralItem);
-        if(tcgDetailView.getPotentialCollateral() != null && tcgDetailView.getPotentialCollateral().getId() != 0){
-            potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral().getId());
-            if (potentialColToTCGColList == null) {
+        Date date = new Date();
+
+        try {
+            modeForButton = ModeForButton.EDIT;
+            Cloner cloner = new Cloner();
+            tcgDetailView = new TCGDetailView();
+            tcgDetailView = cloner.deepClone(selectCollateralItem);
+            if(tcgDetailView.getPotentialCollateral() != null && tcgDetailView.getPotentialCollateral().getId() != 0){
+                potentialColToTCGColList = potentialColToTCGColDAO.getListPotentialColToTCGCol(tcgDetailView.getPotentialCollateral().getId());
+                if (potentialColToTCGColList == null) {
+                    potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+                }
+            } else {
                 potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
             }
-        } else {
-            potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
+
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Collateral Information", date, ActionResult.SUCCESS, "");
+        } catch (Exception e) {
+            log.error("onEditCollateralDetail Exception : {}", Util.getMessageException(e));
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Collateral Information", date, ActionResult.FAILED, Util.getMessageException(e));
         }
     }
 
     public void onSaveCollateralDetail() {
         log.info("onSaveCollateralDetail ::: modeForButton : {}", modeForButton);
+        Date date = new Date();
+
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete;
         if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
@@ -184,11 +222,24 @@ public class TCGInfo extends BaseController {
             complete = false;
         }
         context.addCallbackParam("functionComplete", complete);
+
+        slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_SAVE, "On Save Collateral Information", date, ActionResult.SUCCESS, "");
+    }
+
+    public void onCancelCollateralDetail() {
+        slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_CANCEL, "On Cancel Collateral Information", new Date(), ActionResult.SUCCESS, "");
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", true);
     }
 
     public void onDeleteTcgDetail() {
+        Date date = new Date();
+
         TCGDetailViewList.remove(selectCollateralItem);
         calculate();
+
+        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete Collateral Information :: Collateral ID :: " + selectCollateralItem.getId(), date, ActionResult.SUCCESS, "");
     }
 
     public void calculate(){
@@ -207,23 +258,27 @@ public class TCGInfo extends BaseController {
 
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: modeForDB  {}", modeForDB);
+        Date date = new Date();
         try {
             tcgInfoControl.saveTCGInfo(TCGView, TCGDetailViewList, workCaseId);
             calculationControl.calForTCG(workCaseId);
             calculationControl.calculateTotalProposeAmount(workCaseId);
             calculationControl.calculateMaximumSMELimit(workCaseId);
 
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
+
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.tcg.response.save.success");
             messageSeverity = MessageDialogSeverity.INFO.severity();
-        } catch (Exception ex) {
-            log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.messageHeader.exception");
-            message = Util.getMessageException(ex);
+        } catch(Exception ex) {
+            log.error("TCG Info :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
+
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Save tcg info data failed. Cause : " + Util.getMessageException(ex);
             messageSeverity = MessageDialogSeverity.ALERT.severity();
-            messageErr = true;
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
@@ -233,6 +288,9 @@ public class TCGInfo extends BaseController {
         for (int i = 0; i < TCGDetailViewList.size(); i++) {
             TCGDetailViewList.remove(TCGDetailViewList.get(i));
         }
+
+        slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+
         onCreation();
     }
 
@@ -306,14 +364,6 @@ public class TCGInfo extends BaseController {
 
     public void setTCGView(TCGView TCGView) {
         this.TCGView = TCGView;
-    }
-
-    public boolean isMessageErr() {
-        return messageErr;
-    }
-
-    public void setMessageErr(boolean messageErr) {
-        this.messageErr = messageErr;
     }
 
     public String getMessage() {

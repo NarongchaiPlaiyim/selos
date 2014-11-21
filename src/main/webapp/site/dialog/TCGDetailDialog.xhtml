@@ -124,11 +124,13 @@
                                 process=":tcgDlgForm"
                                 update=":tcgDlgForm,:frmMain:resultCollateralDetail"
                                 oncomplete="handletcgInfoRequest(xhr, status, args)"/>
-                        <p:commandButton
-                                value="#{msg.get('app.tcg.dlg.button.cancel')}"
-                                styleClass="small"
-                                onclick="PF('tcgDlg').hide()"
-                                update=":tcgDlgForm">
+                        <p:commandButton id="dlgCancelColBtn"
+                                         value="#{msg.get('app.button.cancel')}"
+                                         styleClass="small"
+                                         actionListener="#{tcgInfo.onCancelCollateralDetail()}"
+                                         process="@form"
+                                         update=":tcgDlgForm"
+                                         oncomplete="handletcgInfoRequest(xhr, status, args)">
                             <p:resetInput target=":tcgDlgForm"/>
                         </p:commandButton>
                     </td>
