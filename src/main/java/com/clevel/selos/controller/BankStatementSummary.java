@@ -537,6 +537,7 @@ public class BankStatementSummary extends BaseController {
                 lastThreeMonth1 = DateTimeUtil.getOnlyDatePlusMonth(lastThreeMonth3, -2);
             }
 
+            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, (isRetrieveSuccess && hasDataFromRetrieve));
             bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
 
@@ -585,7 +586,12 @@ public class BankStatementSummary extends BaseController {
                 log.debug("selectedBankStmtView: {} has been removed from Source of collateral proof list.");
             }
 
+            bankStmtControl.updateMainAccAndHighestInflow(summaryView);
             bankStmtControl.bankStmtSumTotalCalculation(summaryView, (isRetrieveSuccess && hasDataFromRetrieve));
+            BankStmtSummaryView resultBankStmtSumView = bankStmtControl.saveBankStmtSumFullApp(summaryView, workCaseId);
+            if (resultBankStmtSumView != null) {
+                summaryView = resultBankStmtSumView;
+            }
 
             messageHeader = msg.get("app.messageHeader.info");
             message = "Delete Bank statement data success.";
