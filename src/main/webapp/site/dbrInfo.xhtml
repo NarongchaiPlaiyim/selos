@@ -373,7 +373,7 @@
                                         <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                          styleClass="small"
                                                          binding="#{dbrSaveBtn}"
-                                                         action="#{dbrInfo.onSaveDBRInfo}"
+                                                         action="#{dbrInfo.onSaveDBRInfo()}"
                                                          onclick="onOneClick('frmMain:btnSave', true);"
                                                          oncomplete="onOneClick('frmMain:btnSave', false);"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel"
@@ -382,7 +382,7 @@
                                         <p:spacer  width="10"/>
                                         <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                          styleClass="small"
-                                                         action="#{dbrInfo.onCreation}"
+                                                         action="#{dbrInfo.onCancelDBRInfo()}"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel"
                                                          disabled="#{dbrInfo.isDisabled('cancelButton')}">
                                         </p:commandButton>

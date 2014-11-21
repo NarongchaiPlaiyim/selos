@@ -101,11 +101,13 @@
                                      oncomplete="handleDialogRequest(xhr, status, args, 'dbrDetailDialog')"
                                      update=":dbrDetailDlgForm :frmMain:dbrDetailDT">
                     </p:commandButton>
-                    <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
+                    <p:commandButton id="btnCancel"
+                                     value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
-                                     process="@this"
+                                     actionListener="#{dbrInfo.onCancelDBRDetail()}"
+                                     process="@form"
                                      update=":dbrDetailDlgForm"
-                                     onclick="PF('dbrDetailDialog').hide()">
+                                     oncomplete="handleDialogRequest(xhr, status, args)">
                         <p:resetInput target=":dbrDetailDlgForm"/>
                     </p:commandButton>
                 </td>

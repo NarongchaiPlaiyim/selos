@@ -5,13 +5,13 @@ import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.ProposeLineControl;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.MessageDialogSeverity;
-import com.clevel.selos.model.RadioValue;
-import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.LoanAccountTypeView;
 import com.clevel.selos.model.view.NCBDetailView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -47,6 +48,9 @@ public class DBRInfo extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     DBRControl dbrControl;
@@ -75,11 +79,10 @@ public class DBRInfo extends BaseController {
     private int rowIndex;
     private boolean isUpdate;
 
-
     //session
     private long workCaseId;
 
-    private boolean isComplete;
+    private String userId;
 
     public DBRInfo() {
     }
@@ -110,8 +113,16 @@ public class DBRInfo extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
+        Date date = new Date();
 
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -130,14 +141,21 @@ public class DBRInfo extends BaseController {
 
             loanAccountTypes = loanAccountTypeControl.getListLoanTypeByWorkCaseId(workCaseId);
             ncbDetails = dbrControl.getNCBForDBR(workCaseId, dbr.getDbrMarketableFlag());
+
+            slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
         }
     }
 
     public void initAddDBRDetail() {
         selectedItem = new DBRDetailView();
+
+        slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_ADD, "On Add DBR Detail", new Date(), ActionResult.SUCCESS, "");
     }
 
     public void onAddDBRDetail() {
+        Date date = new Date();
         log.debug("onAdd DBR Detail :{}", selectedItem);
         RequestContext context = RequestContext.getCurrentInstance();
         if (selectedItem == null || loanAccountTypes.isEmpty()) {
@@ -162,13 +180,29 @@ public class DBRInfo extends BaseController {
         }
 
         context.addCallbackParam("functionComplete", true);
+
+        slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_SAVE, "On Save DBR Detail", date, ActionResult.SUCCESS, "");
+    }
+
+    public void onCancelDBRDetail() {
+        slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_CANCEL, "On Cancel DBR Detail", new Date(), ActionResult.SUCCESS, "");
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", true);
     }
 
     public void onDeletedDBRDetail() {
-        dbrDetails.remove(rowIndex);
+        try {
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete DBR Detail :: DBR Detail ID :: " + dbrDetails.get(rowIndex).getId(), new Date(), ActionResult.SUCCESS, "");
+
+            dbrDetails.remove(rowIndex);
+        } catch (Exception ex) {
+            log.debug("onDeletedDBRDetail Exception :: {}", Util.getMessageException(ex));
+        }
     }
 
     public void onSaveDBRInfo() {
+        Date date = new Date();
         try {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
@@ -179,18 +213,29 @@ public class DBRInfo extends BaseController {
             calculationControl.calculateFinalDBR(workCaseId);
             calculationControl.calWC(workCaseId);
 
+            slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
+
             //update Display
             onCreation();
 
             messageHeader = msg.get("app.header.save.success");
             message = msg.get("app.dbr.message.save");
             severity = MessageDialogSeverity.INFO.severity();
-        } catch (Exception e) {
-            messageHeader = "Exception.";
-            message = Util.getMessageException(e);
+        } catch(Exception ex) {
+            log.error("DBR Info :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
+
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Save dbr info data failed. Cause : " + Util.getMessageException(ex);
             severity = MessageDialogSeverity.ALERT.severity();
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+    }
+
+    public void onCancelDBRInfo() {
+        slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+
+        onCreation();
     }
 
     public BigDecimal getTotalMonthDebtBorrower(){
@@ -285,14 +330,6 @@ public class DBRInfo extends BaseController {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-    public void setComplete(boolean complete) {
-        isComplete = complete;
     }
 
     public String getSeverity() {
