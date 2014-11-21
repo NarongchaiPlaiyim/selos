@@ -494,7 +494,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{ncbInfo.messageHeader}" message="#{ncbInfo.message}">
+                     header="#{ncbInfo.messageHeader}" message="#{ncbInfo.message}" severity="#{ncbInfo.severity}">
         <p:commandButton value="OK"
                          process="@this"
                          update=":frmMain"

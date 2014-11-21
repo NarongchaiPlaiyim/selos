@@ -78,7 +78,7 @@ public class TCGInfo extends BaseController {
     private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
-    private String messageSeverity;
+    private String severity;
 
     private List<PotentialCollateral> potentialCollateralList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
@@ -180,7 +180,7 @@ public class TCGInfo extends BaseController {
                 potentialColToTCGColList = new ArrayList<PotentialColToTCGCol>();
             }
 
-            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Collateral Information", date, ActionResult.SUCCESS, "");
+            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Collateral Information - TCG Detail ID :: " + tcgDetailView.getId(), date, ActionResult.SUCCESS, "");
         } catch (Exception e) {
             log.error("onEditCollateralDetail Exception : {}", Util.getMessageException(e));
             slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_EDIT, "On Edit Collateral Information", date, ActionResult.FAILED, Util.getMessageException(e));
@@ -239,7 +239,7 @@ public class TCGInfo extends BaseController {
         TCGDetailViewList.remove(selectCollateralItem);
         calculate();
 
-        slosAuditor.add(Screen.BASIC_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete Collateral Information :: Collateral ID :: " + selectCollateralItem.getId(), date, ActionResult.SUCCESS, "");
+        slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete Collateral Information :: Collateral ID :: " + selectCollateralItem.getId(), date, ActionResult.SUCCESS, "");
     }
 
     public void calculate(){
@@ -271,14 +271,14 @@ public class TCGInfo extends BaseController {
 
             messageHeader = msg.get("app.messageHeader.info");
             message = msg.get("app.tcg.response.save.success");
-            messageSeverity = MessageDialogSeverity.INFO.severity();
+            severity = MessageDialogSeverity.INFO.severity();
         } catch(Exception ex) {
             log.error("TCG Info :: Exception : {}", Util.getMessageException(ex));
             slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
 
             messageHeader = msg.get("app.messageHeader.error");
             message = "Save tcg info data failed. Cause : " + Util.getMessageException(ex);
-            messageSeverity = MessageDialogSeverity.ALERT.severity();
+            severity = MessageDialogSeverity.ALERT.severity();
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
@@ -382,12 +382,12 @@ public class TCGInfo extends BaseController {
         this.messageHeader = messageHeader;
     }
 
-    public String getMessageSeverity() {
-        return messageSeverity;
+    public String getSeverity() {
+        return severity;
     }
 
-    public void setMessageSeverity(String messageSeverity) {
-        this.messageSeverity = messageSeverity;
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }
 
