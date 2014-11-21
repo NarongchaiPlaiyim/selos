@@ -32,23 +32,9 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
         criteria.add(Restrictions.eq("proposeType", proposeType));
-        //criteria.add(Restrictions.eq(""))
         criteria.add(Restrictions.or(Restrictions.eq("appraisalRequest", RequestAppraisalValue.READY_FOR_REQUEST.value()), Restrictions.eq("appraisalRequest", RequestAppraisalValue.REQUESTED.value())));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
-
-        /*List<ProposeCollateralInfo> proposeCollateralInfoList = new ArrayList<ProposeCollateralInfo>();
-        boolean isCash = false;
-        for(ProposeCollateralInfo collateralInfo : tempCollateralInfoList){
-            if(!Util.isNull(collateralInfo.getProposeCollateralInfoHeadList())){
-                for(ProposeCollateralInfoHead collateralInfoHead : collateralInfo.getProposeCollateralInfoHeadList()){
-                    if(!Util.isNull(collateralInfoHead.getPotentialCollateral()) && !Util.isTrue(collateralInfoHead.getPotentialCollateral().getAppraisalFlag())){
-                        isCash = true;
-                    }
-                }
-            }
-            if(isCash)
-        }*/
 
         return proposeCollateralInfoList;
     }
@@ -58,7 +44,6 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
         criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.add(Restrictions.eq("appraisalRequest", RequestAppraisalValue.REQUESTED.value()));
-        //criteria.add(Restrictions.or(Restrictions.eq("appraisalRequest", RequestAppraisalValue.READY_FOR_REQUEST.value()), Restrictions.eq("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value())));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
 
@@ -76,19 +61,21 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         return proposeCollateralInfoList;
     }
 
-    public List<ProposeCollateralInfo> findCollateralForAppraisal(ProposeLine proposeLine, ProposeType proposeType){
+    public List<ProposeCollateralInfo> findCollateralForAppraisalReturn(ProposeLine proposeLine){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
-        criteria.add(Restrictions.eq("proposeType", proposeType));
+        criteria.add(Restrictions.eq("proposeType", ProposeType.A));
+        criteria.add(Restrictions.eq("appraisalRequest", RequestAppraisalValue.COMPLETED.value()));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
 
         return proposeCollateralInfoList;
     }
 
-    public List<ProposeCollateralInfo> findNewCollateralByNewCreditFacility(ProposeLine proposeLine) {
+    public List<ProposeCollateralInfo> findCollateralForAppraisal(ProposeLine proposeLine, ProposeType proposeType){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("proposeLine", proposeLine));
+        criteria.add(Restrictions.eq("proposeType", proposeType));
         criteria.addOrder(Order.asc("id"));
         List<ProposeCollateralInfo> proposeCollateralInfoList = (List<ProposeCollateralInfo>) criteria.list();
 
@@ -115,47 +102,12 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         return newCollateralDetailList;
     }
 
-    public List<ProposeCollateralInfo> findNewCollateralByTypeP(ProposeLine newCreditFacility) {
-        log.info("-- findNewCollateralByTypeP ::: {}", newCreditFacility.toString());
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", ProposeType.P));  //1
-        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value())); //Not equals
-        criteria.addOrder(Order.asc("id"));
-        List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
-        log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
-        return newCollateralDetailList;
-    }
-
-    public List<ProposeCollateralInfo> findNewCollateralByTypeA2(ProposeLine newCreditFacility) {
-        log.info("-- findNewCollateralByTypeA2 ::: {}", newCreditFacility.toString());
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", ProposeType.A));    //2
-        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value()));
-        criteria.addOrder(Order.asc("id"));
-        List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
-        log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
-        return newCollateralDetailList;
-    }
-
     public boolean isExist(final long id) {
         boolean result;
         log.debug("-- isExist ProposeCollateralInfo.id[{}]", id);
         result = isRecordExist(Restrictions.eq("id", id));
         log.debug("-- Result[{}]", result);
         return result;
-    }
-
-    public List<ProposeCollateralInfo> findNewCollateralByTypeA(ProposeLine newCreditFacility) {
-        log.info("-- findNewCollateralByTypeA ::: {}", newCreditFacility.toString());
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
-        criteria.add(Restrictions.eq("proposeType", ProposeType.A));
-        criteria.addOrder(Order.asc("id"));
-        List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
-        log.info("-- List<NewCollateral> ::: size : {}", newCollateralDetailList.size());
-        return newCollateralDetailList;
     }
 
     public List<ProposeCollateralInfo> findNewCollateralByTypeA(long workCaseId) {
@@ -174,22 +126,5 @@ public class ProposeCollateralInfoDAO extends GenericDAO<ProposeCollateralInfo, 
         proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.REQUESTED.value());
         proposeCollateralInfo.setProposeType(ProposeType.A);
         persist(proposeCollateralInfo);
-    }
-
-    public List<ProposeCollateralInfo> findNewCollateralByTypePorA(ProposeLine newCreditFacility) {
-        log.info("-- findNewCollateralByTypeAll ::: {}", newCreditFacility.toString());
-
-        Criterion proposeTypeP = Restrictions.eq("proposeType", ProposeType.P); //type = 1
-        Criterion proposeTypeA = Restrictions.eq("proposeType", ProposeType.A); //type = 2
-        LogicalExpression proposeType = Restrictions.or(proposeTypeP,proposeTypeA);
-
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("proposeLine", newCreditFacility));
-        criteria.add(proposeType);
-        criteria.add(Restrictions.ne("appraisalRequest", RequestAppraisalValue.NOT_REQUEST.value())); //Not equals
-        criteria.addOrder(Order.asc("id"));
-        List<ProposeCollateralInfo> newCollateralDetailList = (List<ProposeCollateralInfo>) criteria.list();
-        log.info("newCollateralDetailList ::: size : {}", newCollateralDetailList.size());
-        return newCollateralDetailList;
     }
  }

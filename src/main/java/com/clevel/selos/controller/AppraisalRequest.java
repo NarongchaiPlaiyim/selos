@@ -125,7 +125,7 @@ public class AppraisalRequest extends BaseController {
             //Check Step is PreScreen, PreScreenMaker, Prepare FullApp ( 1001, 1003, 2001, 2011 )
             stepId = getCurrentStep(session);
             if(!(stepId == StepValue.PRESCREEN_INITIAL.value() || stepId == StepValue.PRESCREEN_MAKER.value() ||
-                    stepId == StepValue.FULLAPP_BDM.value() || stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value() ||
+                    stepId == StepValue.FULLAPP_BDM.value() || stepId == StepValue.FULLAPP_ABDM.value() || stepId == StepValue.CUSTOMER_ACCEPTANCE_PRE.value() ||
                         stepId == StepValue.REQUEST_APPRAISAL_RETURN.value() || stepId == StepValue.REQUEST_APPRAISAL.value())){
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
