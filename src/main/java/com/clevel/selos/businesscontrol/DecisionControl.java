@@ -908,6 +908,9 @@ public class DecisionControl extends BusinessControl {
         decision.setTotalApproveJuriGuaranteeAmt(decisionView.getApproveTotalJurisGuaranteeAmt());
 
         decisionDAO.persist(decision);
+
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
     }
 
     public void calculateTotalApprove(DecisionView decisionView, long workCaseId) {
