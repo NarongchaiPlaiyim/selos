@@ -292,12 +292,14 @@
                             update=":ncbDlgForm,:frmMain:resultNcbDetail"
                             oncomplete="handleNCBInfoRequest(xhr, status, args)"
                             disabled="#{ncbInfo.isDisabled('saveButton')}"/>
-                    <p:commandButton
-                            id="cancelBtn"
-                            value="#{msg.get('app.button.cancel')}"
-                            styleClass="small"
-                            onclick="PF('ncbDlg').hide()"
-                            disabled="#{ncbInfo.isDisabled('cancelButton')}"/>
+                    <p:commandButton id="cancelBtn"
+                                     value="#{msg.get('app.button.cancel')}"
+                                     styleClass="small"
+                                     actionListener="#{ncbInfo.onCancelNcbRecord()}"
+                                     process="@form"
+                                     update=":tcgDlgForm"
+                                     oncomplete="handleNCBInfoRequest(xhr, status, args)">
+                    </p:commandButton>
                 </td>
             </tr>
         </table>
