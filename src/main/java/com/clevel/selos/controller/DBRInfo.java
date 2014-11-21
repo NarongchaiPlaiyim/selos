@@ -36,6 +36,7 @@ public class DBRInfo extends BaseController {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;

@@ -878,8 +878,12 @@ public class DecisionControl extends BusinessControl {
         return 0;
     }
 
-    public void saveDecision(DecisionView decisionView, WorkCase workCase) {
-        log.debug("saveDecision() workCase: {}", workCase);
+    public void saveDecision(DecisionView decisionView, long workCaseId) {
+        log.debug("saveDecision() workCase: {}", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        workCase.setCaseUpdateFlag(1);
+        workCaseDAO.persist(workCase);
+
         Decision decision = decisionDAO.findByWorkCase(workCase);
         log.debug("decision: {}", decision);
         User currentUser = getCurrentUser();
@@ -908,9 +912,6 @@ public class DecisionControl extends BusinessControl {
         decision.setTotalApproveJuriGuaranteeAmt(decisionView.getApproveTotalJurisGuaranteeAmt());
 
         decisionDAO.persist(decision);
-
-        workCase.setCaseUpdateFlag(1);
-        workCaseDAO.persist(workCase);
     }
 
     public void calculateTotalApprove(DecisionView decisionView, long workCaseId) {

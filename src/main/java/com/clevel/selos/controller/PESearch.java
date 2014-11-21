@@ -13,6 +13,7 @@ import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.bpm.BPMInterfaceImpl;
 import com.clevel.selos.model.RoleValue;
+import com.clevel.selos.model.StatusValue;
 import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.TeamTypeValue;
 import com.clevel.selos.model.db.master.Step;
@@ -356,15 +357,8 @@ public class PESearch implements Serializable
 
             if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
                 if(stepId == 1) {
-                    if (wrkCaseId != 0) {
-                        session.setAttribute("stepId", 2001L);
-                        session.setAttribute("stageId", 201);
-                        FacesUtil.redirect("/site/basicInfo.jsf");
-                    } else {
-                        session.setAttribute("stepId", 1003L);
-                        session.setAttribute("stageId", 101);
-                        FacesUtil.redirect("/site/prescreenMaker.jsf");
-                    }
+                    stageId = getStageByStatusId(statusId, wrkCasePreScreenId, wrkCaseId);
+                    session.setAttribute("stageId", stageId);
                 }else{
                     if(stageId == 201) {
                         FacesUtil.redirect("/site/basicInfo.jsf");
@@ -381,6 +375,32 @@ public class PESearch implements Serializable
         } catch (Exception e) {
             log.error("Error while opening case",e);
         }
+    }
+
+    private int getStageByStatusId(long statusId, long workCasePreScreenId, long workCaseId){
+        int stageId = 201;
+        if(statusId == StatusValue.CANCEL_CA.value()){
+            if(!Util.isZero(workCaseId)){
+                WorkCase tempWorkCase = workCaseDAO.findById(workCaseId);
+                if(!Util.isNull(tempWorkCase))
+                    if(!Util.isNull(tempWorkCase.getCancelStepId()))
+                        if(!Util.isNull(tempWorkCase.getCancelStepId().getStage()))
+                            stageId = tempWorkCase.getCancelStepId().getStage().getId();
+            }else if(!Util.isZero(workCasePreScreenId)){
+                WorkCasePrescreen tempWorkCasePreScreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+                if(!Util.isNull(tempWorkCasePreScreen))
+                    if(!Util.isNull(tempWorkCasePreScreen.getCancelStepId()))
+                        if(!Util.isNull(tempWorkCasePreScreen.getCancelStepId().getStage()))
+                            stageId = tempWorkCasePreScreen.getCancelStepId().getStage().getId();
+            }
+        }else{
+            if(statusId == StatusValue.REJECT_UW1.value() || statusId == StatusValue.CA_APPROVED_UW1.value() ||
+                    statusId == StatusValue.REJECT_CA.value() || statusId == StatusValue.CA_APPROVED_ZM.value() ||
+                        statusId == StatusValue.CA_APPROVED_UW2.value() || statusId == StatusValue.REJECT_UW2.value()){
+                stageId = 201;
+            }
+        }
+        return stageId;
     }
 
     public boolean checkAuthorizeRole(long workCasePreScreenId, long workCaseId, User user)
