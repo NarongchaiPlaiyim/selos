@@ -1221,7 +1221,7 @@
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" width="350px"
-                         header="#{bizInfoDetail.messageHeader}" message="#{bizInfoDetail.message}" >
+                         header="#{bizInfoDetail.messageHeader}" message="#{bizInfoDetail.message}" severity="#{bizInfoDetail.severity}">
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"

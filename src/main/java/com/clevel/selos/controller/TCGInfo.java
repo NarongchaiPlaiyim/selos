@@ -191,7 +191,6 @@ public class TCGInfo extends BaseController {
         log.info("onSaveCollateralDetail ::: modeForButton : {}", modeForButton);
         Date date = new Date();
 
-        RequestContext context = RequestContext.getCurrentInstance();
         boolean complete;
         if (tcgDetailView.getPotentialCollateral().getId() != 0 && tcgDetailView.getTcgCollateralType().getId() != 0) {
             if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
@@ -221,6 +220,7 @@ public class TCGInfo extends BaseController {
             log.info("onSaveCollateralDetail ::: Validation Failed.");
             complete = false;
         }
+        RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
 
         slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_SAVE, "On Save Collateral Information", date, ActionResult.SUCCESS, "");
