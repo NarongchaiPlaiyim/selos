@@ -1067,11 +1067,6 @@ public class FullApplicationControl extends BusinessControl {
         duplicateCollateralData(workCaseId, workCasePreScreenId, "SUBMIT");
     }
 
-    public void duplicateCollateralForReturn(long workCaseId){
-        log.debug("duplicateCollateralForReturn : workCaseId : {}", workCaseId);
-        duplicateCollateralData(workCaseId, 0, "RETURN");
-    }
-
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
     public void requestAppraisal(String queueName, String wobNumber, long workCaseId, String submitRemark, int slaReasonId, String slaRemark ) throws Exception{
         if(!Util.isEmpty(queueName) && !Util.isEmpty(wobNumber)) {

@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.StepDAO;
@@ -60,7 +61,7 @@ public class ReturnControl extends BusinessControl {
     @Inject
     BPMExecutor bpmExecutor;
     @Inject
-    FullApplicationControl fullApplicationControl;
+    STPExecutor stpExecutor;
 
     public List<Reason> getReturnReasonList(){
         List<Reason> reasons = reasonDAO.getReasonList();
@@ -510,8 +511,21 @@ public class ReturnControl extends BusinessControl {
             //TODO Change Appraisal Request flag in Collateral from COMPLETED to REQUESTED and Duplicate Data for COMPLETED
             if(stepId == StepValue.CREDIT_DECISION_UW2.value()){
                 log.debug("duplicate data for AAD Admin and AAD Committee");
-                fullApplicationControl.duplicateCollateralForReturn(workCaseId);
+                duplicateCollateralForReturn(workCaseId);
             }
+        }
+    }
+
+    public void duplicateCollateralForReturn(long workCaseId){
+        log.debug("duplicateCollateralForReturn : workCaseId : {}", workCaseId);
+        duplicateCollateralData(workCaseId, 0, "RETURN");
+    }
+
+    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId, String method){
+        try {
+            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId, method);
+        }catch (Exception ex){
+            log.error("Exception while duplicateFacilityData : ", ex);
         }
     }
 
