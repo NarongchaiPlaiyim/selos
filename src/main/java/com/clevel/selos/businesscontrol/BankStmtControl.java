@@ -508,7 +508,7 @@ public class BankStmtControl extends BusinessControl {
 
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
-                    break;
+                    continue;
                 }
 
                 // find MAX AvgIncomeNet(UW/BDM)
