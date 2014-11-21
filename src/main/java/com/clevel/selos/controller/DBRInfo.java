@@ -193,7 +193,7 @@ public class DBRInfo extends BaseController {
 
     public void onDeletedDBRDetail() {
         try {
-            slosAuditor.add(Screen.TCG_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete DBR Detail :: DBR Detail ID :: " + dbrDetails.get(rowIndex).getId(), new Date(), ActionResult.SUCCESS, "");
+            slosAuditor.add(Screen.DBR_INFO.value(), userId, ActionAudit.ON_DELETE, "On Delete DBR Detail :: DBR Detail ID :: " + dbrDetails.get(rowIndex).getId(), new Date(), ActionResult.SUCCESS, "");
 
             dbrDetails.remove(rowIndex);
         } catch (Exception ex) {
