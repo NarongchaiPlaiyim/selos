@@ -470,12 +470,15 @@ public class Decision extends BaseController {
                 && (approveCreditInfoDetailView.getDisbursementTypeView().getId() != 0)) {
             Map<String, Object> resultMapVal;
             if(mode == Mode.ADD) {
+                log.debug("onSaveApproveCredit :: Mode Add Before lastSeq :: {}", lastSeq);
                 resultMapVal = proposeLineControl.onSaveCreditInfo(decisionView, approveCreditInfoDetailView, 1, rowIndex, lastSeq, hashSeqCredit);
             } else {
+                log.debug("onSaveApproveCredit :: Mode Edit Before lastSeq :: {}", lastSeq);
                 resultMapVal = proposeLineControl.onSaveCreditInfo(decisionView, approveCreditInfoDetailView, 2, rowIndex, lastSeq, hashSeqCredit);
             }
             decisionView = (DecisionView) resultMapVal.get("decisionView");
             lastSeq = (Integer) resultMapVal.get("lastSeq");
+            log.debug("onSaveApproveCredit :: After lastSeq :: {}", lastSeq);
             hashSeqCredit = (Hashtable) resultMapVal.get("hashSeqCredit");
             creditFlag = true;
             complete = true;

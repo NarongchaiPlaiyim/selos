@@ -369,12 +369,15 @@ public class ProposeLine extends BaseController {
                 && (proposeCreditInfoDetailView.getDisbursementTypeView().getId() != 0)) {
             Map<String, Object> resultMapVal;
             if(mode == Mode.ADD) {
+                log.debug("onSaveCreditInfo :: Mode Add Before lastSeq :: {}", lastSeq);
                 resultMapVal = proposeLineControl.onSaveCreditInfo(proposeLineView, proposeCreditInfoDetailView, 1, rowIndex, lastSeq, hashSeqCredit);
             } else {
+                log.debug("onSaveCreditInfo :: Mode Edit Before lastSeq :: {}", lastSeq);
                 resultMapVal = proposeLineControl.onSaveCreditInfo(proposeLineView, proposeCreditInfoDetailView, 2, rowIndex, lastSeq, hashSeqCredit);
             }
             proposeLineView = (ProposeLineView) resultMapVal.get("proposeLineView");
             lastSeq = (Integer) resultMapVal.get("lastSeq");
+            log.debug("onSaveCreditInfo :: After lastSeq :: {}", lastSeq);
             hashSeqCredit = (Hashtable) resultMapVal.get("hashSeqCredit");
             creditFlag = true;
             complete = true;
