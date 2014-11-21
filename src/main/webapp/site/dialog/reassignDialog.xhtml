@@ -4,53 +4,56 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-    <p:panel>
-        <table class="content_form" style="width: 600px;">
-            <tr>
-                <td>
-                    <h:messages style="color:red;margin:8px;" />
-                    <h:panelGrid columns="2">
-                        <tr>
-                            <td class="title" style="width: 220px;"> Team Lead Unit Name : </td>
-                            <td>
-                                <h:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign"
-                                                 value="#{reassignteamnames.popupselectedteamname}"
-                                                 required="#{not empty param[validateReassign.clientId]}" requiredMessage="Please Select Team">
-                                    <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                    <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamid} - #{popupreassign.teamname}"/>
-                                    <f:ajax listener="#{reassignteamnames.changeUserNameBasedOnTeamName}" render="userNameReassign" execute="@this"/>
-                                </h:selectOneMenu>
-                            </td>
-                        </tr>
-
-                        <tr>
-
-                            <td class="title" style="width: 220px;"> Assign To : </td>
-                            <td>
-                                <h:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign"
-                                                 value="#{reassignteamnames.popupselectedusername}"
-                                                 required="#{not empty param[validateReassign.clientId]}" requiredMessage="Please Select User">
-                                    <f:selectItem itemValue="" itemLabel="-Please Select-"/>
-                                    <f:selectItems value="#{reassignteamnames.usersIdNameList1}" var="username1" itemLabel="#{username1.id} - #{username1.userName}" itemValue="#{username1.id}"/>
-                                </h:selectOneMenu>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Remark : </td>
-                            <td><h:inputTextarea cols="50" rows="3" value="#{reassignteamnames.popupremark}" ></h:inputTextarea></td>
-                        </tr>
-
-                    </h:panelGrid>
-
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2" align="center">
-                    <p:commandButton value="Submit" styleClass="small" binding="#{validateReassign}" actionListener="#{reassignteamnames.reassignDisptchRecords()}" oncomplete="handleDialogValidation( args,'reassignDlg')" update=":frmMain"/>
-                    <p:commandButton value="Cancel" styleClass="small" onclick="reassignDlg.close();"/>
-                </td>
-            </tr>
-        </table>
+    <p:panel styleClass="panel-dialog">
+        <h:form id="reassignDlgForm">
+            <table class="content_form" style="width: 600px;">
+                <tr>
+                    <td>
+                        <h:messages style="color:red;margin:8px;" />
+                        <table class="content_form">
+                            <tr>
+                                <td class="title" style="width: 220px;"> Team Lead Unit Name : </td>
+                                <td>
+                                    <p:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign"
+                                                     value="#{reassignteamnames.popupselectedteamname}"
+                                                     required="#{not empty param[validateReassign.clientId]}"
+                                                     requiredMessage="Please Select Team">
+                                        <f:selectItem itemValue="" itemLabel="-Please Select-"/>
+                                        <f:selectItems value="#{reassignteamnames.popupreasignteamnames}" var="popupreassign" itemValue="#{popupreassign.teamid}" itemLabel="#{popupreassign.teamid} - #{popupreassign.teamname}"/>
+                                        <p:ajax listener="#{reassignteamnames.changeUserNameBasedOnTeamName}" update=":reassignDlgForm:userNameReassign" process="@this"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="width: 220px;"> Assign To : </td>
+                                <td>
+                                    <p:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign"
+                                                     value="#{reassignteamnames.popupselectedusername}"
+                                                     required="#{not empty param[validateReassign.clientId]}"
+                                                     requiredMessage="Please Select User">
+                                        <f:selectItem itemValue="" itemLabel="-Please Select-"/>
+                                        <f:selectItems value="#{reassignteamnames.usersIdNameList1}" var="username1" itemLabel="#{username1.id} - #{username1.userName}" itemValue="#{username1.id}"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Remark : </td>
+                                <td><h:inputTextarea cols="50" rows="3" value="#{reassignteamnames.popupremark}" ></h:inputTextarea></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <p:commandButton value="Submit" styleClass="small"
+                                         binding="#{validateReassign}"
+                                         actionListener="#{reassignteamnames.reassignDisptchRecords()}"
+                                         oncomplete="handleDialogValidation( args,'reassignDlg')"
+                                         update=":frmMain :reassignDlgForm"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="PF('reassignDlg').close();"/>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
     </p:panel>
 </ui:composition>

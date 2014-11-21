@@ -353,12 +353,14 @@ public class PESearch implements Serializable
 
             String landingPage = inboxControl.getLandingPage(stepId, statusId);
 
-            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, queueName);
+            log.debug("onSelectInbox ::: workCasePreScreenId : {}, workCaseId : {}, workCaseAppraisalId : {}, requestAppraisal : {}, stepId : {}, statusId : {}, queueName : {}", wrkCasePreScreenId, wrkCaseId, wrkCaseAppraisalId, requestAppraisalFlag, stepId, statusId, queueName);
+            log.debug("landingPage : {}", landingPage);
 
             if(!landingPage.equals("") && !landingPage.equals("LANDING_PAGE_NOT_FOUND")){
                 if(stepId == 1) {
                     stageId = getStageByStatusId(statusId, wrkCasePreScreenId, wrkCaseId);
                     session.setAttribute("stageId", stageId);
+                    FacesUtil.redirect(landingPage);
                 }else{
                     if(stageId == 201) {
                         FacesUtil.redirect("/site/basicInfo.jsf");
