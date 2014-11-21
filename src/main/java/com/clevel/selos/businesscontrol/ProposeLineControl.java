@@ -634,12 +634,13 @@ public class ProposeLineControl extends BusinessControl {
         }
 
         if(mode == 1){
+            log.debug("lastSeq :: {}", lastSeq);
             lastSeq = lastSeq + 1;
+            log.debug("lastSeq + 1 :: {}", lastSeq);
             proposeCreditInfoDetailView.setSeq(lastSeq);
             proposeCreditInfoDetailView.setFrontEndFeeOriginal(proposeCreditInfoDetailView.getFrontEndFee()); // only set on this step
             proposeLineView.getProposeCreditInfoDetailViewList().add(proposeCreditInfoDetailView);
             hashSeqCredit.put(lastSeq, 0);
-            lastSeq++;
         } else {
             proposeLineView.getProposeCreditInfoDetailViewList().set(rowIndex, proposeCreditInfoDetailView);
         }
@@ -697,7 +698,6 @@ public class ProposeLineControl extends BusinessControl {
             proposeCreditInfoDetailView.setFrontEndFeeOriginal(proposeCreditInfoDetailView.getFrontEndFee()); // only set on this step
             decisionView.getApproveCreditList().add(proposeCreditInfoDetailView);
             hashSeqCredit.put(lastSeq, 0);
-            lastSeq++;
         } else {
             decisionView.getApproveCreditList().set(rowIndex, proposeCreditInfoDetailView);
         }
