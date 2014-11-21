@@ -8,10 +8,14 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionAudit;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BankStmtTransform;
@@ -40,40 +44,14 @@ public class BizInfoSummary extends BaseController {
     @NormalMessage
     @Inject
     Message msg;
-    @Inject
-    BankStmtControl bankStmtControl;
-
-    private BizInfoSummaryView bizInfoSummaryView;
-    private BizInfoDetailView selectBizInfoDetailView;
-    private List<BizInfoDetailView> bizInfoDetailViewList;
-    private List<BizInfoDetail> bizInfoDetailList;
-    private List<Province> provinceList;
-    private List<District> districtList;
-    private List<SubDistrict> subDistrictList;
-    private List<Country> countryList;
-    private List<ReferredExperience> referredExperienceList;
-    private boolean fromDB;
-    private boolean readonlyInterview;
-    //private User user;
-    private Date currentDate;
-    private String currentDateDDMMYY;
-
-    private String sumIncomeAmountDis;
-    private String incomeAmountDis;
-    private BigDecimal sumIncomeAmount;
-    private BigDecimal sumIncomePercent;
-    private BigDecimal SumWeightIntvIncomeFactor;
-    private BigDecimal SumWeightAR;
-    private BigDecimal SumWeightAP;
-    private BigDecimal SumWeightINV;
-
-    private String messageHeader;
-    private String message;
-    private String redirect;
 
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
+
     @Inject
     private BusinessGroupDAO businessGroupDAO;
     @Inject
@@ -102,12 +80,42 @@ public class BizInfoSummary extends BaseController {
     BankStatementSummaryDAO bankStmtSummaryDAO;
     @Inject
     CalculationControl calculationControl;
-
     @Inject
-    private Util util;
+    BankStmtControl bankStmtControl;
+
+    private BizInfoSummaryView bizInfoSummaryView;
+    private BizInfoDetailView selectBizInfoDetailView;
+    private List<BizInfoDetailView> bizInfoDetailViewList;
+    private List<BizInfoDetail> bizInfoDetailList;
+    private List<Province> provinceList;
+    private List<District> districtList;
+    private List<SubDistrict> subDistrictList;
+    private List<Country> countryList;
+    private List<ReferredExperience> referredExperienceList;
+    private boolean readonlyInterview;
+    //private User user;
+    private Date currentDate;
+    private String currentDateDDMMYY;
+
+    private String sumIncomeAmountDis;
+    private String incomeAmountDis;
+    private BigDecimal sumIncomeAmount;
+    private BigDecimal sumIncomePercent;
+    private BigDecimal SumWeightIntvIncomeFactor;
+    private BigDecimal SumWeightAR;
+    private BigDecimal SumWeightAP;
+    private BigDecimal SumWeightINV;
+
+    private String messageHeader;
+    private String message;
+    private String severity;
+
+    private String redirect;
 
     private long workCaseId;
     private long stepId;
+
+    private String userId;
 
     public BizInfoSummary() {
     }
@@ -139,8 +147,16 @@ public class BizInfoSummary extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
+        Date date = new Date();
 
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -166,7 +182,6 @@ public class BizInfoSummary extends BaseController {
 
             if(Util.isNull(bizInfoSummaryView)) {
                 log.info("bizInfoSummaryView == null ");
-                fromDB = false;
                 bizInfoSummaryView = new BizInfoSummaryView();
 
                 Country country = new Country();
@@ -188,7 +203,6 @@ public class BizInfoSummary extends BaseController {
                 bizInfoSummaryView.setWeightIncomeFactor(BigDecimal.ZERO);
             } else {
                 log.info("bizInfoSummaryView != null ");
-                fromDB = true;
                 getBusinessInfoListDB();
                 onChangeProvinceEdit();
                 onChangeDistrictEdit();
@@ -198,6 +212,10 @@ public class BizInfoSummary extends BaseController {
             }
             onCheckInterview();
             onChangeEstablishDate();
+
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
         }
     }
 
@@ -362,86 +380,76 @@ public class BizInfoSummary extends BaseController {
         log.info("onCalSummaryTable end");
     }
 
-    public void onCheckSave(){
-        log.info("have to redirect is " + redirect );
-        if (!Util.isNull(redirect) && !(("")).equals(redirect)) {
-            RequestContext.getCurrentInstance().execute("confirmAddBizInfoDetailDlg.show()");
+    private void onAddBizInfoDetail(){
+        try {
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("bizInfoDetailViewId", -1);
+            FacesUtil.redirect("/site/bizInfoDetail.jsf");
+
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_ADD, "On Add Business Info Detail", new Date(), ActionResult.SUCCESS, "");
+        } catch (Exception ex) {
+            log.error("onAddBizInfoDetail :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_ADD, "On Add Business Info Detail", new Date(), ActionResult.FAILED, Util.getMessageException(ex));
         }
     }
 
-    private void onDetail(){
+    public void onEditBizInfoDetail() {
         try {
-            log.debug("onDetail");
             HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("bizInfoDetailViewId", -1);
-
-            if (!Util.isNull(redirect)&& redirect.equals("viewDetail")) {
-//                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                log.info("view Detail ");
-                onViewDetail();
-            }
-
-            log.info("session.getAttribute('bizInfoDetailViewId') " + session.getAttribute("bizInfoDetailViewId"));
-            String url = "bizInfoDetail.jsf";
+            session.setAttribute("bizInfoDetailViewId", selectBizInfoDetailView.getId());
             FacesUtil.redirect("/site/bizInfoDetail.jsf");
-            log.info("redirect to new page goooo!! 1");
-            return;
-        } catch (Exception e) {
-            log.debug("Exception e. {}",e);
-        }
 
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit Business Info Detail", new Date(), ActionResult.SUCCESS, "");
+        } catch (Exception ex) {
+            log.error("onEditBizInfoDetail :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit Business Info Detail", new Date(), ActionResult.FAILED, Util.getMessageException(ex));
+        }
     }
 
     public void onSaveBizInfoSummary() {
+        Date date = new Date();
         try {
             log.info("onSaveBizInfoSummary begin");
 
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             calculationControl.calForBizInfoSummary(workCaseId);
-                log.info("after redirect method");
-                log.info("not have to redirect ");
-                onCreation();
-                log.info("onCreation() after Save");
-                messageHeader = msg.get("app.bizInfoSummary.message.header.save.success");
-                message = msg.get("app.bizInfoSummary.message.body.save.success");
-                log.info("after set message");
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            }
-        } catch (Exception ex) {
-            log.info("onSaveBizInfoSummary Error : ", ex);
 
-            messageHeader = msg.get("app.bizInfoSummary.message.header.save.fail");
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
 
-            if (ex.getCause() != null) {
-                //log.info("ex.getCause().toString() is " + ex.getCause().toString());
-                message = msg.get("app.bizInfoSummary.message.body.save.fail") + ex.getCause().toString();
-            } else {
-                //log.info("ex.getCause().toString() is " + ex.getMessage());
-                message = msg.get("app.bizInfoSummary.message.body.save.fail")  + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
+
+            messageHeader = msg.get("app.messageHeader.info");
+            message = msg.get("app.tcg.response.save.success");
+            severity = MessageDialogSeverity.INFO.severity();
+        } catch(Exception ex) {
+            log.error("Business Info Summary :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
+
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Save business info summary data failed. Cause : " + Util.getMessageException(ex);
+            severity = MessageDialogSeverity.ALERT.severity();
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
-    public void onViewDetail() {
-        log.info(" onViewDetail begin !! {}");
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("bizInfoDetailViewId", selectBizInfoDetailView.getId());
-        log.info(" onViewDetail end !! {}");
+    public void onCancelBizInfoSummary() {
+        slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+
+        onCreation();
     }
 
     public void onDeleteBizInfoToDB() {
-
+        Date date = new Date();
         try {
-            log.info("onDeleteBizInfoToDB Controller begin ");
             bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
             bizInfoDetailControl.onSaveSumOnSummary(bizInfoSummaryView.getId(),workCaseId,stepId);
-            onCreation();
-//            getBusinessInfoListDB();
-        } catch (Exception e) {
 
-        } finally {
-            log.info("onDeleteBizInfoToDB Controller end ");
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "On Delete Business Info Detail :: Business Info Detail ID :: " + selectBizInfoDetailView.getId(), date, ActionResult.SUCCESS, "");
+
+            onCreation();
+        } catch (Exception ex) {
+            log.error("onDeleteBizInfoToDB :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BUSINESS_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "On Delete Business Info Detail", date, ActionResult.FAILED, Util.getMessageException(ex));
         }
     }
 
@@ -470,18 +478,6 @@ public class BizInfoSummary extends BaseController {
             referredExperienceList = new ArrayList<ReferredExperience>();
             referredExperienceList = referredExperienceDAO.findAll();
         }
-    }
-
-    public void onCheckAdd(){
-        redirect = "addDetail";
-        onDetail();
-//        onSaveBizInfoSummary();
-    }
-
-    public void onCheckEdit(){
-        redirect = "viewDetail";
-        onDetail();
-//        onSaveBizInfoSummary();
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {
@@ -667,5 +663,13 @@ public class BizInfoSummary extends BaseController {
 
     public void setReadonlyInterview(boolean readonlyInterview) {
         this.readonlyInterview = readonlyInterview;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

@@ -407,7 +407,7 @@
 
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{tcgInfo.messageSeverity}"
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" severity="#{tcgInfo.severity}"
                      header="#{tcgInfo.messageHeader}" message="#{tcgInfo.message}" closable="false">
         <p:commandButton value="OK"
                          process="@this"
