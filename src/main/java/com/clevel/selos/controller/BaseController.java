@@ -40,18 +40,11 @@ public class BaseController implements Serializable {
         long stepId = Util.parseLong(session.getAttribute("stepId"), 0);
         long statusId = Util.parseLong(session.getAttribute("statusId"), 0);
         List<FieldsControlView> fields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, statusId, screenId, ownerCaseUserId);
-        //List<FieldsControlView> dialogFields = mandatoryFieldsControl.getFieldsControlView(workCaseId, stepId, screenId, ownerCaseUserId);
         fieldMap.clear();
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
-            //log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
-
-        /*for (FieldsControlView field : dialogFields) {
-            dialogFieldMap.put(field.getFieldName(), field);
-        }*/
-
     }
 
     protected void loadFieldControlPreScreen(long workCasePreScreenId, Screen screenId, String ownerCaseUserId) {
@@ -64,9 +57,7 @@ public class BaseController implements Serializable {
         dialogFieldMap.clear();
         for (FieldsControlView field : fields) {
             fieldMap.put(field.getFieldName(), field);
-            //log.debug("Field Map ScreenId : [{}], WorkCaseId : [{}], fieldMap : [{}]", screenId, workCaseId, fieldMap);
         }
-
     }
 
     public String mandate(String name) {
@@ -166,19 +157,11 @@ public class BaseController implements Serializable {
         log.debug("userAccessMenuMap : {}", userAccessMenuMap);
     }
 
-    /*public boolean isDialogMandate(String name) {
-        FieldsControlView field = dialogFieldMap.get(name);
-        if (field == null)
-            return false;
-        return field.isMandate();
-    }*/
-
     public boolean canAccessMenu(int screenId){
         if(userAccessMenuMap.containsKey(Integer.toString(screenId))){
             UserAccessView userAccessView = userAccessMenuMap.get(Integer.toString(screenId));
             if(userAccessView == null)
                 return false;
-
             return userAccessView.isAccessFlag();
         }
         return false;
@@ -190,7 +173,6 @@ public class BaseController implements Serializable {
             UserAccessView userAccessView = userAccessMap.get(screenId);
             if(userAccessView == null)
                 return false;
-
             return userAccessView.isAccessFlag();
         }
         return false;
@@ -212,9 +194,7 @@ public class BaseController implements Serializable {
         RequestContext.getCurrentInstance().execute("msgBoxMandateMessageDlg.show()");
     }
 
-    public void showMessageNoPermissionBox(){
-        RequestContext.getCurrentInstance().execute("msgBoxNoPermissionDlg.show()");
-    }
+    public void showMessageNoPermissionBox(){ RequestContext.getCurrentInstance().execute("msgBoxNoPermissionDlg.show()"); }
 
     public void sendCallBackParam(boolean value){
         RequestContext.getCurrentInstance().addCallbackParam("functionComplete", value);
@@ -237,9 +217,8 @@ public class BaseController implements Serializable {
     protected User getCurrentUser() {
         HttpSession session = FacesUtil.getSession(false);
         User user = (User) session.getAttribute("user");
-        if(Util.isNull(user)) {
+        if(Util.isNull(user))
             user = new User();
-        }
         return user;
     }
 }
