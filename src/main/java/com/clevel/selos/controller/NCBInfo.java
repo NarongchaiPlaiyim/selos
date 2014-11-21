@@ -8,17 +8,16 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.Month;
+import com.clevel.selos.model.ActionAudit;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.AccountStatus;
-import com.clevel.selos.model.db.master.AccountType;
-import com.clevel.selos.model.db.master.SettlementStatus;
-import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.SettlementStatusView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -38,6 +37,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,6 +59,32 @@ public class NCBInfo extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
+
+    @Inject
+    private AccountStatusDAO accountStatusDAO;
+    @Inject
+    private AccountTypeDAO accountTypeDAO;
+    @Inject
+    private SettlementStatusDAO settlementStatusDAO;
+    @Inject
+    private TDRConditionDAO tdrConditionDAO;
+    @Inject
+    NCBInfoControl ncbInfoControl;
+    @Inject
+    private UserDAO userDAO;
+    @Inject
+    private CustomerDAO customerDAO;
+    @Inject
+    private NCBDAO ncbDAO;
+    @Inject
+    DBRControl dbrControl;
+    @Inject
+    private CalculationControl calculationControl;
+    @Inject
+    SettlementStatusTransform settlementStatusTransform;
 
     private List<SettlementStatusView> settlementStatusList;
     private List<AccountStatus> accountStatusList;
@@ -91,36 +117,11 @@ public class NCBInfo extends BaseController {
     private List<String> yearList;
     private Customer customerInfo;
 
-    @Inject
-    private AccountStatusDAO accountStatusDAO;
-    @Inject
-    private AccountTypeDAO accountTypeDAO;
-    @Inject
-    private SettlementStatusDAO settlementStatusDAO;
-    @Inject
-    private TDRConditionDAO tdrConditionDAO;
-    @Inject
-    NCBInfoControl ncbInfoControl;
-    @Inject
-    private UserDAO userDAO;
-    @Inject
-    private CustomerDAO customerDAO;
-    @Inject
-    private NCBDAO ncbDAO;
-    @Inject
-    DBRControl dbrControl;
-    @Inject
-    private CalculationControl calculationControl;
-    @Inject
-    SettlementStatusTransform settlementStatusTransform;
-
     private long workCaseId;
 
-    public NCBInfo() {
-    }
+    String userId;
 
-    public Month[] getStatMonths() {
-        return Month.values();
+    public NCBInfo() {
     }
 
     public boolean checkSession(HttpSession session){
@@ -128,7 +129,6 @@ public class NCBInfo extends BaseController {
         if( (Long)session.getAttribute("workCaseId") != 0 && (Long)session.getAttribute("stepId") != 0){
             checkSession = true;
         }
-
         return checkSession;
     }
 
@@ -198,12 +198,22 @@ public class NCBInfo extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
+
+        Date date = new Date();
+
+        HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
+
         modeForButton = ModeForButton.ADD;
         noOfmonthsPaymentFlag = false;
 
         initial();
-
-        HttpSession session = FacesUtil.getSession(false);
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -243,24 +253,27 @@ public class NCBInfo extends BaseController {
             }
             String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
             loadFieldControl(workCaseId, Screen.NCB_DETAIL, ownerCaseUserId);
+
+            slosAuditor.add(Screen.NCB_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.NCB_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
         }
     }
 
     public void toControlNplFlagRendered() {
         log.debug("nplFlag :: {}", ncbInfoView.getNplFlag());
 
-        if (ncbInfoView.getNplFlag() == 2) {
+        if(ncbInfoView.getNplFlag() == 2) {
             nplRendered = true;
         } else {
             nplRendered = false;
         }
-
     }
 
     public void toControlTdrFlagRendered() {
         log.debug("tdrFlag :: {}", ncbInfoView.getTdrFlag());
 
-        if (ncbInfoView.getTdrFlag() == 2) {
+        if(ncbInfoView.getTdrFlag() == 2) {
             tdrRendered = true;
         } else {
             tdrRendered = false;
