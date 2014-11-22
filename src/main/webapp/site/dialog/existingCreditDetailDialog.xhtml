@@ -325,7 +325,7 @@
                              disabled="#{not creditFacExisting.canSaveCreditDetail}"
                              process="@form"
                              update=":existingCreditDlgForm :frmMain"
-                             oncomplete="handleExistingCreditRequest(xhr, status, args)"/>
+                             oncomplete="handleDialogRequest(xhr, status, args, 'existingCreditDlg')"/>
 
             <p:commandButton type="button" styleClass="small"
                              value="#{msg.get('app.button.cancel')}"

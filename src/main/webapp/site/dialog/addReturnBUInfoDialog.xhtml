@@ -38,7 +38,7 @@
                                  actionListener="#{headerController.onSaveReturnBUInfo()}"
                                  process="@form"
                                  update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBUDlgPanel, :frmMain:addReturnBUInfoDlgPanel"
-                                 oncomplete="handleReturnBUAddDialogRequest(xhr, status, args)"/>
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'addReturnBUInfoDlg')"/>
                 <p:commandButton id="dlgCancelReturnBUInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"

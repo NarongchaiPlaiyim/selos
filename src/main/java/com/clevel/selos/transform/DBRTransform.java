@@ -4,10 +4,17 @@ import com.clevel.selos.dao.working.DBRDAO;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.model.view.ProposeCreditInfoDetailView;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class DBRTransform extends Transform {
 
@@ -33,7 +40,17 @@ public class DBRTransform extends Transform {
             dbrView.setTotalMonthDebtBorrowerFinal(dbr.getTotalMonthDebtBorrowerFinal());
             dbrView.setTotalMonthDebtBorrowerStart(dbr.getTotalMonthDebtBorrowerStart());
             dbrView.setTotalMonthDebtRelatedWc(dbr.getTotalMonthDebtRelatedWc());
-            dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
+
+            List<DBRDetailView> dbrDetailViewList = dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails());
+            Collections.sort(dbrDetailViewList, new Comparator<DBRDetailView>() {
+                public int compare(DBRDetailView o1, DBRDetailView o2) {
+                    if (Util.isZero(o1.getId()) || Util.isZero(o2.getId()))
+                        return 0;
+                    return BigDecimal.valueOf(o1.getId()).compareTo(BigDecimal.valueOf(o2.getId()));
+                }
+            });
+            dbrView.setDbrDetailViews(dbrDetailViewList);
+
             dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
             dbrView.setModifyDate(dbr.getModifyDate());
             dbrView.setDbrMarketableFlag(dbr.getMarketableFlag());

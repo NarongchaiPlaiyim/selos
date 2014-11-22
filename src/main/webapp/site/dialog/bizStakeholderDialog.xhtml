@@ -149,14 +149,14 @@
                                      process="@form"
                                      action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
                                      update=":frmMain:supplierTable, :frmMain:buyerTable, :msgBoxSystemMessagePanel, :stakeholderViewDlgForm"
-                                     oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'stakeholderViewDlg')"/>
                     <p:commandButton id="dlgCancelBtn"
                                      value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      actionListener="#{bizInfoDetail.onCancelBizStakeHolderDetailView()}"
                                      process="@form"
                                      update=":stakeholderViewDlgForm"
-                                     oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)">
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'stakeholderViewDlg')">
                     </p:commandButton>
 
                 </td>

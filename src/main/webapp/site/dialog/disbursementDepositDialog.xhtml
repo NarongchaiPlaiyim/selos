@@ -54,7 +54,7 @@
                                      actionListener="#{disbursementInfo.onSubmitDisbursementDeposit}"
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementDepositForm"
-                                     oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'depositDisbursementDialog')"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="depositDisbursementDialog.hide()"
                                      update=":frmMain"/>

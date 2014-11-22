@@ -77,7 +77,7 @@
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
                                      actionListener="#{headerController.onSubmitReturnInfo()}"
-                                     oncomplete="handleReturnBDMInfoDialogRequest(xhr, status, args)"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'returnInfoBDMDlg')"
                                      process="@form"
                                      update=":frmMain:returnInfoBDMDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"

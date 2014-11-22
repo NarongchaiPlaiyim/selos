@@ -36,7 +36,7 @@ public class NCBDetailDAO extends GenericDAO<NCBDetail, Long> {
         log.debug("getNCBForDBRList : workCaseId : {}", workCaseId);
         List<NCBDetail> ncbDetailList;
 
-        String query = "SELECT ncbDetail FROM NCBDetail ncbDetail WHERE ncbDetail.ncb in ( SELECT ncb FROM NCB ncb WHERE ncb.customer in ( SELECT customer FROM Customer customer WHERE customer.workCase.id = " + workCaseId + "))";
+        String query = "SELECT ncbDetail FROM NCBDetail ncbDetail WHERE ncbDetail.ncb in ( SELECT ncb FROM NCB ncb WHERE ncb.customer in ( SELECT customer FROM Customer customer WHERE customer.workCase.id = " + workCaseId + ")) order by ncbDetail.id asc";
         ncbDetailList = (List<NCBDetail>) getSession().createQuery(query).list();
 
         return ncbDetailList;

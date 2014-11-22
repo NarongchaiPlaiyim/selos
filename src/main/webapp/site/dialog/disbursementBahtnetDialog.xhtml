@@ -65,7 +65,7 @@
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementBahtnetForm"
                                      process="@form"
-                                     oncomplete="handleDisbursementBahtnetDialogRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'bahtnetDisbursementDialog')"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="bahtnetDisbursementDialog.hide()"
                                      update=":frmMain"/>

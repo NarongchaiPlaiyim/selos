@@ -77,7 +77,7 @@
                                 actionListener="#{creditFacPropose.onSaveTierInfo()}"
                                 process=":proposeTierDlgForm"
                                 update=":creditInfoDlgForm:resultFinal"
-                                oncomplete="handleTierDlgRequest(xhr, status, args)"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'proposeTierDlg')"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.tcg.dlg.button.cancel')}"

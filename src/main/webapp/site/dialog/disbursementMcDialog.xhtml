@@ -75,7 +75,7 @@
                                      actionListener="#{disbursementInfo.onSubmitDisbursementMc}"
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementMcForm"
-                                     oncomplete="handleDisbursementMcDialogRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'mcDisbursementDialog')"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller"
                                      type="button" onclick="mcDisbursementDialog.hide()"
                                      update=":frmMain"/>

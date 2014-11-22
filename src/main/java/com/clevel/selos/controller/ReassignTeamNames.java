@@ -484,45 +484,32 @@ public class ReassignTeamNames implements Serializable
 
     public List<User> valueChangeMethod(ValueChangeEvent e)
     {
-
-        disableReassign = true;
-
         log.info("controller comes to valueChangeMethod of ReassignTeamNames class");
-
+        disableReassign = true;
         teamuserslist = new ArrayList<String>();
-
-        log.info("new value is :::::::: {}",Integer.parseInt(e.getNewValue().toString()));
-
-        changedteamid = Integer.parseInt(e.getNewValue().toString());
-
         usersIdNameList = new ArrayList<User>();
 
-        if(changedteamid != 0 )
-        {
+        log.debug("new value is ::: {}", e.getNewValue());
+        if(!Util.isNull(e.getNewValue())){
+            log.info("new value is :::::::: {}",Integer.parseInt(e.getNewValue().toString()));
+            changedteamid = Integer.parseInt(e.getNewValue().toString());
+            if(changedteamid != 0 ){
+                teamuserslist = userTeamDAO.getUsers(changedteamid);
+                Iterator<String> it = teamuserslist.iterator();
+                while (it.hasNext()){
+                    User user1= new User();
 
-            teamuserslist = userTeamDAO.getUsers(changedteamid);
-
-            Iterator<String> it = teamuserslist.iterator();
-            while (it.hasNext())
-            {
-                User user1= new User();
-
-                user1.setId(it.next());
-                if(!user1.getId().equalsIgnoreCase("ALL"))
-                {
-                    user1.setUserName(userDAO.findById(user1.getId()).getUserName());
+                    user1.setId(it.next());
+                    if(!user1.getId().equalsIgnoreCase("ALL")){
+                        user1.setUserName(userDAO.findById(user1.getId()).getUserName());
+                    }
+                    usersIdNameList.add(user1);
+                    user1 = null;
                 }
-                usersIdNameList.add(user1);
-                user1 = null;
             }
-
-
         }
 
-        //return teamuserslist;
-
         return usersIdNameList;
-
     }
 
     public List<PEInbox> reassignSearch()

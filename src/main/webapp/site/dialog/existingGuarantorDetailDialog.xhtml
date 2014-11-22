@@ -97,12 +97,12 @@
                                 actionListener="#{creditFacExisting.onSaveExistingGuarantor()}"
                                 process=":existingGuarantorDlgForm"
                                 update=":existingGuarantorDlgForm,:frmMain"
-                                oncomplete="handleExistingGuarantorRequest(xhr, status, args)"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'existingGuarantorDlg')"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.button.cancel')}"
                                 styleClass="small"
-                                onclick="existingGuarantorDlg.hide()"/>
+                                onclick="PF('existingGuarantorDlg').hide()"/>
                     </td>
                 </tr>
 

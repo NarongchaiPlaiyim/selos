@@ -12,9 +12,9 @@
                         <h:messages style="color:red;margin:8px;" />
                         <table class="content_form">
                             <tr>
-                                <td class="title" style="width: 220px;"> Team Lead Unit Name : </td>
+                                <td class="title" style="width: 220px;">Team Lead Unit Name : </td>
                                 <td>
-                                    <p:selectOneMenu class="largest" id="teamNameReassign" label="teamNameReassign"
+                                    <p:selectOneMenu styleClass="largest" id="teamNameReassign" label="teamNameReassign"
                                                      value="#{reassignteamnames.popupselectedteamname}"
                                                      required="#{not empty param[validateReassign.clientId]}"
                                                      requiredMessage="Please Select Team">
@@ -27,7 +27,7 @@
                             <tr>
                                 <td class="title" style="width: 220px;"> Assign To : </td>
                                 <td>
-                                    <p:selectOneMenu class="largest" id="userNameReassign" label="userNameReassign"
+                                    <p:selectOneMenu styleClass="largest" id="userNameReassign" label="userNameReassign"
                                                      value="#{reassignteamnames.popupselectedusername}"
                                                      required="#{not empty param[validateReassign.clientId]}"
                                                      requiredMessage="Please Select User">

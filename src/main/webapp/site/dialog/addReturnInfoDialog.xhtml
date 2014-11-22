@@ -38,7 +38,7 @@
                                  actionListener="#{headerController.onSaveReturnInfo()}"
                                  process="@form"
                                  update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADDlgPanel, :frmMain:addReturnInfoDlgPanel"
-                                 oncomplete="handleReturnAddDialogRequest(xhr, status, args)"/>
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'addReturnInfoDlg')"/>
                 <p:commandButton id="dlgCancelReturnInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"

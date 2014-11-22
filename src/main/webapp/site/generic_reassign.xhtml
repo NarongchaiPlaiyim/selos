@@ -10,7 +10,7 @@
     <title>SE-LOS : Reassign</title>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
-    
+
     <style type="text/css">
         table.ui-selectoneradio.nolabel_radio {
             border-collapse: collapse;
@@ -66,7 +66,7 @@
         <div id="content_container">
             <div id="content_name">Reassign</div>
             <div id="content">
-                <div style="color: red; margin-left: 5px;">
+                <div style="color: red; margin-top: 15px; margin-left: 15px;">
                     Reassign: ใช้เพื่อโอนงานจาก user หนึ่งไปให้อีก user หนึ่ง กรณีที่งานยัง on hand อยู่ใน step ของ user นั้นๆ
                     <br/>
                     Change Owner: ใช้เพื่อโอนงานจาก user หนึ่ง ไปให้อีก user หนึ่ง กรณีที่งานจบ step ของ user นั้นๆ แต่ยัง on process ในระบบ
@@ -74,33 +74,40 @@
                 <div id="content_form">
                     <table class="content_table_form">
                         <tr>
-                            <td colspan="2" class="title"><h2>Search On Hand Case</h2></td>
+                            <td colspan="3" class="title">Search On Hand Case</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><h:messages style="color:red;margin:8px;" /></td>
+                            <td colspan="3"><h:messages style="color:red;margin:8px;" /></td>
                         </tr>
                         <tr>
-                           <td class="title" style="width: 150px;"> Team Lead Unit Name </td>
-                           <td>
-                                <p:selectOneMenu id="teamnameselectbox" class="largest" value="#{reassignteamnames.selectedTeamName}"
+                           <td class="title" style="width: 180px;">
+                               <h:outputLabel for="teamNameSelectBox" value="Team Lead Unit Name :"/>
+                           </td>
+                           <td colspan="2">
+                                <p:selectOneMenu id="teamNameSelectBox" styleClass="largest"
+                                                 value="#{reassignteamnames.selectedTeamName}"
                                                  requiredMessage="Please select team"
+                                                 valueChangeListener="#{reassignteamnames.valueChangeMethod}"
                                                  required="#{not empty param[btnSearch.clientId]}">
                                     <f:selectItem itemValue="" itemLabel="-Please Select-"  />
                                     <f:selectItems value="#{reassignteamnames.reasignteamnames}" var="reassign" itemValue="#{reassign.teamid}" itemLabel="#{reassign.teamid} - #{reassign.teamname}"/>
-                                    <p:ajax event="change" process="@this" onstart="blockUI.show()" oncomplete="blockUI.hide()" listener="#{reassignteamnames.valueChangeMethod}" update=":frmMain:usernameselectbox" />
+                                    <p:ajax event="change" process="@this" onstart="blockUI.show()" oncomplete="blockUI.hide()" update=":frmMain:usernameSelectBox" />
                                 </p:selectOneMenu>
                            </td>
                         </tr>
                         <tr>
-                            <td class="title" style="width: 150px;"> User Name </td>
-                            <td>
-                                <p:selectOneMenu id="usernameselectbox" class="largest" value="#{reassignteamnames.selectedUserName}"
+                            <td class="title">
+                                <h:outputLabel for="usernameSelectBox" value="User Name :"/></td>
+                            <td style="width: 200px;">
+                                <p:selectOneMenu id="usernameSelectBox" styleClass="largest" value="#{reassignteamnames.selectedUserName}"
                                                  requiredMessage="Please select user"
                                                  required="#{not empty param[btnSearch.clientId]}">
                                     <f:selectItem itemValue="" itemLabel="-Please Select-" />
                                     <f:selectItems value="#{reassignteamnames.usersIdNameList}" var="username" itemLabel="#{username.id} - #{username.userName}" itemValue="#{username.id}" />
                                 </p:selectOneMenu>
-                                <p:spacer width="15px"/>
+                            </td>
+                            <td>
+                                <p:spacer width="15px" height="10px"/>
                                 <p:commandButton  id="btnSearch" styleClass="medium" value="Search"
                                                   binding="#{btnSearch}"
                                                   onclick="PF('blockUI').show()"
@@ -110,13 +117,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="100%" style="line-height: 10px;"><p:spacer width="2px"/></td>
+                            <td colspan="3" style="line-height: 10px;"><p:spacer width="2px"/></td>
                         </tr>
                         <tr>
-                            <td colspan="100%"><p:separator/></td>
+                            <td colspan="3"><p:separator/></td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="3">
                                 <h:panelGroup id="pnl_menu_inbox1" rendered='#{reassignteamnames.reassignSearchViewList != null}' styleClass="panel" >
                                 <table>
                                     <tr>
@@ -217,7 +224,7 @@
                                                 </p:column>
 
                                                 <p:column headerText="">
-                                                    <p:commandButton icon="ui-icon-search" title="View" action="#{reassignteamnames.onSelectInbox}" onclick="blockInbox.show()">
+                                                    <p:commandButton icon="ui-icon-search" title="View" action="#{reassignteamnames.onSelectInbox}" onclick="PF('blockUI').show()">
                                                         <f:setPropertyActionListener value="#{item}" target="#{reassignteamnames.searchViewSelectItem}"/>
                                                     </p:commandButton>
                                                 </p:column>
@@ -228,7 +235,6 @@
                                 </h:panelGroup>
                             </td>
                         </tr>
-                        <tr><td colspan="100%"><p:spacer width="2"/></td></tr>
                     </table>
                 </div>
             </div>
@@ -268,7 +274,7 @@
             </p:confirmDialog>
         </p:panel>
 
-        <p:panel id="msgBoxErrorPanel1" styleClass="panel">
+        <!--<p:panel id="msgBoxErrorPanel1" styleClass="panel">
             <p:confirmDialog id="msgBoxErrorDialog3" widgetVar="msgBoxErrorDlg3" styleClass="messageDialog"
                              closable="false"
                              header="Exception.">
@@ -280,16 +286,16 @@
                                  update="frmMain"
                                  oncomplete="msgBoxErrorDlg.hide()"/>
             </p:confirmDialog>
-        </p:panel>
+        </p:panel>-->
         <!-- Start Footer -->
         <ui:include src="include/footer_inbox.xhtml" />
         <!-- End Footer -->
     </div>
+    <p:blockUI widgetVar="blockUI" block=":frmMain">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </h:form>
-<p:blockUI widgetVar="blockUI" block=":frmMain">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
 </p:panel>
 <p:dialog id="reassignDialog" header="Reassign Information" widgetVar="reassignDlg" modal="true" >
     <ui:include src="/site/dialog/reassignDialog.xhtml"/>

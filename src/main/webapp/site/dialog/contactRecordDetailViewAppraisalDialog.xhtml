@@ -140,7 +140,7 @@
                                 actionListener="#{appraisalAppointment.onSaveContactRecordDetailView()}"
                                 process="@form"
                                 update=":contactRecordViewDlgForm, :frmMain:contact_record_tbl"
-                                oncomplete="handleAppraisalContactDetailRequest(xhr, status, args)"
+                                oncomplete="handleDialogRequest(xhr, status, args, 'contactRecordViewDlg')"
                                 styleClass="small" />
                         <p:commandButton type='button' styleClass="small"
                                 value="#{msg.get('app.button.cancel')}"

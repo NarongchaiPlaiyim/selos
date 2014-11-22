@@ -74,11 +74,11 @@
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
                                      actionListener="#{headerController.onSubmitZM()}"
-                                     oncomplete="handleSubmitZMDialogRequest(xhr, status, args)"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'submitZMDlg')"
                                      process="@form"
                                      update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"
-                                     styleClass="small" onclick="submitZMDlg.hide()"/>
+                                     styleClass="small" onclick="PF('submitZMDlg').hide()"/>
                 </td>
             </tr>
         </table>
@@ -201,7 +201,7 @@
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
                                      actionListener="#{headerController.onSubmitZM()}"
-                                     oncomplete="handleSubmitZMDialogRequest(xhr, status, args)"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'submitZMDlg')"
                                      process="@form"
                                      update=":frmMain:submitCaseDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"

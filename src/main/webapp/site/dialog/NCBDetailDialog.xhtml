@@ -290,7 +290,7 @@
                             actionListener="#{ncbInfo.onSaveNcbRecord()}"
                             process="@form"
                             update=":ncbDlgForm,:frmMain:resultNcbDetail"
-                            oncomplete="handleNCBInfoRequest(xhr, status, args)"
+                            oncomplete="handleDialogRequest(xhr, status, args, 'ncbDlg')"
                             disabled="#{ncbInfo.isDisabled('saveButton')}"/>
                     <p:commandButton id="cancelBtn"
                                      value="#{msg.get('app.button.cancel')}"
@@ -298,7 +298,7 @@
                                      actionListener="#{ncbInfo.onCancelNcbRecord()}"
                                      process="@form"
                                      update=":tcgDlgForm"
-                                     oncomplete="handleNCBInfoRequest(xhr, status, args)">
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'ncbDlg')">
                     </p:commandButton>
                 </td>
             </tr>

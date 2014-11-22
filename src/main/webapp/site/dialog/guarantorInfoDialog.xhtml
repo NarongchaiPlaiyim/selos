@@ -108,7 +108,7 @@
                                 actionListener="#{creditFacPropose.onSaveGuarantorInfoDlg()}"
                                 process=":guarantorDlgForm"
                                 update=":guarantorDlgForm,:frmMain:conditionInfoDetailTable"
-                                oncomplete="handleGuarantorInfoRequest(xhr, status, args)"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'guarantorInfoDlg')"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.button.cancel')}"

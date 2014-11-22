@@ -77,7 +77,7 @@
                                      value="#{msg.get('app.button.submit')}"
                                      styleClass="small"
                                      actionListener="#{headerController.onSubmitReturnInfo()}"
-                                     oncomplete="handleReturnMakerInfoDialogRequest(xhr, status, args)"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'returnInfoMakerDlg')"
                                      process="@form"
                                      update=":frmMain:returnInfoMakerDlgPanel :frmMain:msgBoxBaseMessagePanel :frmMain:msgBoxBaseRedirectPanel"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button"

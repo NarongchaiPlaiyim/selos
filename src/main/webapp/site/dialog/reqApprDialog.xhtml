@@ -201,7 +201,7 @@
                          styleClass="medium"
                          process="@form"
                          actionListener="#{headerController.onSubmitRequestAppraisal()}"
-                         oncomplete="handleRequestAppraisal(xhr, status, args);"
+                         oncomplete="handleDialogRequest(xhr, status, args, 'reqApprDlg');"
                          update=":frmMain:reqApprDialogPanel, :frmMain:msgBoxBaseMessagePanel"/>
 
         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="medium"
