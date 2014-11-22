@@ -7,10 +7,9 @@
 	xmlns:p="http://primefaces.org/ui">
 
 	<h:head>
-		<title>#{msg.get('app.tcgApprovalInfo.title')}</title>
+		<title>#{msg.get("app.name")} - #{msg.get('app.tcgApprovalInfo.title')}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
 		<h:outputStylesheet name="css/style.css" />
-		<script type="text/javascript" language="javascript"
-			src="#{request.contextPath}/resources/js/jquery.numeric.js" />
 		<h:outputScript library="js" name="custom.js" />
 	</h:head>
 

@@ -670,14 +670,6 @@
     </p:dialog>
 </p:panel>
 
-<!--<p:panel id="submitZMPanel" styleClass="panel">
-    <p:dialog id="submitZMDialog" widgetVar="submitZMDlg" header="Submit to Zone Manager"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="450" closable="false">
-        <ui:include src="/site/dialog/submitCaseDialog.xhtml"/>
-    </p:dialog>
-</p:panel>-->
-
 <p:panel id="submitBUPanel" styleClass="panel">
     <p:dialog id="submitBUDialog" widgetVar="submitBUDlg" header="Submit CA"
               rendered="#{headerController.checkButton('Submit CA') and headerController.checkSubmitBU()}"
@@ -703,14 +695,6 @@
         <ui:include src="/site/dialog/cancelCA.xhtml"/>
     </p:dialog>
 </p:panel>
-
-<!--<p:panel id="submitUWPanel" styleClass="panel">
-    <p:dialog id="submitUWDialog" widgetVar="submitUWDlg" header="Submit to UW"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="550" height="450">
-        <ui:include src="/site/dialog/submitCaseUWDialog.xhtml"/>
-    </p:dialog>
-</p:panel>-->
 
 <p:panel id="submitAADCPanel" styleClass="panel"
          rendered="#{headerController.checkButton('Submit CA') and headerController.stepId == 2006}">

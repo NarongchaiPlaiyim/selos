@@ -4,11 +4,11 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        >
+        xmlns:p="http://primefaces.org/ui" >
 
 <h:head>
-    <title>#{msg.get('app.accountInfo.title')}</title>
+    <title>#{msg.get("app.name")} - #{msg.get('app.accountInfo.title')}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
 </h:head>
