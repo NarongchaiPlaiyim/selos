@@ -45,8 +45,8 @@
                             <div id="content_info">
                                 <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
                                 <div id="content_lastupdate">Last update by
-                                        <h:outputText id="lastupdateName" value="??"/>,
-                                        <h:outputText id="lastupdateTime" value="??"/>
+                                    <h:outputText id="lastupdateName" value=" #{creditFacExisting.existingCreditFacilityView.modifyBy != null ? creditFacExisting.existingCreditFacilityView.modifyBy.userName : ''}"/>,
+                                    <h:outputText value=" #{creditFacExisting.existingCreditFacilityView.modifyDate}"/>
                                 </div>
                             </div>
                             <div id="content_form">

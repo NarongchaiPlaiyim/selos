@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.util.DateTimeUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -39,6 +40,9 @@ public class BankStmtSummaryView implements Serializable {
 
     private List<BankStmtView> tmbBankStmtViewList;
     private List<BankStmtView> othBankStmtViewList;
+
+    private User modifyBy;
+    private Date modifyDate;
 
     public BankStmtSummaryView() {
     }
@@ -237,6 +241,22 @@ public class BankStmtSummaryView implements Serializable {
 
     public void setGrdTotalBorrowerIncomeNetUW(BigDecimal grdTotalBorrowerIncomeNetUW) {
         this.grdTotalBorrowerIncomeNetUW = grdTotalBorrowerIncomeNetUW;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
     @Override

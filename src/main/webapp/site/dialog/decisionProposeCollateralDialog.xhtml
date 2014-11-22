@@ -394,7 +394,7 @@
                                          actionListener="#{decision.onAddSubCollateral()}"
                                          update=":subCollateralDlgForm,:msgBoxSystemMessagePanel"
                                          disabled="#{decision.approveCollateralInfoView.coms or decision.isDisabled('collateral.subcoll.addButton')}">
-                            <f:setPropertyActionListener value="#{i.index}" target="#{decision.rowHeadCollIndex}"/>
+                            <f:setPropertyActionListener value="#{collHeadIndex.index}" target="#{decision.rowHeadCollIndex}"/>
                             <p:resetInput target=":subCollateralDlgForm"/>
                         </p:commandButton>
                     </td>
@@ -501,6 +501,7 @@
                                                  process="@this"
                                                  oncomplete="subCollateralInfoDlg.show();"
                                                  disabled="#{decision.isDisabled('collateral.subcoll.editButton')}">
+                                    <f:setPropertyActionListener value="#{collHeadIndex.index}" target="#{decision.rowHeadCollIndex}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}" target="#{decision.rowSubCollIndex}"/>
                                     <f:setPropertyActionListener value="#{proposeCollSubView}" target="#{decision.approveCollateralInfoSubView}"/>
                                     <p:resetInput target=":subCollateralDlgForm"/>

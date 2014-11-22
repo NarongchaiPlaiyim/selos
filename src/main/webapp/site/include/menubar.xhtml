@@ -78,15 +78,15 @@
                         <c:if test="#{headerController.canAccessMenu(2500)}">
                             <li id="submnucredithistory"><a href="NCBSummary.jsf" title="#{msg.get('app.menu.creditHistory')}">#{msg.get('app.menu.creditHistory')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2800)}">
+                        <c:if test="#{headerController.canAccessMenu(3000)}">
                             <li id="submnuqualitative"><a href="qualitative.jsf" title="#{msg.get('app.menu.qualitative')}">#{msg.get('app.menu.qualitative')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2600)}">
+                        <c:if test="#{headerController.canAccessMenu(2700)}">
                             <li id="submnutcgcalculation"><a href="TCGInfo.jsf" title="#{msg.get('app.menu.tcgCalculation')}">#{msg.get('app.menu.tcgCalculation')}</a></li>
                         </c:if>
                     </ul>
                 </li>
-                <c:if test="#{headerController.canAccessMenu(2700)}">
+                <c:if test="#{headerController.canAccessMenu(2800)}">
                     <li id="mnubusinessinfo"><a href="bizInfoSummary.jsf" title="#{msg.get('app.menu.businessInfo')}">#{msg.get('app.menu.businessInfo')}</a></li>
                 </c:if>
                 <li id="mnufinancialinfo">
@@ -94,16 +94,16 @@
                     <h:link title="#{msg.get('app.menu.financialInfo')}" value="#{msg.get('app.menu.financialInfo')}" outcome="#{headerController.defaultPage('financialInfo')}"/>
                     </c:if>
                     <ul>
-                        <c:if test="#{headerController.canAccessMenu(2810)}">
+                        <c:if test="#{headerController.canAccessMenu(3100)}">
                             <li id="submnubankstatement"><a href="bankStatementSummary.jsf" title="#{msg.get('app.menu.bankStatement')}">#{msg.get('app.menu.bankStatement')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2830)}">
+                        <c:if test="#{headerController.canAccessMenu(3300)}">
                             <li id="submnudbr"><a href="dbrInfo.jsf" title="#{msg.get('app.menu.dbr')}">#{msg.get('app.menu.dbr')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2850)}">
+                        <c:if test="#{headerController.canAccessMenu(3400)}">
                             <li id="submnuexistingline"><a href="creditFacExisting.jsf" title="#{msg.get('app.menu.existingLine')}">#{msg.get('app.menu.existingLine')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2880)}">
+                        <c:if test="#{headerController.canAccessMenu(3500)}">
                             <li id="submnuproposeline"><a href="proposeLine.jsf" title="#{msg.get('app.menu.proposeLine')}">#{msg.get('app.menu.proposeLine')}</a></li>
                         </c:if>
                     </ul>
@@ -113,22 +113,22 @@
                     <h:link title="#{msg.get('app.menu.decision')}" value="#{msg.get('app.menu.decision')}" outcome="#{headerController.defaultPage('decision')}"/>
                     </c:if>
                     <ul>
-                        <c:if test="#{headerController.canAccessMenu(2910)}">
+                        <c:if test="#{headerController.canAccessMenu(3600)}">
                             <li id="submnuexsum"><a href="exSummary.jsf" title="#{msg.get('app.menu.exSummary')}">#{msg.get('app.menu.exSummary')}</a></li>
                         </c:if>
-                        <c:if test="#{headerController.canAccessMenu(2920)}">
+                        <c:if test="#{headerController.canAccessMenu(3700)}">
                             <li id="submnudecision"><a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a></li>
                         </c:if>
                     </ul>
                 </li>
             </h:panelGroup>
             <h:panelGroup id="pnl_menu_custacceptance" rendered="#{headerController.stageId == 205}" styleClass="panel">
-                <c:if test="#{headerController.canAccessMenu(2920)}">
+                <c:if test="#{headerController.canAccessMenu(3700)}">
                     <li id="mnudecision">
                         <a href="decision.jsf" title="#{msg.get('app.menu.decision')}">#{msg.get('app.menu.decision')}</a>
                     </li>
                 </c:if>
-                <c:if test="#{headerController.canAccessMenu(2930)}">
+                <c:if test="#{headerController.canAccessMenu(3800)}">
                     <li id="mnucustacceptpre">
                         <a href="customerAcceptancePre.jsf" title="#{msg.get('app.menu.customerAcceptancePre')}">#{msg.get('app.menu.customerAcceptancePre')}</a>
                     </li>
@@ -142,14 +142,14 @@
    	                		outcome="#{postAppGeneral.defaultOutcomeGroupSummary}"
    	                		/>
     	                <ul>
-    	                	<c:if test="#{postAppGeneral.canAccessMenu(2910)}">
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(3600)}">
 	        	                <li>
 	        	                	<h:link title="#{msg.get('app.menu.exSummary')}" value="#{msg.get('app.menu.exSummary')}"
 	        	                		outcome="exSummary"
 	        	                		/>
 	        	                </li>
         	                </c:if>
-        	                <c:if test="#{postAppGeneral.canAccessMenu(2920)}">
+        	                <c:if test="#{postAppGeneral.canAccessMenu(3700)}">
 	        	                <li>
 	        	                	<h:link title="#{msg.get('app.menu.decision')}" value="#{msg.get('app.menu.decision')}"
 	        	                		outcome="decision"
@@ -159,7 +159,7 @@
                 	    </ul>
                 	</li>
                	</c:if>
-                <c:if test="#{postAppGeneral.canAccessMenu(3300)}">
+                <c:if test="#{postAppGeneral.canAccessMenu(4200)}">
                		<li>
                			<h:link title="#{msg.get('app.menu.contact_record')}" value="#{msg.get('app.menu.contact_record')}"
 	                		outcome="customerAcceptance"
@@ -194,7 +194,7 @@
 	        	                		/>
 	        	                </li>
         	                </c:if>
-        	                <c:if test="#{postAppGeneral.canAccessMenu(3700)}">
+        	                <c:if test="#{postAppGeneral.canAccessMenu(4300)}">
 	        	                <li>
 	        	                	<h:link title="#{msg.get('app.menu.collateral')}" value="#{msg.get('app.menu.collateral')}"
 	        	                		outcome="mortgageSummary"
@@ -225,7 +225,7 @@
    	                		outcome='#{postAppGeneral.defaultOutcomeGroupInsurance}'
    	                		/>
     	                <ul>
-    	                	<c:if test="#{postAppGeneral.canAccessMenu(3100)}">
+    	                	<c:if test="#{postAppGeneral.canAccessMenu(4100)}">
 	        	                <li>
 	        	                	<h:link title="#{msg.get('app.menu.insurance_info')}" value="#{msg.get('app.menu.insurance_info')}"
 	        	                		outcome="insuranceInfo"

@@ -1,11 +1,13 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.master.BankAccountTypeView;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class BankStmtView implements Serializable {
@@ -57,6 +59,9 @@ public class BankStmtView implements Serializable {
 
     private BigDecimal totalTransaction;
 
+    private User modifyBy;
+    private Date modifyDate;
+
     public BankStmtView() {
         reset();
     }
@@ -70,20 +75,6 @@ public class BankStmtView implements Serializable {
         this.accountStatusView = new AccountStatusView();
         this.isTMB = "";
         this.isHighestInflow = "";
-//        this.limit = BigDecimal.ZERO;
-//        this.avgIncomeGross = BigDecimal.ZERO;
-//        this.avgIncomeNetBDM = BigDecimal.ZERO;
-//        this.avgIncomeNetUW = BigDecimal.ZERO;
-//        this.avgWithDrawAmount = BigDecimal.ZERO;
-//        this.avgSwingPercent = BigDecimal.ZERO;
-//        this.avgUtilizationPercent = BigDecimal.ZERO;
-//        this.avgGrossInflowPerLimit = BigDecimal.ZERO;
-//        this.chequeReturn = BigDecimal.ZERO;
-//        this.trdChequeReturnAmount = BigDecimal.ZERO;
-//        this.trdChequeReturnPercent = BigDecimal.ZERO;
-//        this.overLimitTimes = BigDecimal.ZERO;
-//        this.overLimitDays = BigDecimal.ZERO;
-//        this.avgOSBalanceAmount = BigDecimal.ZERO;
         this.remark = "";
 
         this.colorIncomeGross = "";
@@ -421,6 +412,22 @@ public class BankStmtView implements Serializable {
 
     public void setTotalTransaction(BigDecimal totalTransaction) {
         this.totalTransaction = totalTransaction;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override

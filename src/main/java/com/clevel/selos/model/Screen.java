@@ -14,30 +14,30 @@ public enum Screen {
     CUSTOMER_INFO_JURISTIC(2300),
     CUSTOMER_INFO_INDIVIDUAL(2400),
     NCB_SUMMARY(2500),                  //2030
-    NCB_DETAIL(2510),                   //2040
-    TCG_INFO(2600),                     //2050
-    BUSINESS_INFO_SUMMARY(2700),        //2060
-    BUSINESS_INFO_DETAIL(2710),         //2070
-    QUALITATIVE(2800),                  //2080
-    BANK_STATEMENT_SUMMARY(2810),       //2090
-    BANK_STATEMENT_DETAIL(2820),        //2100
-    DBR_INFO(2830),                     //2110
-    CREDIT_FACILITY_EXISTING(2850),     //2120
-    CREDIT_FACILITY_PROPOSE(2880),      //2130
-    EXECUTIVE_SUMMARY(2910),            //2140
+    NCB_DETAIL(2600),                   //2040
+    TCG_INFO(2700),                     //2050
+    BUSINESS_INFO_SUMMARY(2800),        //2060
+    BUSINESS_INFO_DETAIL(2900),         //2070
+    QUALITATIVE(3000),                  //2080
+    BANK_STATEMENT_SUMMARY(3100),       //2090
+    BANK_STATEMENT_DETAIL(3200),        //2100
+    DBR_INFO(3300),                     //2110
+    CREDIT_FACILITY_EXISTING(3400),     //2120
+    CREDIT_FACILITY_PROPOSE(3500),      //2130
+    EXECUTIVE_SUMMARY(3600),            //2140
 
     //Decision
-    DECISION(2920),                     //2150
+    DECISION(3700),                     //2150
 
     //Customer Accept Pre
-    CUSTOMER_ACCEPTANCE_PRE(2930),      //2160
+    CUSTOMER_ACCEPTANCE_PRE(3800),      //2160
     
     //Step 301 Screen 
-    InsuranceInfo(3100),                //3010
-    ContactRecord(3300),                //3020
-    CallingRecordDialog(3500),          //3021
+    InsuranceInfo(4100),                //3010
+    ContactRecord(4200),                //3020
+    CallingRecordDialog(4210),          //3021
+    CollateralMortgageInfoSum(4300),    //3040
     FeeCalculation(9400),               //3030
-    CollateralMortgageInfoSum(3700),    //3040
     MortgageInfoDetail(4000),           //3050
     PledgeDetail(8000),                 //3060
     AddDepInfoDialog(8100),             //3061
@@ -67,9 +67,9 @@ public enum Screen {
     ConfirmLimitSetUp(10200) ,          //3220
 
     //Appraisal
-    AppraisalRequest(21000),            //4010
-    AppraisalAppointment(22000),        //4020
-    AppraisalResult(23000),             //4030
+    AppraisalRequest(8100),            //4010
+    AppraisalAppointment(8200),        //4020
+    AppraisalResult(8300),             //4030
 
     //Return Screen
     ReturnInfoReply(20100) ,            //9010
