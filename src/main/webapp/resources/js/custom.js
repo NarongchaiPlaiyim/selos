@@ -214,7 +214,7 @@ function onKeyPressNumber(evt){
 
 function onKeyDownNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
-
+    /*key 17 = Ctrl, key 86 = v, key 67 = c */
     if(keyCode == 17 || keyCode == 86 || keyCode == 67 || keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
         return true;
     }
@@ -271,35 +271,26 @@ function onKeyPressMoney(evt){
         keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
         return false;
     }
-
-    /** ALLOW NUMBER **/
-    /*  96-105=number(0-9)
-     *  44=comma    188=comma
-     *  46=period   190=period
-     */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 46 || keyCode == 190 ) {
-        return true;
-    } else {
-        return checkAllowKeyMoney(keyCode);
-    }
+    return checkAllowKey(keyCode, '0123456789.,');
 }
 
 function onKeyDownMoney(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
+    /*key 17 = Ctrl, key 86 = v, key 67 = c */
+    if(keyCode == 17 || keyCode == 86 || keyCode == 67 || keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
+        return true;
+    }
+    return checkAllowKey(keyCode, '0123456789.,');
+}
+
+function onKeyUpMoney(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
         return true;
     }
-    /** ALLOW NUMBER **/
-    /*  96-105=number(0-9)
-     *  44=comma    188=comma
-     *  46=period   190=period
-     */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 190 ) {
-        return true;
-    } else {
-        return checkAllowKeyMoney(keyCode);
-    }
+    return checkAllowKey(keyCode, '0123456789.,');
 }
 
 function onKeyPressNegMoney(evt){
@@ -538,7 +529,6 @@ function checkAllowKeyTelNo(keyCode){
     return true;
 }
 
-
 function onKeyPressHomeNo(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
     /** CHECK SPECIAL CHARACTER **/
@@ -593,9 +583,6 @@ function checkAllowKeyHomeNo(keyCode){
     return true;
 }
 
-
-
-
 function hideWindowsScrollBar() {
     $("body").attr("style", "overflow-y: hidden");
     $('input').each(function() {
@@ -612,17 +599,9 @@ function showWindowsScrollBar() {
 }
 
 function onCheckRightClick(event){
-    if(event.button==2){
+    if(event.button==2)
         return false;
-    }
 }
-
-/*function onCheckEnter(obj, event){
-    if(event.keyCode == 13){
-        $(obj).attr("disabled","disabled");
-        return true;
-    }
-}*/
 
 function handleDialogRequest(xhr, status, args, widgetVarName) {
     if (args.functionComplete) {

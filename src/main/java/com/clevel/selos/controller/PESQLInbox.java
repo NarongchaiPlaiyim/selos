@@ -306,6 +306,7 @@ public class PESQLInbox implements Serializable
 
             inboxControl.updateWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, stepId, caseOwner);
 
+            session.setAttribute("appNumber", appNumber);
             session.setAttribute("workCaseId", wrkCaseId);
             session.setAttribute("workCasePreScreenId", wrkCasePreScreenId);
             session.setAttribute("workCaseAppraisalId", wrkCaseAppraisalId);

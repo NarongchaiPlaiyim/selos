@@ -221,4 +221,10 @@ public class BaseController implements Serializable {
             user = new User();
         return user;
     }
+
+    protected String getCurrentAppNumber(){
+        HttpSession session = FacesUtil.getSession(false);
+        String appNumber = Util.parseString(session.getAttribute("appNumber"), "");
+        return appNumber;
+    }
 }
