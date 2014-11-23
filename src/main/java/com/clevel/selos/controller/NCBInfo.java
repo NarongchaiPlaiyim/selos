@@ -255,6 +255,9 @@ public class NCBInfo extends BaseController {
             slosAuditor.add(Screen.NCB_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
         } else {
             slosAuditor.add(Screen.NCB_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 

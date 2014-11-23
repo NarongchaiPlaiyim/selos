@@ -256,7 +256,10 @@ public class AppraisalAppointment extends BaseController implements Serializable
             }
             slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
         } else {
-            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Session invalid.");
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 

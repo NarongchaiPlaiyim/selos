@@ -199,7 +199,10 @@ public class AppraisalRequest extends BaseController {
             }
             slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
         } else {
-            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session.");
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
