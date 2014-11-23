@@ -4,16 +4,14 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.CaseRequestTypes;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -32,6 +30,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -51,6 +50,9 @@ public class PrescreenResult extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    SLOSAuditor slosAuditor;
 
     @Inject
     private WorkCaseDAO workCaseDAO;
@@ -84,11 +86,6 @@ public class PrescreenResult extends BaseController {
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
 
         if (Util.isZero(workCasePreScreenId)){
-            /*stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            if (stepId != StepValue.PRESCREEN_MAKER.value()) {
-                FacesUtil.redirect("/site/inbox.jsf");
-                return;
-            }*/
             long workCaseId = getCurrentWorkCaseId(session);
             if(Util.isZero(workCaseId)) {
                 log.info("preRender ::: workCasePrescreenId is null.");
@@ -100,6 +97,7 @@ public class PrescreenResult extends BaseController {
 
     @PostConstruct
     public void onCreation() {
+        Date actionDate = new Date();
         log.info("PrescreenResult ::: onCreation");
         HttpSession session = FacesUtil.getSession(false);
         int requestType = 0;
@@ -134,9 +132,11 @@ public class PrescreenResult extends BaseController {
             if(requestType == CaseRequestTypes.NEW_CASE.value())
                 loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_RESULT, ownerCaseUserId);
         }
+        slosAuditor.add(Screen.PRESCREEN_RESULT.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onRetrieveInterfaceInfo() {
+        Date actionDate = new Date();
         log.info("Start on Retrieve Interface Info");
 
         List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
@@ -150,10 +150,12 @@ public class PrescreenResult extends BaseController {
             prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView, workCasePreScreenId);
             messageHeader = "Information.";
             message = "Retrieve interface info success.";
+            slosAuditor.add(Screen.PRESCREEN_RESULT.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Interface Info", actionDate, ActionResult.SUCCESS, "");
         } catch (Exception ex){
             messageHeader = "Exception.";
             message = Util.getMessageException(ex);
             log.error("exception while retrieve interface info : ", ex);
+            slosAuditor.add(Screen.PRESCREEN_RESULT.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Interface Info", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
         }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageResultDlg.show()");
     }
@@ -176,14 +178,24 @@ public class PrescreenResult extends BaseController {
     }
 
     public void onSave() {
-        log.info("Start onSave {}", prescreenResultView);
-        prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId, user);
+        Date actionDate = new Date();
+        try {
+            log.info("Start onSave {}", prescreenResultView);
+            prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId, user);
 
-        messageHeader = "Save PreScreen Result Success.";
-        message = "Save PreScreen Result data success.";
+            messageHeader = "Save PreScreen Result Success.";
+            message = "Save PreScreen Result data success.";
 
-        onCreation();
-        RequestContext.getCurrentInstance().execute("msgBoxRefreshDlg.show()");
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.SUCCESS, "");
+
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxRefreshDlg.show()");
+        }catch (Exception ex){
+            messageHeader = "Save PreScreen Result Failed.";
+            message = Util.getMessageException(ex);
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     public void onCloseSale() {
