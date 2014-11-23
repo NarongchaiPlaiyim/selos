@@ -51,9 +51,12 @@
                                 disabled="#{proposeLine.isDisabled('condition.saveButton')}"
                                 oncomplete="handleDialogRequest(xhr, status, args, 'conditionDlg')"/>
                         <p:spacer width="10" height="0"/>
-                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                         disabled="#{proposeLine.isDisabled('condition.cancelButton')}"
-                                        onclick="PF('conditionDlg').hide()"/>
+                        <p:commandButton id="dlgCancelConditionBtn"
+                                         value="#{msg.get('app.button.cancel')}"
+                                         styleClass="small"
+                                         actionListener="#{proposeLine.onCancelConditionInfo()}"
+                                         process="@form"
+                                         oncomplete="handleDialogRequest(xhr, status, args, 'conditionDlg')"/>
                     </td>
                 </tr>
                 <tr>

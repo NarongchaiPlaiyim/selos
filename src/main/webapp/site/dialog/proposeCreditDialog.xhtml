@@ -525,10 +525,12 @@
                                      disabled="#{proposeLine.isDisabled('credit.saveButton')}"
                                      oncomplete="handleDialogRequest(xhr, status, args, 'creditInfoDlg')"/>
                     <p:spacer width="10" height="0"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                     disabled="#{proposeLine.isDisabled('credit.cancelButton')}"
+                    <p:commandButton id="dlgCancelCreditBtn"
+                                     value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
-                                     onclick="PF('creditInfoDlg').hide()"/>
+                                     actionListener="#{proposeLine.onCancelCreditInfo()}"
+                                     process="@form"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'creditInfoDlg')"/>
                 </td>
             </tr>
 
