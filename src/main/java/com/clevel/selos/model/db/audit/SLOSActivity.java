@@ -23,6 +23,9 @@ public class SLOSActivity implements Serializable {
     @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
 
+    @Column(name = "app_number", length = 16)
+    private String appNumber;
+
     @Column(name = "action_audit", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionAudit actionAudit;
@@ -48,7 +51,7 @@ public class SLOSActivity implements Serializable {
     public SLOSActivity() {
     }
 
-    public SLOSActivity(int screenId, String userId, ActionAudit actionAudit, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate) {
+    public SLOSActivity(int screenId, String userId, String appNumber, ActionAudit actionAudit, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate) {
         this.screenId = screenId;
         this.userId = userId;
         this.actionAudit = actionAudit;
@@ -57,6 +60,7 @@ public class SLOSActivity implements Serializable {
         this.actionResult = actionResult;
         this.resultDesc = resultDesc;
         this.resultDate = resultDate;
+        this.appNumber = appNumber;
     }
 
     public long getId() {
@@ -131,17 +135,27 @@ public class SLOSActivity implements Serializable {
         this.resultDate = resultDate;
     }
 
+    public String getAppNumber() {
+        return appNumber;
+    }
+
+    public void setAppNumber(String appNumber) {
+        this.appNumber = appNumber;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("userId", userId).
-                append("actionAudit", actionAudit).
-                append("actionDesc", actionDesc).
-                append("actionDate", actionDate).
-                append("actionResult", actionResult).
-                append("resultDesc", resultDesc).
-                append("resultDate", resultDate).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("screenId", screenId)
+                .append("userId", userId)
+                .append("appNumber", appNumber)
+                .append("actionAudit", actionAudit)
+                .append("actionDesc", actionDesc)
+                .append("actionDate", actionDate)
+                .append("actionResult", actionResult)
+                .append("resultDesc", resultDesc)
+                .append("resultDate", resultDate)
+                .toString();
     }
 }
