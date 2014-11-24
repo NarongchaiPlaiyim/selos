@@ -5,18 +5,13 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Reference;
-import com.clevel.selos.model.db.master.Relation;
-import com.clevel.selos.model.db.master.Title;
+import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.DistrictView;
 import com.clevel.selos.model.view.master.KYCLevelView;
 import com.clevel.selos.model.view.master.ProvinceView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -47,6 +42,9 @@ public class CustomerInfoJuristic extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     @ValidationMessage
@@ -177,6 +175,8 @@ public class CustomerInfoJuristic extends BaseController {
     private int relationId;
     private int referenceId;
 
+    private String userId;
+
     public CustomerInfoJuristic(){
     }
 
@@ -197,7 +197,17 @@ public class CustomerInfoJuristic extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
+
         if(checkSession(session)){
             workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
@@ -225,8 +235,13 @@ public class CustomerInfoJuristic extends BaseController {
                     onEditJuristic();
                 }
             }
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
         } else {
-            //TODO Show messageBox
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -337,12 +352,17 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public String onAddIndividual(){
+        Date date = new Date();
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
         map.put("isEditFromJuristic", false);
         map.put("customerId", -1L);
         map.put("customerInfoView", customerInfoView);
+
+
+        slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ADD, "On Add Individual", date, ActionResult.SUCCESS, "");
 
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("cusInfoParams", map);
@@ -351,6 +371,8 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public String onEditIndividual(){
+        Date date = new Date();
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("isFromSummaryParam",false);
         map.put("isFromJuristicParam",true);
@@ -367,6 +389,8 @@ public class CustomerInfoJuristic extends BaseController {
                 }
             }
         }
+
+        slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_EDIT, "On Edit Individual", date, ActionResult.SUCCESS, "");
 
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("cusInfoParams", map);
@@ -469,6 +493,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onSearchCustomerInfo() {
+        Date date = new Date();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
@@ -527,7 +552,9 @@ public class CustomerInfoJuristic extends BaseController {
                     messageHeader = "Information.";
                     message = "Search customer found.";
                     severity = "info";
-                }else{
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
+                } else {
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
                     enableCitizenId = true;
@@ -535,6 +562,8 @@ public class CustomerInfoJuristic extends BaseController {
                     messageHeader = "Information.";
                     message = "Search customer not found.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
                 }
             } else {
                 enableDocumentType = true;
@@ -542,6 +571,8 @@ public class CustomerInfoJuristic extends BaseController {
                 messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
             }
 
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
@@ -552,20 +583,25 @@ public class CustomerInfoJuristic extends BaseController {
             onChangeProvinceEditForm1();
             onChangeDistrictEditForm1();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             enableDocumentType = true;
             enableCitizenId = true;
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
             customerInfoView.setRegistrationId(customerInfoSearch.getSearchId());
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
-            message = ex.getMessage();
+            message = Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onRefreshInterfaceInfo(){
+        Date date = new Date();
+
         if(customerInfoView.getSearchFromRM() == 1){
             long cusId = customerInfoView.getId();
             int searchBy = customerInfoView.getSearchBy();
@@ -624,16 +660,22 @@ public class CustomerInfoJuristic extends BaseController {
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                     }else{
                         log.debug("refreshInterfaceInfo ::: customer not found.");
                         messageHeader = "Information.";
                         message = "Refresh interface info failed.";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
                     }
                 } else {
                     messageHeader = "Information.";
-                    message = "Refresh interface info failed.";
+                    message = customerInfoResultView.getReason();
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
                 }
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
@@ -641,20 +683,26 @@ public class CustomerInfoJuristic extends BaseController {
                 onChangeProvinceEditForm1();
                 onChangeDistrictEditForm1();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
-                message = ex.getMessage();
+                message = Util.getMessageException(ex);
                 severity = "alert";
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = "Information.";
             message = "Cause this customer do not search from RM";
             severity = "info";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -673,12 +721,17 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onSave(){
+        Date date = new Date();
+
         log.debug("onSave");
         //check registration
         if(customerInfoControl.isDuplicateCustomerJuris(customerInfoView.getRegistrationId(), customerInfoView.getId() ,workCaseId)){
             messageHeader = "Information.";
             message = "Registration Id is already exist";
             severity = "info";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -698,6 +751,9 @@ public class CustomerInfoJuristic extends BaseController {
                     messageHeader = "Information.";
                     message = msg.get("app.message.customer.existing.error");
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
@@ -721,6 +777,9 @@ public class CustomerInfoJuristic extends BaseController {
             messageHeader = "Information.";
             message = "Save Customer Juristic Data Success.";
             severity = "info";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, message);
+
             //updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch(Exception ex){
@@ -728,6 +787,9 @@ public class CustomerInfoJuristic extends BaseController {
             messageHeader = "Error.";
             message = "Save Juristic Failed. Cause : " + Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -749,6 +811,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public void onDeleteIndividual(){
+        Date date = new Date();
         try{
             //check individual using on basic info
             if(selectEditIndividual.getId() != 0){
@@ -757,6 +820,8 @@ public class CustomerInfoJuristic extends BaseController {
                     messageHeader = "Information.";
                     message = msg.get("app.message.customer.existing.error2");
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_DELETE, "On Delete Customer Information Individual.", date, ActionResult.FAILED, message);
                 } else {
                     List<CustomerInfoView> cusTmp = new ArrayList<CustomerInfoView>();
                     if(selectEditIndividual.getIsSpouse() == 1) {
@@ -792,6 +857,8 @@ public class CustomerInfoJuristic extends BaseController {
                     messageHeader = "Information.";
                     message = "Delete Customer Info Individual Success.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_DELETE, "On Delete Customer Information Individual.", date, ActionResult.SUCCESS, message);
                 }
             } else {
                 List<CustomerInfoView> cusTmp = new ArrayList<CustomerInfoView>();
@@ -827,17 +894,18 @@ public class CustomerInfoJuristic extends BaseController {
                 messageHeader = "Information.";
                 message = "Delete Customer Info Individual Success.";
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_DELETE, "On Delete Customer Information Individual.", date, ActionResult.SUCCESS, message);
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Exception :: {}",ex);
             messageHeader = "Error.";
-            if(ex.getCause() != null){
-                message = "Delete Customer Info Individual Failed. <br/><br/> Cause : " + ex.getCause().toString();
-            } else {
-                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getMessage();
-            }
+            message = "Delete Customer Info Individual Failed. <br/><br/> Cause : " + Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_DELETE, "On Delete Customer Information Individual.", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -847,6 +915,7 @@ public class CustomerInfoJuristic extends BaseController {
     }
 
     public String onCancelForm(boolean isRedirect){
+        slosAuditor.add(Screen.CUSTOMER_INFO_JURISTIC.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
         if(isRedirect){
             return "customerInfoSummary?faces-redirect=true";
         } else {
@@ -858,13 +927,6 @@ public class CustomerInfoJuristic extends BaseController {
     public void onChangeCountryIncome() {
         if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getCountryIncome().getId());
-//            Country country = new Country();
-//            country.setId(countryView.getId());
-//            country.setName(countryView.getName());
-//            country.setCode(countryView.getCode());
-//            country.setCode2(countryView.getCode2());
-//            country.setIsoCode(countryView.getIsoCode());
-//            country.setActive(countryView.getActive());
             customerInfoView.setCountryIncome(countryView);
         }
     }
@@ -872,13 +934,6 @@ public class CustomerInfoJuristic extends BaseController {
     public void onChangeRegisterAddress() {
         if(customerInfoView.getRegisterAddress() != null && customerInfoView.getRegisterAddress().getCountry() != null && customerInfoView.getRegisterAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getRegisterAddress().getCountry().getId());
-//            Country country = new Country();
-//            country.setId(countryView.getId());
-//            country.setName(countryView.getName());
-//            country.setCode(countryView.getCode());
-//            country.setCode2(countryView.getCode2());
-//            country.setIsoCode(countryView.getIsoCode());
-//            country.setActive(countryView.getActive());
             customerInfoView.getRegisterAddress().setCountry(countryView);
         }
     }
@@ -886,13 +941,6 @@ public class CustomerInfoJuristic extends BaseController {
     public void onChangeWorkAddress() {
         if(customerInfoView.getWorkAddress() != null && customerInfoView.getWorkAddress().getCountry() != null && customerInfoView.getWorkAddress().getCountry().getId() != 0){
             CountryView countryView = countryControl.getCountryViewById(customerInfoView.getWorkAddress().getCountry().getId());
-//            Country country = new Country();
-//            country.setId(countryView.getId());
-//            country.setName(countryView.getName());
-//            country.setCode(countryView.getCode());
-//            country.setCode2(countryView.getCode2());
-//            country.setIsoCode(countryView.getIsoCode());
-//            country.setActive(countryView.getActive());
             customerInfoView.getWorkAddress().setCountry(countryView);
         }
     }
@@ -900,11 +948,6 @@ public class CustomerInfoJuristic extends BaseController {
     public void onChangeKYCLv() {
         if(customerInfoView.getKycLevel() != null && customerInfoView.getKycLevel().getId() != 0){
             KYCLevelView kycLevelView = kycLevelControl.getKYCLevelViewById(customerInfoView.getKycLevel().getId());
-//            KYCLevel kycLevel = new KYCLevel();
-//            kycLevel.setId(kycLevelView.getId());
-//            kycLevel.setName(kycLevelView.getName());
-//            kycLevel.setKycLevel(kycLevelView.getKycLevel());
-//            kycLevel.setActive(kycLevelView.getActive());
             customerInfoView.setKycLevel(kycLevelView);
         }
     }
