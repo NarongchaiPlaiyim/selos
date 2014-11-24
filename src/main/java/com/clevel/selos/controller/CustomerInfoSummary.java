@@ -4,10 +4,15 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.master.CustomerEntityControl;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionAudit;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.MessageDialogSeverity;
 import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -23,6 +28,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +42,9 @@ public class CustomerInfoSummary extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     @ValidationMessage
@@ -68,6 +77,8 @@ public class CustomerInfoSummary extends BaseController {
     private String message;
     private String severity;
 
+    private String userId;
+
     public CustomerInfoSummary(){
     }
 
@@ -98,7 +109,16 @@ public class CustomerInfoSummary extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -109,10 +129,19 @@ public class CustomerInfoSummary extends BaseController {
             customerEntityList = customerEntityControl.getCustomerEntitySelectItemList();
             customerInfoSummaryView = new CustomerInfoSummaryView();
             customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
     public String onLinkToEditBorrower() {
+        Date date = new Date();
+
         long customerId;
         if(selectedItemCustomerBorrower.getSpouse() != null && selectedItemCustomerBorrower.getIsSpouse() == 1){
             Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerBorrower.getId());
@@ -123,14 +152,22 @@ public class CustomerInfoSummary extends BaseController {
 
         if(selectedItemCustomerBorrower.getCustomerEntity().getId() == 1){ // Individual
             passParamsToIndividual(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Borrower Customer Individual :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoIndividual?faces-redirect=true";
         }else{
             passParamsToJuristic(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Borrower Customer Juristic :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoJuristic?faces-redirect=true";
         }
     }
 
     public String onLinkToEditGuarantor() {
+        Date date = new Date();
+
         long customerId;
         if(selectedItemCustomerGuarantor.getSpouse() != null && selectedItemCustomerGuarantor.getIsSpouse() == 1){
             Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
@@ -141,14 +178,22 @@ public class CustomerInfoSummary extends BaseController {
 
         if(selectedItemCustomerGuarantor.getCustomerEntity().getId() == 1){ // Individual
             passParamsToIndividual(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Guarantor Customer Juristic :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoIndividual?faces-redirect=true";
         }else{
             passParamsToJuristic(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Guarantor Customer Juristic :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoJuristic?faces-redirect=true";
         }
     }
 
     public String onLinkToEditRelated() {
+        Date date = new Date();
+
         long customerId;
         if(selectedItemCustomerRelated.getSpouse() != null && selectedItemCustomerRelated.getIsSpouse() == 1){
             Customer customer = customerDAO.findMainCustomerBySpouseId(selectedItemCustomerRelated.getId());
@@ -159,9 +204,15 @@ public class CustomerInfoSummary extends BaseController {
 
         if(selectedItemCustomerRelated.getCustomerEntity().getId() == 1){ // Individual
             passParamsToIndividual(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Related Customer Juristic :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoIndividual?faces-redirect=true";
         }else{
             passParamsToJuristic(customerId);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "Edit Related Customer Juristic :: Customer ID :: "+customerId, date, ActionResult.SUCCESS, "");
+
             return "customerInfoJuristic?faces-redirect=true";
         }
     }
@@ -207,51 +258,53 @@ public class CustomerInfoSummary extends BaseController {
     }
 
     public void onDeleteGuarantor(){
+        Date date = new Date();
         try{
             boolean isExist = customerInfoControl.checkExistingAll(selectedItemCustomerGuarantor.getId());
             if(isExist){
-                messageHeader = "Information.";
+                messageHeader = msg.get("app.messageHeader.info");
                 message = msg.get("app.message.customer.existing.error2");
-                severity = "info";
+                severity = MessageDialogSeverity.INFO.severity();
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "Delete Guarantor Customer Information :: Customer ID :: "+selectedItemCustomerGuarantor.getId(), date, ActionResult.FAILED, message);
             } else {
                 onDelete(selectedItemCustomerGuarantor);
-                messageHeader = "Information.";
+                messageHeader = msg.get("app.messageHeader.info");
                 message = "Delete Customer Info Guarantor Success.";
-                severity = "info";
+                severity = MessageDialogSeverity.INFO.severity();
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "Delete Guarantor Customer Information :: Customer ID :: "+selectedItemCustomerGuarantor.getId(), date, ActionResult.SUCCESS, "");
             }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            log.error("Exception :: {}",ex);
-            messageHeader = "Error.";
-            if(ex.getCause() != null){
-                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getCause().toString();
-            } else {
-                message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + ex.getMessage();
-            }
-            severity = "alert";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Delete Customer Info Guarantor Failed. <br/><br/> Cause : " + Util.getMessageException(ex);
+            severity = MessageDialogSeverity.ALERT.severity();
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "Delete Guarantor Customer Information :: Customer ID :: "+selectedItemCustomerGuarantor.getId(), date, ActionResult.FAILED, message);
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         onCreation();
     }
 
     public void onDeleteRelated(){
+        Date date = new Date();
         try{
             onDelete(selectedItemCustomerRelated);
-            messageHeader = "Information.";
+            messageHeader = msg.get("app.messageHeader.info");
             message = "Delete Customer Info Related Success.";
-            severity = "info";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            severity = MessageDialogSeverity.INFO.severity();
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "Delete Related Customer Information :: Customer ID :: "+selectedItemCustomerGuarantor.getId(), date, ActionResult.SUCCESS, "");
         } catch(Exception ex){
-            log.error("Exception :: {}",ex);
-            messageHeader = "Error.";
-            if(ex.getCause() != null){
-                message = "Delete Customer Info Related failed. <br/><br/> Cause : " + ex.getCause().toString();
-            } else {
-                message = "Delete Customer Info Related failed. <br/><br/> Cause : " + ex.getMessage();
-            }
-            severity = "alert";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Delete Customer Info Related failed. <br/><br/> Cause : " + Util.getMessageException(ex);
+            severity = MessageDialogSeverity.ALERT.severity();
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_SUMMARY.value(), userId, ActionAudit.ON_DELETE, "Delete Related Customer Information :: Customer ID :: "+selectedItemCustomerGuarantor.getId(), date, ActionResult.FAILED, message);
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         onCreation();
     }
 
