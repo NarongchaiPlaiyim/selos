@@ -364,7 +364,15 @@ public class PESearch implements Serializable
                 if(stepId == 1) {
                     stageId = getStageByStatusId(statusId, wrkCasePreScreenId, wrkCaseId);
                     session.setAttribute("stageId", stageId);
-                    FacesUtil.redirect(landingPage);
+                    if(statusId == StatusValue.CANCEL_CA.value()){
+                        if(stageId == 201) {
+                            FacesUtil.redirect("/site/basicInfo.jsf");
+                        }else{
+                            FacesUtil.redirect(landingPage);
+                        }
+                    }else {
+                        FacesUtil.redirect(landingPage);
+                    }
                 }else{
                     if(stageId == 201) {
                         FacesUtil.redirect("/site/basicInfo.jsf");
