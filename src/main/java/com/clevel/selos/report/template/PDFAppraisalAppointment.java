@@ -183,34 +183,34 @@ public class PDFAppraisalAppointment implements Serializable {
         return report;
     }
 
-    public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
-        List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
-        List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
-        int count = 1;
-
-        if (Util.isSafetyList(appraisalView.getContactRecordDetailViewList())){
-            log.debug("--appraisalView.getContactRecordDetailViewList(). {}",appraisalView.getContactRecordDetailViewList().size());
-            for (ContactRecordDetailView view : appraisalView.getContactRecordDetailViewList()){
-                ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
-                report.setCount(count++);
-                report.setPath(pathsub);
-                report.setCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getCallingDate()));
-                report.setCallingResult(view.getCallingResult());
-                report.setAcceptResult(view.getAcceptResult());
-                report.setNextCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getNextCallingDate()));
-                report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
-                report.setRemark(Util.checkNullString(view.getRemark()));
-                report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));
-                report.setDisplayName(Util.checkNullString(view.getCreateBy().getDisplayName()));
-                contactRecordDetailViewReports.add(report);
-            }
-        } else {
-            ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
-            contactRecordDetailViewReports.add(report);
-            log.debug("--appraisalView.getContactRecordDetailViewList() is Null.");
-        }
-        return contactRecordDetailViewReports;
-    }
+//    public List<ContactRecordDetailViewReport> fillContactRecordDetailViewReport(){
+//        List<ContactRecordDetailViewReport> contactRecordDetailViewReports = new ArrayList<ContactRecordDetailViewReport>();
+//        List<ContactRecordDetailView> detailViewList = new ArrayList<ContactRecordDetailView>();
+//        int count = 1;
+//
+//        if (Util.isSafetyList(appraisalView.getContactRecordDetailViewList())){
+//            log.debug("--appraisalView.getContactRecordDetailViewList(). {}",appraisalView.getContactRecordDetailViewList().size());
+//            for (ContactRecordDetailView view : appraisalView.getContactRecordDetailViewList()){
+//                ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
+//                report.setCount(count++);
+//                report.setPath(pathsub);
+//                report.setCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getCallingDate()));
+//                report.setCallingResult(view.getCallingResult());
+//                report.setAcceptResult(view.getAcceptResult());
+//                report.setNextCallingDate(DateTimeUtil.getCurrentDateTimeTH(view.getNextCallingDate()));
+//                report.setReasonDescription(Util.checkNullString(!Util.isNull(view.getReason()) ? view.getReason().getDescription() : SPACE));
+//                report.setRemark(Util.checkNullString(view.getRemark()));
+//                report.setStatusDescription(Util.checkNullString(!Util.isNull(view.getStatus()) ? view.getStatus().getDescription() : SPACE));
+//                report.setDisplayName(Util.checkNullString(view.getCreateBy().getDisplayName()));
+//                contactRecordDetailViewReports.add(report);
+//            }
+//        } else {
+//            ContactRecordDetailViewReport report = new ContactRecordDetailViewReport();
+//            contactRecordDetailViewReports.add(report);
+//            log.debug("--appraisalView.getContactRecordDetailViewList() is Null.");
+//        }
+//        return contactRecordDetailViewReports;
+//    }
 
     public HeaderAndFooterReport fillHeader(){
         HeaderAndFooterReport report = new HeaderAndFooterReport();
