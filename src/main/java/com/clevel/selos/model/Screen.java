@@ -37,34 +37,33 @@ public enum Screen {
     ContactRecord(4200),                //3020
     CallingRecordDialog(4210),          //3021
     CollateralMortgageInfoSum(4300),    //3040
-    FeeCalculation(9400),               //3030
-    MortgageInfoDetail(4000),           //3050
-    PledgeDetail(8000),                 //3060
+    MortgageInfoDetail(4400),           //3050
+    PostCustomerInfoSum(4500),          //3120
+    PostCustomerInfoIndv(4600),         //3130
+    PostCustomerInfoJuris(4700),        //3140
+    PledgeDetail(4800),                 //3060
+    GuarantorDetail(4900),              //3070
+    BAInfo(5100),                       //3080
+    applyBAinfoDialog(5200),            //3081
+    ApproveDetailInfo(5300),            //3180
+    PreDisbursement(5400),              //3100
+    Disbursement(5500),                 //3190
+    FeeCalculation(5600),               //3030
+    UpdateCollateralInfo(5800),         //3200
+    TCGInfo(5900),                      //3110
+    AgreementAndMortgageConfirm(6000),  //3150
+    AgreementSign(6100),                //3160
+    PledgeConfirm(6200),                //3170
+    PerfectionReview(6300) ,            //3210
+    ConfirmLimitSetUp(6400) ,           //3220
+
     AddDepInfoDialog(8100),             //3061
-    GuarantorDetail(8200),              //3070
-    BAInfo(8300),                       //3080
-    applyBAinfoDialog(8400),            //3081
     addBAPAInfoDialog(10300),           //3082
     AccountInfo(8500),                  //3090
     AddAccountInfoDialog(8600),         //3091
-    PreDisbursement(9200),              //3100
-    TCGInfo(9700),                      //3110
-    PostCustomerInfoSum(5300),          //3120
-    PostCustomerInfoIndv(5400),         //3130
-    PostCustomerInfoJuris(9100),        //3140
-    AgreementAndMortgageConfirm(9800),  //3150
-    AgreementSign(9900),                //3160
-    PledgeConfirm(10000),               //3170
-
-    ApproveDetailInfo(8700),            //3180
     AddMCDisburseInfoDialog(8800) ,     //3181
     AddDepositDisburseInfoDialog(8900) ,//3182
     AddBahtNetDisburseInfoDialog(9000) ,//3183
-    Disbursement(9300) ,                //3190
-    
-    UpdateCollateralInfo(9600) ,        //3200
-    PerfectionReview(10100) ,           //3210
-    ConfirmLimitSetUp(10200) ,          //3220
 
     //Appraisal
     AppraisalRequest(8100),            //4010
