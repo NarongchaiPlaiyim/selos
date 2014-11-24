@@ -19,15 +19,15 @@ public class SubjectAddressDisputeModel implements Serializable {
     @XStreamAlias("disputecodedesc")
     private String disputecodedesc;
 
-    @XStreamAlias("disputecoderemark")
-    private String disputecoderemark;
+    @XStreamAlias("disputeremark")
+    private String disputeremark;
 
-    public SubjectAddressDisputeModel(String disputedate, String disputetime, String disputecode, String disputecodedesc, String disputecoderemark) {
+    public SubjectAddressDisputeModel(String disputedate, String disputetime, String disputecode, String disputecodedesc, String disputeremark) {
         this.disputedate = disputedate;
         this.disputetime = disputetime;
         this.disputecode = disputecode;
         this.disputecodedesc = disputecodedesc;
-        this.disputecoderemark = disputecoderemark;
+        this.disputeremark = disputeremark;
     }
 
     public String getDisputedate() {
@@ -46,8 +46,8 @@ public class SubjectAddressDisputeModel implements Serializable {
         return disputecodedesc;
     }
 
-    public String getDisputecoderemark() {
-        return disputecoderemark;
+    public String getDisputeremark() {
+        return disputeremark;
     }
 
 

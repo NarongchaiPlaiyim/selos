@@ -301,7 +301,7 @@ public class PESQLInbox implements Serializable
 
             if(Util.isTrue(requestAppraisalFlag)){
                 WorkCaseAppraisal workCaseAppraisal = workCaseAppraisalDAO.findByAppNumber(appNumber);
-                wrkCaseAppraisalId = workCaseAppraisal.getId();
+                wrkCaseAppraisalId = workCaseAppraisal != null ? workCaseAppraisal.getId() : 0;
             }
 
             inboxControl.updateWorkCaseOwner(wrkCasePreScreenId, wrkCaseId, stepId, caseOwner);

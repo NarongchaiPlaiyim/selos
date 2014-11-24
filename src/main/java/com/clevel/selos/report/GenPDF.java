@@ -130,13 +130,13 @@ public class GenPDF extends ReportService implements Serializable {
         log.debug("init() {[]}");
         cancelRejectInfo = new CancelRejectInfo();
 
-        if(!Util.isZero((Long)session.getAttribute("workCaseId"))){
-            workCaseId = (Long)session.getAttribute("workCaseId");
+        if(!Util.isZero(Util.parseLong(session.getAttribute("workCaseId"), 0))){
+            workCaseId = Util.parseLong(session.getAttribute("workCaseId"), 0);
             if (!Util.isZero(workCaseId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCaseId(workCaseId);
             }
-        }else if (!Util.isZero((Long)session.getAttribute("workCasePreScreenId"))){
-            workCasePreScreenId = (Long)session.getAttribute("workCasePreScreenId");
+        }else if (!Util.isZero(Util.parseLong(session.getAttribute("workCasePreScreenId"), 0))){
+            workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
             if (!Util.isZero(workCasePreScreenId)){
                 cancelRejectInfo = cancelRejectInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
             }
@@ -199,7 +199,7 @@ public class GenPDF extends ReportService implements Serializable {
                 if(!Util.isNull(workCasePrescreen)){
                     appNumber = workCasePrescreen.getAppNumber();
                     statusId = workCasePrescreen.getStatus().getId();
-                    stepId = workCase.getStep().getId();
+                    stepId = workCasePrescreen.getStep().getId();
                 }
             }
 
@@ -491,7 +491,7 @@ public class GenPDF extends ReportService implements Serializable {
     map.put("fillAppraisalDetailReport",pdfAppraisalAppointment.fillAppraisalDetailReport());
     map.put("fillAppraisalDetailViewReport",pdfAppraisalAppointment.fillAppraisalDetailViewReport(pathsub));
     map.put("fillAppraisalContactDetailViewReport",pdfAppraisalAppointment.fillAppraisalContactDetailViewReport());
-    map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
+//    map.put("fillContactRecordDetailViewReport",pdfAppraisalAppointment.fillContactRecordDetailViewReport());
 
     generatePDF(pathAppraisal,map,reportView.getNameReportAppralsal());
 }

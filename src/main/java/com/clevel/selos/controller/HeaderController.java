@@ -1011,7 +1011,15 @@ public class HeaderController extends BaseController {
 
     private void getUserOwnerBU(){
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-        if(pricingDOALevel == 1 || pricingDOALevel == 2){
+        if(pricingDOALevel == 1) {
+            isSubmitToZM = true;
+            //Get User ZM from WorkCase Owner
+            User zmUser = basicInfo.getZmUser();
+            if(!Util.isNull(zmUser)) {
+                zmUserId = zmUser.getId();
+                onSelectedZM();
+            }
+        }else if(pricingDOALevel == 2){
             isSubmitToZM = true;
             isSubmitToRGM = true;
             //Get User ZM from WorkCase Owner

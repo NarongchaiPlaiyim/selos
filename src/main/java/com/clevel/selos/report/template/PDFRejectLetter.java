@@ -275,11 +275,14 @@ public class PDFRejectLetter implements Serializable {
 
     public RejectLetterReport fillRejectLetter(){
         log.debug("fillRejectLetter. {}");
+        Date rejectDate = null;
 
         if (!Util.isNull(workCase)){
             userView = userDAO.findByUserName(workCase.getCreateBy().getUserName());
+            rejectDate = workCase.getCompleteDate();
         } else if (!Util.isNull(workCasePrescreen)){
             userView = userDAO.findByUserName(workCasePrescreen.getCreateBy().getUserName());
+            rejectDate = workCasePrescreen.getCompleteDate();
         }
 
         if (!Util.isNull(userView.getTeam())){
@@ -289,7 +292,7 @@ public class PDFRejectLetter implements Serializable {
         }
 
         RejectLetterReport letterReport = new RejectLetterReport();
-        String date = Util.createDateTh(new Date());
+        String date = Util.createDateTh(rejectDate);
         String[] spDate = date.split("/");
         int month = Integer.valueOf(spDate[1]);
         String setMonth;
@@ -305,30 +308,64 @@ public class PDFRejectLetter implements Serializable {
             for (Customer view : customers){
                 Customer customer = customerDAO.findById(view.getId());
 
-                if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
-                    addressTH = new StringBuilder();
-                    Address allAddress = customer.getAddressesList().get(0);
-                    addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(SPACE))
-                        .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(SPACE))
-                        .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(SPACE))
-                        .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(SPACE))
-                        .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(SPACE))
-                        .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.district").concat(SPACE))
-                        .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.province").concat(SPACE))
-                        .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.postCode").concat(SPACE))
-                        .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(SPACE))
-                        .append(msg.get("app.bizInfoSummary.label.country").concat(SPACE))
-                        .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(SPACE));
-                    break;
-                } else {
-                    addressTH = addressTH.append(SPACE);
+                if (customer.getCustomerEntity().getId() == 1){
+                    if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
+                        addressTH = new StringBuilder();
+                        for (Address allAddress : customer.getAddressesList()){
+                           if (allAddress.getAddressType().getId() == 1){
+                               addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(SPACE))
+                                       .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(SPACE))
+                                       .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(SPACE))
+                                       .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(SPACE))
+                                       .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(SPACE))
+                                       .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.district").concat(SPACE))
+                                       .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.province").concat(SPACE))
+                                       .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.postCode").concat(SPACE))
+                                       .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(SPACE))
+                                       .append(msg.get("app.bizInfoSummary.label.country").concat(SPACE))
+                                       .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(SPACE));
+                               break;
+                           }
+                        }
+                    } else {
+                        addressTH = addressTH.append(SPACE);
+                    }
+                } else if(customer.getCustomerEntity().getId() == 2){
+                    if(!Util.isNull(customer.getAddressesList()) && customer.getAddressesList().size() > 0){
+                        addressTH = new StringBuilder();
+                        for (Address allAddress : customer.getAddressesList()){
+                            if (allAddress.getAddressType().getId() == 4){
+                                addressTH = addressTH.append(msg.get("app.bizInfoSummary.label.addressNo").concat(SPACE))
+                                        .append((allAddress.getAddressNo() != null ? allAddress.getAddressNo() : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.addressMoo").concat(SPACE))
+                                        .append((allAddress.getMoo() != null ? allAddress.getMoo() : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.addressBuilding").concat(SPACE))
+                                        .append((allAddress.getBuilding() != null ? allAddress.getBuilding() : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.addressStreet").concat(SPACE))
+                                        .append((allAddress.getRoad() != null ? allAddress.getRoad() : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.subdistrict").concat(SPACE))
+                                        .append((allAddress.getSubDistrict() != null ? allAddress.getSubDistrict().getCode() != 0 ? allAddress.getSubDistrict().getName() : "-" : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.district").concat(SPACE))
+                                        .append((allAddress.getDistrict() != null ? allAddress.getDistrict().getId() != 0 ? allAddress.getDistrict().getName() : "-" : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.province").concat(SPACE))
+                                        .append((allAddress.getProvince() != null ? allAddress.getProvince().getCode() != 0 ? allAddress.getProvince().getName() : "-" : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.postCode").concat(SPACE))
+                                        .append((allAddress.getPostalCode() != null ? allAddress.getPostalCode() : "-").concat(SPACE))
+                                        .append(msg.get("app.bizInfoSummary.label.country").concat(SPACE))
+                                        .append((allAddress.getCountry() != null ? allAddress.getCountry().getId() != 0 ? allAddress.getCountry().getName() : "-" : "-").concat(SPACE));
+                                break;
+                            }
+                        }
+                    } else {
+                        addressTH = addressTH.append(SPACE);
+                    }
                 }
             }
             if(!Util.isNull(addressTH)){
@@ -336,7 +373,6 @@ public class PDFRejectLetter implements Serializable {
             } else {
                 letterReport.setAddress(SPACE);
             }
-
 
             switch (month){
                 case 1: setMonth = msg.get("app.report.month.january"); break;
@@ -352,7 +388,6 @@ public class PDFRejectLetter implements Serializable {
                 case 11: setMonth = msg.get("app.report.month.november"); break;
                 case 12: setMonth = msg.get("app.report.month.december"); break;
                 default:setMonth = SPACE;
-
             }
 
             StringBuilder stringBuilder =new StringBuilder();

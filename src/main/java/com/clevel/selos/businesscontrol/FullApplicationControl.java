@@ -1093,6 +1093,10 @@ public class FullApplicationControl extends BusinessControl {
                             }
                         }
                     }
+
+                    WorkCase workCase = workCaseDAO.findById(workCaseId);
+                    workCase.setRequestAppraisal(1);
+                    workCaseDAO.persist(workCase);
                 }
                 bpmExecutor.requestAppraisal(queueName, wobNumber, ActionCode.REQUEST_APPRAISAL.getVal(), getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId));
                 log.debug("requestAppraisal Customer Acceptance ::: Create Work Item for appraisal complete.");
@@ -1587,12 +1591,12 @@ public class FullApplicationControl extends BusinessControl {
             if(!exceptionalFlow){
                 //Checking for GenericDOA
                 if(priceReduceDOA != null && frontEndFeeReduceDOA != null) {
-                    if(priceReduceDOA.compareTo(new BigDecimal("0.25")) <= 0){
-                        if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){
+                    if(priceReduceDOA.compareTo(BigDecimal.ZERO) == 0){
+                        if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){     //Front End Fee > 1
                             //GH DOA Level
                             pricingDOALevel = PricingDOAValue.GH_DOA;
                             log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                        } else if (frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) >= 0 ) {
+                        } else if (frontEndFeeReduceDOA.compareTo(new BigDecimal("0.75")) >= 0 ) {      //Front End Fee > 0.75
                             //RGM DOA Level
                             pricingDOALevel = PricingDOAValue.RGM_DOA;
                             log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
@@ -1600,11 +1604,21 @@ public class FullApplicationControl extends BusinessControl {
                             pricingDOALevel = PricingDOAValue.ZM_DOA;
                             log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
                         }
+                    }else if(priceReduceDOA.compareTo(new BigDecimal("0.25")) <= 0){      //Pricing DOA >= 0.25
+                        if(frontEndFeeReduceDOA.compareTo(BigDecimal.ONE) > 0){     //Front End Fee > 1
+                            //GH DOA Level
+                            pricingDOALevel = PricingDOAValue.GH_DOA;
+                            log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        } else {
+                            //GH DOA Level
+                            pricingDOALevel = PricingDOAValue.RGM_DOA;
+                            log.debug("calculatePricingDOA Level [REGION MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
+                        }
                     } else if(priceReduceDOA.compareTo(new BigDecimal("0.25")) > 0 && priceReduceDOA.compareTo(BigDecimal.ONE) <= 0){
                         //GH DOA Level
                         pricingDOALevel = PricingDOAValue.GH_DOA;
                         log.debug("calculatePricingDOA Level [GROUP HEAD] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);
-                    } else {
+                    } else if(priceReduceDOA.compareTo(BigDecimal.ONE) > 0){
                         //CSSO DOA Level
                         pricingDOALevel = PricingDOAValue.CSSO_DOA;
                         log.debug("calculatePricingDOA Level [CSSO MANAGER] ::: priceReduceDOA : {}, frontEndFeeReduceDOA : {}", priceReduceDOA, frontEndFeeReduceDOA);

@@ -138,11 +138,12 @@ public class NCBSummary extends BaseController {
 
     public void onOpenNCBInfo() {
         log.info("openNCBInfo ::: ");
+        Date date = new Date();
 
         if (ncbSummaryViewItem != null) {
             try {
                 log.info("openNCBInfo ::: ncbSummaryViewItem :: {}",ncbSummaryViewItem);
-                HttpSession session = FacesUtil.getSession(false);
+                HttpSession session = FacesUtil.getSession(true);
 
                 session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
                 session.setAttribute("workCaseId", workCaseId);
