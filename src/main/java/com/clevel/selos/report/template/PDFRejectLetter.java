@@ -374,7 +374,6 @@ public class PDFRejectLetter implements Serializable {
                 letterReport.setAddress(SPACE);
             }
 
-
             switch (month){
                 case 1: setMonth = msg.get("app.report.month.january"); break;
                 case 2: setMonth = msg.get("app.report.month.february"); break;
@@ -389,7 +388,6 @@ public class PDFRejectLetter implements Serializable {
                 case 11: setMonth = msg.get("app.report.month.november"); break;
                 case 12: setMonth = msg.get("app.report.month.december"); break;
                 default:setMonth = SPACE;
-
             }
 
             StringBuilder stringBuilder =new StringBuilder();
