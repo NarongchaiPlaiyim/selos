@@ -383,7 +383,7 @@ public class BizInfoSummary extends BaseController {
         log.info("onCalSummaryTable end");
     }
 
-    private void onAddBizInfoDetail(){
+    public void onAddBizInfoDetail(){
         try {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("bizInfoDetailViewId", -1);
