@@ -220,11 +220,11 @@ function onKeyDownNumber(evt){
     }
     /** ALLOW NUMBER **/
     /*  96-105=number(0-9) */
-    /*if (keyCode > 95 && keyCode < 106) {
+    if (keyCode > 95 && keyCode < 106) {
         return true;
-    } else {*/
+    } else {
         return checkAllowKey(keyCode, '1234567890');
-    //}
+    }
 }
 
 function onKeyUpNumber(evt){
@@ -281,7 +281,11 @@ function onKeyDownMoney(evt){
     if(keyCode == 17 || keyCode == 86 || keyCode == 67 || keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
         return true;
     }
-    return checkAllowKey(keyCode, '0123456789.,');
+    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 190 ) {
+        return true;
+    } else {
+        return checkAllowKey(keyCode, '0123456789.,');
+    }
 }
 
 function onKeyUpMoney(evt){
