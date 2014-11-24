@@ -422,7 +422,7 @@ public class BizInfoSummary extends BaseController {
             onCreation();
 
             messageHeader = msg.get("app.messageHeader.info");
-            message = msg.get("app.tcg.response.save.success");
+            message = msg.get("app.bizInfoSummary.message.body.save.success");
             severity = MessageDialogSeverity.INFO.severity();
         } catch(Exception ex) {
             log.error("Business Info Summary :: Exception : {}", Util.getMessageException(ex));

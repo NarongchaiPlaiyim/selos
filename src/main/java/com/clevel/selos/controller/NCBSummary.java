@@ -147,15 +147,15 @@ public class NCBSummary extends BaseController {
                 session.setAttribute("customerId", ncbSummaryViewItem.getCustomerId());    // set customerId to NCB information
                 session.setAttribute("workCaseId", workCaseId);
 
-                slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail - Customer ID :: " + ncbSummaryViewItem.getCustomerId(), date, ActionResult.SUCCESS, "");
+//                slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail - Customer ID :: " + ncbSummaryViewItem.getCustomerId(), date, ActionResult.SUCCESS, "");
 
                 FacesUtil.redirect("/site/NCBInfo.jsf");
             } catch (Exception e) {
                 log.error("onOpenNCBInfo Exception : {}", Util.getMessageException(e));
-                slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail - Customer ID :: " + ncbSummaryViewItem.getCustomerId(), date, ActionResult.FAILED, Util.getMessageException(e));
+//                slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail - Customer ID :: " + ncbSummaryViewItem.getCustomerId(), date, ActionResult.FAILED, Util.getMessageException(e));
             }
         } else {
-            slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail", date, ActionResult.FAILED, "NCB Summary View Item is Null");
+//            slosAuditor.add(Screen.NCB_SUMMARY.value(), userId, ActionAudit.ON_EDIT, "On Edit NCB Detail", date, ActionResult.FAILED, "NCB Summary View Item is Null");
         }
     }
 
