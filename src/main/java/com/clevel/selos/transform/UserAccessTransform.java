@@ -24,9 +24,9 @@ public class UserAccessTransform extends Transform {
         UserAccessView userAccessView = new UserAccessView();
 
         userAccessView.setScreenId(userAccess.getScreenId());
-        userAccessView.setStepId(userAccess.getStep().getId());
-        userAccessView.setStageId(userAccess.getStage().getId());
-        userAccessView.setRoleId(userAccess.getRole().getId());
+        userAccessView.setStepId(userAccess.getStep() != null ? userAccess.getStep().getId() : 0);
+        userAccessView.setStageId(userAccess.getStage() != null ? userAccess.getStage().getId() : 0);
+        userAccessView.setRoleId(userAccess.getRole() != null ? userAccess.getRole().getId() : 0);
         userAccessView.setAccessFlag(Util.isTrue(userAccess.getAccessFlag()));
 
         return userAccessView;

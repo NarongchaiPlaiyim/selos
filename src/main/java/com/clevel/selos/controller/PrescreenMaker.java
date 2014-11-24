@@ -17,6 +17,7 @@ import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -46,6 +47,7 @@ public class PrescreenMaker extends BaseController {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -57,6 +59,9 @@ public class PrescreenMaker extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    SLOSAuditor slosAuditor;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -148,7 +153,6 @@ public class PrescreenMaker extends BaseController {
     private CustomerEntity caseBorrowerType;
     private CustomerEntity customerEntity;
 
-
     enum ModeForButton {ADD, EDIT, DELETE}
 
     enum ListCustomerName {BORROWER, GUARANTOR, RELATED, CUSTOMER}
@@ -170,6 +174,8 @@ public class PrescreenMaker extends BaseController {
     private boolean enableSearchForm;
 
     private MaritalStatus previousMaritalStatus;
+
+    private Screen PRESCREEN_PAGE;
 
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
@@ -267,7 +273,7 @@ public class PrescreenMaker extends BaseController {
                     FacesUtil.redirect("/site/prescreenMaker.jsf");
                 } else if (stepId == StepValue.PRESCREEN_CHECKER.value() && page.equals("prescreen.jsf")) {
                     FacesUtil.redirect("/site/prescreenChecker.jsf");
-                } else if (stepId == StepValue.COMPLETED_STEP.value() && page.equals("prescreen.jsf")){
+                } else if (stepId == StepValue.COMPLETED_STEP.value() && page.equals("prescreen.jsf")) {
                     FacesUtil.redirect("/site/prescreenMaker.jsf");
                 } else {
                     FacesUtil.redirect("/site/inbox.jsf");
@@ -284,6 +290,7 @@ public class PrescreenMaker extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation :::");
+        Date actionDate = new Date();
         HttpSession session = FacesUtil.getSession(false);
 
         workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
@@ -291,7 +298,13 @@ public class PrescreenMaker extends BaseController {
         queueName = Util.parseString(session.getAttribute("queueName"), "");
         wobNumber = Util.parseString(session.getAttribute("wobNumber"), "");
 
-        if (workCasePreScreenId != 0) {
+        if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
+            PRESCREEN_PAGE = Screen.PRESCREEN_INITIAL;
+        } else {
+            PRESCREEN_PAGE = Screen.PRESCREEN_MAKER;
+        }
+
+        if (!Util.isZero(workCasePreScreenId)) {
             log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.debug("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
@@ -301,8 +314,7 @@ public class PrescreenMaker extends BaseController {
             log.debug("onCreation ::: stepId : {}", stepId);
             log.debug("onCreation ::: queueName : {}", queueName);
 
-
-            user = (User) session.getAttribute("user");
+            user = getCurrentUser();
 
             modeForButton = ModeForButton.ADD;
             customerModifyFlag = 0;
@@ -315,16 +327,21 @@ public class PrescreenMaker extends BaseController {
             WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
             log.debug("workCasePrescreen Request Type : {}", workCasePrescreen.getRequestType().getId());
 
-            if(workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
+            if (workCasePrescreen.getRequestType().getId() == CaseRequestTypes.NEW_CASE.value()) {
                 String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
                 if (stepId == StepValue.PRESCREEN_INITIAL.value()) {
                     loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_INITIAL, ownerCaseUserId);
+                    slosAuditor.add(Screen.PRESCREEN_INITIAL.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
                 } else {
                     loadFieldControlPreScreen(workCasePreScreenId, Screen.PRESCREEN_MAKER, ownerCaseUserId);
+                    slosAuditor.add(Screen.PRESCREEN_MAKER.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
                 }
+            } else {
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
             }
         } else {
             //--- Redirect to Inbox ---//
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid session.");
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
             FacesUtil.redirect("/site/inbox.jsf");
             return;
@@ -619,44 +636,11 @@ public class PrescreenMaker extends BaseController {
 
     }
 
-
-
-    /*public void onCloseSale() {
-        log.debug("onCloseSale ::: queueName : {}", queueName);
-        try {
-            //TODO Check Modified flag
-            int modifyFlag = prescreenBusinessControl.getModifyValue(workCasePreScreenId);
-            if (modifyFlag == 1) {
-                messageHeader = "Exception";
-                message = "Some of data has been changed. Please Retrive Interface before Closesale.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else if (modifyFlag == 2) {
-                messageHeader = "Exception";
-                message = "Could not get data for PreScreen.";
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                prescreenBusinessControl.duplicateData(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
-                //prescreenBusinessControl.closeSale(workCasePreScreenId, queueName, ActionCode.CLOSE_SALES.getVal());
-
-                messageHeader = "Information";
-                message = "Close Sales Complete.";
-
-                RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
-            }
-        } catch (Exception ex) {
-            messageHeader = "Exception";
-            message = "Close Sales Failed, " + ex.getMessage();
-
-            log.error("onCloseSale failed : ", ex);
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
-    }*/
-
     // *** Function For Facility *** //
     public void onAddFacility() {
         log.debug("onAddFacility ::: ");
         log.debug("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
-
+        Date actionDate = new Date();
         if (prescreenView.getProductGroup() != null) {
             //*** Reset form ***//
             log.debug("onAddFacility ::: Reset Form");
@@ -667,10 +651,12 @@ public class PrescreenMaker extends BaseController {
             modeForButton = ModeForButton.ADD;
             RequestContext context = RequestContext.getCurrentInstance();
             context.execute("PF('facilityDlg').show()");
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Facility", actionDate, ActionResult.SUCCESS, "");
         }
     }
 
     public void onEditFacility() {
+        Date actionDate = new Date();
         modeForButton = ModeForButton.EDIT;
         log.debug("onEditFacility ::: selectFacilityItem : {}", selectFacilityItem);
 
@@ -683,9 +669,11 @@ public class PrescreenMaker extends BaseController {
         facility.setProductProgram(productProgram);
         facility.setCreditType(creditType);
         facility.setRequestAmount(requestAmount);
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Edit Facility", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onSaveFacility() {
+        Date actionDate = new Date();
         log.debug("onSaveFacility ::: mode : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -708,6 +696,7 @@ public class PrescreenMaker extends BaseController {
                 facilityItem.setRequestAmount(facility.getRequestAmount());
                 facilityViewList.add(facilityItem);
                 log.debug("onSaveFacility ::: modeForButton : {}, Completed.", modeForButton);
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Facility", actionDate, ActionResult.SUCCESS, "");
             } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 ProductProgram productProgram = productProgramDAO.findById(facility.getProductProgram().getId());
                 CreditType creditType = creditTypeDao.findById(facility.getCreditType().getId());
@@ -715,12 +704,15 @@ public class PrescreenMaker extends BaseController {
                 facilityViewList.get(rowIndex).setCreditType(creditType);
                 facilityViewList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
                 log.debug("onSaveFacility ::: modeForButton : {}, rowIndex : {}, Completed.", modeForButton, rowIndex);
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Facility", actionDate, ActionResult.SUCCESS, "");
             } else {
                 log.debug("onSaveFacility ::: Undefined modeForbutton !!");
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Facility", actionDate, ActionResult.FAILED, "Could not find mode for button.");
             }
             complete = true;
         } else {
             log.debug("onSaveFacility ::: validation failed.");
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Facility", actionDate, ActionResult.FAILED, "Input mandatory failed.");
             complete = false;
         }
         context.addCallbackParam("functionComplete", complete);
@@ -729,10 +721,12 @@ public class PrescreenMaker extends BaseController {
     public void onDeleteFacility() {
         log.debug("onDeleteFacility ::: selectFacilityItem : {}");
         facilityViewList.remove(selectFacilityItem);
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Facility", new Date(), ActionResult.SUCCESS, "");
     }
 
     // *** Function For Customer *** //
     public void onAddCustomerInfo() {
+        Date actionDate = new Date();
         log.debug("onAddCustomerInfo ::: reset form");
         // *** Reset Form *** //
         modeForButton = ModeForButton.ADD;
@@ -808,9 +802,11 @@ public class PrescreenMaker extends BaseController {
         enableTMBCustomerId = false;
         enableCitizenId = false;
         enableSearchForm = true;
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Customer Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onEditCustomerInfo() {
+        Date actionDate = new Date();
         log.debug("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
         log.debug("onEditCustomer ::: customerInfoViewList : {}", customerInfoViewList);
         //Clone object
@@ -847,7 +843,7 @@ public class PrescreenMaker extends BaseController {
                     spouse.reset();
                     borrowerInfo.setSpouse(spouse);
                 } else {
-                    if(Util.isTrue(borrowerInfo.getMaritalStatus().getSpouseFlag())) {
+                    if (Util.isTrue(borrowerInfo.getMaritalStatus().getSpouseFlag())) {
                         spouseRelation = cloner.deepClone(borrowerInfo.getSpouse().getRelation());
                         onChangeSpouseRelation();
                         spouseReference = cloner.deepClone(borrowerInfo.getSpouse().getReference());
@@ -934,6 +930,7 @@ public class PrescreenMaker extends BaseController {
         }
         log.debug("customerInfoViewList before save edit : {}", customerInfoViewList);
         enableSearchForm = false;
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Customer Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onChangeProvinceBorrower() {
@@ -1003,6 +1000,7 @@ public class PrescreenMaker extends BaseController {
     }
 
     public void onSaveCustomerInfo() {
+        Date actionDate = new Date();
         log.debug("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
         log.debug("onSaveCustomerInfo ::: customerInfoViewList : {}", customerInfoViewList);
 
@@ -1181,7 +1179,7 @@ public class PrescreenMaker extends BaseController {
                             //Add flag for popup when save
                             customerModifyFlag = customerModifyFlag + 1;
                         } else {
-                            //customerInfoViewList.add(borrowerInfo);
+                            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Individual ).", actionDate, ActionResult.FAILED, "Invalid relation type.");
                             complete = false;
                             messageHeader = "Save customer failed.";
                             message = "Invalid relation type.";
@@ -1190,7 +1188,6 @@ public class PrescreenMaker extends BaseController {
                         if (complete) {
                             //--- Spouse ---
                             log.debug("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
-                            //if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
                             if (borrowerInfo.getMaritalStatus().getSpouseFlag() == 1) {
                                 if (borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0) {
                                     CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
@@ -1226,18 +1223,24 @@ public class PrescreenMaker extends BaseController {
                                         //Add flag for popup when save
                                         customerModifyFlag = customerModifyFlag + 1;
                                     } else {
+                                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Spouse Info ( Individual ).", actionDate, ActionResult.FAILED, "Invalid relation type");
                                         complete = false;
                                         messageHeader = "Save customer (Spouse) failed.";
                                         message = "Invalid relation type.";
                                     }
                                 }
+                                if (complete) {
+                                    slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Individual ).", actionDate, ActionResult.SUCCESS, "");
+                                }
+                            } else {
+                                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Individual ).", actionDate, ActionResult.SUCCESS, "");
                             }
                         }
                     } else {
                         // Validate citizen failed..
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Individual ).", actionDate, ActionResult.FAILED, "Citizen validation failed.");
                         complete = false;
                     }
-
                 } else if (borrowerInfo.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()) { //Juristic
                     DocumentType documentType = new DocumentType();
                     documentType.setId(3);
@@ -1283,20 +1286,27 @@ public class PrescreenMaker extends BaseController {
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         } else {
+                            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Juristic ).", actionDate, ActionResult.FAILED, "Invalid relation type.");
                             complete = false;
                             messageHeader = "Save customer failed.";
                             message = "Invalid relation type.";
                         }
                     } else {
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Juristic ).", actionDate, ActionResult.FAILED, "Duplicate registration id.");
                         complete = false;
                     }
+
+                    if (complete) {
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Juristic ).", actionDate, ActionResult.SUCCESS, "");
+                    }
                 } else {
+                    slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Customer Info ( Juristic ).", actionDate, ActionResult.FAILED, "Invalid customer entity.");
                     complete = false;
                     messageHeader = "Save customer failed.";
                     message = "Invalid customer entity.";
                 }
             }
-//---------------------------------------------------------------- EDIT CUSTOMER ------------------------------------------------------------------//
+        //-----------------EDIT CUSTOMER------------------------//
         } else { // Edit
             log.debug("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
             log.debug("onSaveCustomerInfo ::: customerInfoList : {}", customerInfoViewList);
@@ -1584,6 +1594,7 @@ public class PrescreenMaker extends BaseController {
                                     customerModifyFlag = customerModifyFlag + 1;
                                 }
                             }
+                            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info ( Individual ).", actionDate, ActionResult.SUCCESS, "");
                         } else if (borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getSpouseFlag() == 0) {
                             //TODO check old spouse and remove from list
                             log.debug("onSaveCustomer ::: remove spouse from list");
@@ -1601,9 +1612,11 @@ public class PrescreenMaker extends BaseController {
                                 }
                                 deleteCustomerInfoViewList.add(oldSpouse);
                             }
+                            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info ( Individual ).", actionDate, ActionResult.SUCCESS, "");
                         }
                         customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                     } else {
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info ( Individual ).", actionDate, ActionResult.FAILED, "Citizen validation failed.");
                         complete = false;
                     }
 
@@ -1713,10 +1726,13 @@ public class PrescreenMaker extends BaseController {
                             }
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         }
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info ( Juristic ).", actionDate, ActionResult.SUCCESS, "");
                     } else {
+                        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info ( Juristic ).", actionDate, ActionResult.FAILED, "Registration validation failed.");
                         complete = false;
                     }
                 } else {
+                    slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Customer Info.", actionDate, ActionResult.FAILED, "Invalid customer entity");
                     complete = false;
                     messageHeader = "Save customer failed.";
                     message = "Invalid customer entity.";
@@ -1788,6 +1804,7 @@ public class PrescreenMaker extends BaseController {
     }
 
     public void onDeleteCustomerInfo() {
+        Date actionDate = new Date();
         log.debug("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         if (deleteCustomerInfoViewList == null) {
             deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
@@ -1884,6 +1901,7 @@ public class PrescreenMaker extends BaseController {
         if (customerInfoViewList.size() == 0) {
             caseBorrowerTypeId = 0;
         }
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Customer Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onDeleteBorrower() {
@@ -1937,28 +1955,8 @@ public class PrescreenMaker extends BaseController {
 
     }
 
-    /*private void enableCustomerForm(boolean enable){
-        isCitizenId = enable;
-        isCustomerId = enable;
-        isServiceSegment = !enable;
-        isRelation = !enable;
-        isCollateralOwner = !enable;
-        isReference = !enable;
-        isPercentShare = !enable;
-        isTitleTh = !enable;
-        isFirstNameTh = !enable;
-        isLastNameTh = !enable;
-        isDateOfBirth = !enable;
-        isAge = enable;
-        isNationality = !enable;
-        isAddress = !enable;
-        isPostalCode = !enable;
-        isApproxIncome = !enable;
-        isMaritalStatus= !enable;
-        isDateOfRegister = !enable;
-    }*/
-
     public void onSearchCustomerInfo() {
+        Date actionDate = new Date();
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
         CustomerInfoResultView customerInfoResultView = new CustomerInfoResultView();
@@ -2012,29 +2010,26 @@ public class PrescreenMaker extends BaseController {
                                 //--Check Citizen ID or TMB Customer ID to Search Again
                                 boolean searchSpouse = false;
                                 CustomerInfoView tmpSearchSpouseInfo = borrowerInfo.getSpouse();
-                                if(!Util.isEmpty(tmpSearchSpouseInfo.getTmbCustomerId())){
+                                if (!Util.isEmpty(tmpSearchSpouseInfo.getTmbCustomerId())) {
                                     tmpSearchSpouseInfo.setSearchBy(2);
                                     searchSpouse = true;
-                                }else if(!Util.isEmpty(tmpSearchSpouseInfo.getCitizenId())){
+                                } else if (!Util.isEmpty(tmpSearchSpouseInfo.getCitizenId())) {
                                     tmpSearchSpouseInfo.setSearchBy(1);
                                     searchSpouse = true;
                                 }
                                 log.debug("onSearchCustomerIfo ::: Search Spouse : {}", searchSpouse);
-                                if(searchSpouse) {
+                                if (searchSpouse) {
                                     tmpSearchSpouseInfo.setDocumentType(documentTypeDAO.findById(1));
                                     tmpSearchSpouseInfo.setSearchBy(1);
                                     tmpSearchSpouseInfo.setSearchId(tmpSearchSpouseInfo.getCitizenId());
                                     log.debug("tmpSearchSpouseInfo : {}", tmpSearchSpouseInfo);
                                     CustomerInfoResultView spouseCustomerResultView = prescreenBusinessControl.getCustomerInfoFromRM(tmpSearchSpouseInfo, user);
                                     log.debug("spouseCustomerResultView : {}", spouseCustomerResultView);
-                                    if(spouseCustomerResultView.getActionResult() == ActionResult.SUCCESS) {
+                                    if (spouseCustomerResultView.getActionResult() == ActionResult.SUCCESS) {
                                         CustomerInfoView tmpSpouseInfo = spouseCustomerResultView.getCustomerInfoView();
                                         borrowerInfo.setSpouse(tmpSpouseInfo);
                                     }
                                 }
-                                /*if(Util.isEmpty(borrowerInfo.getSpouse().getCitizenId())){
-                                    enableSpous
-                                }*/
                                 onChangeProvinceSpouse();
                                 onChangeDistrictSpouse();
                                 onChangeDate("spouse");
@@ -2044,6 +2039,7 @@ public class PrescreenMaker extends BaseController {
 
                     messageHeader = "Customer search complete.";
                     message = "Customer found.";
+                    slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Customer Info.", actionDate, ActionResult.SUCCESS, "Search customer search id : ".concat(searchId).concat(". Customer found."));
                 } else {
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     if (borrowerInfo.getSearchBy() == 2) {
@@ -2066,10 +2062,10 @@ public class PrescreenMaker extends BaseController {
                     borrowerInfo.setCustomerEntity(customerEntity);
 
                     //Assign value after search not found
-
-
                     messageHeader = "Customer search complete.";
                     message = "Search customer not found.";
+
+                    slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Search Customer Info.", actionDate, ActionResult.SUCCESS, "Search customer search id : ".concat(borrowerInfo.getSearchId()).concat(". Customer found."));
                 }
             } else {
                 if (borrowerInfo.getSearchBy() == 2) {
@@ -2101,21 +2097,22 @@ public class PrescreenMaker extends BaseController {
 
                 messageHeader = "Customer search complete.";
                 message = customerInfoResultView.getReason();
-
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Search Customer Info.", actionDate, ActionResult.FAILED, customerInfoResultView.getReason());
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
+            log.error("Exception while search customer : ", ex);
             if (borrowerInfo.getSearchBy() == 2) {
                 //enableDocumentType = true;
                 borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
             } else {
                 //enableDocumentType = false;
                 if (borrowerInfo.getDocumentType() != null) {
-                    if (borrowerInfo.getDocumentType().getId() == 1 ) {
+                    if (borrowerInfo.getDocumentType().getId() == 1) {
                         if (borrowerInfo.getSearchId().length() > 12) {
                             borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0, 13));
                         }
-                    } else if(borrowerInfo.getDocumentType().getId() == 2){
+                    } else if (borrowerInfo.getDocumentType().getId() == 2) {
                         borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
                     } else if (borrowerInfo.getDocumentType().getId() == 3) {
                         if (borrowerInfo.getSearchId().length() > 12) {
@@ -2131,9 +2128,10 @@ public class PrescreenMaker extends BaseController {
             enableTMBCustomerId = true;
             enableCitizenId = true;
             enableSearchForm = false;
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            log.debug("onSearchCustomerInfo Exception : ", ex);
             messageHeader = "Customer search failed.";
-            message = ex.getMessage();
+            message = Util.getMessageException(ex);
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Search Customer Info.", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -2257,40 +2255,40 @@ public class PrescreenMaker extends BaseController {
     public void onChangeMaritalStatus() {
         log.debug("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
         //TODO Check Spouse.. if any spouse remove it
-        if(borrowerInfo != null && borrowerInfo.getMaritalStatus().getId() == 0){
+        if (borrowerInfo != null && borrowerInfo.getMaritalStatus().getId() == 0) {
             return;
         }
 
         boolean maritalStatusFlag;
         boolean previousStatusFlag;
         MaritalStatus maritalStatus = maritalStatusDAO.findById(borrowerInfo.getMaritalStatus().getId());
-        if(maritalStatus != null && maritalStatus.getSpouseFlag() == 1){
+        if (maritalStatus != null && maritalStatus.getSpouseFlag() == 1) {
             maritalStatusFlag = true;
         } else {
             maritalStatusFlag = false;
         }
 
-        if(previousMaritalStatus != null && borrowerInfo.getRelation() != null && borrowerInfo.getRelation().getId() == RelationValue.BORROWER.value()) {
-            if(borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()) {
+        if (previousMaritalStatus != null && borrowerInfo.getRelation() != null && borrowerInfo.getRelation().getId() == RelationValue.BORROWER.value()) {
+            if (borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() == RelationValue.BORROWER.value()) {
                 MaritalStatus prvMaritalStatus = maritalStatusDAO.findById(previousMaritalStatus.getId());
                 if (prvMaritalStatus != null && prvMaritalStatus.getSpouseFlag() == 1) {
                     previousStatusFlag = true;
                 } else {
                     previousStatusFlag = false;
                 }
-            }else{
+            } else {
                 previousStatusFlag = false;
             }
             log.debug("previousStatusFlag : {}", previousStatusFlag);
 
             if (maritalStatusFlag == false && previousStatusFlag == true) {
-                if(borrowerInfo.getNcbFlag() == 2 && ( borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getNcbFlag() == 2)) {
+                if (borrowerInfo.getNcbFlag() == 2 && (borrowerInfo.getSpouse() != null && borrowerInfo.getSpouse().getNcbFlag() == 2)) {
                     Cloner cloner = new Cloner();
                     messageHeader = "Information.";
                     message = "Can not change marriage status to single or remove borrower at this step.";
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     borrowerInfo.setMaritalStatus(cloner.deepClone(previousMaritalStatus));
-                }else{
+                } else {
                     borrowerInfo.setMaritalStatus(maritalStatus);
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();
@@ -2304,7 +2302,7 @@ public class PrescreenMaker extends BaseController {
                 spouse.setSpouse(null);
                 borrowerInfo.setSpouse(spouse);
             }
-        }else{
+        } else {
             borrowerInfo.setMaritalStatus(maritalStatus);
             CustomerInfoView spouse = new CustomerInfoView();
             spouse.reset();
@@ -2355,37 +2353,20 @@ public class PrescreenMaker extends BaseController {
         }*/
     }
 
-    /*// *** Calculate Age And Year In Business ***//*/
-    public void onCalAge(String type){
-        log.debug("onCalAge ::: DateOfBirth:{} ", borrowerInfo.getDateOfBirth());
-        int age = 0;
-        if(type.trim().toUpperCase().equals("AGE")){
-            if(borrowerInfo.getDateOfBirth() != null){
-                age = Util.calAge(borrowerInfo.getDateOfBirth());
-                borrowerInfo.setAge(age);
-            }else if(type.trim().toUpperCase().equals("SPOUSEAGE")){
-                age = Util.calAge(borrowerInfo.getSpouse().getDateOfBirth());
-                spouseInfo.setAge(age);
-                borrowerInfo.setSpouse(spouseInfo);
-            }else if(type.trim().toUpperCase().equals("DATEOFREGISTER")){
-                age = Util.calAge(borrowerInfo.getDateOfRegister());
-                borrowerInfo.setAge(age);
-            }
-        }
-        log.debug("onCalAge ::: DateOfBirth:{}", age);
-    }*/
-
     // *** Function For BusinessInfoView *** //
     public void onAddBusinessInfo() {
+        Date actionDate = new Date();
         log.debug("onAddBusinessInfo ::: reset form");
         /*** Reset Form ***/
         modeForButton = ModeForButton.ADD;
 
         bizInfoView = new BizInfoDetailView();
         bizInfoView.reset();
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Business Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onEditBusinessInfo() {
+        Date actionDate = new Date();
         log.debug("onEditBusinessInfo ::: selectBusinessInfo : {}", selectBizInfoItem);
         modeForButton = ModeForButton.EDIT;
 
@@ -2394,9 +2375,11 @@ public class PrescreenMaker extends BaseController {
         bizInfoView.setBizGroup(selectBizInfoItem.getBizGroup());
 
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizInfoView.getBizGroup());
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Business Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onSaveBusinessInfo() {
+        Date actionDate = new Date();
         log.debug("onSaveBusinessInfo ::: modeForButton : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -2417,6 +2400,7 @@ public class PrescreenMaker extends BaseController {
 
                 bizInfoViewList.add(bizInfoDetailView);
                 complete = true;
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Business Info.", actionDate, ActionResult.SUCCESS, "");
             } else if (modeForButton.equals(ModeForButton.EDIT)) {
                 log.debug("onSaveBusinessInfo ::: rowIndex : {}", rowIndex);
                 BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
@@ -2432,6 +2416,9 @@ public class PrescreenMaker extends BaseController {
                 bizInfoViewList.set(rowIndex, bizInfoDetailView);
 
                 complete = true;
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Business Info.", actionDate, ActionResult.SUCCESS, "");
+            }else{
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Business Info.", actionDate, ActionResult.FAILED, "Could not find mode for button.");
             }
         }
         context.addCallbackParam("functionComplete", complete);
@@ -2440,27 +2427,38 @@ public class PrescreenMaker extends BaseController {
     public void onDeleteBusinessInfo() {
         log.debug("onDeleteBusinessInformation ::: selectBizInfoItem : {}", selectBizInfoItem);
         bizInfoViewList.remove(selectBizInfoItem);
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Delete Business Info.", new Date(), ActionResult.SUCCESS, "");
     }
 
     // *** Function For ProposeCollateral ***//
     public void onAddProposeCollateral() {
+        Date actionDate = new Date();
         log.debug("onAddProposeCollateral :::");
         //*** Reset form ***//
         log.debug("onAddProposeCollateral ::: Reset Form");
         modeForButton = ModeForButton.ADD;
         proposeCollateral = new PrescreenCollateralView();
         proposeCollateral.setPotentialCollateral(new PotentialCollateral());
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Collateral Info.", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onEditProposeCollateral() {
+        Date actionDate = new Date();
         modeForButton = ModeForButton.EDIT;
         log.debug("onEditProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
 
         Cloner cloner = new Cloner();
-        proposeCollateral = cloner.deepClone(selectProposeCollateralItem);
+        try {
+            proposeCollateral = cloner.deepClone(selectProposeCollateralItem);
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Collateral Info.", actionDate, ActionResult.SUCCESS, "");
+        }catch(Exception ex){
+            log.error("Exception while edit propose collateral : ", ex);
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Collateral Info.", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+        }
     }
 
     public void onSaveProposeCollateral() {
+        Date actionDate = new Date();
         log.debug("onSaveProposeCollateral ::: modeForButton : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -2476,17 +2474,21 @@ public class PrescreenMaker extends BaseController {
 
                 proposePrescreenCollateralViewList.add(collateral);
                 log.debug("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Collateral Info.", actionDate, ActionResult.SUCCESS, "");
             } else if (modeForButton.equals(ModeForButton.EDIT)) {
                 PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(proposeCollateral.getPotentialCollateral().getId());
                 proposeCollateral.setPotentialCollateral(potentialCollateral);
                 proposePrescreenCollateralViewList.set(rowIndex, proposeCollateral);
                 log.debug("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Collateral Info.", actionDate, ActionResult.SUCCESS, "");
             } else {
                 log.debug("onSaveProposeCollateral ::: Undefined modeForbutton !!");
+                slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Collateral Info.", actionDate, ActionResult.FAILED, "Could not find mode for button.");
             }
             complete = true;
         } else {
             complete = false;
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Collateral Info.", actionDate, ActionResult.FAILED, "Input mandatory validation failed.");
             log.debug("onSaveProposeCollateral ::: validation failed.");
         }
         context.addCallbackParam("functionComplete", complete);
@@ -2495,10 +2497,11 @@ public class PrescreenMaker extends BaseController {
     public void onDeleteProposeCollateral() {
         log.debug("onDeleteProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
         proposePrescreenCollateralViewList.remove(selectProposeCollateralItem);
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Save Collateral Info.", new Date(), ActionResult.SUCCESS, "");
 
     }
 
-    private void updateHeaderInfo(){
+    private void updateHeaderInfo() {
         AppHeaderView appHeaderView = getAppHeaderView();
         appHeaderView = headerControl.updateCustomerInfo(appHeaderView, workCasePreScreenId, 0);
         appHeaderView.setProductGroup(prescreenView.getProductGroup() != null ? prescreenView.getProductGroup().getName() : "");
@@ -2509,6 +2512,7 @@ public class PrescreenMaker extends BaseController {
 
     // *** Function for Prescreen Initial *** //
     public void onSavePrescreenInitial() {
+        Date actionDate = new Date();
         log.debug("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
         log.debug("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
 
@@ -2523,34 +2527,15 @@ public class PrescreenMaker extends BaseController {
 
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.SUCCESS, "");
             onCreation();
             updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
-            log.error("onSavePreScreenInitial ::: exception : {}", ex);
-            //TODO show messageBox error
+            log.error("onSavePreScreenInitial ::: exception : ", ex);
             messageHeader = "Save PreScreen Failed.";
-            if (ex.getCause() != null) {
-                message = "Save PreScreen data failed. Cause : " + ex.getCause().toString();
-            } else {
-                message = "Save PreScreen data failed. Cause : " + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }
-    }
-
-    public void onCancelCA() {
-        try {
-            //TODO : set reason and remark from screen.
-            prescreenBusinessControl.cancelCase(queueName, wobNumber, ActionCode.CANCEL_CA.getVal(), "", "");
-            messageHeader = "Information.";
-            message = "Cancel CA Complete.";
-
-            RequestContext.getCurrentInstance().execute("msgBoxRedirectDlg.show()");
-        } catch (Exception ex) {
-            messageHeader = "Exception.";
-            message = "Cancel CA Failed, cause : " + Util.getMessageException(ex);
-
+            message = Util.getMessageException(ex);
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -2558,6 +2543,7 @@ public class PrescreenMaker extends BaseController {
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen() {
         //*** validate forms ***//
+        Date actionDate = new Date();
         log.debug("onSavePrescreen ::: prescreenView : {}", prescreenView);
         try {
             customerModifyFlag = customerModifyFlag + prescreenBusinessControl.checkModifyValue(prescreenView, workCasePreScreenId);
@@ -2575,14 +2561,15 @@ public class PrescreenMaker extends BaseController {
             if (modifyFlag) {
                 message = message + "<br/><br/>Prescreen data has been modified.<br/>Please refresh interface info.";
             }
-
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.SUCCESS, "");
             onCreation();
             updateHeaderInfo();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
-            log.error("onSavePrescreen ::: exception : {}", ex);
+            log.error("Exception while save PreScreen : ", ex);
             messageHeader = "Save PreScreen Failed.";
             message = "Save PreScreen data failed. Cause : " + Util.getMessageException(ex);
+            slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.SUCCESS, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -2599,6 +2586,7 @@ public class PrescreenMaker extends BaseController {
     }
 
     public void onChangeProductGroup() {
+        Date actionDate = new Date();
         getProductProgramList();
         //*** Check if Facility added system must be remove all ***//
         log.debug("onChangeProductGroup :::: facilityViewList.size :::::::::::" + facilityViewList.size());
@@ -2610,6 +2598,7 @@ public class PrescreenMaker extends BaseController {
         if (facilityViewList.size() > 0) {
             facilityViewList.removeAll(facilityViewList);
         }
+        slosAuditor.add(PRESCREEN_PAGE.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Change Product Group", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onCancelChangeProductGroup() {
@@ -2670,90 +2659,6 @@ public class PrescreenMaker extends BaseController {
         log.debug("onChangeBusinessDesc ::: businessDesc : {}", bizInfoView.getBizDesc());
 
     }
-
-    /*
-
-
-    public void onClearDlg() {
-
-        dCollateralAmount = null;
-        dCollateralTypeName = "";
-        modeForCollateral = "add";
-    }
-
-    public void onAddExistCollateral() {
-        log.debug("onAddExistCollateral {}");
-        PrescreenCollateralView collExist = null;
-
-        log.debug("dCollateralTypeName is ", existCollateralTypeName);
-        log.debug("dCollateralAmount is ", existCollateralAmount);
-        collExist = new PrescreenCollateralView();
-        collExist.setCollateralTypeName(existCollateralTypeName);
-        collExist.setCollateralAmount(existCollateralAmount);
-        proposePrescreenCollateralViewList.add(collExist);
-
-    }
-
-    public void onSelectedExistCollateral(int row) {
-        existCollateralAmount = proposePrescreenCollateralViewList.get(row).getCollateralAmount();
-        existCollateralTypeName = proposePrescreenCollateralViewList.get(row).getCollateralTypeName();
-        indexExistEdit = row;
-        modeForExist = "edit";
-    }
-
-    public void onEditExistCollateral() {
-        proposePrescreenCollateralViewList.get(indexExistEdit).setCollateralAmount(existCollateralAmount);
-        proposePrescreenCollateralViewList.get(indexExistEdit).setCollateralTypeName(existCollateralTypeName);
-        modeForExist = "add";
-        existCollateralTypeName = "";
-        existCollateralAmount = null;
-    }
-
-    public void onDeleteExistCollateral(int row) {
-        proposePrescreenCollateralViewList.remove(row);
-    }
-
-
-
-
-
-    public void onChangeCreditType(){
-        log.debug("onChangeCreditType ::: selectCreditType.Id() >>> " + selectCreditType.getId());
-//        CreditType creditType  = creditTypeDao.findById(selectCreditType.getId());
-//        log.debug("onChangeCreditType ::: selectCreditType.Name() >>> " + creditType.getName());
-    }*/
-
-    // open dialog
- /*   public void onSelectedFacility(int rowNumber) {
-        modeForButton = "edit";
-        rowIndex = rowNumber;
-        log.debug("onSelectedFacility :::  rowNumber  :: " + rowNumber);
-        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getFacilityName :: " + rowNumber + "  "
-                + facilityViewList.get(rowNumber).getCreditType().getId());
-        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getProductProgramName :: " + rowNumber + "  "
-                + facilityViewList.get(rowNumber).getProductProgram().getId());
-        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getRequestAmount :: " + rowNumber + "  "
-                + facilityViewList.get(rowNumber).getRequestAmount());
-
-        selectProductProgram = facilityViewList.get(rowNumber).getProductProgram();
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdProgram(selectProductProgram);
-        selectCreditType = facilityViewList.get(rowNumber).getCreditType();
-        facility.setProductProgram(selectProductProgram);
-        facility.setCreditType(selectCreditType);
-        facility.setRequestAmount(facilityViewList.get(rowNumber).getRequestAmount());
-
-
-    }*/
-
-    /*public void onEditFacility() {
-        ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        log.debug("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
-        log.debug("onEditFacility :::::: selectCreditType ::: "+selectCreditType.getName());
-        facilityViewList.get(rowIndex).setProductProgram(productProgram);
-        facilityViewList.get(rowIndex).setCreditType(creditType);
-        facilityViewList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
-    }*/
 
     public ModeForButton getModeForButton() {
         return modeForButton;
@@ -3302,7 +3207,6 @@ public class PrescreenMaker extends BaseController {
     }
 
     public String getCurrentDateDDMMYY() {
-        log.debug("current date : {}", getCurrentDate());
         return currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
     }
 

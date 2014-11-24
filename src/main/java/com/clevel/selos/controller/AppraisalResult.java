@@ -11,15 +11,13 @@ import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.AppraisalDataResult;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.DecisionType;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AppraisalCompany;
 import com.clevel.selos.model.db.master.AppraisalDivision;
 import com.clevel.selos.model.db.master.LocationProperty;
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -63,6 +61,9 @@ public class AppraisalResult extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    SLOSAuditor slosAuditor;
 
     @Inject
     private UserDAO userDAO;
@@ -168,7 +169,7 @@ public class AppraisalResult extends BaseController {
     }
 
     public void preRender(){
-        log.info("preRender...");
+        log.debug("preRender...");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
@@ -188,7 +189,8 @@ public class AppraisalResult extends BaseController {
     @PostConstruct
     public void onCreation() {
         HttpSession session = FacesUtil.getSession(false);
-        log.info("onCreation...");
+        Date actionDate = new Date();
+        log.debug("onCreation...");
         _initial(session);
         if(checkSession(session)){
             appraisalView = appraisalResultControl.getAppraisalResult(workCaseId, workCasePreScreenId);
@@ -210,8 +212,12 @@ public class AppraisalResult extends BaseController {
             }else if(workCasePreScreenId != 0){
                 loadFieldControlPreScreen(workCasePreScreenId, Screen.AppraisalResult, ownerCaseUserId);
             }
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
         }else{
-            //TODO show message exception
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -234,18 +240,21 @@ public class AppraisalResult extends BaseController {
     }
 
     public void onAddCollateralDetailView(){
-        log.info("-- onAddCollateralDetailView >>> begin ");
+        Date actionDate = new Date();
+        log.debug("-- onAddCollateralDetailView >>> begin ");
         modeForButton = ModeForButton.ADD;
         flagReadOnly = false;
         saveAndEditFlag = false;
         newCollateralView = new ProposeCollateralInfoView();
         newCollateralView.setJobID("");
         log.debug("-- NewCollateralView[New] created");
+        slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Collateral", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onCallRetrieveAppraisalReportInfo() {
+        Date actionDate = new Date();
         String jobID = newCollateralView.getJobID();
-        log.info("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
+        log.debug("-- onCallRetrieveAppraisalReportInfo  NewCollateralView.jobIDSearch[{}]", jobID);
         boolean flag;
         messageHeader = "Information";
         message = "Duplicate Job ID";
@@ -261,16 +270,18 @@ public class AppraisalResult extends BaseController {
                         if(!Util.isNull(appraisalDataResult) && ActionResult.SUCCESS.equals(appraisalDataResult.getActionResult())){
                             newCollateralView = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
                             saveAndEditFlag = true;
+                            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.SUCCEED, "");
                         } else {
                             saveAndEditFlag = false;
                             messageHeader = "Result " + appraisalDataResult.getActionResult();
                             message = "Result" + appraisalDataResult.getReason();
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, appraisalDataResult.getActionResult(), appraisalDataResult.getReason());
                         }
                     } else {
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.FAILED, "Duplicate Job ID.");
                     }
-
                 } else if(ModeForButton.EDIT.equals(modeForButton)){
                     log.debug("-- EDIT");
                     flag = checkJobIdExist(newCollateralViewList, jobID);
@@ -280,26 +291,28 @@ public class AppraisalResult extends BaseController {
                             ProposeCollateralInfoView tempAppraisalResult = collateralBizTransform.transformAppraisalToProposeCollateralView(appraisalDataResult);
                             newCollateralView = appraisalResultControl.updateCollateral(newCollateralView, tempAppraisalResult);
                             saveAndEditFlag = true;
+                            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.SUCCEED, "");
                         } else {
                             saveAndEditFlag = false;
                             messageHeader = ""+appraisalDataResult.getActionResult();
                             message = appraisalDataResult.getReason();
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, appraisalDataResult.getActionResult(), appraisalDataResult.getReason());
                         }
                     } else {
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.FAILED, "Duplicate Job ID.");
                     }
                 }
             } catch (COMSInterfaceException e){
                 log.error("COMSInterfaceException ::: {}",e);
                 messageHeader = "COM-S Exception";
                 message = "Data not found.";
-//                message = e.getMessage();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.FAILED, Util.getMessageException(e));
             } catch (Exception e){
                 log.error("Exception ::: {}",e);
                 messageHeader = "Exception";
-
                 if(!Util.isNull(e.getMessage())){
                     if(e.getMessage().indexOf("Data Not Found!") > -1){
                         message = "Data Not Found!";
@@ -307,7 +320,6 @@ public class AppraisalResult extends BaseController {
                 } else {
                     message = e.getMessage();
                 }
-
                 if("See nested exception; nested exception is: COMSInterfaceException[code=053,message=Data Not Found!]".equalsIgnoreCase(e.getMessage())){
                     message = "Data Not Found!";
                 } else {
@@ -315,12 +327,14 @@ public class AppraisalResult extends BaseController {
                 }
                 flagReadOnly = false;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.FAILED, Util.getMessageException(e));
             }
         } else {
             messageHeader = "Exception";
             message = "Job ID Search is empty or null";
-            log.debug("messageHeader ::: {}, message ::: {}",messageHeader,message);
+            log.debug("messageHeader ::: {}, message ::: {}",messageHeader, message);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Retrieve Appraisal Report", actionDate, ActionResult.FAILED, "Job ID Search is empty or null");
         }
     }
 
@@ -340,63 +354,64 @@ public class AppraisalResult extends BaseController {
 
     public void onSaveCollateralDetailView(){
         log.debug("-- onSaveCollateralDetailView()");
-        boolean complete = false;
+        Date actionDate = new Date();
         if(ModeForButton.ADD.equals(modeForButton)){
             log.debug("-- Flag {}", ModeForButton.ADD);
-            complete=true;
             String jobID = newCollateralView.getJobID();
             messageHeader = "Retrieve Appraisal.";
             if(!Util.isNull(jobID) && !Util.equals(jobID, "")){
                 if(saveAndEditFlag){
                     newCollateralViewList.add(newCollateralView);
-                    log.info("-- NewCollateralView.jobID[{}] added to NewCollateralViewList[{}]", newCollateralView.getJobID(), newCollateralViewList.size()+1);
+                    log.debug("-- NewCollateralView.jobID[{}] added to NewCollateralViewList[{}]", newCollateralView.getJobID(), newCollateralViewList.size()+1);
                     message = ActionResult.SUCCESS.toString();
+                    slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Appraisal Report", actionDate, ActionResult.SUCCESS, "");
                 } else {
                     message = ActionResult.FAILED.toString();
+                    slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Appraisal Report", actionDate, ActionResult.FAILED, "No data to save.");
                 }
             }
         }else if(ModeForButton.EDIT.equals(modeForButton)){
-            complete=true;
             log.debug("-- Flag {}", ModeForButton.EDIT);
             if(saveAndEditFlag){
                 newCollateralViewList.set(rowCollateral, newCollateralView);
-//                appraisalView.setNewCollateralViewList(newCollateralViewList);
-                log.info("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
+                log.debug("-- NewCollateralView.jobID[{}] updated to NewCollateralViewList[{}]", newCollateralView.getJobID(), rowCollateral);
                 message = ActionResult.SUCCESS.toString();
+                slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Appraisal Report", actionDate, ActionResult.SUCCESS, "");
             } else {
                 message = ActionResult.FAILED.toString();
+                slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Appraisal Report", actionDate, ActionResult.FAILED, "No data to save.");
             }
         }
-
-//        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//        RequestContext context = RequestContext.getCurrentInstance();
-//        context.addCallbackParam("functionComplete", complete);
-        RequestContext.getCurrentInstance().addCallbackParam("functionComplete", true);
+        sendCallBackParam(true);
     }
 
     public void onEditCollateralDetailView(){
-        log.info("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
+        log.debug("-- onEditCollateralDetailView {}",  newCollateralViewList.size());
+        Date actionDate = new Date();
         modeForButton = ModeForButton.EDIT;
-        Cloner cloner = new Cloner();
-        newCollateralView = cloner.deepClone(selectCollateralDetailView);
-        log.debug("-- newCollateralView : {}", newCollateralView);
-//        if(Util.isNull(newCollateralView.getJobID()) || Util.isZero(newCollateralView.getJobID().length())){
-//            flagReadOnly = false;
-//        } else {
         flagReadOnly = true;
-//        }
+        Cloner cloner = new Cloner();
+        try {
+            newCollateralView = cloner.deepClone(selectCollateralDetailView);
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Report", actionDate, ActionResult.SUCCESS, "");
+        }catch (Exception ex){
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Report", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+        }
+        log.debug("-- newCollateralView : {}", newCollateralView);
     }
 
     public void onDeleteCollateralDetailView(){
-        if(selectCollateralDetailView.getId() != 0){
+        Date actionDate = new Date();
+        if(selectCollateralDetailView.getId() != 0)
             appraisalView.getRemoveCollListId().add(selectCollateralDetailView.getId());
-        }
         newCollateralViewList.remove(selectCollateralDetailView);
-        log.info("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
+        log.debug("-- onDeleteCollateralDetailView Job id {} deleted", selectCollateralDetailView.getJobID());
+        slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Appraisal Report", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onSaveAppraisalResult() {
-        log.info("-- onSaveAppraisalResult");
+        log.debug("-- onSaveAppraisalResult");
+        Date actionDate = new Date();
         try{
             appraisalView.setNewCollateralViewList(newCollateralViewList);
             log.debug("## appraisalView.getNewCollateralViewList().size() ## [{}]",appraisalView.getNewCollateralViewList().size());
@@ -404,39 +419,38 @@ public class AppraisalResult extends BaseController {
             messageHeader = msg.get("app.appraisal.result.message.header.save.success");
             message = msg.get("app.appraisal.result.body.message.save.success");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Appraisal Result", actionDate, ActionResult.SUCCESS, "");
             onCreation();
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.appraisal.result.message.header.save.fail");
-            if(ex.getCause() != null){
-                message = msg.get("app.appraisal.result.message.body.save.fail") + " cause : "+ ex.getCause().toString();
-            } else {
-                message = msg.get("app.appraisal.result.message.body.save.fail") + ex.getMessage();
-            }
+            message = Util.getMessageException(ex);
+            slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Appraisal Result", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onCancelAppraisalResult(){
-        log.info("onCancelAppraisalResult::::  ");
+        log.debug("onCancelAppraisalResult::::  ");
+        slosAuditor.add(Screen.AppraisalResult.value(), getCurrentUser().getId(), ActionAudit.ON_CANCEL, "On Save Appraisal Result", new Date(), ActionResult.SUCCESS, "");
         onCreation();
     }
 
     public void onChangeAppraisalDate(){
-        log.info("onChangeAppraisalDate");
+        log.debug("onChangeAppraisalDate");
         int locate = appraisalView.getLocationOfProperty().getId();
 
-        log.info("locate is " + locate);
+        log.debug("locate is " + locate);
 
         Date dueDate;
         DateTime dueDateTime = new DateTime(appraisalView.getAppraisalDate());
         DateTime addedDate  = new DateTime(appraisalView.getAppraisalDate());
         int nowDay = dueDateTime.getDayOfWeek();
 
-        log.info ("dueDateTime dayOfWeek before plus is " + dueDateTime.getDayOfWeek());
+        log.debug ("dueDateTime dayOfWeek before plus is " + dueDateTime.getDayOfWeek());
 
         if(locate == 1){
-            log.info("in locate 1 ");
+            log.debug("in locate 1 ");
             if(nowDay==1||nowDay>5) {
                 addedDate = dueDateTime.plusDays(3);
             }else if(nowDay==4){
@@ -445,7 +459,7 @@ public class AppraisalResult extends BaseController {
                 addedDate = dueDateTime.plusDays(5);
             }
         }else if(locate == 2){
-            log.info("in locate 2");
+            log.debug("in locate 2");
             if(nowDay>5) {
                 addedDate = dueDateTime.plusDays(4);
             }else if(nowDay==5){
@@ -454,7 +468,7 @@ public class AppraisalResult extends BaseController {
                 addedDate = dueDateTime.plusDays(6);
             }
         }else if(locate == 3){
-            log.info("in locate 3");
+            log.debug("in locate 3");
             if(nowDay==5){
                 addedDate = dueDateTime.plusDays(9);
             }else if(nowDay==4){
@@ -464,7 +478,7 @@ public class AppraisalResult extends BaseController {
             }
         }
 
-        log.info ("dueDateTime dayOfWeek after plus is " + dueDateTime.getDayOfWeek());
+        log.debug ("dueDateTime dayOfWeek after plus is " + dueDateTime.getDayOfWeek());
 
         dueDate = addedDate.toDate();
         appraisalView.setDueDate(dueDate);

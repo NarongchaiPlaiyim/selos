@@ -43,7 +43,7 @@
                                 actionListener="#{creditFacExisting.onSaveConditionDetailDlg()}"
                                 process=":conditionDlgForm"
                                 update=":conditionDlgForm,:frmMain:conditionDetailTable"
-                                oncomplete="handleExistingConditionRequest(xhr, status, args)"/>
+                                oncomplete="handleDialogRequest(xhr, status, args, 'conditionDlg')"/>
 
                         <p:commandButton
                                 value="#{msg.get('app.button.cancel')}"

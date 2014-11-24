@@ -44,9 +44,17 @@ PrimeFaces.locales ['th_TH'] = {
     allDayText: 'All Day'
 };
 
-function showCheckedValue(){
-    alert(document.getElementById('frmMain:checkBoxId').checked);
-}
+$(document).ready(function(){
+    $(".numberOnly").keypress(function(event){
+        return onKeyPressNumber(event);
+    });
+    $(".numberOnly").keydown(function(event){
+        return onKeyDownNumber(event);
+    });
+    $(".numberOnly").keyup(function(event){
+        return onKeyUpNumber(event);
+    });
+});
 
 function reload(){
     window.location.reload();
@@ -74,10 +82,6 @@ function checkSearchThaiID(obj){
             PF('msgBoxInvalidCitizenSearchDlg').show();
         }
     }
-}
-
-function openDialog(url){
-    window.open(url,'_blank','toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400');
 }
 
 function checkJuristicThaiID(obj){
@@ -170,6 +174,15 @@ function checkAllowKeyNumber(keyCode){
     return true;
 }
 
+function checkAllowKey(keyCode, validChar){
+    var keyChar = String.fromCharCode(keyCode);
+    validChar += String.fromCharCode(8);
+    if (validChar.indexOf(keyChar) < 0) {
+        return false;
+    }
+    return true;
+}
+
 function onKeyPressNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -184,8 +197,6 @@ function onKeyPressNumber(evt){
      *  94=^       95=_    123={       125=}
      */
 
-//    alert("keyPress : " + keyCode);
-
     if(keyCode == 33 || keyCode == 34 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 ||
         keyCode == 41 || keyCode == 42 || keyCode == 45 || keyCode == 47 || keyCode == 58 || keyCode == 59 || keyCode == 60 || keyCode == 62 ||
         keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
@@ -194,28 +205,41 @@ function onKeyPressNumber(evt){
 
     /** ALLOW NUMBER **/
     /*  96-105=number(0-9) */
-    if (keyCode > 95 && keyCode < 106) {
+    /*if (keyCode > 95 && keyCode < 106) {
         return true;
-    } else {
-        return checkAllowKeyNumber(keyCode);
-    }
+    } else {*/
+        return checkAllowKey(keyCode, '1234567890');
+    //}
 }
 
 function onKeyDownNumber(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+    /*key 17 = Ctrl, key 86 = v, key 67 = c */
+    if(keyCode == 17 || keyCode == 86 || keyCode == 67 || keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
+        return true;
+    }
+    /** ALLOW NUMBER **/
+    /*  96-105=number(0-9) */
+    /*if (keyCode > 95 && keyCode < 106) {
+        return true;
+    } else {*/
+        return checkAllowKey(keyCode, '1234567890');
+    //}
+}
 
-//    alert("keyDown : " + keyCode);
+function onKeyUpNumber(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46){
         return true;
     }
     /** ALLOW NUMBER **/
     /*  96-105=number(0-9) */
-    if (keyCode > 95 && keyCode < 106) {
+    /*if (keyCode > 95 && keyCode < 106) {
         return true;
-    } else {
-        return checkAllowKeyNumber(keyCode);
-    }
+    } else {*/
+        return checkAllowKey(keyCode, '1234567890');
+    //}
 }
 
 function checkAllowKeyMoney(keyCode){
@@ -247,35 +271,26 @@ function onKeyPressMoney(evt){
         keyCode == 63 || keyCode == 64 || keyCode == 91 || keyCode == 93 || keyCode == 123 || keyCode == 125){
         return false;
     }
-
-    /** ALLOW NUMBER **/
-    /*  96-105=number(0-9)
-     *  44=comma    188=comma
-     *  46=period   190=period
-     */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 46 || keyCode == 190 ) {
-        return true;
-    } else {
-        return checkAllowKeyMoney(keyCode);
-    }
+    return checkAllowKey(keyCode, '0123456789.,');
 }
 
 function onKeyDownMoney(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
 
+    /*key 17 = Ctrl, key 86 = v, key 67 = c */
+    if(keyCode == 17 || keyCode == 86 || keyCode == 67 || keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
+        return true;
+    }
+    return checkAllowKey(keyCode, '0123456789.,');
+}
+
+function onKeyUpMoney(evt){
+    var keyCode = evt.keyCode ? evt.keyCode : evt.which;
+
     if(keyCode == 8 || keyCode == 9 || keyCode == 35 || keyCode == 36 || keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40 || keyCode == 46 || keyCode == 144 || keyCode == 110){
         return true;
     }
-    /** ALLOW NUMBER **/
-    /*  96-105=number(0-9)
-     *  44=comma    188=comma
-     *  46=period   190=period
-     */
-    if ( (keyCode > 95 && keyCode < 106) || keyCode == 44 || keyCode == 188 || keyCode == 190 ) {
-        return true;
-    } else {
-        return checkAllowKeyMoney(keyCode);
-    }
+    return checkAllowKey(keyCode, '0123456789.,');
 }
 
 function onKeyPressNegMoney(evt){
@@ -514,7 +529,6 @@ function checkAllowKeyTelNo(keyCode){
     return true;
 }
 
-
 function onKeyPressHomeNo(evt){
     var keyCode = evt.keyCode ? evt.keyCode : evt.which;
     /** CHECK SPECIAL CHARACTER **/
@@ -569,9 +583,6 @@ function checkAllowKeyHomeNo(keyCode){
     return true;
 }
 
-
-
-
 function hideWindowsScrollBar() {
     $("body").attr("style", "overflow-y: hidden");
     $('input').each(function() {
@@ -589,230 +600,7 @@ function showWindowsScrollBar() {
 
 function onCheckRightClick(event){
     if(event.button==2)
-    {
         return false;
-    }
-}
-
-/*function onCheckEnter(obj, event){
-    if(event.keyCode == 13){
-        $(obj).attr("disabled","disabled");
-        return true;
-    }
-}*/
-
-function handleReturnMakerDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnMakerDlg.hide();
-    }
-}
-
-function handleAssignCheckerDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        assignCheckerDlg.hide();
-    }
-}
-
-function handleSubmitZMDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        submitZMDlg.hide();
-    }
-}
-
-function handleAssignABDMDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        assignABDMDlg.hide();
-    }
-}
-
-function handleCancelFullAppDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        cancelCAFullAppDlg.hide();
-    }
-}
-
-function handleReturnInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoDlg.hide();
-    }
-}
-
-function handleReturnAADInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoAADDlg.hide();
-    }
-}
-
-function handleReturnBDMInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoBDMDlg.hide();
-    }
-}
-
-function handleReturnBUInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoBUDlg.hide();
-    }
-}
-
-function handleReturnMakerInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoMakerDlg.hide();
-    }
-}
-
-function handleReturnAADUWInfoDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        returnInfoAADUWDlg.hide();
-    }
-}
-
-function handleReturnAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnInfoDlg.hide();
-    }
-}
-
-function handleReturnAADAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnAADInfoDlg.hide();
-    }
-}
-
-function handleReturnBDMAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnBDMInfoDlg.hide();
-    }
-}
-
-function handleReturnBUAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnBUInfoDlg.hide();
-    }
-}
-
-function handleReturnMakerAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnMakerInfoDlg.hide();
-    }
-}
-
-function handleReturnAADUWAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        addReturnAADUWInfoDlg.hide();
-    }
-}
-
-function handleDisbursementMcDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        mcDisbursementDialog.hide();
-    }
-}
-
-function handleDisbursementDepositDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        depositDisbursementDialog.hide();
-    }
-}
-function handleDisbursementBahtnetDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        bahtnetDisbursementDialog.hide();
-    }
-}
-
-function handleBaPaAddDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        bapaInfoDialog.hide();
-    }
-}
-
-function handleApplyBaDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        applyBaInfoDialog.hide();
-    }
-}
-
-function handleManageUserDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        manageUserDlg.hide();
-    }
-}
-
-function handleNCBInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        ncbDlg.hide();
-    }
-}
-
-function handleFullappBizProductRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        bizProductViewDlg.hide();
-    }
-}
-
-function handleFullappBizStakeHolderRequest(xhr, status, args) {
-
-    if (args.functionComplete) {
-        stakeholderViewDlg.hide();
-    }
-}
-
-function handletcgInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        tcgDlg.hide();
-    }
-}
-
-function handleBasicInfoAccountRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        basicInfoAccountDlg.hide();
-    }
-}
-
-function handleAccountInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        accountInfoDlg.hide();
-    }
-}
-
-function handleInsuranceInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        insuranceInfoDlg.hide();
-    }
-}
-
-function handleContactRecordRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        contactRecordDetailViewDlg.hide();
-    }
-}
-
-function handleRequestAppraisal(xhr, status, args) {
-    if(args.functionComplete){
-        reqApprDlg.hide();
-    }
-}
-
-function handleRequestAppraisalDetail(xhr, status, args) {
-    if(args.functionComplete){
-        reqApprDetailDlg.hide();
-    }
-}
-
-function handleAppraisalContactDetailRequest(xhr, status, args) {
-    if(args.functionComplete){
-        contactRecordViewDlg.hide();
-    }
-}
-
-function handleExSumDeviateRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        exSumDeviateDlg.hide();
-    }
-}
-
-function testHandle(){
-    return true;
 }
 
 function handleDialogRequest(xhr, status, args, widgetVarName) {
@@ -838,85 +626,6 @@ function handleDialogOpen(xhr, status, args, widgetVarName) {
     if (args.functionComplete) {
         var name = widgetVarName;
         PF(name).show();
-    }
-}
-
-function handleExistingCreditRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        existingCreditDlg.hide();
-    }
-}
-
-function handleExistingConditionRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        conditionDlg.hide();
-    }
-}
-
-// Credit Facility Existing Collateral Dialog
-function handleExistingCollateralBorrowerRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        existingCollateralBorrowerDlg.hide();
-    }
-}
-
-// Credit Facility Existing Collateral Dialog
-function handleExistingCollateralRelatedRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        existingCollateralRelatedDlg.hide();
-    }
-}
-
-function handleExistingGuarantorRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        existingGuarantorDlg.hide();
-    }
-}
-
-// Credit Facility Propose Credit Dialog
-function handleDlgCreditProposeRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        creditInfoDlg.hide();
-    }
-}
-
-function handleTierDlgRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        proposeTierDlg.hide();
-    }
-}
-
-// Credit Facility Propose Collateral Dialog
-function handleProposeCollateralDetailRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        collateralInfoDlg.hide();
-    }
-}
-
-// Credit Facility Propose Sub Collateral Dialog
-function handleSubCollateralInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        subCollateralInfoDlg.hide();
-    }
-}
-
-// Credit Facility Propose Guarantor Dialog
-function handleGuarantorInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        guarantorInfoDlg.hide();
-    }
-}
-
-//Print Report Exsummary Dialog
-function handlePrintRerportDialogRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        printReportDlg.hide();
-    }
-}
-
-function handleConditionInfoRequest(xhr, status, args) {
-    if (args.functionComplete) {
-        conditionDlg.hide();
     }
 }
 

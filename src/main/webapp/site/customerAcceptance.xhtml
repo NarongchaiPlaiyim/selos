@@ -8,7 +8,8 @@
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
-    <title>#{msg.get('app.cusaccept.title')}</title>
+    <title>#{msg.get("app.name")} - #{msg.get('app.cusaccept.title')}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js"/>

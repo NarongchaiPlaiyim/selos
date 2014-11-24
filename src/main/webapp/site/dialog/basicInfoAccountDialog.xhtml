@@ -133,14 +133,14 @@
                                      actionListener="#{basicInfo.onAddAccount()}"
                                      process="@form"
                                      update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount,:msgBoxSystemMessagePanel2"
-                                     oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'basicInfoAccountDlg')"/>
                     <p:commandButton id="dlgCancelBasicAccBtn"
                                      value="#{msg.get('app.button.cancel')}"
                                      styleClass="small"
                                      actionListener="#{basicInfo.onCancelAccount()}"
                                      process="@form"
                                      update=":basicInfoAccountDlgForm"
-                                     oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'basicInfoAccountDlg')"/>
                 </td>
             </tr>
         </table>

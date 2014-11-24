@@ -6,14 +6,13 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ProposeType;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
 import com.clevel.selos.model.view.AppraisalView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -31,6 +30,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,6 +52,9 @@ public class AppraisalRequest extends BaseController {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+    @Inject
+    SLOSAuditor slosAuditor;
 
     @Inject
     private UserDAO userDAO;
@@ -139,6 +142,7 @@ public class AppraisalRequest extends BaseController {
 
     @PostConstruct
     public void onCreation() {
+        Date actionDate = new Date();
         HttpSession session = FacesUtil.getSession(false);
         log.debug("onCreation...");
 
@@ -193,61 +197,74 @@ public class AppraisalRequest extends BaseController {
                 appraisalDetailViewList = new ArrayList<AppraisalDetailView>();
                 log.debug("-- AppraisalDetailViewList[New] created");
             }
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
         } else {
-            //TODO Show dialog for exception cannot load data from database.
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
     public void onSaveAppraisalDetailView(){
+        Date actionDate = new Date();
         log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
         boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
         if(appraisalDetailViewMandate()){
             complete = true;
             if(ModeForButton.ADD == modeForButton){
                 appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+                slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
             }else if(ModeForButton.EDIT == modeForButton){
                 log.debug("-- RowIndex[{}]", rowIndex);
                 appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+                slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
             }
-            context.addCallbackParam("functionComplete", complete);
-        }else {
-            context.addCallbackParam("functionComplete", complete);
+        }else{
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "", actionDate, ActionResult.FAILED, "Input mandatory failed.");
         }
+        sendCallBackParam(complete);
     }
     
     public void onEditAppraisalDetailView(){
+        Date actionDate = new Date();
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
         Cloner cloner = new Cloner();
-        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+        try {
+            appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
+        }catch (Exception ex){
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Detail", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+        }
     }
-
-
 
     public void onAddAppraisalDetailView(){
         log.info("-- onAddAppraisalDetailView() ModeForButton[ADD]");
+        Date actionDate = new Date();
         appraisalDetailViewDialog = new AppraisalDetailView();
         titleDeedFlag = false;
         purposeFlag = false;
         numberOfDocumentsFlag = false;
         modeForButton = ModeForButton.ADD;
+        slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onDeleteAppraisalDetailView() {
         log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
         appraisalDetailViewList.remove(rowIndex);
         log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
+        slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Appraisal Detail", new Date(), ActionResult.SUCCESS, "");
     }
 
     public void onSaveAppraisalRequest() {
         log.info("-- onSaveAppraisalRequest::::");
-
+        Date actionDate = new Date();
         if(appraisalDetailViewListMandate()){
             if(appraisalContactDetailViewMandate()){
                 try{
@@ -259,27 +276,31 @@ public class AppraisalRequest extends BaseController {
                     message = msg.get("app.appraisal.request.message.body.save.success");
                     onCreation();
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Add Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
                 } catch(Exception ex){
                     log.error("Exception : {}", ex);
                     messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
                     message = Util.getMessageException(ex);
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Add Appraisal Detail", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
                 }
             } else {
                 messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
                 message = "Please fill in all required information(Contact Detail).";
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Add Appraisal Detail", actionDate, ActionResult.FAILED, "Input mandatory failed (Contact detail).");
             }
         } else {
             messageHeader = msg.get("app.appraisal.request.message.header.save.fail");
             message = "Please fill in all required information(Estimate Detail).";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Appraisal Request", actionDate, ActionResult.FAILED, "Input mandatory failed (Estimate detail).");
         }
-
     }
 
     public void onCancelAppraisalRequest(){
         log.info("onCancelCustomerAcceptance::::  ");
+        slosAuditor.add(Screen.AppraisalRequest.value(), getCurrentUser().getId(), ActionAudit.ON_CANCEL, "On Add Appraisal Detail", new Date(), ActionResult.SUCCESS, "");
         onCreation();
     }
 

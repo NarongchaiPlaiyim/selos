@@ -8,7 +8,8 @@
         xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <h:head>
-    <title>SE-LOS : Credit Facility - Propose Line</title>
+    <title>#{msg.get("app.name")} - Credit Facility - Propose Line</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
@@ -1922,7 +1923,7 @@
                                                          id="cancelBtn"
                                                          process="@form"
                                                          update=":frmMain"
-                                                         actionListener="#{proposeLine.onCreation}"
+                                                         actionListener="#{proposeLine.onCancelProposeLine()}"
                                                          disabled="#{proposeLine.isDisabled('cancelButton')}"/>
                                     </td>
                                 </tr>

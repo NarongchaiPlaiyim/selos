@@ -7,7 +7,8 @@
         xmlns:p="http://primefaces.org/ui" >
 
 <h:head>
-    <title>SE-LOS : NCB Record Detail</title>
+    <title>#{msg.get("app.name")} - NCB Record Detail</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css"/>
     <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     <h:outputScript library="js" name="custom.js"/>
@@ -494,7 +495,7 @@
 
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{ncbInfo.messageHeader}" message="#{ncbInfo.message}">
+                     header="#{ncbInfo.messageHeader}" message="#{ncbInfo.message}" severity="#{ncbInfo.severity}">
         <p:commandButton value="OK"
                          process="@this"
                          update=":frmMain"

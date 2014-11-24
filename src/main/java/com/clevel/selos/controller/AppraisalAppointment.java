@@ -9,13 +9,12 @@ import com.clevel.selos.dao.relation.ReasonToStepDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.DayOff;
-import com.clevel.selos.model.Screen;
-import com.clevel.selos.model.StepValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -37,12 +36,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 
 @ViewScoped
 @ManagedBean(name = "appraisalAppointment")
@@ -63,11 +59,18 @@ public class AppraisalAppointment extends BaseController implements Serializable
     Message exceptionMsg;
 
     @Inject
+    SLOSAuditor slosAuditor;
+
+    @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
     @Inject
     private LocationPropertyDAO locationPropertyDAO;
     @Inject
     private ReasonToStepDAO reasonToStepDAO;
+    @Inject
+    private WorkCaseDAO workCaseDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     @Inject
     private AppraisalAppointmentControl appraisalAppointmentControl;
@@ -76,11 +79,6 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
     @Inject
     private AppraisalDetailTransform appraisalDetailTransform;
-
-    @Inject
-    private WorkCaseDAO workCaseDAO;
-    @Inject
-    private WorkCasePrescreenDAO workCasePrescreenDAO;
 
     private enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
@@ -192,7 +190,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void preRender(){
-        log.info("preRender ::: ");
+        log.debug("preRender ::: ");
         HttpSession session = FacesUtil.getSession(false);
         if(checkSession(session)){
             stepId = Util.parseLong(session.getAttribute("stepId"), 0);
@@ -212,7 +210,8 @@ public class AppraisalAppointment extends BaseController implements Serializable
     @PostConstruct
     public void onCreation() {
         HttpSession session = FacesUtil.getSession(false);
-        log.info("onCreation :::");
+        Date actionDate = new Date();
+        log.debug("onCreation :::");
         _initial(session);
         WorkCase workCase;
         WorkCasePrescreen workCasePrescreen;
@@ -255,8 +254,12 @@ public class AppraisalAppointment extends BaseController implements Serializable
                 appraisalView.reset();
                 getZoneTeamId(bdmUserId);
             }
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
         } else {
-            //TODO show message box
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -277,7 +280,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onClickForDialogNoRequest(){
-        log.info("onClickForDialogNoRequest");
+        log.debug("onClickForDialogNoRequest");
         messageHeader = "เกิดข้อผิดพลาด";
         message = "ยังไม่มีการกรอกข้อมูลการร้องขอ Appraisal มาก่อน";
         RequestContext.getCurrentInstance().execute("msgBoxNoRequestMessageDlg.show()");
@@ -285,13 +288,13 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
     public void onChangePageCauseNoRequest(){
         try{
-            log.info("onChangePageCauseNoRequest 1");
+            log.debug("onChangePageCauseNoRequest 1");
             String url = "appraisalRequest.jsf";
-            log.info("onChangePageCauseNoRequest 2");
+            log.debug("onChangePageCauseNoRequest 2");
             FacesContext fc = FacesContext.getCurrentInstance();
-            log.info("onChangePageCauseNoRequest 3");
+            log.debug("onChangePageCauseNoRequest 3");
             ExternalContext ec = fc.getExternalContext();
-            log.info("redirect to new page");
+            log.debug("redirect to new page");
             ec.redirect(url);
 
         } catch(Exception ex){
@@ -308,14 +311,13 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onSaveContactRecordDetailView(){
+        Date actionDate = new Date();
         log.debug("-- onSaveContactRecordDetailView() flag = {}", modeForButton);
         boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
         Cloner cloner = new Cloner();
 
         contactRecord.updateNextCallingDate();
 
-        sendCallBackParam(true);
         if(Util.isZero(contactRecordDetailViewList.size())){
             contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
             log.debug("-- [NEW]ContactRecordDetailViewList created");
@@ -337,7 +339,8 @@ public class AppraisalAppointment extends BaseController implements Serializable
             contactRecordDetailViewList.add(contactRecordDetailView);
             complete = true;
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
-        }else if(ModeForButton.EDIT.equals(modeForButton)){
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Record Detail", actionDate, ActionResult.SUCCESS, "");
+        } else if(ModeForButton.EDIT.equals(modeForButton)) {
             log.debug("-- RowIndex[{}]", rowIndex);
             log.debug("-- [AFTER]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
             contactRecordDetailView = cloner.deepClone(contactRecord);
@@ -354,9 +357,9 @@ public class AppraisalAppointment extends BaseController implements Serializable
             complete = true;
             contactRecordDetailViewList.set(rowIndex, contactRecordDetailView);
             log.debug("-- [BEFORE]ContactRecordDetailViewList.size()[{}]", contactRecordDetailViewList.size());
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Record Detail", actionDate, ActionResult.SUCCESS, "");
         }
-        context.addCallbackParam("functionComplete", complete);
-
+        sendCallBackParam(complete);
     }
 
     private void setStringOnAppraisalTable(){
@@ -392,6 +395,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
     public void onSaveAppraisalDetailView(){
         log.debug("-- onSaveAppraisalDetailView() flag = {}", modeForButton);
+        Date actionDate = new Date();
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
         if(appraisalDetailViewMandate()){
@@ -399,14 +403,17 @@ public class AppraisalAppointment extends BaseController implements Serializable
             if(ModeForButton.ADD.equals(modeForButton)){
                 appraisalDetailViewList.add(appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+                slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
             }else if(ModeForButton.EDIT.equals(modeForButton)){
                 log.debug("-- RowIndex[{}]", rowIndex);
                 appraisalDetailViewList.set(rowIndex, appraisalDetailViewDialog);
                 appraisalDetailViewList = appraisalDetailTransform.updateLabel(appraisalDetailViewList);
+                slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
             }
             context.addCallbackParam("functionComplete", complete);
         }else {
             context.addCallbackParam("functionComplete", complete);
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Appraisal Detail", actionDate, ActionResult.FAILED, "Input Mandatory failed.");
         }
     }
 
@@ -442,55 +449,63 @@ public class AppraisalAppointment extends BaseController implements Serializable
 
     public void onSaveAppraisalContactDetailView(){
         boolean complete = false;
+        Date actionDate = new Date();
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if(true){
+        if(ModeForButton.ADD.equals(modeForButton)){
+            log.debug("onSaveAppraisalContactDetailView add >>> begin ");
+            log.debug("appraisalContactDetailViewList size >>> is {}", appraisalContactDetailViewList.size());
+            log.debug("onSaveContactRecordDetailView contactRecordDetailView >>> : {}", appraisalContactDetailView);
+            appraisalContactDetailViewList.add(appraisalContactDetailView);
+            log.debug("onSaveAppraisalContactDetailView add >>> end ");
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save New Contact Detail", actionDate, ActionResult.SUCCESS, "");
             complete = true;
-            if(ModeForButton.ADD.equals(modeForButton)){
-                log.info("onSaveAppraisalContactDetailView add >>> begin ");
-                log.info("appraisalContactDetailViewList size >>> is " + appraisalContactDetailViewList.size());
-//                appraisalContactDetailView.setNo(appraisalContactDetailViewList.size()+1);
-                log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + appraisalContactDetailView);
-                appraisalContactDetailViewList.add(appraisalContactDetailView);
-                log.info("onSaveAppraisalContactDetailView add >>> end ");
-
-            }else if(ModeForButton.EDIT.equals(modeForButton)){
-                log.info("onSaveAppraisalContactDetailView edit >>> begin ");
-
-                AppraisalContactDetailView appraisalContactDetailViewRow;
-                appraisalContactDetailViewRow = appraisalContactDetailViewList.get(rowIndex);
-//                appraisalContactDetailViewRow.setCustomerName(appraisalContactDetailView.getCustomerName());
-//                appraisalContactDetailViewRow.setContactNo(appraisalContactDetailView.getContactNo());
-
-                appraisalContactDetailView = new AppraisalContactDetailView();
-                log.info("onSaveAppraisalContactDetailView edit >>> end ");
-            }
+        }else if(ModeForButton.EDIT.equals(modeForButton)){
+            log.debug("onSaveAppraisalContactDetailView edit >>> begin ");
+            AppraisalContactDetailView appraisalContactDetailViewRow = appraisalContactDetailViewList.get(rowIndex);
+            appraisalContactDetailView = new AppraisalContactDetailView();
+            log.debug("onSaveAppraisalContactDetailView edit >>> end ");
+            complete = true;
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Edit Contact Detail", actionDate, ActionResult.SUCCESS, "");
         }
         context.addCallbackParam("functionComplete", complete);
     }
     
     public void onEditAppraisalDetailView(){
+        Date actionDate = new Date();
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalDetailView() RowIndex[{}]", rowIndex);
         Cloner cloner = new Cloner();
-        appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+        try {
+            appraisalDetailViewDialog = cloner.deepClone(appraisalDetailViewSelected);
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
+        }catch(Exception ex){
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Appraisal Detail", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+        }
     }
 
     public void onEditAppraisalContactDetailView(){
+        Date actionDate = new Date();
         modeForButton = ModeForButton.EDIT;
         log.debug("-- onEditAppraisalContactDetailView() RowIndex[{}]", rowIndex);
         Cloner cloner = new Cloner();
-        contactRecord = cloner.deepClone(contactRecord);
+        try {
+            contactRecord = cloner.deepClone(contactRecord);
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Contact Detail", actionDate, ActionResult.SUCCESS, "");
+        }catch(Exception ex){
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_EDIT, "On Edit Contact Detail", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
+        }
     }
 
     public void onAddAppraisalDetailView(){
-        log.info("onAddAppraisalDetailView >>> begin ");
+        log.debug("onAddAppraisalDetailView >>> begin ");
         appraisalDetailView = new AppraisalDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
     public void onAddAppraisalContactDetailView(){
-        log.info("-- onAddAppraisalContactDetailView() ModeForButton[ADD]");
+        Date actionDate = new Date();
+        log.debug("-- onAddAppraisalContactDetailView() ModeForButton[ADD]");
         contactRecord = new ContactRecordDetailView();
         contactRecord.setCreateBy(user);
         contactRecord.setStatus(workCaseStatus);
@@ -499,20 +514,23 @@ public class AppraisalAppointment extends BaseController implements Serializable
         }
         contactRecord.setCallingDate(getCurrentDate());
         modeForButton = ModeForButton.ADD;
+        slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_ADD, "On Add Contact Detail", actionDate, ActionResult.SUCCESS, "");
     }
 
 
     public void onDeleteAppraisalDetailView() {
-        log.info( "-- onDeleteAppraisalDetailView RowIndex[{}]", rowIndex);
+        Date actionDate = new Date();
         appraisalDetailViewList.remove(rowIndex);
         appraisalView.getRemoveCollListId().add(appraisalDetailViewSelected.getNewCollateralId());
-        log.info( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
+        log.debug( "-- AppraisalDetailViewList[{}] deleted", rowIndex);
+        slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Appraisal Detail", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onDeleteAppraisalContactDetailView() {
-        log.info( "-- onDeleteAppraisalContactDetailView RowIndex[{}]", rowIndex);
+        Date actionDate = new Date();
         contactRecordDetailViewList.remove(rowIndex);
-        log.info( "-- onDeleteAppraisalContactDetailView[{}] deleted", rowIndex);
+        log.debug( "-- onDeleteAppraisalContactDetailView[{}] deleted", rowIndex);
+        slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_DELETE, "On Delete Contact Detail", actionDate, ActionResult.SUCCESS, "");
     }
 
     public void onSetRowNoAppraisalDetailView(){
@@ -533,17 +551,17 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onSaveAppraisalAppointment() {
-        log.info("-- onSaveAppraisalAppointment::::");
-        log.info("appraisalDetailViewList.size()        ::: {} ", appraisalDetailViewList.size());
-        log.info("appraisalContactDetailViewList.size() ::: {} ", appraisalContactDetailViewList.size());
+        Date actionDate = new Date();
+        log.debug("-- onSaveAppraisalAppointment::::");
+        log.debug("appraisalDetailViewList.size()        ::: {} ", appraisalDetailViewList.size());
+        log.debug("appraisalContactDetailViewList.size() ::: {} ", appraisalContactDetailViewList.size());
         try{
-
             appraisalView.setAppraisalDetailViewList(appraisalDetailViewList);
             appraisalView.setContactRecordDetailViewList(contactRecordDetailViewList);
-
             appraisalAppointmentControl.onSaveAppraisalAppointment(appraisalView, workCaseId, workCasePreScreenId, contactRecordDetailViewList, customerAcceptanceView, statusId);
             messageHeader = "Information";
             message = msg.get("app.appraisal.appointment.message.body.save.success");
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Appraisal Appointment", actionDate, ActionResult.SUCCESS, "");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
@@ -551,17 +569,19 @@ public class AppraisalAppointment extends BaseController implements Serializable
             messageHeader = "Exception";
             message = Util.getMessageException(ex);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_SAVE, "On Save Appraisal Appointment", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
         }
     }
 
     public void onCancelAppraisalAppointment(){
-        log.info("onCancelCustomerAcceptance::::  ");
+        log.debug("onCancelCustomerAcceptance::::  ");
+        slosAuditor.add(Screen.AppraisalAppointment.value(), getCurrentUser().getId(), ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
         onCreation();
     }
 
     //TODO edit this for fix due date
     public void onChangeAppraisalDate(){
-        log.info("-- onChangeAppraisalDate()");
+        log.debug("-- onChangeAppraisalDate()");
         final Date NOW = DateTime.now().toDate();
         if(Util.isNull(appraisalView.getAppraisalDate())){
             appraisalView.setAppraisalDate(NOW);
@@ -576,29 +596,29 @@ public class AppraisalAppointment extends BaseController implements Serializable
         if(!Util.isNull(appraisalView.getLocationOfProperty())){
             log.debug("-- AppraisalView[{}]", appraisalView.toString());
             final int LOCATE = appraisalView.getLocationOfProperty().getId();
-            log.info("-- locate id is {}", appraisalView.getLocationOfProperty().getId());
+            log.debug("-- locate id is {}", appraisalView.getLocationOfProperty().getId());
             final int BANGKOK_AND_PERIMETER = 3;
             final int COUNTRY = 4;
             final int OTHER_CASE = 6;
             final Date APPRAISAL_DATE = appraisalView.getAppraisalDate();
             log.debug("-- APPRAISAL_DATE : {}", dateString(APPRAISAL_DATE));
             if(LOCATE == 1){
-                log.info("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
+                log.debug("-- In locate due date +{}.", BANGKOK_AND_PERIMETER);
                 log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
                 log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             }else if(LOCATE == 2){
-                log.info("-- In locate due date +{}.", COUNTRY);
+                log.debug("-- In locate due date +{}.", COUNTRY);
                 log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, COUNTRY));
                 log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             }else if(LOCATE == 3){
-                log.info("-- In locate due date +{}.", OTHER_CASE);
+                log.debug("-- In locate due date +{}.", OTHER_CASE);
                 log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, OTHER_CASE));
                 log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
             } else {
-                log.info("-- Other locate");
+                log.debug("-- Other locate");
                 log.debug("--[BEFORE] DueDate : {}", dateString(appraisalView.getDueDate()));
                 appraisalView.setDueDate(updateDueDate(APPRAISAL_DATE, BANGKOK_AND_PERIMETER));
                 log.debug("--[AFTER] DueDate : {}", dateString(appraisalView.getDueDate()));
@@ -613,7 +633,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onChangeAppointmentDate(){
-        log.info("-- onChangeAppointmentDate()");
+        log.debug("-- onChangeAppointmentDate()");
         if(Util.isNull(appraisalView.getAppointmentDate())){
             appraisalView.setAppointmentDate(DateTime.now().toDate());
             log.debug("--[NEW] AppointmentDate");
@@ -623,7 +643,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onChangeLocationOfProperty(){
-        log.info("-- onChangeLocationOfProperty()");
+        log.debug("-- onChangeLocationOfProperty()");
         if(!Util.isNull(appraisalView.getAppraisalDate()) && !Util.isNull(appraisalView.getDueDate())){
             log.debug("-- AppraisalDate and DuaDate is not null");
             onChangeAppraisalDate();
@@ -713,7 +733,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onOpenAddContactRecordDialog() {
-        log.info("Open Contact Record Dialog");
+        log.debug("Open Contact Record Dialog");
         contactRecord = new ContactRecordDetailView();
         contactRecord.setId(0);
         contactRecord.setCallingDate(new Date());
@@ -726,7 +746,7 @@ public class AppraisalAppointment extends BaseController implements Serializable
     }
 
     public void onOpenUpdateContactRecordDialog() {
-        log.info("Open Update Contact Record Dialog");
+        log.debug("Open Update Contact Record Dialog");
         if (reasons == null) {
             reasons = customerAcceptanceControl.getContactRecordReasons();
         }

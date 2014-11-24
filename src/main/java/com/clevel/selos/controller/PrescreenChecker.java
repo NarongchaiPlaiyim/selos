@@ -1,6 +1,5 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CheckMandateDocControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.businesscontrol.ReturnControl;
 import com.clevel.selos.dao.master.ReasonDAO;
@@ -8,15 +7,13 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
-import com.clevel.selos.model.ActionCode;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.NCBOutputView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -36,11 +33,12 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "prescreenChecker")
-public class PrescreenChecker implements Serializable {
+public class PrescreenChecker extends BaseController {
     @Inject
     @SELOS
     Logger log;    
@@ -57,6 +55,9 @@ public class PrescreenChecker implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    @Inject
+    SLOSAuditor slosAuditor;
+
 
     private List<CustomerInfoView> customerInfoViewList;
     private String[] citizenID;
@@ -71,8 +72,6 @@ public class PrescreenChecker implements Serializable {
     PrescreenBusinessControl prescreenBusinessControl;
     @Inject
     ReturnControl returnControl;
-    @Inject
-    private CheckMandateDocControl checkMandateDocControl;
 
     private List<Reason> reasonList;
 
@@ -103,26 +102,19 @@ public class PrescreenChecker implements Serializable {
     public void preRender(){
         HttpSession session = FacesUtil.getSession(false);
         log.debug("preRender ::: setSession ");
+        workCasePreScreenId = Util.parseLong(session.getAttribute("workCasePreScreenId"), 0);
+        stepId = Util.parseLong(session.getAttribute("stepId"), 0);
 
-        if(session.getAttribute("workCasePreScreenId") != null){
-            workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }else{
-            //TODO return to inbox
-            log.debug("onCreation ::: workCasePrescreenId is null.");
-            try{
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
-                return;
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
-            }
+        if(Util.isZero(workCasePreScreenId)){
+            FacesUtil.redirect("/site/inbox.jsf");
+            return;
         }
     }
 
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation");
+        Date actionDate = new Date();
         HttpSession session = FacesUtil.getSession(false);
 
         if(session.getAttribute("workCasePreScreenId") != null){
@@ -134,7 +126,7 @@ public class PrescreenChecker implements Serializable {
             userId = userDetail.getUserName();
         }
 
-        //TODO Generate row for textBox to check Citizen id
+        //Generate row for textBox to check Citizen id
         List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         if(customerInfoViews != null){
             customerInfoViewList = generateCustomerInfoList(customerInfoViews);
@@ -148,8 +140,7 @@ public class PrescreenChecker implements Serializable {
         success = false;
         ncbViewList = new ArrayList<NcbView>();
 
-        log.debug("customerinfoList : {}", customerInfoViewList);
-
+        slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_CREATION, "", actionDate, ActionResult.SUCCESS, "");
     }
 
     public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
@@ -178,61 +169,59 @@ public class PrescreenChecker implements Serializable {
 
     public void onCheckCustomer(){
         log.debug("onCheckCustomer :::");
+        Date actionDate = new Date();
         RequestContext.getCurrentInstance().execute("blockUICheckCustomer.show()");
 
-        if(checkMandateDocControl.isMandateDocCompleted(0, workCasePreScreenId, stepId)){
-            //save return history
-            try {
-                returnControl.saveReturnHistoryForRestart(0,workCasePreScreenId);
-            } catch (Exception ex){
-                log.error("exception while save return information to history! ",ex);
-            }
+        //save return history
+        try {
+            returnControl.saveReturnHistoryForRestart(0,workCasePreScreenId);
+        } catch (Exception ex){
+            log.error("exception while save return information to history! ",ex);
+        }
 
-
-
-            List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
-            tmpCustomerInfoViewList = customerInfoViewList;
-            customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
-            int failCount = 0;
-            for(CustomerInfoView customer : tmpCustomerInfoViewList){
-                log.debug("CustomerInfo : {}", customer);
-                if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                    if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
-                        log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
-                        customer.setValidId(1);
-                        customer.setNcbReason("");
-                    }else{
-                        log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
-                        customer.setValidId(0);
-                        customer.setNcbReason("");
-                        failCount = failCount + 1;
-                    }
-                } else {
-                    if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
-                        log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
-                        customer.setValidId(1);
-                        customer.setNcbReason("");
-                    }else{
-                        log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
-                        customer.setValidId(0);
-                        customer.setNcbReason("");
-                        failCount = failCount + 1;
-                    }
+        List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+        tmpCustomerInfoViewList = customerInfoViewList;
+        customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
+        int failCount = 0;
+        for(CustomerInfoView customer : tmpCustomerInfoViewList){
+            log.debug("CustomerInfo : {}", customer);
+            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
+                    log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    customer.setNcbResult("");
+                }else{
+                    log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    customer.setNcbResult("");
+                    failCount = failCount + 1;
                 }
-                customerInfoViewList.add(customer);
+            } else {
+                if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
+                    log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    customer.setNcbResult("");
+                }else{
+                    log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    customer.setNcbResult("");
+                    failCount = failCount + 1;
+                }
             }
+            customerInfoViewList.add(customer);
+        }
 
 
-            if(failCount == 0){
-                //TODO Check ncb
-                RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
-                RequestContext.getCurrentInstance().execute("commandCheckNCB()");
-            }
-        } else {
-            messageHeader = "Warning.";
-            message = "Cannot " + ActionCode.CHECK_NCB.getActionName() + ". Some Mandate Document are incompleted.";
+        if(failCount == 0){
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check Citizen/Registration", actionDate, ActionResult.SUCCESS, "");
             RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            RequestContext.getCurrentInstance().execute("commandCheckNCB()");
+        }else{
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check Citizen/Registration", actionDate, ActionResult.FAILED, "Some Citizen/Registration Input not match.");
         }
     }
 
@@ -271,11 +260,12 @@ public class PrescreenChecker implements Serializable {
 
     public void onCheckNCB(){
         //To get NCB data
+        Date actionDate = new Date();
         log.debug("onCheckNCB ::: starting...");
         try{
-            //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             ncbOutputView = prescreenBusinessControl.getNCBFromNCB(customerInfoViewList, workCasePreScreenId);
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check NCB ( Online ) with out save data.", actionDate, ActionResult.SUCCESS, "");
             RequestContext.getCurrentInstance().execute("commandSaveNCB()");
             log.debug("onCheckNCB ::: success...");
         } catch(Exception ex){
@@ -283,12 +273,14 @@ public class PrescreenChecker implements Serializable {
             messageHeader = "Exception.";
             message = "Check NCB failed." + Util.getMessageException(ex);
             messageErr = true;
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check NCB ( Online ) with out save data.", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onSaveNCB(){
         //To save NCB data
+        Date actionDate = new Date();
         log.debug("onSaveNCB ::: starting...");
         try{
             ncbViewList = prescreenBusinessControl.getNCBData(ncbOutputView, workCasePreScreenId);
@@ -349,8 +341,7 @@ public class PrescreenChecker implements Serializable {
                         index = index + 1;
                     }
                 }
-                //TODO update customer to database
-                log.debug("onSaveNCB ::: customerInfoViewList : {}", customerInfoViewList);
+                //log.debug("onSaveNCB ::: customerInfoViewList : {}", customerInfoViewList);
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, ncbViewList, customerEntityId, workCasePreScreenId);
                 log.debug("onSaveNCB ::: savePreScreenChecker success...");
                 log.debug("onSaveNCB ::: failedCount : {}", failedCount);
@@ -358,8 +349,10 @@ public class PrescreenChecker implements Serializable {
 
             if(failedCount != 0){
                 success = false;
+                slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check NCB ( Save data )", actionDate, ActionResult.FAILED, "Some customer failed from NCB");
             } else {
                 success = true;
+                slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check NCB ( Save data )", actionDate, ActionResult.SUCCESS, "");
             }
 
             RequestContext.getCurrentInstance().execute("commandCheckCSI()");
@@ -368,6 +361,7 @@ public class PrescreenChecker implements Serializable {
             messageHeader = "Exception.";
             message = "Save NCB failed. " + Util.getMessageException(ex);
             messageErr = true;
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check NCB ( Save data )", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.error("onSaveNCB ::: Exception : ", ex);
         }
@@ -375,6 +369,7 @@ public class PrescreenChecker implements Serializable {
     }
 
     public void onCheckCSI(){
+        Date actionDate = new Date();
         try{
             if(ncbViewList != null && ncbViewList.size() > 0){
                 int failedCount = 0;
@@ -427,8 +422,10 @@ public class PrescreenChecker implements Serializable {
                     if(success){
                         success = true;
                     }
+                    slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check CSI ( Online )", actionDate, ActionResult.SUCCESS, "");
                 } else {
                     success = false;
+                    slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check CSI ( Online )", actionDate, ActionResult.FAILED, "Some customer failed from CSI");
                 }
 
                 prescreenBusinessControl.savePreScreenCheckerOnlyCSI(customerInfoViewList, customerEntityId, workCasePreScreenId);
@@ -499,8 +496,10 @@ public class PrescreenChecker implements Serializable {
                     if(success){
                         success = true;
                     }
+                    slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check CSI ( Online )", actionDate, ActionResult.SUCCESS, "");
                 } else {
                     success = false;
+                    slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check CSI ( Online )", actionDate, ActionResult.FAILED, "Some customer failed from CSI");
                 }
 
                 prescreenBusinessControl.savePreScreenCheckerOnlyCSI(customerInfoViewList, customerEntityId, workCasePreScreenId);
@@ -514,6 +513,7 @@ public class PrescreenChecker implements Serializable {
             messageHeader = "Exception.";
             message = "Check CSI failed. " + Util.getMessageException(ex);
             messageErr = true;
+            slosAuditor.add(Screen.PRESCREEN_CHECKER.value(), getCurrentUser().getId(), ActionAudit.ON_ACTION, "On Check CSI ( Online )", actionDate, ActionResult.FAILED, Util.getMessageException(ex));
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             log.error("onCheckCSI ::: Exception : ", ex);
         }

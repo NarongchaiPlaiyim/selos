@@ -57,7 +57,7 @@
                                      actionListener="#{executiveSummary.onAddDeviate()}"
                                      process="@form"
                                      update=":exSumDeviateDlgForm,:frmMain:decisionTable"
-                                     oncomplete="handleExSumDeviateRequest(xhr, status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'exSumDeviateDlg')"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      type="button" process="@this" update=":exSumDeviateDlgForm"
                                      onclick="PF('exSumDeviateDlg').hide()"/>

@@ -99,6 +99,10 @@
         <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>com.clevel.selos.security.SessionHandler</listener-class>
+    </listener>
+
     <welcome-file-list>
         <welcome-file>login.jsf</welcome-file>
         <!--<welcome-file>index.html</welcome-file>-->

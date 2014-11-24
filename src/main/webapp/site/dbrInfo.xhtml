@@ -8,7 +8,8 @@
         >
 
 <h:head>
-    <title>#{msg.get('app.dbr.title')}</title>
+    <title>#{msg.get("app.name")} - #{msg.get('app.dbr.title')}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
 
@@ -373,7 +374,7 @@
                                         <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
                                                          styleClass="small"
                                                          binding="#{dbrSaveBtn}"
-                                                         action="#{dbrInfo.onSaveDBRInfo}"
+                                                         action="#{dbrInfo.onSaveDBRInfo()}"
                                                          onclick="onOneClick('frmMain:btnSave', true);"
                                                          oncomplete="onOneClick('frmMain:btnSave', false);"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel"
@@ -382,7 +383,7 @@
                                         <p:spacer  width="10"/>
                                         <p:commandButton id="btnCancel" value="#{msg.get('app.button.cancel')}"
                                                          styleClass="small"
-                                                         action="#{dbrInfo.onCreation}"
+                                                         action="#{dbrInfo.onCancelDBRInfo()}"
                                                          update=":pnl_maincontainer :msgBoxSystemMessagePanel"
                                                          disabled="#{dbrInfo.isDisabled('cancelButton')}">
                                         </p:commandButton>

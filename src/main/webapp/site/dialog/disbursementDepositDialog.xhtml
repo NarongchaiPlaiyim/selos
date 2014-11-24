@@ -62,7 +62,7 @@
                                      styleClass="smaller"
                                      update=":frmMain ,:disbursementDepositForm, :msgBoxSystemMessagePanel2"
                                      onclick="PF('blockDisbursementDep').show()"
-                                     oncomplete="handleDisbursementDepositDialogRequest(xhr, status, args); blockDisbursementDep.hide()"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'depositDisbursementDialog')"/>
                     <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="smaller" type="button"
                                      onclick="depositDisbursementDialog.hide()"
                                      update=":frmMain"/>

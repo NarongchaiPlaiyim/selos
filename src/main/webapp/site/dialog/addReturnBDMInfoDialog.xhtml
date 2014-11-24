@@ -38,7 +38,7 @@
                                  actionListener="#{headerController.onSaveReturnBDMInfo()}"
                                  process="@form"
                                  update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoBDMDlgPanel, :frmMain:addReturnBDMInfoDlgPanel"
-                                 oncomplete="handleReturnBDMAddDialogRequest(xhr, status, args)"/>
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'addReturnBDMInfoDlg')"/>
                 <p:commandButton id="dlgCancelReturnBDMInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"

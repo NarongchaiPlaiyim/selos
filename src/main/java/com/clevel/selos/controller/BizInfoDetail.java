@@ -9,13 +9,13 @@ import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.RoleValue;
-import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.DateTimeUtil;
@@ -44,6 +44,30 @@ public class BizInfoDetail extends BaseController {
     @Inject
     Message msg;
 
+    @Inject
+    @SELOS
+    Logger log;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
+
+    @Inject
+    private BusinessGroupDAO businessGroupDAO;
+    @Inject
+    private BusinessDescriptionDAO businessDescriptionDAO;
+    @Inject
+    private BusinessTypeDAO businessTypeDAO;
+    @Inject
+    private BusinessActivityDAO businessActivityDAO;
+    @Inject
+    BizInfoDetailControl bizInfoDetailControl;
+    @Inject
+    private BizInfoSummaryControl bizInfoSummaryControl;
+    @Inject
+    private DBRControl dbrControl;
+    @Inject
+    private CalculationControl calculationControl;
+
     private long workCaseId;
     private long stepId;
     private long statusId;
@@ -56,8 +80,10 @@ public class BizInfoDetail extends BaseController {
     private BigDecimal sumCreditTermB;
     private double circulationAmount =0;
     private double productionCostsAmount =0;
+
     private String messageHeader;
     private String message;
+    private String severity;
 
     private int rowIndex;
     private String modeForButton;
@@ -94,26 +120,7 @@ public class BizInfoDetail extends BaseController {
 
     private boolean isDisable;
 
-    @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
-    private BusinessGroupDAO businessGroupDAO;
-    @Inject
-    private BusinessDescriptionDAO businessDescriptionDAO;
-    @Inject
-    private BusinessTypeDAO businessTypeDAO;
-    @Inject
-    private BusinessActivityDAO businessActivityDAO;
-    @Inject
-    BizInfoDetailControl bizInfoDetailControl;
-    @Inject
-    private BizInfoSummaryControl bizInfoSummaryControl;
-    @Inject
-    private DBRControl dbrControl;
-    @Inject
-    private CalculationControl calculationControl;
+    private String userId;
 
     public BizInfoDetail(){
 
@@ -136,8 +143,16 @@ public class BizInfoDetail extends BaseController {
     @PostConstruct
     public void onCreation(){
         log.debug("onCreation");
+        Date date = new Date();
 
         HttpSession session = FacesUtil.getSession(false);
+
+        user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             try{
@@ -152,14 +167,7 @@ public class BizInfoDetail extends BaseController {
 
                 if(!Util.isNull(bizInfoSummaryView) && !Util.isZero(bizInfoSummaryView.getId())){
                     bizInfoSummaryId = bizInfoSummaryView.getId();
-//                    onChangeBusinessGroupInitial();
-                } /*else {
-                    String url = "bizInfoSummary.jsf";
-                    FacesContext fc = FacesContext.getCurrentInstance();
-                    ExternalContext ec = fc.getExternalContext();
-                    log.debug("redirect to new page");
-                    ec.redirect(url);
-                } */
+                }
 
                 if (!Util.isNull(bizInfoSummaryView)){
                     if(bizInfoSummaryView.getCirculationAmount() != null){
@@ -169,8 +177,8 @@ public class BizInfoDetail extends BaseController {
                         productionCostsAmount = bizInfoSummaryView.getProductionCostsAmount().doubleValue();
                     }
                 } else {
-                        circulationAmount = 0;
-                        productionCostsAmount = 0;
+                    circulationAmount = 0;
+                    productionCostsAmount = 0;
                 }
 
                 double x = (circulationAmount/365)*30;
@@ -186,10 +194,7 @@ public class BizInfoDetail extends BaseController {
 
                 getBusinessInfoListDB();
 
-
                 bizInfoDetailViewId = Util.parseLong(session.getAttribute("bizInfoDetailViewId"), -1);
-
-                user = (User)session.getAttribute("user");
 
                 if(bizInfoDetailViewId == -1 ){
                     bizInfoDetailView = new BizInfoDetailView();
@@ -210,20 +215,9 @@ public class BizInfoDetail extends BaseController {
                         buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
                     }
 
-//                    if (Util.equals("Y",bizInfoDetailView.getBizPermission())){
-//                        if(!Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
-//                            bizInfoDetailView.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
-//                            log.info("setBizDocExpiryDate :",bizInfoDetailView.getBizDocExpiryDate());
-//                        } else {
-//                            bizInfoDetailView.setBizDocExpiryDate(null);
-//                        }
-//                    }
-
-
                     onChangeBusinessGroupInitial();
 
                     if (Util.isNull(bizInfoDetailView.getBizDocExpiryDate())){
-                        // #### pass data by presceen ####
                         onChangeBusinessDesc();
                     }
 
@@ -247,12 +241,17 @@ public class BizInfoDetail extends BaseController {
                 }
                 onCheckRole();
                 onChangeBizPermission();
-            }catch (Exception ex){
-                log.error("onCreation Exception : ", ex);
-                message = "Exception while load data : " + Util.getMessageException(ex);
-            }finally {
-                log.debug("onCreation end ");
+
+                slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+            } catch (Exception ex){
+                log.error("onCreation Exception : ", Util.getMessageException(ex));
+                slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, Util.getMessageException(ex));
             }
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -339,13 +338,70 @@ public class BizInfoDetail extends BaseController {
     }
 
     public void onAddBizProductDetailView(){
-        log.debug("onAddBizProductDetailView >>> begin ");
         bizProductDetailView = new BizProductDetailView();
         modeForButton = "add";
+
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_ADD, "On Add Product Information", new Date(), ActionResult.SUCCESS, "");
+    }
+
+    public void onSaveBizProductDetailView(){
+        Date date = new Date();
+        
+        boolean complete = false;
+        if(!bizProductDetailView.getProductType().equals("")&&!bizProductDetailView.getProductDetail().equals("")&&!bizProductDetailView.getPercentSalesVolume().equals("")&&!bizProductDetailView.getPercentEBIT().equals("")){
+            complete = true;
+            if(modeForButton.equalsIgnoreCase("add")){
+                log.debug("onSaveBizProductDetailView add >>> begin ");
+                bizProductDetailView.setNo(bizProductDetailViewList.size()+1);
+                bizProductDetailViewList.add(bizProductDetailView);
+
+                if(!calSumBizProductDetailView()){
+                    bizProductDetailViewList.remove(bizProductDetailView);
+                    calSumBizProductDetailView();
+                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
+                    severity = MessageDialogSeverity.ALERT.severity();
+                    complete = false;
+                }
+            } else if(modeForButton.equalsIgnoreCase("edit")) {
+                BizProductDetailView bizTemp;
+                bizTemp = bizProductDetailViewList.get(rowIndex);
+                bizTemp.setProductType(bizProductDetailView.getProductType());
+                bizTemp.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
+                bizTemp.setPercentEBIT(bizProductDetailView.getPercentEBIT());
+                bizTemp.setProductDetail(bizProductDetailView.getProductDetail());
+                if(!calSumBizProductDetailView()){
+                    bizTemp.setProductType(bizProductDetailViewTemp.getProductType());
+                    bizTemp.setPercentSalesVolume(bizProductDetailViewTemp.getPercentSalesVolume());
+                    bizTemp.setPercentEBIT(bizProductDetailViewTemp.getPercentEBIT());
+                    bizTemp.setProductDetail(bizProductDetailViewTemp.getProductDetail());
+                    calSumBizProductDetailView();
+                    
+                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
+                    severity = MessageDialogSeverity.ALERT.severity();  
+                    complete = false;
+                }
+            }
+        }
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_SAVE, "On Save Product Information", date, ActionResult.SUCCESS, "");
+
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onCancelBizProductDetailView(){
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel Product Information", new Date(), ActionResult.SUCCESS, "");
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", true);
     }
 
     public void onEditBizProductDetailView() {
         log.debug( " onEditBizProductDetailView is {}",selectBizProductDetail);
+        Date date = new Date();
         modeForButton = "edit";
         bizProductDetailView = new BizProductDetailView();
         //*** Check list size ***//
@@ -360,13 +416,18 @@ public class BizInfoDetail extends BaseController {
         bizProductDetailViewTemp.setPercentSalesVolume(selectBizProductDetail.getPercentSalesVolume());
         bizProductDetailViewTemp.setPercentEBIT(selectBizProductDetail.getPercentEBIT());
         bizProductDetailViewTemp.setProductDetail(selectBizProductDetail.getProductDetail());
+
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_EDIT, "On Edit Product Information - Product Type :: " + selectBizProductDetail.getProductType(), date, ActionResult.SUCCESS, "");
 }
 
     public void onDeleteBizProductDetailView() {
+        Date date = new Date();
         log.debug( " onDeleteBizProductDetailView is {}",selectBizProductDetail);
         bizProductDetailViewList.remove(selectBizProductDetail);
         calSumBizProductDetailView();
         onSetRowNoBizProductDetail();
+
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_DELETE, "On Delete Product Information - Product Type :: " + selectBizProductDetail.getProductType(), date, ActionResult.SUCCESS, "");
     }
 
     public void onSetRowNoBizProductDetail(){
@@ -375,50 +436,6 @@ public class BizInfoDetail extends BaseController {
             bizProductDetailTemp = bizProductDetailViewList.get(i);
             bizProductDetailTemp.setNo(i+1);
         }
-    }
-
-    public void onSaveBizProductDetailView(){
-        boolean complete = false;
-        RequestContext context = RequestContext.getCurrentInstance();
-
-        if(!bizProductDetailView.getProductType().equals("")&&!bizProductDetailView.getProductDetail().equals("")&&!bizProductDetailView.getPercentSalesVolume().equals("")&&!bizProductDetailView.getPercentEBIT().equals("")){
-            complete = true;
-            if(modeForButton.equalsIgnoreCase("add")){
-                log.debug("onSaveBizProductDetailView add >>> begin ");
-                bizProductDetailView.setNo(bizProductDetailViewList.size()+1);
-                bizProductDetailViewList.add(bizProductDetailView);
-
-                if(!calSumBizProductDetailView()){
-                    bizProductDetailViewList.remove(bizProductDetailView);
-                    calSumBizProductDetailView();
-                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    complete = false;
-                }
-                bizProductDetailView = new BizProductDetailView();
-            }else if(modeForButton.equalsIgnoreCase("edit")){
-                BizProductDetailView bizTemp;
-                bizTemp = bizProductDetailViewList.get(rowIndex);
-                bizTemp.setProductType(bizProductDetailView.getProductType());
-                bizTemp.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
-                bizTemp.setPercentEBIT(bizProductDetailView.getPercentEBIT());
-                bizTemp.setProductDetail(bizProductDetailView.getProductDetail());
-                if(!calSumBizProductDetailView()){
-                    bizTemp.setProductType(bizProductDetailViewTemp.getProductType());
-                    bizTemp.setPercentSalesVolume(bizProductDetailViewTemp.getPercentSalesVolume());
-                    bizTemp.setPercentEBIT(bizProductDetailViewTemp.getPercentEBIT());
-                    bizTemp.setProductDetail(bizProductDetailViewTemp.getProductDetail());
-                    calSumBizProductDetailView();
-                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
-                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-                    complete = false;
-                }
-                bizProductDetailView = new BizProductDetailView();
-            }
-        }
-        context.addCallbackParam("functionComplete", complete);
     }
 
     private boolean calSumBizProductDetailView(){
@@ -438,12 +455,19 @@ public class BizInfoDetail extends BaseController {
     }
 
     public void onAddBizStakeHolderDetailView(){
+        Date date = new Date();
         modeForButton = "add";
         onSetLabelStakeHolder();
         bizStakeHolderDetailView = new BizStakeHolderDetailView();
+        if(stakeType.equalsIgnoreCase("1")){
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_ADD, "On Add Stake Holder Supplier", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_ADD, "On Add Stake Holder Buyer", date, ActionResult.SUCCESS, "");
+        }
     }
 
     public void onEditBizStakeHolderDetailView() {
+        Date date = new Date();
         modeForButton = "edit";
         onSetLabelStakeHolder();
         bizStakeHolderDetailView = new BizStakeHolderDetailView();
@@ -451,6 +475,11 @@ public class BizInfoDetail extends BaseController {
         bizStakeHolderDetailView = onSetStakeHolder(bizStakeHolderDetailView,selectStakeHolder);
         bizStakeHolderTemp = new BizStakeHolderDetailView();
         bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,selectStakeHolder);
+        if(stakeType.equalsIgnoreCase("1")){
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_EDIT, "On Edit Stake Holder Supplier - Name :: " + selectStakeHolder.getName(), date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_EDIT, "On Edit Stake Holder Buyer - Name :: " + selectStakeHolder.getName(), date, ActionResult.SUCCESS, "");
+        }
     }
 
     private void onSetLabelStakeHolder(){
@@ -458,7 +487,7 @@ public class BizInfoDetail extends BaseController {
             dlgStakeHeader = msg.get("app.bizInfoDetail.label.supplierDetail");
             dlgStakeName = msg.get("app.bizInfoDetail.bizStakeHolder.label.supplierName");
             dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentBuysVolume");
-        }else if(stakeType.equalsIgnoreCase("2")){
+        } else if(stakeType.equalsIgnoreCase("2")) {
             dlgStakeHeader = msg.get("app.bizInfoDetail.label.buyerDetail");
             dlgStakeName =msg.get("app.bizInfoDetail.bizStakeHolder.label.buyerName");
             dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentSalesVolume");
@@ -466,6 +495,7 @@ public class BizInfoDetail extends BaseController {
     }
 
     public void onDeleteBizStakeHolderDetailView() {
+        Date date = new Date();
         if(stakeType.equalsIgnoreCase("1")){
             supplierDetailList.remove(selectStakeHolder);
             calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
@@ -474,15 +504,21 @@ public class BizInfoDetail extends BaseController {
             calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
         }
         onSetRowNoBizStakeHolderDetail();
+
+        if(stakeType.equalsIgnoreCase("1")){
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_DELETE, "On Delete Stake Holder Supplier :: Name :: " + selectStakeHolder.getName(),date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_DELETE, "On Delete Stake Holder Buyer :: Name :: " + selectStakeHolder.getName(),date, ActionResult.SUCCESS, "");
+        }
     }
 
     public void onSaveBizStakeHolderDetailView(){
+        Date date = new Date();
         boolean supplier;
         boolean buyer;
         BizStakeHolderDetailView stakeHolderRow;
-        RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = true;
-        if(modeForButton.equalsIgnoreCase("add")){
+        if(modeForButton.equalsIgnoreCase("add")) {
             if(stakeType.equals("1")){
                 bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
                 supplierDetailList.add(bizStakeHolderDetailView);
@@ -492,10 +528,11 @@ public class BizInfoDetail extends BaseController {
                      calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
                      messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
                      message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
-                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     severity = MessageDialogSeverity.ALERT.severity();
+
                      complete = false;
                  }
-            }else if(stakeType.equals("2")){
+            } else if(stakeType.equals("2")) {
                 log.debug( " add buyer 1 ");
                  bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
                  buyerDetailList.add(bizStakeHolderDetailView);
@@ -508,10 +545,10 @@ public class BizInfoDetail extends BaseController {
                      calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
                      messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
                      message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
-                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     severity = MessageDialogSeverity.ALERT.severity();
+
                      complete = false;
                  }
-                log.debug( " buyerlist size " + buyerDetailList.size());
             }
         }else if(modeForButton.equalsIgnoreCase("edit")){
             if(stakeType.equals("1")){
@@ -525,7 +562,8 @@ public class BizInfoDetail extends BaseController {
                      calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
                      messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
                      message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
-                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                     severity = MessageDialogSeverity.ALERT.severity();
+
                      complete = false;
                  }
             }else if(stakeType.equals("2")){
@@ -539,12 +577,34 @@ public class BizInfoDetail extends BaseController {
                     calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
                     messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
                     message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
-                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    severity = MessageDialogSeverity.ALERT.severity();
+
                     complete = false;
                 }
             }
         }
+
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+        if(stakeType.equalsIgnoreCase("1")){
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_SAVE, "On Save Stake Holder Supplier", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_SAVE, "On Save Stake Holder Buyer", date, ActionResult.SUCCESS, "");
+        }
+
+        RequestContext context = RequestContext.getCurrentInstance();
         context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onCancelBizStakeHolderDetailView(){
+        if(stakeType.equalsIgnoreCase("1")){
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel Stake Holder Supplier", new Date(), ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel Stake Holder Buyer", new Date(), ActionResult.SUCCESS, "");
+        }
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", true);
     }
 
     private BizStakeHolderDetailView onSetStakeHolder(BizStakeHolderDetailView stakeHolderMaster ,BizStakeHolderDetailView stakeHolderChild){
@@ -658,11 +718,12 @@ public class BizInfoDetail extends BaseController {
     }
 
     public void onSaveBizInfoView(){
+        Date date = new Date();
         try{
-
             if(Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()) != null){
                 sumBizPercent = Util.add(BigDecimal.valueOf(sumBizPercent), bizInfoDetailView.getPercentBiz()).doubleValue();
             }
+
             if(sumBizPercent>100.001){
                 sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
                 messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
@@ -673,7 +734,6 @@ public class BizInfoDetail extends BaseController {
 
             if (Util.isNull(bizInfoSummaryView)){
                 bizInfoSummaryId = bizInfoDetailControl.onSaveSummaryByDetail(workCaseId);
-                log.debug("--Creation BizInfoSummary.");
             }
 
             if(bizInfoDetailView.getId() == 0){
@@ -682,67 +742,43 @@ public class BizInfoDetail extends BaseController {
             }
 
             if(onCheckPermission()){
-
                 bizInfoDetailView.setModifyBy(user);
                 bizInfoDetailView.setSupplierDetailList(supplierDetailList);
                 bizInfoDetailView.setBuyerDetailList(buyerDetailList);
                 bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId, workCaseId, stepId);
                 dbrControl.updateValueOfDBR(workCaseId);
                 calculationControl.calForBizInfoSummary(workCaseId);
-                messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
-                message = msg.get("app.bizInfoDetail.message.body.save.success");
 
-                log.debug(" after save to DB BizInfoDetail is {}",bizInfoDetailView.getId());
                 bizInfoDetailViewId =  bizInfoDetailView.getId();
 
                 HttpSession session = FacesUtil.getSession(true);
-                session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
+                session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId);
 
-                log.debug(" after save to DB BizInfoDetail bizInfoDetailViewId at session is {}", session.getAttribute("bizInfoDetailViewId"));
                 calculationControl.calWC(workCaseId);
+
+                slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
+
                 onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+                messageHeader = msg.get("app.messageHeader.info");
+                message = msg.get("app.tcg.response.save.success");
+                severity = MessageDialogSeverity.INFO.severity();
             }
-        } catch(Exception ex){
-            log.error("Exception while save business description : ", ex);
-            messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
-            if(ex.getCause() != null){
-                message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();
-            } else {
-                message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getMessage();
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }finally {
-            log.debug("onSaveBizInfoView end");
+        } catch(Exception ex) {
+            log.error("Save Business Info Detail :: Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, Util.getMessageException(ex));
+
+            messageHeader = msg.get("app.messageHeader.error");
+            message = "Save business info detail data failed. Cause : " + Util.getMessageException(ex);
+            severity = MessageDialogSeverity.ALERT.severity();
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCancel(){
+        slosAuditor.add(Screen.BUSINESS_INFO_DETAIL.value(), userId, ActionAudit.ON_CANCEL, "", new Date(), ActionResult.SUCCESS, "");
+
         FacesUtil.redirect("/site/bizInfoSummary.jsf");
-    }
-
-    public void onCalCashCredit(String point){
-        if(point.equals("stakeHolderDlg")){
-            bizStakeHolderDetailView.setPercentCredit(Util.subtract(BigDecimal.valueOf(100),bizStakeHolderDetailView.getPercentCash()));
-        }else if(point.equals("purchasePercentCash")){
-            bizInfoDetailView.setPurchasePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentCash()));
-        }else if(point.equals("payablePercentCash")){
-            bizInfoDetailView.setPayablePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentCash()));
-        }else if(point.equals("purchasePercentLocal")){
-            bizInfoDetailView.setPurchasePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentLocal()));
-        }else if(point.equals("payablePercentLocal")){
-            bizInfoDetailView.setPayablePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentLocal()));
-        }
-    }
-
-    public void onCalStockValue(){
-        double stockDuBDM = bizInfoDetailView.getStockDurationBDM().doubleValue();
-        double stockValueBDM = (productionCostsAmount/365)*stockDuBDM;
-        bizInfoDetailView.setStockValueBDM( new BigDecimal(stockValueBDM));
-
-        double stockDuUW =    bizInfoDetailView.getStockDurationUW().doubleValue();
-        double stockValueUW= (productionCostsAmount/365)*stockDuUW;
-        bizInfoDetailView.setStockValueUW( new BigDecimal(stockValueUW));
     }
 
     public boolean onCheckPermission(){
@@ -760,6 +796,21 @@ public class BizInfoDetail extends BaseController {
         }
     }
 
+    public void onCalCashCredit(String point){
+        if(point.equals("stakeHolderDlg")){
+            bizStakeHolderDetailView.setPercentCredit(Util.subtract(BigDecimal.valueOf(100),bizStakeHolderDetailView.getPercentCash()));
+        }else if(point.equals("purchasePercentCash")){
+            bizInfoDetailView.setPurchasePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentCash()));
+        }else if(point.equals("payablePercentCash")){
+            bizInfoDetailView.setPayablePercentCredit(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentCash()));
+        }else if(point.equals("purchasePercentLocal")){
+            bizInfoDetailView.setPurchasePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPurchasePercentLocal()));
+        }else if(point.equals("payablePercentLocal")){
+            bizInfoDetailView.setPayablePercentForeign(Util.subtract(BigDecimal.valueOf(100),bizInfoDetailView.getPayablePercentLocal()));
+        }
+    }
+
+    //GETTER SETTER
     public BizStakeHolderDetailView getBizStakeHolderDetailView() {
         return bizStakeHolderDetailView;
     }
@@ -959,5 +1010,13 @@ public class BizInfoDetail extends BaseController {
 
     public void setDlgStakeHeader(String dlgStakeHeader) {
         this.dlgStakeHeader = dlgStakeHeader;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
     }
 }

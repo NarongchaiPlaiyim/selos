@@ -492,34 +492,43 @@ public class BankStmtControl extends BusinessControl {
     }*/
 
     public void calculateMainAccount(List<BankStmtView> bankStmtViewList) {
+        log.debug("calculateMainAccount");
         if (!Util.isNull(bankStmtViewList)) {
+            log.debug("bankStmtViewList :: size :: {}", bankStmtViewList.size());
             List<BankStmtView> candidateMaxIncomeNetList = new ArrayList<BankStmtView>();
             BigDecimal maxValue = BigDecimal.ZERO;
             long atId = 0;
+            int i = 1;
 
             for(BankStmtView bankStmtView : bankStmtViewList) {
+                log.debug("Loop :: {}, maxValue :: {}", i, maxValue);
                 //Clear
                 bankStmtView.setMainAccount(RadioValue.NO.value());
                 bankStmtView.setHighestInflow("N");
 
                 // skip to next, if BankStmt is not Borrower or does not have any ODLimit within the last Six month
                 if (!isBorrowerAndHasODLimit(bankStmtView)) {
-                    break;
+                    continue;
                 }
 
                 // find MAX AvgIncomeNet(UW/BDM)
                 if (!Util.isNull(bankStmtView.getNetIncomeLastSix())){
+                    log.debug("Net Income Last Six Month :: {}", bankStmtView.getNetIncomeLastSix());
                     if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getNetIncomeLastSix(), maxValue, ValidationUtil.CompareMode.GREATER_THAN)) {
+                        log.debug("##### 1 #####");
                         maxValue = bankStmtView.getNetIncomeLastSix();
                         candidateMaxIncomeNetList.clear();
                         candidateMaxIncomeNetList.add(bankStmtView);
                         atId = bankStmtView.getId();
                     } else if (ValidationUtil.isFirstCompareToSecond(bankStmtView.getNetIncomeLastSix(), maxValue, ValidationUtil.CompareMode.EQUAL)) {
+                        log.debug("##### 2 #####");
                         candidateMaxIncomeNetList.add(bankStmtView);
                     }
                 }
+                i++;
             }
 
+            log.debug("#1 - Candidate :: Size :: {}", candidateMaxIncomeNetList.size());
             if (candidateMaxIncomeNetList.size() == 1) {
                 setMainAccountAtId(bankStmtViewList, atId);
             } else if (candidateMaxIncomeNetList.size() > 1) {
@@ -541,6 +550,7 @@ public class BankStmtControl extends BusinessControl {
                     }
                 }
 
+                log.debug("#2 - Candidate :: Size :: {}", candidateMaxIncomeNetList.size());
                 if (candidateMaxLimitList.size() == 1) {
                     setMainAccountAtId(bankStmtViewList, atId);
                 } else if (candidateMaxLimitList.size() > 1) {
@@ -562,6 +572,7 @@ public class BankStmtControl extends BusinessControl {
                         }
                     }
 
+                    log.debug("#3 - Candidate :: Size :: {}", candidateMaxIncomeNetList.size());
                     if (candidateMaxDebitTxList.size() == 1) {
                         setMainAccountAtId(bankStmtViewList, atId);
                     } else if (candidateMaxDebitTxList.size() > 1) {
@@ -603,6 +614,7 @@ public class BankStmtControl extends BusinessControl {
         if(!Util.isNull(bankStmtSummaryView.getTmbBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getTmbBankStmtViewList());
             for(BankStmtView bankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
+                log.debug("Account Name :: , Main :: {}", bankStmtView.getAccountName(), bankStmtView.getMainAccount());
                 if(bankStmtView.getMainAccount() == RadioValue.YES.value()) {
                     tmb = bankStmtView;
                     tmb.setHighestInflow("Y");
@@ -611,10 +623,13 @@ public class BankStmtControl extends BusinessControl {
                 }
             }
         }
+
         if(!Util.isNull(bankStmtSummaryView.getOthBankStmtViewList())) {
             calculateMainAccount(bankStmtSummaryView.getOthBankStmtViewList());
                 for(BankStmtView bankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
+                    log.debug("Account Name :: , Main :: {}", bankStmtView.getAccountName(), bankStmtView.getMainAccount());
                     if(bankStmtView.getMainAccount() == RadioValue.YES.value()) { //OTH = Main
+                        log.debug("isHaveMainTMB :: {}", isHaveMainTMB);
                         if(isHaveMainTMB) {
                             log.debug("OTH Limit :: {}", bankStmtView.getNetIncomeLastSix());
                             if(tmb.getNetIncomeLastSix().compareTo(bankStmtView.getNetIncomeLastSix()) > 0) { //OTH = Main && Income Last Six Month < TMB

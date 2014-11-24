@@ -78,7 +78,7 @@
                                      actionListener="#{headerController.onSaveAppraisalDetail()}"
                                      process="@form"
                                      update=":frmMain:reqApprDetailDialogPanel, :frmMain:reqApprDialogPanel"
-                                     oncomplete="handleRequestAppraisalDetail(xhr, status, args); blockReqApprDetailDialogPanel.hide()"/>
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'reqApprDetailDlg'); blockReqApprDetailDialogPanel.hide()"/>
 
                     <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="reqApprDetailDlg.hide()" />
                 </td>

@@ -8,7 +8,8 @@
         xmlns:clv="http://clevel.com/ui">
 
 <h:head>
-    <title>SE-LOS : Search</title>
+    <title>#{msg.get("app.name")} - Search</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/images/shared/favicon.ico"/>
     <h:outputStylesheet name="css/style.css" />
     <h:outputScript library="js" name="custom.js" />
 
@@ -100,7 +101,8 @@ function resetter()
                                     </tr>
                                     <tr>
                                         <td class="title">Application No. :</td>
-                                        <td colspan="3"><h:inputText size="20" value="#{peSearch.applicationNumber}" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"> </h:inputText></td>
+                                        <!--<td colspan="3"><h:inputText size="20" value="#{peSearch.applicationNumber}" styleClass="numberOnly" onkeydown="return onKeyDownNumber(event);" onkeypress="return onKeyPressNumber(event);"> </h:inputText></td>-->
+                                        <td colspan="3"><h:inputText size="20" value="#{peSearch.applicationNumber}" styleClass="numberOnly"> </h:inputText></td>
                                     </tr>
                                     <tr>
                                         <td class="title">User ID :</td>

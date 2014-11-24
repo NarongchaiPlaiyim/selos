@@ -177,12 +177,12 @@
                                 actionListener="#{creditFacExisting.onSaveExistingCollateral()}"
                                 process="@form"
                                 update=":existingCollateralRelatedDlgForm,:frmMain"
-                                oncomplete="handleExistingCollateralRelatedRequest(xhr, status, args)" />
+                                oncomplete="handleDialogRequest(xhr, status, args, 'existingCollateralRelatedDlg')" />
 
                         <p:commandButton
                                 value="#{msg.get('app.tcg.dlg.button.cancel')}"
                                 styleClass="small"
-                                onclick="existingCollateralRelatedDlg.hide()"
+                                onclick="PF('existingCollateralRelatedDlg').hide()"
                                 />
                     </td>
                 </tr>

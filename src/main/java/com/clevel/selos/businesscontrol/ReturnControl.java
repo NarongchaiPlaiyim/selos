@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.businesscontrol.util.bpm.BPMExecutor;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.ReturnInfoHistoryDAO;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.StepDAO;
@@ -10,6 +11,7 @@ import com.clevel.selos.model.ActionCode;
 import com.clevel.selos.model.ParallelAppraisalStatus;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.StageValue;
+import com.clevel.selos.model.StepValue;
 import com.clevel.selos.model.db.history.ReturnInfoHistory;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.Step;
@@ -55,6 +57,8 @@ public class ReturnControl extends BusinessControl {
 
     @Inject
     BPMExecutor bpmExecutor;
+    @Inject
+    STPExecutor stpExecutor;
 
     public List<Reason> getReturnReasonList(){
         List<Reason> reasons = reasonDAO.getReasonList();
@@ -514,6 +518,24 @@ public class ReturnControl extends BusinessControl {
 
             log.debug("execute bpm (dispatch)");
             bpmExecutor.returnCase(queueName, wobNumber, remark, reason, ActionCode.RETURN_TO_AAD_ADMIN.getVal());
+            //TODO Change Appraisal Request flag in Collateral from COMPLETED to REQUESTED and Duplicate Data for COMPLETED
+            if(stepId == StepValue.CREDIT_DECISION_UW2.value()){
+                log.debug("duplicate data for AAD Admin and AAD Committee");
+                duplicateCollateralForReturn(workCaseId);
+            }
+        }
+    }
+
+    public void duplicateCollateralForReturn(long workCaseId){
+        log.debug("duplicateCollateralForReturn : workCaseId : {}", workCaseId);
+        duplicateCollateralData(workCaseId, 0, "RETURN");
+    }
+
+    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId, String method){
+        try {
+            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId, method);
+        }catch (Exception ex){
+            log.error("Exception while duplicateFacilityData : ", ex);
         }
     }
 

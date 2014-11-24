@@ -38,7 +38,7 @@
                                  actionListener="#{headerController.onSaveReturnAADUWInfo()}"
                                  process="@form"
                                  update=":frmMain:returnInfoDlgPanel,:frmMain:returnInfoAADUWDlgPanel, :frmMain:addReturnAADUWInfoDlgPanel"
-                                 oncomplete="handleReturnAADUWAddDialogRequest(xhr, status, args)"/>
+                                 oncomplete="handleDialogRequest(xhr, status, args, 'addReturnAADUWInfoDlg')"/>
                 <p:commandButton id="dlgCancelReturnAADUWInfoBtn"
                                  value="#{msg.get('app.button.cancel')}"
                                  styleClass="small"

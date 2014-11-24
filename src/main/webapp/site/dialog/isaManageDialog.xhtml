@@ -191,7 +191,7 @@
                                      styleClass="medium"
                                      actionListener="#{isa.onSubmitSaveDialog()}"
                                      update=":userTableData,:msgBoxSystemMessagePanel,:manageDialogForm"
-                                     oncomplete="handleManageUserDialogRequest(xhr,status, args)"/>
+                                     oncomplete="handleDialogRequest(xhr,status, args, 'manageUserDlg')"/>
                     <p:commandButton value="Cancel"
                                      styleClass="medium"
                                      process="@this"

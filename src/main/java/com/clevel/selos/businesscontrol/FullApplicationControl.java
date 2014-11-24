@@ -409,6 +409,7 @@ public class FullApplicationControl extends BusinessControl {
 
                     ProposeLine proposeLine = proposeLineDAO.findByWorkCaseId(workCaseId);
                     ExistingCreditFacility existingCreditFacility = existingCreditFacilityDAO.findByWorkCaseId(workCaseId);
+
                     if(proposeLine != null) {
                         //totalCommercial = proposeLine.getTotalExposure();
                         BigDecimal totalNewCredit = proposeLine.getTotalNewCredit() != null ? proposeLine.getTotalNewCredit() : BigDecimal.ZERO;
@@ -481,6 +482,12 @@ public class FullApplicationControl extends BusinessControl {
                             approvalHistoryEndorseCA.setSubmit(1);
                             approvalHistoryEndorseCA.setSubmitDate(new Date());
                         }
+                    }
+
+                    if(Util.isEmpty(rgmUserId)) {
+                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                        basicInfo.setUwSubmitDate(new Date());
+                        basicInfoDAO.persist(basicInfo);
                     }
 
                     UWRuleResultSummary uwRuleResultSummary = uwRuleResultSummaryDAO.findByWorkCaseId(workCaseId);
@@ -667,6 +674,12 @@ public class FullApplicationControl extends BusinessControl {
 
                         bpmExecutor.submitForRGM(queueName, wobNumber, ghUserId, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), rgmDecisionFlag, ActionCode.SUBMIT_CA.getVal());
                         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+
+                        if(Util.isEmpty(ghUserId)) {
+                            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                            basicInfo.setUwSubmitDate(new Date());
+                            basicInfoDAO.persist(basicInfo);
+                        }
                     } else {
                         log.debug("submitForRGM :: no decision selected.");
                         throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
@@ -711,6 +724,11 @@ public class FullApplicationControl extends BusinessControl {
                         bpmExecutor.submitForGH(queueName, wobNumber, cssoUserId, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), ghDecisionFlag, ActionCode.SUBMIT_CA.getVal());
                         approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
 
+                        if(Util.isEmpty(cssoUserId)) {
+                            BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                            basicInfo.setUwSubmitDate(new Date());
+                            basicInfoDAO.persist(basicInfo);
+                        }
                     } else {
                         log.debug("submitForGH :: no decision found. ( pricing )");
                         throw new Exception(msg.get("exception.submit.makedecision.beforesubmit"));
@@ -747,6 +765,10 @@ public class FullApplicationControl extends BusinessControl {
 
                     bpmExecutor.submitForCSSO(queueName, wobNumber, getRemark(submitRemark, slaRemark), getReasonDescription(slaReasonId), cssoDecisionFlag, ActionCode.SUBMIT_CA.getVal());
                     approvalHistoryDAO.persist(approvalHistoryEndorsePricing);
+
+                    BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+                    basicInfo.setUwSubmitDate(new Date());
+                    basicInfoDAO.persist(basicInfo);
                 } else {
                     throw new Exception("Please make decision before submit.");
                 }
@@ -831,13 +853,6 @@ public class FullApplicationControl extends BusinessControl {
                         approvalHistory.setSubmit(1);
                         approvalHistory.setSubmitDate(submitDate);
                         approvalHistoryDAO.persist(approvalHistory);
-
-                        //Set submit date for UW1
-                        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
-                        if (!Util.isNull(basicInfo)) {
-                            basicInfo.setUwSubmitDate(submitDate);
-                            basicInfoDAO.persist(basicInfo);
-                        }
                     }catch (Exception ex){
                         log.error("Exception while submit for UW : ", ex);
                     }
@@ -1049,7 +1064,7 @@ public class FullApplicationControl extends BusinessControl {
     public void duplicateCollateralForAppraisal(long workCaseId, long workCasePreScreenId){
         //Duplicate Data From Propose ( Requested ) to Approve Requested...
         log.debug("duplicateCollateralData : workCaseId : {}, workCasePreScreenId : {}", workCaseId, workCasePreScreenId);
-        duplicateCollateralData(workCaseId, workCasePreScreenId);
+        duplicateCollateralData(workCaseId, workCasePreScreenId, "SUBMIT");
     }
 
     /** Appraisal [ Request Appraisal - BDM at RequestAppraisal Screen ( Customer Acceptance ) ] **/
@@ -1360,21 +1375,6 @@ public class FullApplicationControl extends BusinessControl {
                         proposeCollateralInfoDAO.persist(proposeCollateralInfo);
                     }
                 }
-                /*for(ProposeCollateralInfo proposeCollateralInfo : proposeLine.getProposeCollateralInfoList()){
-                    if(proposeCollateralInfo.getProposeType() == ProposeType.R && proposeCollateralInfo.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
-                        proposeCollateralInfo.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
-                        if(!Util.isNull(proposeCollateralInfo.getProposeCollateralInfoHeadList()) && proposeCollateralInfo.getProposeCollateralInfoHeadList().size() > 0){
-                            for(ProposeCollateralInfoHead proposeCollateralInfoHead : proposeCollateralInfo.getProposeCollateralInfoHeadList()){
-                                if(proposeCollateralInfoHead.getProposeType() == ProposeType.R && proposeCollateralInfoHead.getAppraisalRequest() == RequestAppraisalValue.REQUESTED.value()){
-                                    proposeCollateralInfoHead.setAppraisalRequest(RequestAppraisalValue.COMPLETED.value());
-                                    proposeCollateralInfoHead.setProposeType(ProposeType.A);
-                                }
-                            }
-                        }
-                    }
-                    log.debug("submitForAADCommittee : proposeCollateralInfo : {}", proposeCollateralInfo);
-                    proposeCollateralInfoDAO.persist(proposeCollateralInfo);
-                }*/
             }
         }
         bpmExecutor.submitUW2FromCommittee(queueName, wobNumber, ActionCode.SUBMIT_CA.getVal());
@@ -2165,9 +2165,9 @@ public class FullApplicationControl extends BusinessControl {
         }
     }
 
-    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId){
+    public void duplicateCollateralData(long workCaseId, long workCasePreScreenId, String method){
         try {
-            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId);
+            stpExecutor.duplicateCollateralData(workCaseId, workCasePreScreenId, method);
         }catch (Exception ex){
             log.error("Exception while duplicateFacilityData : ", ex);
         }
@@ -2222,6 +2222,15 @@ public class FullApplicationControl extends BusinessControl {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             workCase.setNcbRejectFlag(isNCBReject);
             workCaseDAO.persist(workCase);
+        }
+    }
+
+    public void updateUWSubmitDate(long workCaseId){
+        //Set submit date for UW1
+        BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
+        if (!Util.isNull(basicInfo)) {
+            basicInfo.setUwSubmitDate(new Date());
+            basicInfoDAO.persist(basicInfo);
         }
     }
 }

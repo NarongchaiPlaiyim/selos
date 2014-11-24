@@ -78,9 +78,15 @@
                             action="#{bizInfoDetail.onSaveBizProductDetailView()}"
                             process="@form"
                             update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
-                            oncomplete="handleFullappBizProductRequest(xhr, status, args)"/>
-                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                     update=":bizProductViewDlgForm" onclick="PF('bizProductViewDlg').hide()"/>
+                            oncomplete="handleDialogRequest(xhr, status, args, 'bizProductViewDlg')"/>
+                    <p:commandButton id="dlgCancelBtn"
+                                     value="#{msg.get('app.button.cancel')}"
+                                     styleClass="small"
+                                     actionListener="#{bizInfoDetail.onCancelBizProductDetailView()}"
+                                     process="@form"
+                                     update=":bizProductViewDlgForm"
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'bizProductViewDlg')">
+                    </p:commandButton>
                 </td>
             </tr>
         </table>
