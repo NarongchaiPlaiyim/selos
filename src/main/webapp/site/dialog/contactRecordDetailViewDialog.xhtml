@@ -63,12 +63,14 @@
             	<td class="title">
             	</td>
             	<td>
+                    <h:outputText value="HH"/>
             		<p:spinner value="#{customerAcceptance.contactRecord.nextCallingHour}"
             			min="0" max="23" size="3" style="margin-right : 5px"
             			required="#{customerAcceptance.isDialogMandate('nextCall')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
                         disabled="#{customerAcceptance.isDialogDisable('nextCall')}"
             			/>
-            		:	
+            		:
+                    <h:outputText value="MM"/>
             		<p:spinner value="#{customerAcceptance.contactRecord.nextCallingMin}"
             			min="0" max="59"  size="3" style="margin-left:5px"
             			required="#{customerAcceptance.isDialogMandate('nextCall')}" requiredMessage="#{msg.get('app.cusaccept.validate.nextCallDateTime')}"
