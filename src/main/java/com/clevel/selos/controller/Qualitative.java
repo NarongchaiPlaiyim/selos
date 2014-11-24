@@ -4,10 +4,14 @@ import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.working.BasicInfoDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionAudit;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.QualityLevel;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.QualitativeView;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -23,6 +27,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -36,6 +41,9 @@ public class Qualitative extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     @ValidationMessage
@@ -68,6 +76,8 @@ public class Qualitative extends BaseController {
     private int result;
     private boolean validate;
     private boolean requiredReason;
+
+    private String userId;
 
     public Qualitative() {
 
@@ -117,7 +127,17 @@ public class Qualitative extends BaseController {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
+
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ", page);
@@ -163,6 +183,13 @@ public class Qualitative extends BaseController {
             onLoadSelectList();
             String ownerCaseUserId = Util.parseString(session.getAttribute("caseOwner"), "");
             loadFieldControl(workCaseId, Screen.QUALITATIVE, ownerCaseUserId);
+
+            slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -255,6 +282,8 @@ public class Qualitative extends BaseController {
     }
 
     public void onSaveQualitativeA() {
+        Date date = new Date();
+
         log.info("onSaveQualitativeA :::");
         log.info("modeForButton :: {} ", modeForButton);
         boolean validate = true;
@@ -274,18 +303,19 @@ public class Qualitative extends BaseController {
                 modeForButton = ModeForButton.EDIT;
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.qualitativeA.response.save.success");
+
+                slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_SAVE, "Qualitative A", date, ActionResult.SUCCESS, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 onCreation();
             } catch (Exception ex) {
                 log.error("Exception : {}", ex);
                 messageHeader = msg.get("app.header.save.failed");
-
-                if (ex.getCause() != null) {
-                    message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + ex.getCause().toString();
-                } else {
-                    message = msg.get("app.qualitativeA.response.save.failed ") + ex.getMessage();
-                }
+                message = msg.get("app.qualitativeA.response.save.failed ") + " cause : " + Util.getMessageException(ex);
                 messageErr = true;
+
+                slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_SAVE, "Qualitative A", date, ActionResult.FAILED, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
             }
@@ -293,12 +323,15 @@ public class Qualitative extends BaseController {
     }
 
     public void onCancelQualitativeA() {
+        slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_CANCEL, "Qualitative A", new Date(), ActionResult.SUCCESS, "");
         modeForButton = ModeForButton.CANCEL;
         log.info("modeForButton :: {} ", modeForButton);
         onCreation();
     }
 
     public void onSaveQualitativeB() {
+        Date date = new Date();
+
         log.info("onSaveQualitativeB :::");
         log.info("modeForButton :: {} ", modeForButton);
         boolean validate = true;
@@ -317,27 +350,27 @@ public class Qualitative extends BaseController {
                 qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
                 messageHeader = msg.get("app.header.save.success");
                 message = msg.get("app.qualitativeB.response.save.success");
+
+                slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_SAVE, "Qualitative B", date, ActionResult.SUCCESS, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 onCreation();
             } catch (Exception ex) {
                 log.error("Exception : {}", ex);
                 messageHeader = msg.get("app.header.save.failed");
-
-                if (ex.getCause() != null) {
-                    message = msg.get("app.qualitativeB.response.save.failed ") + " cause : " + ex.getCause().toString();
-                } else {
-                    message = msg.get("app.qualitativeB.response.save.failed ") + ex.getMessage();
-                }
-
+                message = msg.get("app.qualitativeB.response.save.failed ") + " cause : " + Util.getMessageException(ex);
                 messageErr = true;
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
+                slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_SAVE, "Qualitative B", date, ActionResult.FAILED, message);
+
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         }
 
     }
 
     public void onCancelQualitativeB() {
+        slosAuditor.add(Screen.QUALITATIVE.value(), userId, ActionAudit.ON_CANCEL, "Qualitative B", new Date(), ActionResult.SUCCESS, "");
         modeForButton = ModeForButton.CANCEL;
         log.info("modeForButton :: {} ", modeForButton);
         onCreation();
