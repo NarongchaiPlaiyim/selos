@@ -761,7 +761,7 @@ public class BizInfoDetail extends BaseController {
                 onCreation();
 
                 messageHeader = msg.get("app.messageHeader.info");
-                message = msg.get("app.tcg.response.save.success");
+                message = msg.get("app.bizInfoDetail.message.body.save.success");
                 severity = MessageDialogSeverity.INFO.severity();
             }
         } catch(Exception ex) {
