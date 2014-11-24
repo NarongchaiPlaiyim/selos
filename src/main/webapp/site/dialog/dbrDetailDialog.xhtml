@@ -107,7 +107,7 @@
                                      actionListener="#{dbrInfo.onCancelDBRDetail()}"
                                      process="@form"
                                      update=":dbrDetailDlgForm"
-                                     oncomplete="handleDialogRequest(xhr, status, args)">
+                                     oncomplete="handleDialogRequest(xhr, status, args, 'dbrDetailDialog')">
                         <p:resetInput target=":dbrDetailDlgForm"/>
                     </p:commandButton>
                 </td>
