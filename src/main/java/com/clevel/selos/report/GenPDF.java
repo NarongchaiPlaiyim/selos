@@ -199,7 +199,7 @@ public class GenPDF extends ReportService implements Serializable {
                 if(!Util.isNull(workCasePrescreen)){
                     appNumber = workCasePrescreen.getAppNumber();
                     statusId = workCasePrescreen.getStatus().getId();
-                    stepId = workCase.getStep().getId();
+                    stepId = workCasePrescreen.getStep().getId();
                 }
             }
 
