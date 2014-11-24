@@ -1350,7 +1350,7 @@ public class CustomerInfoIndividual extends BaseController {
                     message = "Search customer not found.";
                     severity = "info";
 
-                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
                 }
             } else {
                 enableDocumentType = true;
@@ -1359,7 +1359,7 @@ public class CustomerInfoIndividual extends BaseController {
                 message = customerInfoResultView.getReason();
                 severity = "info";
 
-                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
             }
 
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
@@ -1577,14 +1577,14 @@ public class CustomerInfoIndividual extends BaseController {
                         message = "Refresh interface info failed. ( Customer not found. )";
                         severity = "info";
 
-                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
                     }
                 } else {
                     messageHeader = "Information.";
                     message = customerInfoResultView.getReason();
                     severity = "info";
 
-                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
                 }
 
                 customerInfoView.setSearchFromRM(1);
@@ -1660,7 +1660,7 @@ public class CustomerInfoIndividual extends BaseController {
                     message = cusSpouseResultView.getReason();
                     severity = "info";
 
-                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
                 }
                 customerInfoView.getSpouse().setSearchBy(1);
                 customerInfoView.getSpouse().setSearchFromRM(1);
