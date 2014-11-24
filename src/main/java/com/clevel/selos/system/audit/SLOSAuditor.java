@@ -28,7 +28,11 @@ public class SLOSAuditor implements Serializable{
     }
 
     public void add(int screenId, String userId, ActionAudit actionAudit, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc) {
-        HttpSession session = FacesUtil.getSession(false);
-        slosActivityDAO.persist(new SLOSActivity(screenId, userId, Util.parseString(session.getAttribute("appNumber"), ""), actionAudit, actionDesc, actionDate, actionResult, resultDesc, new Date()));
+        try {
+            HttpSession session = FacesUtil.getSession(false);
+            slosActivityDAO.persist(new SLOSActivity(screenId, userId, Util.parseString(session.getAttribute("appNumber"), ""), actionAudit, actionDesc, actionDate, actionResult, resultDesc, new Date()));
+        }catch (Exception ex){
+            log.error("Exception while add slosAuditor : ", ex);
+        }
     }
 }

@@ -325,10 +325,14 @@ public class PESearch implements Serializable
             if(!Util.isNull(workCase)){
                 wrkCaseId = workCase.getId();
                 requestAppraisalFlag = workCase.getRequestAppraisal();
+                if(Util.isZero(statusId))
+                    statusId = workCase.getStatus().getId();
             } else {
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByAppNumber(appNumber);
                 wrkCasePreScreenId = workCasePrescreen.getId();
                 requestAppraisalFlag = workCasePrescreen.getRequestAppraisal();
+                if(Util.isZero(statusId))
+                    statusId = workCasePrescreen.getStatus().getId();
             }
 
             if(Util.isTrue(requestAppraisalFlag)){
