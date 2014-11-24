@@ -5,15 +5,14 @@ import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.businesscontrol.HeaderControl;
 import com.clevel.selos.businesscontrol.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.RelationValue;
-import com.clevel.selos.model.Screen;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.master.Relation;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.model.view.master.*;
+import com.clevel.selos.system.audit.SLOSAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -42,6 +41,9 @@ public class CustomerInfoIndividual extends BaseController {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    private SLOSAuditor slosAuditor;
 
     @Inject
     @ValidationMessage
@@ -283,6 +285,8 @@ public class CustomerInfoIndividual extends BaseController {
 
     private CustomerInfoView individualView;
 
+    private String userId;
+
     public CustomerInfoIndividual(){
     }
 
@@ -312,7 +316,16 @@ public class CustomerInfoIndividual extends BaseController {
     public void onCreation() {
         log.debug("onCreation");
 
+        Date date = new Date();
+
         HttpSession session = FacesUtil.getSession(false);
+
+        User user = getCurrentUser();
+        if(!Util.isNull(user)) {
+            userId = user.getId();
+        } else {
+            userId = "Null";
+        }
 
         if(checkSession(session)){
             workCaseId = (Long)session.getAttribute("workCaseId");
@@ -342,11 +355,18 @@ public class CustomerInfoIndividual extends BaseController {
             }
 
             //flag for show button
-            if(isFromJuristicParam){                        // add new individual from juristic
+            if(isFromJuristicParam) {                        // add new individual from juristic
                 isFromJuristic = true;                      // for pass param return to juristic
-            }else{
+            } else {
                 isFromJuristic = false;                     // for save individual to DB
             }
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.SUCCESS, "");
+        } else {
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_CREATION, "", date, ActionResult.FAILED, "Invalid Session");
+
+            log.debug("No session for case found. Redirect to Inbox");
+            FacesUtil.redirect("/site/inbox.jsf");
         }
     }
 
@@ -1144,6 +1164,7 @@ public class CustomerInfoIndividual extends BaseController {
     }
 
     public void onSearchCustomerInfo() {
+        Date date = new Date();
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
         try {
@@ -1311,12 +1332,16 @@ public class CustomerInfoIndividual extends BaseController {
                         } catch (Exception ex) {
                             enableSpouseDocumentType = true;
                             enableSpouseCitizenId = true;
-                            log.error("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
+                            log.error("onSearchCustomerInfo ( spouse ) Exception : {}", Util.getMessageException(ex));
+
+                            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, Util.getMessageException(ex));
                         }
                     }
                     messageHeader = "Information.";
                     message = "Search customer found.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
                 } else {
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
@@ -1324,6 +1349,8 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = "Search customer not found.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
                 }
             } else {
                 enableDocumentType = true;
@@ -1331,6 +1358,8 @@ public class CustomerInfoIndividual extends BaseController {
                 messageHeader = "Information.";
                 message = customerInfoResultView.getReason();
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.SUCCESS, message);
             }
 
             customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
@@ -1357,13 +1386,18 @@ public class CustomerInfoIndividual extends BaseController {
             }
             log.error("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
-            message = ex.getMessage();
+            message = Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search ID :: " + customerInfoSearch.getSearchId(), date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onRefreshInterfaceInfo(){
+        Date date = new Date();
+
         log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
         long cusId = customerInfoView.getId();
         long cusSpoId = 0;
@@ -1535,16 +1569,22 @@ public class CustomerInfoIndividual extends BaseController {
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                     } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
                         messageHeader = "Information.";
                         message = "Refresh interface info failed. ( Customer not found. )";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                     }
                 } else {
                     messageHeader = "Information.";
                     message = customerInfoResultView.getReason();
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                 }
 
                 customerInfoView.setSearchFromRM(1);
@@ -1571,15 +1611,19 @@ public class CustomerInfoIndividual extends BaseController {
                 onChangeDistrictEditForm2();
                 onChangeProvinceEditForm3();
                 onChangeDistrictEditForm3();
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
-                message = ex.getMessage();
+                message = Util.getMessageException(ex);
                 severity = "alert";
                 customerInfoView.setSearchFromRM(1);
                 customerInfoView.setSearchBy(searchBy);
                 customerInfoView.setSearchId(searchId);
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for spouse
@@ -1601,16 +1645,22 @@ public class CustomerInfoIndividual extends BaseController {
                         messageHeader = "Information.";
                         message = "Refresh interface info complete.";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                     } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
                         messageHeader = "Information.";
                         message = "Refresh interface info failed.";
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message+" Customer not found.");
                     }
                 } else {
                     messageHeader = "Information.";
                     message = cusSpouseResultView.getReason();
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.SUCCESS, message);
                 }
                 customerInfoView.getSpouse().setSearchBy(1);
                 customerInfoView.getSpouse().setSearchFromRM(1);
@@ -1620,7 +1670,7 @@ public class CustomerInfoIndividual extends BaseController {
                 onChangeProvinceEditForm5();
                 onChangeProvinceEditForm6();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 log.error("refreshInterfaceInfo Exception : {}", ex);
                 messageHeader = "Error.";
                 message = ex.getMessage();
@@ -1628,17 +1678,24 @@ public class CustomerInfoIndividual extends BaseController {
                 customerInfoView.getSpouse().setSearchBy(1);
                 customerInfoView.getSpouse().setSearchFromRM(1);
                 customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         } else {
             messageHeader = "Information.";
             message = "Cause this customer do not search from RM";
             severity = "info";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Refresh Interface Information", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public void onSearchSpouseCustomerInfo() {
+        Date date = new Date();
         log.debug("onSearchSpouseCustomerInfo :::");
         log.debug("onSearchSpouseCustomerInfo ::: customerInfoSearchSpouse : {}", customerInfoSearchSpouse);
         CustomerInfoResultView customerInfoResultView;
@@ -1729,6 +1786,8 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = "Search customer found.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search Spouse ID :: " + customerInfoSearchSpouse.getSearchId(), date, ActionResult.SUCCESS, message);
                 } else {
                     log.debug("onSearchSpouseCustomerInfo ::: customer not found.");
                     enableSpouseDocumentType = true;
@@ -1737,6 +1796,8 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = "Search customer not found.";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search Spouse ID :: " + customerInfoSearchSpouse.getSearchId(), date, ActionResult.SUCCESS, message);
                 }
             } else {
                 enableSpouseDocumentType = true;
@@ -1747,6 +1808,8 @@ public class CustomerInfoIndividual extends BaseController {
                 CustomerInfoView cus = new CustomerInfoView();
                 cus.reset();
                 customerInfoView.setSpouse(cus);
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search Spouse ID :: " + customerInfoSearchSpouse.getSearchId(), date, ActionResult.FAILED, message);
             }
 
             customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
@@ -1772,13 +1835,17 @@ public class CustomerInfoIndividual extends BaseController {
             customerInfoView.getSpouse().setCitizenId(customerInfoSearchSpouse.getSearchId());
             log.error("onSearchSpouseCustomerInfo Exception : {}", ex);
             messageHeader = "Error.";
-            message = ex.getMessage();
+            message = Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_ACTION, "On Search Customer Information - Search Spouse ID :: " + customerInfoSearchSpouse.getSearchId(), date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageSpouseDlg.show()");
         }
     }
 
     public void onSave(){
+        Date date = new Date();
         log.debug("onSave");
         if(maritalStatusFlag){
             if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getSpouseFlag() == 1 && customerInfoView.getSpouse() != null){
@@ -1796,6 +1863,9 @@ public class CustomerInfoIndividual extends BaseController {
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message+". [Spouse]");
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
@@ -1804,6 +1874,9 @@ public class CustomerInfoIndividual extends BaseController {
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message+". [Spouse]");
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return;
             }
@@ -1813,6 +1886,9 @@ public class CustomerInfoIndividual extends BaseController {
             messageHeader = "Information.";
             message = "Citizen Id is already exist";
             severity = "info";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             return;
         }
@@ -1833,6 +1909,9 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = msg.get("app.message.customer.existing.error");
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return;
                 }
@@ -1845,6 +1924,9 @@ public class CustomerInfoIndividual extends BaseController {
                             messageHeader = "Information.";
                             message = msg.get("app.message.customer.existing.error");
                             severity = "info";
+
+                            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message+". [Spouse]");
+
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return;
                         }
@@ -1913,16 +1995,18 @@ public class CustomerInfoIndividual extends BaseController {
             message = "Save individual data success.";
             severity = "info";
             //updateHeaderInfo();
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.SUCCESS, "");
+
             RequestContext.getCurrentInstance().execute("msgBoxSaveMessageDlg.show()");
         } catch (Exception ex){
             log.error("onSave Exception : {}", ex);
             messageHeader = "Error.";
-            if(ex.getCause() != null){
-                message = "Save individual failed. Cause : <br/><br/>" + ex.getCause().toString();
-            } else {
-                message = "Save individual failed. Cause : <br/><br/>" + ex.getMessage();
-            }
+            message = "Save individual failed. Cause : <br/><br/>" + Util.getMessageException(ex);
             severity = "alert";
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "", date, ActionResult.FAILED, message);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1934,6 +2018,7 @@ public class CustomerInfoIndividual extends BaseController {
     }
 
     public String onSaveFromJuristic(){
+        Date date = new Date();
         log.debug("onSaveFromJuristic");
         try {
             //check citizen id
@@ -1942,6 +2027,9 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = "Citizen Id is already exist";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
                 }
@@ -1950,6 +2038,9 @@ public class CustomerInfoIndividual extends BaseController {
                     messageHeader = "Information.";
                     message = "Citizen Id is already exist";
                     severity = "info";
+
+                    slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                     RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                     return "";
                 }
@@ -1959,6 +2050,9 @@ public class CustomerInfoIndividual extends BaseController {
                 messageHeader = "Information.";
                 message = "Citizen Id is already exist";
                 severity = "info";
+
+                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 return "";
             }
@@ -1970,6 +2064,9 @@ public class CustomerInfoIndividual extends BaseController {
                             messageHeader = "Information.";
                             message = "Citizen Id is already exist";
                             severity = "info";
+
+                            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return "";
                         }
@@ -1979,6 +2076,9 @@ public class CustomerInfoIndividual extends BaseController {
                                 messageHeader = "Information.";
                                 message = "Citizen Id is already exist";
                                 severity = "info";
+
+                                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                                 return "";
                             }
@@ -1988,6 +2088,9 @@ public class CustomerInfoIndividual extends BaseController {
                             messageHeader = "Information.";
                             message = "Citizen Id is already exist";
                             severity = "info";
+
+                            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                             return "";
                         }
@@ -1997,6 +2100,9 @@ public class CustomerInfoIndividual extends BaseController {
                                 messageHeader = "Information.";
                                 message = "Citizen Id is already exist";
                                 severity = "info";
+
+                                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                                 return "";
                             }
@@ -2021,6 +2127,9 @@ public class CustomerInfoIndividual extends BaseController {
                         messageHeader = "Information.";
                         message = msg.get("app.message.customer.existing.error");
                         severity = "info";
+
+                        slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                         return "";
                     }
@@ -2033,6 +2142,9 @@ public class CustomerInfoIndividual extends BaseController {
                                 messageHeader = "Information.";
                                 message = msg.get("app.message.customer.existing.error");
                                 severity = "info";
+
+                                slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, message);
+
                                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                                 return "";
                             }
@@ -2154,15 +2266,19 @@ public class CustomerInfoIndividual extends BaseController {
             map.put("customerId", 0L);
             map.put("customerInfoView", cusInfoJuristic);
 
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.SUCCESS, "");
+
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("cusInfoParams", map);
         } catch (Exception ex) {
-            log.error("onSaveFromJuristic Exception : {}", ex);
+            log.error("onSaveFromJuristic Exception : {}", Util.getMessageException(ex));
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_SAVE, "On Save From Juristic", date, ActionResult.FAILED, Util.getMessageException(ex));
         }
         return "customerInfoJuristic?faces-redirect=true";
     }
 
     public String onCancelFromJuristic(boolean isRedirect){
+        Date date = new Date();
         log.debug("onCancelFromJuristic");
         if(isRedirect){
             Map<String, Object> map = new HashMap<String, Object>();
@@ -2173,6 +2289,8 @@ public class CustomerInfoIndividual extends BaseController {
 
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("cusInfoParams", map);
+
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel From Juristic", date, ActionResult.SUCCESS, "");
 
             return "customerInfoJuristic?faces-redirect=true";
         } else {
@@ -2306,9 +2424,14 @@ public class CustomerInfoIndividual extends BaseController {
     }
 
     public String onCancelForm(boolean isRedirect){
+        Date date = new Date();
         if(isRedirect){
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel From Juristic", date, ActionResult.SUCCESS, "");
+
             return "customerInfoSummary?faces-redirect=true";
         } else {
+            slosAuditor.add(Screen.CUSTOMER_INFO_INDIVIDUAL.value(), userId, ActionAudit.ON_CANCEL, "On Cancel", date, ActionResult.SUCCESS, "");
+
             RequestContext.getCurrentInstance().execute("msgBoxCancelDlg.show()");
             return "";
         }
